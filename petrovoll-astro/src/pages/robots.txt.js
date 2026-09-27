@@ -1,3 +1,5 @@
+import { urlSite } from '@/lib/contenu'
+
 /**
  * ════════════════════════════════════════════════════════════════════════════
  *  /robots.txt — généré dynamiquement (Astro endpoint, statique au build)
@@ -19,7 +21,7 @@
  *   - Un `User-agent` suivi d'un groupe vide équivaut à tout autoriser.
  *
  *  TODO [seo] :
- *   - [ ] Vérifier après mise en ligne : https://petrovoll.example/robots.txt
+ *   - [ ] Vérifier après mise en ligne : <domaine>/robots.txt
  *   - [ ] Contrôler le rendu côté crawlers IA (Search Console + logs CDN)
  *   - [ ] Revoir la liste des bots tous les 6 mois (écosystème très mouvant)
  */
@@ -28,7 +30,9 @@
 export const prerender = true
 
 /** Chemins privés/techniques : jamais indexables, pour AUCUN robot. */
-const ZONES_PRIVEES = ['/keystatic', '/api/', '/_astro/']
+// ⚠️ Ne pas bloquer /_astro/ : Google doit pouvoir charger CSS, JS et images
+// optimisées pour évaluer le rendu réel des pages.
+const ZONES_PRIVEES = ['/keystatic', '/api/']
 
 /** Bots de recherche IA + moteurs classiques → crawl autorisé. */
 const BOTS_AUTORISES = [
@@ -65,7 +69,7 @@ const BOTS_ENTRAINEMENT = [
  * @param {{ site?: URL }} contexte — `site` provient de astro.config.mjs.
  */
 export async function GET({ site }) {
-  const base = (site ?? new URL('https://petrovoll.example')).toString().replace(/\/+$/, '')
+  const base = urlSite(site).toString().replace(/\/+$/, '')
 
   /** Construit un groupe robots.txt conforme (User-agent + règles). */
   const groupe = (bots, regles) =>
@@ -89,7 +93,7 @@ export async function GET({ site }) {
   )
 
   const contenu = `# ═══════════════════════════════════════════════════════════════════
-#  robots.txt — PETROVOLL
+#  robots.txt — SASOMA
 #  Recherche IA autorisée · entraînement IA refusé
 #  Généré automatiquement (src/pages/robots.txt.js) — ne pas éditer à la main
 # ═══════════════════════════════════════════════════════════════════════

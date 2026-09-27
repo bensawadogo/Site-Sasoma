@@ -1,68 +1,83 @@
 ---
 /**
- * Fiche produit — routes PRERENDUES (getStaticPaths sur la collection).
- * SEO : JSON-LD Product + Offer (prix volontairement absent : B2B sur devis).
- * TODO [seo] : ajouter AggregateRating UNIQUEMENT avec de vrais avis.
+ * Fiche produit — une page prérendue par produit de l'admin.
+ * JSON-LD Product (+ Offer en FCFA quand un prix est renseigné).
  */
-import { getCollection, render, type CollectionEntry } from 'astro:content'
+import { getImage } from 'astro:assets'
+import { getEntry, render } from 'astro:content'
 
 import ProduitDetail from '@/components/produits/ProduitDetail.astro'
 import PageLayout from '@/layouts/PageLayout.astro'
-import { resolveImageSource, truncate } from '@/lib/utils'
+import { getProduits, urlSite, type Produit } from '@/lib/contenu'
+import { extraitTexte } from '@/lib/format'
 
 export const prerender = true
 
 export async function getStaticPaths() {
-  const produits = await getCollection('produits')
-  return produits.map((p) => ({ params: { slug: p.id }, props: { produit: p } }))
+  const produits = await getProduits()
+  return produits.map((produit) => ({ params: { slug: produit.id }, props: { produit } }))
 }
 
-interface Props { produit: CollectionEntry<'produits'> }
+interface Props {
+  produit: Produit
+}
 const { produit } = Astro.props
-// Astro 5 Content Layer : render() est une fonction libre, pas une methode
-// d'entree (entry.render() n'existe plus — echec de build Astro 4 style).
 const { Content } = await render(produit)
+const { nom, photos, prix, disponible, marque, reference, secteur } = produit.data
 
-const titre = `${produit.data.titre} — ${produit.data.marque ?? 'PETROVOLL'}`
-const description = truncate(produit.body ?? produit.data.titre, 150)
-const visuels = (produit.data.images ?? [])
-  .map((img) => ({ src: resolveImageSource(img) ?? '', alt: img.alt }))
-  .filter((v) => v.src !== '')
+const nomSecteur = secteur ? (await getEntry('secteurs', secteur))?.data.nom : undefined
+const urlPage = new URL(`/produits/${produit.id}`, urlSite(Astro.site)).toString()
+const description = extraitTexte(produit.body) || `${nom} — prix et disponibilité.`
+// Aperçu de partage (WhatsApp, Facebook) : JPEG 1200 px, format lu partout,
+// plutôt que la photo d'origine du téléphone (plusieurs Mo).
+const imagePartage = photos[0]
+  ? new URL((await getImage({ src: photos[0], width: 1200, format: 'jpeg', quality: 80 })).src, urlSite(Astro.site)).toString()
+  : undefined
 
 const schema: Array<Record<string, unknown>> = [
   {
     '@type': 'Product',
-    name: produit.data.titre,
-    brand: { '@type': 'Brand', name: produit.data.marque ?? 'PETROVOLL' },
-    // TODO [seo] : `image` absolue + `sku` (= reference) + `offers` si prix public.
-    category: produit.data.secteur,
-    availability: produit.data.disponible
-      ? 'https://schema.org/InStock'
-      : 'https://schema.org/PreOrder',
+    name: nom,
+    description,
+    ...(marque ? { brand: { '@type': 'Brand', name: marque } } : {}),
+    ...(reference ? { sku: reference } : {}),
+    ...(nomSecteur ? { category: nomSecteur } : {}),
+    ...(imagePartage ? { image: imagePartage } : {}),
+    ...(prix != null
+      ? {
+          offers: {
+            '@type': 'Offer',
+            price: prix,
+            priceCurrency: 'XOF',
+            availability: disponible ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+            url: urlPage,
+          },
+        }
+      : {}),
   },
 ]
 ---
 
-<PageLayout titre={titre} description={description} ogType="product" canonicalChemin={`/produits/${produit.id}`} schema={schema}>
-  <div class="container-page py-10 lg:py-14">
-    <nav aria-label="Fil d'Ariane" class="mb-8 text-sm text-muted">
+<PageLayout
+  titre={nom}
+  description={description}
+  ogType="product"
+  ogImage={imagePartage}
+  canonicalChemin={`/produits/${produit.id}`}
+  schema={schema}
+>
+  <div class="container-page py-8 lg:py-14">
+    <nav aria-label="Fil d'Ariane" class="mb-6 text-sm text-attenue">
       <ol class="flex flex-wrap gap-2">
-        <li><a href="/" class="hover:text-gold">Accueil</a></li>
+        <li><a href="/" class="hover:text-vif">Accueil</a></li>
         <li aria-hidden="true">/</li>
-        <li><a href="/produits" class="hover:text-gold">Produits</a></li>
+        <li><a href="/produits" class="hover:text-vif">Produits</a></li>
         <li aria-hidden="true">/</li>
-        <li aria-current="page" class="text-text">{produit.data.titre}</li>
+        <li aria-current="page" class="text-texte">{nom}</li>
       </ol>
-      {/* TODO [seo] : BreadcrumbList JSON-LD miroir de ce fil. */}
     </nav>
 
-    <ProduitDetail
-      titre={produit.data.titre}
-      marque={produit.data.marque}
-      secteur={produit.data.secteur}
-      disponible={produit.data.disponible}
-      visuels={visuels}
-    >
+    <ProduitDetail produit={produit} nomSecteur={nomSecteur} urlPage={urlPage}>
       <Content />
     </ProduitDetail>
   </div>

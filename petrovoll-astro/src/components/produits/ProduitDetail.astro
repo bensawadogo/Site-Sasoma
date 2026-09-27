@@ -1,72 +1,103 @@
 ---
 /**
- * ProduitDetail.astro — fiche produit (galerie + infos + CTA devis).
- * Mobile-first : galerie empilee, CTA sticky en bas sur mobile.
- * SEO : JSON-LD Product + Offer construit par la page appelante.
+ * ProduitDetail.astro — fiche produit : galerie, prix, disponibilité, contact.
  *
- * TODO [produit] :
- *  - [ ] Galerie : image principale + miniatures (boutons >= 44px)
- *  - [ ] Rendu Markdoc de la description (Content de entry.render())
- *  - [ ] Fil d'Ariane (Accueil / Produits / <titre>) + BreadcrumbList JSON-LD
- *  - [ ] CTA sticky mobile : tel: + WhatsApp + /contact?produit=<slug>
+ * Galerie en défilement horizontal natif (scroll-snap) : on fait glisser les
+ * photos au doigt, sans aucun JS. Le bouton WhatsApp pré-remplit un message
+ * avec le nom du produit : le client sait tout de suite de quoi on parle.
  */
-interface Visuel { src: string; alt: string }
+import PhotoProduit from '@/components/produits/PhotoProduit.astro'
+import { getParametres, type Produit } from '@/lib/contenu'
+import { formaterPrix } from '@/lib/format'
+
 interface Props {
-  titre: string
-  marque?: string
-  reference?: string
-  secteur: string
-  disponible?: boolean
-  visuels?: Visuel[]
+  produit: Produit
+  nomSecteur?: string
+  urlPage: string
 }
-const { titre, marque, reference, secteur, disponible = true, visuels = [] } = Astro.props
-const principal = visuels[0]
+const { produit, nomSecteur, urlPage } = Astro.props
+const { nom, photos, prix, conditionnement, disponible, marque, reference } = produit.data
+const parametres = await getParametres()
+const lienWhatsApp = parametres.whatsapp(`Bonjour, je suis intéressé par : ${nom}\n${urlPage}`)
+const lienDevis = `/contact?produit=${encodeURIComponent(nom)}`
 ---
 
 <article class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
-  <div class="reveal">
-    {
-      principal ? (
-        <img
-          src={principal.src}
-          alt={principal.alt}
-          width="1200"
-          height="900"
-          loading="eager"
-          decoding="async"
-          class="w-full rounded-md border border-border"
-        />
-      ) : (
-        <img
-          src="/images/bidon-fallback.png"
-          alt={`Visuel ${titre}`}
-          width="1200"
-          height="900"
-          loading="eager"
-          decoding="async"
-          class="w-full rounded-md border border-border"
-        />
-      )
-    }
-    {/* TODO [produit] : miniatures si visuels.length > 1. */}
+  <div>
+    <div class="galerie flex snap-x snap-mandatory gap-3 overflow-x-auto rounded-md" aria-label="Photos du produit">
+      {
+        photos.length > 0 ? (
+          photos.map((photo, i) => (
+            <div class="aspect-square w-full flex-shrink-0 snap-center overflow-hidden rounded-md border border-bordure bg-fond">
+              <PhotoProduit
+                photo={photo}
+                alt={photos.length > 1 ? `${nom} — photo ${i + 1}` : nom}
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                prioritaire={i === 0}
+                class="h-full w-full"
+              />
+            </div>
+          ))
+        ) : (
+          <div class="aspect-square w-full overflow-hidden rounded-md border border-bordure bg-fond">
+            <PhotoProduit alt={nom} sizes="(min-width: 1024px) 50vw, 100vw" prioritaire class="h-full w-full" />
+          </div>
+        )
+      }
+    </div>
+    {photos.length > 1 && <p class="mt-2 text-center text-xs text-attenue">Faites glisser pour voir les {photos.length} photos</p>}
   </div>
 
-  <div class="reveal">
-    <p class="text-xs font-semibold uppercase tracking-widest text-gold">{marque ?? secteur}</p>
-    <h1 class="mt-2 text-3xl sm:text-4xl lg:text-5xl">{titre}</h1>
-    {reference && <p class="mt-2 text-sm text-muted">Réf. {reference}</p>}
-    <p class={`mt-4 inline-flex items-center gap-2 text-sm font-medium ${disponible ? 'text-green-400' : 'text-gold'}`}>
-      <span class={`h-2 w-2 rounded-full ${disponible ? 'bg-green-400' : 'bg-gold'}`} aria-hidden="true" />
-      {disponible ? 'Disponible' : 'Sur commande — délai à confirmer'}
+  <div>
+    <p class="text-xs font-semibold uppercase tracking-widest text-vif">{nomSecteur ?? marque ?? 'Produit'}</p>
+    <h1 class="mt-2 text-3xl sm:text-4xl lg:text-5xl">{nom}</h1>
+    {conditionnement && <p class="mt-2 text-base text-attenue">{conditionnement}</p>}
+
+    <p class="mt-5 font-display text-4xl tracking-wide text-vif">{formaterPrix(prix)}</p>
+    <p class:list={['mt-2 inline-flex items-center gap-2 text-sm font-medium', disponible ? 'text-succes' : 'text-vif']}>
+      <span class:list={['h-2 w-2 rounded-full', disponible ? 'bg-succes' : 'bg-vif']} aria-hidden="true"></span>
+      {disponible ? 'En stock' : 'Sur commande — délai à confirmer'}
     </p>
 
-    <div class="rich-text mt-6">
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+      {
+        lienWhatsApp && (
+          <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="btn-primary w-full sm:w-auto">
+            Commander sur WhatsApp
+          </a>
+        )
+      }
+      <a href={lienDevis} class:list={[lienWhatsApp ? 'btn-outline' : 'btn-primary', 'w-full sm:w-auto']}>
+        Demander un devis
+      </a>
+      {
+        parametres.lienTelephone && (
+          <a href={parametres.lienTelephone} class="btn-outline w-full sm:w-auto">
+            Appeler
+          </a>
+        )
+      }
+    </div>
+
+    <div class="rich-text mt-8">
       <slot />
     </div>
 
-    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-      <a href="/contact" class="btn-primary w-full text-center sm:w-auto">Demander un devis</a>
-      <a href="/produits" class="btn-outline w-full text-center sm:w-auto">Retour catalogue</a>
-    </div>
+    {(marque || reference) && (
+      <dl class="mt-8 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 border-t border-bordure pt-6 text-sm">
+        {marque && (<><dt class="text-attenue">Marque</dt><dd>{marque}</dd></>)}
+        {reference && (<><dt class="text-attenue">Référence</dt><dd>{reference}</dd></>)}
+      </dl>
+    )}
   </div>
 </article>
+
+<style>
+  /* Masque la barre de défilement de la galerie (le geste de balayage suffit). */
+  .galerie {
+    scrollbar-width: none;
+  }
+  .galerie::-webkit-scrollbar {
+    display: none;
+  }
+</style>

@@ -17,6 +17,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 
 interface Props {
   titre: string
+  titreComplet?: boolean
   description: string
   ogImage?: string
   ogType?: 'website' | 'article' | 'product'
@@ -25,11 +26,12 @@ interface Props {
   schema?: Array<Record<string, unknown>>
 }
 
-const { titre, description, ogImage, ogType, canonicalChemin, noindex, schema } = Astro.props
+const { titre, titreComplet, description, ogImage, ogType, canonicalChemin, noindex, schema } = Astro.props
 ---
 
 <BaseLayout
   titre={titre}
+  titreComplet={titreComplet}
   description={description}
   ogImage={ogImage}
   ogType={ogType}

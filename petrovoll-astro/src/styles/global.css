@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════════════════════
-   PETROVOLL — Feuille de styles globale (Tailwind CSS v4, CSS-first)
+   SASOMA — Feuille de styles globale (Tailwind CSS v4, CSS-first)
    ────────────────────────────────────────────────────────────────────────────
    ORDRE IMPORTANT :
      1. @import "tailwindcss"   → charge le framework ET déclare les layers
@@ -14,22 +14,27 @@
 /* ─────────────────────────────────────────────────────────────────────────────
    1. DESIGN TOKENS (Tailwind v4 @theme)
    Chaque `--color-*` génère les utilitaires correspondants :
-   `bg-accent`, `text-gold`, `border-primary`, `from-accent`…
+   `bg-accent`, `text-vif`, `border-bordure`, `bg-fond`…
    ──────────────────────────────────────────────────────────────────────────── */
 @theme {
-  /* ── Palette imposée par la charte (aucun pastel, aucun blanc pur) ─────── */
-  --color-primary: #0a0a0a; /* noir industriel — fond global */
-  --color-accent: #d4420a; /* rouge/orange PETROVOLL — actions, accents */
-  --color-gold: #f5a623; /* or/ambre — détails premium, chiffres clés */
-  --color-surface: #141414; /* fond des cartes */
-  --color-surface-2: #1c1c1c; /* cartes au survol / bordures */
-  --color-text: #f0f0f0; /* texte principal */
-  --color-muted: #888888; /* texte secondaire */
-  --color-border: #262626; /* séparateurs discrets */
+  /* ── Couleurs du logo SASOMA (fixes, usage décoratif) ────────────────── */
+  --color-marine: #00244a;
+  --color-orange: #e66711; /* orange exact du logo : décor uniquement (3,3:1 sur blanc) */
 
-  /* Nuances d'appoint (états d'interaction, focus, badges) */
-  --color-accent-strong: #b33507;
-  --color-gold-strong: #dc8a0b;
+  /* ── Couleurs d'usage (thème clair). Une `.zone-sombre` les redéfinit
+     localement : les composants s'adaptent sans changer de classes.
+     Contrastes WCAG AA vérifiés (≥ 4,5:1 pour le texte). ─────────────── */
+  --color-fond: #ffffff; /* fond de page */
+  --color-surface: #f4f7fb; /* cartes, sections alternées */
+  --color-surface-2: #e9eff6; /* survol */
+  --color-texte: #0b2544; /* texte principal (15,4:1) */
+  --color-attenue: #56677d; /* texte secondaire (5,8:1) */
+  --color-bordure: #dce4ee; /* séparateurs */
+  --color-accent: #bf560c; /* fond des boutons, texte blanc (≥ 4,5:1) */
+  --color-accent-fort: #9e4709; /* survol des boutons */
+  --color-vif: #b8520b; /* texte orange : prix, surtitres, liens (4,9:1) */
+  --color-vif-fort: #9e4709;
+  --color-succes: #15803d; /* « En stock » (5:1) */
 
   /* ── Typographies (auto-hébergées, cf. @font-face plus bas) ───────────── */
   --font-display: 'Bebas Neue', 'Arial Narrow', Impact, sans-serif;
@@ -38,8 +43,7 @@
 
   /* ── Ombres (style industriel : marquées, jamais diffuses) ─────────────── */
   --shadow-industrial: 0 10px 40px -12px rgb(0 0 0 / 0.6);
-  --shadow-glow: 0 0 40px -8px rgb(212 66 10 / 0.5);
-  --shadow-gold: 0 0 30px -6px rgb(245 166 35 / 0.4);
+  --shadow-glow: 0 0 40px -8px rgb(230 103 17 / 0.45);
 
   /* ── Rayons : angles peu arrondis (identité industrielle) ─────────────── */
   --radius-sm: 0.125rem;
@@ -104,7 +108,24 @@
    ──────────────────────────────────────────────────────────────────────────── */
 @layer base {
   :root {
-    color-scheme: dark; /* contrôles natifs en thème sombre */
+    color-scheme: light;
+  }
+
+  /* Bandeaux bleu marine (hero, pied de page) : mêmes composants, couleurs
+     inversées. Les utilitaires Tailwind lisent ces variables. */
+  .zone-sombre {
+    color-scheme: dark;
+    --color-fond: #00244a;
+    --color-surface: #0b3160;
+    --color-surface-2: #123d72;
+    --color-texte: #ffffff; /* 15,5:1 */
+    --color-attenue: #b8c6d9; /* 9:1 */
+    --color-bordure: #1e4776;
+    --color-vif: #fd8d1c; /* 6,7:1 */
+    --color-vif-fort: #ffa64d;
+    --color-succes: #4ade80;
+    background-color: var(--color-fond);
+    color: var(--color-texte);
   }
 
   html {
@@ -115,8 +136,8 @@
   }
 
   body {
-    background-color: var(--color-primary);
-    color: var(--color-text);
+    background-color: var(--color-fond);
+    color: var(--color-texte);
     font-family: var(--font-sans);
     font-size: var(--text-base); /* 16px minimum */
     line-height: 1.6;
@@ -134,7 +155,7 @@
     text-transform: uppercase;
     letter-spacing: 0.02em;
     line-height: 0.98;
-    color: var(--color-text);
+    color: var(--color-texte);
     overflow-wrap: anywhere; /* pas de débordement sur petits écrans */
   }
 
@@ -148,9 +169,9 @@
     min-height: 44px;
   }
 
-  /* Focus visible : contour ambré, jamais supprimé sans remplacement */
+  /* Focus visible : contour orange, jamais supprimé sans remplacement */
   :focus-visible {
-    outline: 2px solid var(--color-gold);
+    outline: 2px solid var(--color-orange);
     outline-offset: 2px;
   }
 
@@ -204,7 +225,7 @@
     }
   }
 
-  /* Bouton d'action principal (rouge PETROVOLL) — 48px de haut en mobile */
+  /* Bouton d'action principal (orange) — 48px de haut en mobile */
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -222,10 +243,10 @@
     transition: background-color 150ms ease;
   }
   .btn-primary:hover {
-    background-color: var(--color-accent-strong);
+    background-color: var(--color-accent-fort);
   }
 
-  /* Bouton secondaire (contour or) */
+  /* Bouton secondaire (contour) */
   .btn-outline {
     display: inline-flex;
     align-items: center;
@@ -233,9 +254,9 @@
     gap: 0.5rem;
     min-height: 48px;
     padding-inline: 1.5rem;
-    border: 1px solid color-mix(in oklab, var(--color-gold) 45%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-texte) 35%, transparent);
     border-radius: var(--radius-md);
-    color: var(--color-gold);
+    color: var(--color-texte);
     font-weight: 600;
     font-size: 0.9375rem;
     text-transform: uppercase;
@@ -245,25 +266,19 @@
       color 150ms ease;
   }
   .btn-outline:hover {
-    background-color: var(--color-gold);
-    color: var(--color-primary);
+    background-color: var(--color-texte);
+    color: var(--color-fond);
   }
 
   /* Filet lumineux sous les titres de section */
   .section-line {
     display: block;
     width: 6rem;
-    height: 1px;
+    height: 2px;
     margin-top: 1rem;
-    background: linear-gradient(90deg, var(--color-accent), transparent);
+    background: linear-gradient(90deg, var(--color-orange), transparent);
   }
 
-  /* Bandeau glassmorphism (navbar collée, badges sur image) */
-  .glass {
-    background-color: color-mix(in oklab, var(--color-primary) 78%, transparent);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid color-mix(in oklab, #fff 8%, transparent);
-  }
 
   /* ── Révélation au scroll (voir src/scripts/scroll-reveal.js) ─────────────
      PROGRESSIVE ENHANCEMENT : sans JavaScript, `.reveal` reste VISIBLE.
@@ -287,7 +302,7 @@
   .rich-text {
     font-size: 1rem;
     line-height: 1.7;
-    color: color-mix(in oklab, var(--color-text) 78%, transparent);
+    color: color-mix(in oklab, var(--color-texte) 85%, transparent);
   }
   .rich-text h2,
   .rich-text h3 {
@@ -309,46 +324,13 @@
     list-style: decimal;
   }
   .rich-text a {
-    color: var(--color-gold);
+    color: var(--color-vif);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
   .rich-text img {
     border-radius: var(--radius-md);
     margin-block: 1.5rem;
-  }
-
-  /* Masque la scène 3D si WebGL est indisponible (fallback image affiché) */
-  html.no-webgl .canvas-3d {
-    display: none !important;
-  }
-
-  /* Fallback 2D de la scène 3D — stratégie mobile-first (zéro octet inutile) :
-     - JS absent            → <noscript> affiche l'image (src direct)
-     - JS + WebGL OK        → l'img [data-src] n'a PAS de src : rien n'est
-                              téléchargé ; `webgl-3d-init` (posée par
-                              BidonScene) la masque
-     - JS sans WebGL        → `no-webgl` masque le canvas ; BidonScene pose le
-                              src depuis data-src → image visible
-     - 3D en erreur (GLB KO → même traitement que no-webgl via `webgl-echec` */
-  html.js-reveal-ready:not(.no-webgl):not(.webgl-echec) .webgl-fallback,
-  html.webgl-3d-init:not(.no-webgl):not(.webgl-echec) .webgl-fallback {
-    display: none;
-  }
-  html.webgl-echec .canvas-3d {
-    display: none !important;
-  }
-
-  /* Le canvas 3D occupe la même boîte que le fallback → zéro décalage */
-  .canvas-3d {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    max-height: 60vh; /* évite qu'il mange tout l'écran sur mobile */
-  }
-  @media (min-width: 64rem) {
-    .canvas-3d {
-      max-height: 640px;
-    }
   }
 }
 

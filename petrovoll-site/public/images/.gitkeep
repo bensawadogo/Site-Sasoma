@@ -1,3 +1,0 @@
-# Dossier des images statiques locales (logos SVG, fallbacks, illustrations).
-# Les visuels PRODUITS sont servis par Cloudinary (voir lib/cloudinary.ts) :
-# ne déposer ici que les assets du design system (logo, icônes, OG par défaut).

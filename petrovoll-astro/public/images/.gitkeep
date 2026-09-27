@@ -1,5 +1,5 @@
 # Visuels statiques (fallback 3D, og:image par defaut, favicons).
 # TODO [images] :
-#  - [ ] bidon-fallback.png (800x800, < 150 Ko) — affiche si WebGL absent
+#  - [x] bidon-400.webp / bidon-800.webp — image du bidon (hero, cartes, fiches)
 #  - [ ] og-default.png (1200x630) — partage reseaux sociaux
 #  - [ ] favicon.ico + apple-icon.png — branding client

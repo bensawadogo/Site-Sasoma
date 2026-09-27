@@ -1,0 +1,122 @@
+---
+/**
+ * FiltreCatalogue.astro — filtre du catalogue en JS natif (~1 Ko).
+ * Remplace l'ancienne island React (45 Ko gzip) qui ne filtrait rien.
+ *
+ * Agit sur la grille rendue au build (attributs data-* des ProduitCard) :
+ * sans JS, tous les produits restent visibles. Le secteur choisi est
+ * reporté dans l'URL (?secteur=…) pour pouvoir partager le lien sur WhatsApp.
+ */
+import type { Secteur } from '@/lib/contenu'
+
+interface Props {
+  secteurs: Secteur[]
+  total: number
+}
+const { secteurs, total } = Astro.props
+---
+
+<div class="mb-6 flex flex-col gap-4" data-filtre hidden>
+  <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label="Filtrer par secteur">
+    <button type="button" class="puce" data-secteur="" aria-pressed="true">Tout</button>
+    {
+      secteurs.map((s) => (
+        <button type="button" class="puce" data-secteur={s.id} aria-pressed="false">
+          {s.data.nom}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+    <label class="flex-1">
+      <span class="sr-only">Rechercher un produit</span>
+      <input
+        type="search"
+        data-recherche
+        placeholder="Rechercher : 5W-30, pneu, ramette…"
+        class="min-h-[48px] w-full rounded border border-bordure bg-surface px-4"
+        enterkeyhint="search"
+      />
+    </label>
+    <label class="flex min-h-[48px] cursor-pointer items-center gap-3 text-sm">
+      <input type="checkbox" data-en-stock class="h-6 w-6 accent-accent" />
+      En stock uniquement
+    </label>
+  </div>
+
+  <p class="text-sm text-attenue" role="status" aria-live="polite" data-compte>
+    {total} produit{total > 1 ? 's' : ''}
+  </p>
+</div>
+
+<style>
+  .puce {
+    flex-shrink: 0;
+    min-height: 44px;
+    padding: 0 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-bordure);
+    background: var(--color-surface);
+    color: var(--color-texte);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+  .puce[aria-pressed='true'] {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+  }
+</style>
+
+<script>
+  const filtre = document.querySelector<HTMLElement>('[data-filtre]')
+  const grille = document.querySelector<HTMLElement>('[data-grille-produits]')
+
+  if (filtre && grille) {
+    filtre.hidden = false // le filtre n'apparaît que si le JS fonctionne
+    const puces = [...filtre.querySelectorAll<HTMLButtonElement>('[data-secteur]')]
+    const recherche = filtre.querySelector<HTMLInputElement>('[data-recherche]')!
+    const enStock = filtre.querySelector<HTMLInputElement>('[data-en-stock]')!
+    const compte = filtre.querySelector<HTMLElement>('[data-compte]')!
+    const aucun = document.querySelector<HTMLElement>('[data-aucun-produit]')
+    const produits = [...grille.querySelectorAll<HTMLElement>('[data-produit]')]
+
+    const url = new URL(location.href)
+    let secteur = url.searchParams.get('secteur') ?? ''
+    if (!puces.some((p) => p.dataset.secteur === secteur)) secteur = ''
+
+    // Recherche tolérante : sans accents ni majuscules (« huile » = « Huilé »).
+    const normaliser = (t: string) => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+
+    const appliquer = () => {
+      const mots = normaliser(recherche.value).split(/\s+/).filter(Boolean)
+      let visibles = 0
+      for (const produit of produits) {
+        const ok =
+          (!secteur || produit.dataset.secteur === secteur) &&
+          (!enStock.checked || produit.dataset.disponible === 'true') &&
+          mots.every((mot) => normaliser(produit.dataset.texte ?? '').includes(mot))
+        produit.hidden = !ok
+        if (ok) visibles++
+      }
+      puces.forEach((p) => p.setAttribute('aria-pressed', String(p.dataset.secteur === secteur)))
+      compte.textContent = `${visibles} produit${visibles > 1 ? 's' : ''}`
+      if (aucun) aucun.hidden = visibles > 0
+
+      if (secteur) url.searchParams.set('secteur', secteur)
+      else url.searchParams.delete('secteur')
+      history.replaceState(null, '', url)
+    }
+
+    puces.forEach((p) =>
+      p.addEventListener('click', () => {
+        secteur = p.dataset.secteur ?? ''
+        appliquer()
+      }),
+    )
+    recherche.addEventListener('input', appliquer)
+    enStock.addEventListener('change', appliquer)
+    appliquer()
+  }
+</script>

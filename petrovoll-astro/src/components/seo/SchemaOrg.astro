@@ -24,6 +24,8 @@
  *   - [ ] Ajouter `BreadcrumbList` sur les pages profondes
  *   - [ ] Contrôler le rendu : https://validator.schema.org + Rich Results Test
  */
+import { jsonLdSur } from '@/lib/format'
+
 interface Props {
   /** Structure JSON-LD complète (objet ou tableau de graphes). */
   data: Record<string, unknown> | Array<Record<string, unknown>>
@@ -31,5 +33,7 @@ interface Props {
 const { data } = Astro.props
 ---
 
-<!-- JSON-LD : `set:html` évite l'échappement des guillemets par Astro -->
-<script type="application/ld+json" set:html={JSON.stringify(data)} is:inline />
+<!-- `set:html` évite l'échappement des guillemets ; jsonLdSur() échappe `<`
+     pour qu'un texte saisi dans l'admin (« </script> ») ne puisse pas injecter
+     de script dans la page. -->
+<script type="application/ld+json" set:html={jsonLdSur(data)} is:inline />

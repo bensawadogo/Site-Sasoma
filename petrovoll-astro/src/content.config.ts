@@ -2,108 +2,98 @@ import { defineCollection, z } from 'astro:content'
 import { glob } from 'astro/loaders'
 
 /**
- * ════════════════════════════════════════════════════════════════════════════
- *  Content Collections (Astro 5 — Content Layer API)
- * ════════════════════════════════════════════════════════════════════════════
- *  ⚠️  ÉCART PAR RAPPORT À LA SPEC : le fichier s'appelle
- *      `src/content.config.ts` et non `src/content/config.ts`.
- *      Astro 5 a déplacé la configuration des collections à la racine de
- *      `src/` (l'ancien emplacement est legacy/déprécié). Avec l'API Content
- *      Layer, chaque collection déclare son `loader` (`glob()` pour lire les
- *      fichiers écrits par Keystatic).
+ * Collections de contenu — relisent les fichiers écrits par l'admin Keystatic
+ * (keystatic.config.ts : même structure, mêmes noms de champs).
  *
- *  ⚠️  FORMAT DES FICHIERS : Keystatic écrit UN SEUL `.mdoc` par produit /
- *      secteur (frontmatter YAML + description riche), d'où
- *      `pattern: '*.mdoc'`. Le rendu du contenu riche se fait ensuite avec
- *      `const { Content } = await entry.render()`.
- *
- *  Les schémas ci-dessous valident le frontmatter ÉCRIT PAR KEYSTATIC :
- *  toute incohérence casse le build (c'est voulu : garde-fou qualité).
- *
- *  TODO [contenu] :
- *   - [ ] Ajouter une collection `actualites` si le client veut publier des news
- *   - [ ] Passer `image` en schéma `image()` d'Astro pour importer les visuels
- *         locaux directement dans <Image /> (largeur/hauteur typées)
- *   - [ ] Brancher un loader distant (Cloudinary) si les images ne sont plus
- *         versionnées dans le dépôt
+ * Règle : le client saisit depuis son téléphone, et une erreur de schéma
+ * bloquerait la mise en ligne SANS qu'il comprenne pourquoi. Les schémas sont
+ * donc tolérants (valeurs par défaut, champs vides acceptés, trop de photos
+ * tronquées au lieu de refusées). Seul ce qui rendrait une page inutilisable
+ * (un produit sans nom) fait échouer le build.
  */
 
-/** Contrainte métier : 5 visuels maximum par produit. */
-const IMAGES_MAX = 5
+/** Texte facultatif : Keystatic écrit '' pour un champ vidé. */
+const texte = z
+  .string()
+  .nullish()
+  .transform((v) => v?.trim() || undefined)
 
-const SECTEURS_VALUES = [
-  'lubrifiants',
-  'transport',
-  'distribution',
-  'pneumatiques',
-  'fournitures',
-] as const
+const PHOTOS_MAX = 5
 
-/* ── Produits ─────────────────────────────────────────────────────────────── */
 const produits = defineCollection({
-  // Un fichier <slug>.mdoc par produit (écrit par Keystatic)
   loader: glob({ pattern: '*.mdoc', base: './src/content/produits' }),
-  schema: z.object({
-    titre: z.string().min(3, 'Le titre doit contenir au moins 3 caractères.'),
-    secteur: z.enum(SECTEURS_VALUES),
-    marque: z.string().default('PETROVOLL'),
-    reference: z.string().optional(),
-    images: z
-      .array(
-        z.object({
-          // Chemin géré par Keystatic (fichier du dépôt) — valeur permissive :
-          // voir le TODO ci-dessus pour un typage fort via `image()`.
-          image: z.string().nullish(),
-          // URL Cloudinary externe (alternative au fichier versionné)
-          urlCloudinary: z.string().nullish(),
-          // Obligatoire : accessibilité + SEO + citabilité par les IA
-          alt: z.string().min(3, 'Le texte alternatif est obligatoire.'),
-        }),
-      )
-      .max(IMAGES_MAX, `Maximum ${IMAGES_MAX} images par produit.`)
-      .default([]),
-    /** true → mise en vedette en héros sur la Home (section PETROVOLL) */
-    estProduitPhare: z.boolean().default(false),
-    disponible: z.boolean().default(true),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      nom: z.string().min(1),
+      // Slug d'une entrée « secteurs ». Pas de reference() : supprimer un
+      // secteur encore utilisé ne doit pas bloquer le site (le produit reste
+      // visible dans le catalogue général).
+      secteur: texte,
+      prix: z.number().int().nonnegative().nullish(),
+      conditionnement: texte,
+      photos: z
+        .array(image())
+        .nullish()
+        .transform((photos) => (photos ?? []).slice(0, PHOTOS_MAX)),
+      disponible: z.boolean().default(true),
+      enAvant: z.boolean().default(false),
+      marque: texte,
+      reference: texte,
+    }),
 })
 
-/* ── Secteurs ─────────────────────────────────────────────────────────────── */
 const secteurs = defineCollection({
   loader: glob({ pattern: '*.mdoc', base: './src/content/secteurs' }),
   schema: z.object({
-    nom: z.string().min(2),
-    /** Nom d'icône Lucide en PascalCase (Droplet, Truck, Globe…) */
-    icone: z.string().default('Droplet'),
-    /** Couleur d'accent hexadécimale (#RRGGBB ou #RGB) */
-    couleur: z
-      .string()
-      .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Couleur hexadécimale attendue (ex. #D4420A).')
-      .default('#D4420A'),
+    nom: z.string().min(1),
+    icone: texte,
+    ordre: z.number().nullish().transform((v) => v ?? 10),
+    resume: texte,
   }),
 })
 
-/* ── Paramètres du site (singleton) ───────────────────────────────────────── */
+/** Pages éditoriales simples (À propos, Mentions légales). */
+const pages = defineCollection({
+  loader: glob({ pattern: '*.mdoc', base: './src/content/pages' }),
+  schema: z.object({ titre: z.string().min(1) }),
+})
+
+const accueil = defineCollection({
+  loader: glob({ pattern: 'index.yaml', base: './src/content/accueil' }),
+  schema: z.object({
+    surtitre: texte,
+    titreDebut: texte,
+    titreCouleur: texte,
+    titreFin: texte,
+    texte: texte,
+    chiffres: z
+      .array(z.object({ valeur: z.string(), libelle: z.string() }))
+      .nullish()
+      .transform((liste) => (liste ?? []).filter((c) => c.valeur.trim() && c.libelle.trim())),
+    appelTitre: texte,
+    appelTexte: texte,
+  }),
+})
+
 const parametresSite = defineCollection({
-  // Keystatic écrit src/content/parametresSite/index.yaml
   loader: glob({ pattern: 'index.yaml', base: './src/content/parametresSite' }),
   schema: z.object({
-    nomSociete: z.string().default('PETROVOLL'),
-    slogan: z.string().optional(),
-    telephone: z.string().optional(),
-    // TODO [validation] : renforcer en z.string().email() une fois l'adresse
-    // définitive connue (un champ vide casserait sinon le build).
-    email: z.string().optional(),
-    adresse: z.string().optional(),
+    nomSociete: z.string().default('SASOMA'),
+    slogan: texte,
+    telephone: texte,
+    whatsapp: texte,
+    email: texte,
+    adresse: texte,
+    horaires: texte,
     reseauxSociaux: z
-      .array(
-        z.object({
-          plateforme: z.enum(['linkedin', 'facebook', 'instagram', 'whatsapp', 'youtube']),
-          url: z.string().nullish(),
-        }),
-      )
-      .default([]),
+      .array(z.object({ plateforme: z.string(), url: z.string().nullish() }))
+      .nullish()
+      .transform((liste) =>
+        (liste ?? []).filter((r): r is { plateforme: string; url: string } => Boolean(r.url)),
+      ),
+    rccm: texte,
+    ifu: texte,
   }),
 })
 
-export const collections = { produits, secteurs, parametresSite }
+export const collections = { produits, secteurs, pages, accueil, parametresSite }

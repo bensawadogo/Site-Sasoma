@@ -1,65 +1,49 @@
 ---
 /**
- * ─────────────────────────────────────────────────────────────────────────────
- * Footer.astro — pied de page (rendu statique, aucun JS)
- * ────────────────────────────────────────────────────────────────────────────
- *  Contenu lu depuis Keystatic :
- *   • coordonnées : singleton `parametresSite`
- *   • secteurs : collection `secteurs` (liens réels, pas de liste en dur)
- *
- *  Mobile-first : une seule colonne empilée en dessous de `lg:`, cibles
- *  tactiles ≥ 44 px, texte secondaire en `text-muted` (contraste AA conservé).
+ * Footer.astro — pied de page (zéro JS). Coordonnées, réseaux, secteurs et
+ * identifiants légaux viennent de l'admin ; une ligne vide n'est pas affichée.
+ * Cibles tactiles ≥ 44 px.
  */
-import { getCollection, getEntry } from 'astro:content'
+import { getParametres, getSecteurs } from '@/lib/contenu'
 
-import { buildWhatsAppLink } from '@/lib/utils'
+const [p, secteurs] = await Promise.all([getParametres(), getSecteurs()])
+const lienWhatsApp = p.whatsapp()
 
-const [parametres, secteurs] = await Promise.all([
-  getEntry('parametresSite', 'index'),
-  getCollection('secteurs'),
-])
-
-const nomSociete = parametres?.data.nomSociete ?? 'PETROVOLL'
-const telephone = parametres?.data.telephone ?? ''
-const email = parametres?.data.email ?? ''
-const adresse = parametres?.data.adresse ?? ''
-const reseaux = parametres?.data.reseauxSociaux ?? []
-
-const lienWhatsApp = buildWhatsAppLink(import.meta.env.PUBLIC_WHATSAPP_NUMBER)
-
-/** Navigation secondaire — TODO [cms] : éditorialiser si besoin. */
 const LIENS_ENTREPRISE = [
+  { libelle: 'Catalogue', href: '/produits' },
   { libelle: 'À propos', href: '/a-propos' },
   { libelle: 'Contact & devis', href: '/contact' },
   { libelle: 'Mentions légales', href: '/mentions-legales' },
-  { libelle: 'Politique de confidentialité', href: '/politique-confidentialite' },
 ]
-
+const NOMS_RESEAUX: Record<string, string> = {
+  facebook: 'Facebook',
+  instagram: 'Instagram',
+  tiktok: 'TikTok',
+  linkedin: 'LinkedIn',
+  youtube: 'YouTube',
+}
+const identifiants = [p.rccm && `RCCM ${p.rccm}`, p.ifu && `IFU ${p.ifu}`].filter(Boolean).join(' · ')
 const annee = new Date().getFullYear()
+const lien = 'flex min-h-[44px] items-center text-sm text-attenue hover:text-texte'
 ---
 
-<footer class="mt-20 border-t border-border bg-primary">
+<footer class="zone-sombre mt-20">
   <div class="container-page grid gap-10 py-12 lg:grid-cols-4 lg:py-16">
-    <!-- Identité -->
-    <div class="lg:col-span-1">
-      <p class="font-display text-3xl tracking-wide text-text">{nomSociete}</p>
-      <p class="mt-4 max-w-xs text-base leading-relaxed text-muted">
-        Distribution multi-secteurs en Afrique de l’Ouest : lubrifiants PETROVOLL,
-        transport &amp; logistique, import-export, pneumatiques et fournitures de bureau.
-      </p>
-
+    <div>
+      <img src="/images/logo/sasoma-horizontal-blanc.webp" alt={p.nomSociete} width="385" height="80" loading="lazy" class="h-11 w-auto" />
+      {p.slogan && <p class="mt-4 max-w-xs text-base leading-relaxed text-attenue">{p.slogan}</p>}
       {
-        reseaux.length > 0 && (
-          <ul class="mt-6 flex flex-wrap gap-4">
-            {reseaux.map((reseau) => (
+        p.reseaux.length > 0 && (
+          <ul class="mt-6 flex flex-wrap gap-3">
+            {p.reseaux.map((r) => (
               <li>
                 <a
-                  href={reseau.url ?? '#'}
-                  class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded border border-border px-3 text-xs uppercase tracking-wide text-muted hover:text-gold"
+                  href={r.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  class="flex min-h-[44px] items-center rounded border border-bordure px-3 text-xs uppercase tracking-wide text-attenue hover:text-vif"
                 >
-                  {reseau.plateforme}
+                  {NOMS_RESEAUX[r.plateforme] ?? r.plateforme}
                 </a>
               </li>
             ))}
@@ -68,102 +52,50 @@ const annee = new Date().getFullYear()
       }
     </div>
 
-    <!-- Secteurs (données réelles du CMS) -->
-    <nav aria-labelledby="footer-secteurs">
-      <h2 id="footer-secteurs" class="font-display text-sm tracking-widest text-gold">SECTEURS</h2>
-      <ul class="mt-4 space-y-1">
-        {
-          secteurs.length > 0 ? (
-            secteurs.map((secteur) => (
-              <li>
-                <a
-                  href={`/secteurs/${secteur.id}`}
-                  class="flex min-h-[44px] items-center text-sm text-muted hover:text-text"
-                >
-                  {secteur.data.nom}
-                </a>
-              </li>
-            ))
-          ) : (
-            <li class="text-sm text-muted">
-              Secteurs à publier depuis l’admin Keystatic.
-            </li>
-          )
-        }
-      </ul>
-    </nav>
+    {
+      secteurs.length > 0 && (
+        <nav aria-labelledby="footer-secteurs">
+          <h2 id="footer-secteurs" class="font-display text-sm tracking-widest text-vif">SECTEURS</h2>
+          <ul class="mt-4 space-y-1">
+            {secteurs.map((s) => (
+              <li><a href={`/secteurs/${s.id}`} class={lien}>{s.data.nom}</a></li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
 
-    <!-- Entreprise -->
     <nav aria-labelledby="footer-entreprise">
-      <h2 id="footer-entreprise" class="font-display text-sm tracking-widest text-gold">ENTREPRISE</h2>
+      <h2 id="footer-entreprise" class="font-display text-sm tracking-widest text-vif">ENTREPRISE</h2>
       <ul class="mt-4 space-y-1">
-        {
-          LIENS_ENTREPRISE.map((lien) => (
-            <li>
-              <a href={lien.href} class="flex min-h-[44px] items-center text-sm text-muted hover:text-text">
-                {lien.libelle}
-              </a>
-            </li>
-          ))
-        }
+        {LIENS_ENTREPRISE.map((l) => <li><a href={l.href} class={lien}>{l.libelle}</a></li>)}
       </ul>
     </nav>
 
-    <!-- Contact -->
     <div>
-      <h2 class="font-display text-sm tracking-widest text-gold">CONTACT</h2>
-      <ul class="mt-4 space-y-1 text-sm text-muted">
+      <h2 class="font-display text-sm tracking-widest text-vif">CONTACT</h2>
+      <ul class="mt-4 space-y-1 text-sm text-attenue">
+        {p.adresse && <li class="whitespace-pre-line py-2">{p.adresse}</li>}
+        {p.horaires && <li class="whitespace-pre-line py-2">{p.horaires}</li>}
+        {p.lienTelephone && <li><a href={p.lienTelephone} class={lien}>{p.telephone}</a></li>}
+        {p.email && <li><a href={`mailto:${p.email}`} class:list={[lien, 'break-all']}>{p.email}</a></li>}
         {
-          adresse ? (
-            <li class="whitespace-pre-line py-2">{adresse}</li>
-          ) : (
-            <li class="py-2">Adresse à renseigner (admin Keystatic)</li>
-          )
-        }
-        {
-          telephone ? (
+          lienWhatsApp && (
             <li>
-              <a href={`tel:${telephone.replace(/[^\d+]/g, '')}`} class="flex min-h-[44px] items-center hover:text-text">
-                {telephone}
-              </a>
-            </li>
-          ) : null
-        }
-        {
-          email ? (
-            <li>
-              <a href={`mailto:${email}`} class="flex min-h-[44px] items-center break-all hover:text-text">
-                {email}
-              </a>
-            </li>
-          ) : null
-        }
-        {
-          lienWhatsApp ? (
-            <li>
-              <a
-                href={lienWhatsApp}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex min-h-[44px] items-center text-gold hover:text-gold-strong"
-              >
+              <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="flex min-h-[44px] items-center text-vif hover:text-vif-fort">
                 WhatsApp
               </a>
             </li>
-          ) : null
+          )
         }
       </ul>
     </div>
   </div>
 
-  <!-- Mentions légales
-       TODO [legal] : insérer les identifiants réels selon les pays d'exercice
-       (RCCM, IFU, n° d'importateur) — obligatoires pour la crédibilité B2B et
-       utiles aux moteurs de réponse IA pour identifier l'entité juridique. -->
-  <div class="border-t border-border">
-    <div class="container-page flex flex-col gap-2 py-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-      <p>© {annee} {nomSociete} — Tous droits réservés.</p>
-      <p>Identifiants légaux (RCCM / IFU) à compléter.</p>
+  <div class="border-t border-bordure">
+    <div class="container-page flex flex-col gap-2 py-6 text-xs text-attenue sm:flex-row sm:items-center sm:justify-between">
+      <p>© {annee} {p.nomSociete} — Tous droits réservés.</p>
+      {identifiants && <p>{identifiants}</p>}
     </div>
   </div>
 </footer>

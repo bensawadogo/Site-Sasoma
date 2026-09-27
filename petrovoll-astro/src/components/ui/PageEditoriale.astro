@@ -1,0 +1,34 @@
+---
+/**
+ * PageEditoriale.astro — page de texte éditée dans l'admin (collection `pages`).
+ * Utilisée par « À propos » et « Mentions légales ».
+ */
+import { getEntry, render } from 'astro:content'
+
+import PageLayout from '@/layouts/PageLayout.astro'
+import { extraitTexte } from '@/lib/format'
+
+interface Props {
+  /** Nom du fichier dans src/content/pages (sans extension). */
+  id: string
+  titreParDefaut: string
+  surtitre?: string
+}
+const { id, titreParDefaut, surtitre } = Astro.props
+const page = await getEntry('pages', id)
+const titre = page?.data.titre ?? titreParDefaut
+const { Content } = page ? await render(page) : { Content: null }
+const description = extraitTexte(page?.body) || titre
+---
+
+<PageLayout titre={titre} description={description} canonicalChemin={`/${id}`}>
+  <div class="container-page py-10 lg:py-14">
+    {surtitre && <p class="text-xs font-semibold uppercase tracking-widest text-vif">{surtitre}</p>}
+    <h1 class="mt-2 text-3xl sm:text-4xl lg:text-5xl">{titre}</h1>
+    <span class="section-line" aria-hidden="true" />
+    <div class="rich-text mt-6 max-w-3xl">
+      {Content && <Content />}
+    </div>
+  </div>
+  <slot />
+</PageLayout>

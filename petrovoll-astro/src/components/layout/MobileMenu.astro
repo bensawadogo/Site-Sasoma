@@ -11,19 +11,23 @@
  *   • panneau masqué via l'attribut `hidden` → absent de l'ordre de tabulation
  *     et de l'arbre d'accessibilité quand il est fermé
  */
+import { getParametres } from '@/lib/contenu'
+
 interface Props {
   liens: Array<{ libelle: string; href: string }>
   cheminCourant?: string
 }
 const { liens, cheminCourant = '' } = Astro.props
+const { lienTelephone, whatsapp } = await getParametres()
+const lienWhatsApp = whatsapp()
 ---
 
+<!-- Pas d'aria-modal : le focus n'est pas piégé dans le panneau, c'est un
+     simple menu déroulant (l'annoncer comme modal tromperait les lecteurs d'écran). -->
 <div
   id="menu-mobile"
-  class="border-t border-border bg-primary lg:hidden"
+  class="border-t border-bordure bg-fond lg:hidden"
   hidden
-  role="dialog"
-  aria-modal="true"
   aria-label="Menu de navigation"
 >
   <ul class="container-page flex flex-col py-2">
@@ -33,7 +37,7 @@ const { liens, cheminCourant = '' } = Astro.props
           <a
             href={lien.href}
             data-lien-menu
-            class="flex min-h-[56px] items-center border-b border-border font-display text-2xl tracking-wide text-text"
+            class="flex min-h-[56px] items-center border-b border-bordure font-display text-2xl tracking-wide text-texte"
             aria-current={cheminCourant.startsWith(lien.href) ? 'page' : undefined}
           >
             {lien.libelle}
@@ -42,13 +46,26 @@ const { liens, cheminCourant = '' } = Astro.props
       ))
     }
 
-    <li class="pt-4 pb-6">
+    <li class="flex flex-col gap-3 pt-4 pb-6">
       <a href="/contact" data-lien-menu class="btn-primary w-full">Demander un devis</a>
+      {
+        (lienWhatsApp || lienTelephone) && (
+          <div class="grid grid-cols-2 gap-3">
+            {lienWhatsApp && (
+              <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="btn-outline w-full">
+                WhatsApp
+              </a>
+            )}
+            {lienTelephone && (
+              <a href={lienTelephone} class="btn-outline w-full">
+                Appeler
+              </a>
+            )}
+          </div>
+        )
+      }
     </li>
   </ul>
-
-  <!-- TODO [cms] : afficher ici téléphone / WhatsApp cliquables (tel: et wa.me)
-       lus depuis le singleton parametresSite — canaux de conversion mobiles. -->
 </div>
 
 <script>

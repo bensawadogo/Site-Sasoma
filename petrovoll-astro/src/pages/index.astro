@@ -1,59 +1,31 @@
 ---
 /**
- * ═══════════════════════════════════════════════════════════════════════════
- *  Home — index.astro (PRÉRENDUE : export const prerender = true)
- * ═══════════════════════════════════════════════════════════════════════════
- *  Composition mobile-first (ordre DOM = ordre mobile) :
- *   1. HeroSection    → H1 + CTA + island 3D (texte AVANT la 3D sur mobile)
- *   2. ProduitPhare   → spotlight PETROVOLL (section dominante, 1.5× plus grande)
- *   3. SecteursGrid   → les 5 secteurs en cards
- *   4. StatsSection   → chiffres clés (compteurs animés, zero-JS sans IO)
- *   5. ContactCTA     → appel à l'action B2B (devis / WhatsApp / téléphone)
- *
- *  SEO : Organization + LocalBusiness injectés via `schema` (BaseLayout ajoute
- *  déjà le JSON-LD de base ; ici on complète avec l'implantation physique).
- *
- *  TODO [contenu] :
- *   - [ ] Remplacer titres/paragraphes par les textes validés client
- *   - [ ] Choisir le produit phare via Keystatic (estProduitPhare = true)
- *   - [ ] Renseigner geo + openingHoursSpecification dès que connus
+ * Accueil — page prérendue. Ordre du DOM = ordre sur mobile :
+ * hero (bidon 3D) → produit phare → secteurs → chiffres clés → devis.
+ * Chaque section lit son contenu dans l'admin et se masque si elle est vide.
  */
-import { getCollection } from 'astro:content'
-
 import ContactCTA from '@/components/home/ContactCTA.astro'
 import HeroSection from '@/components/home/HeroSection.astro'
 import ProduitPhare from '@/components/home/ProduitPhare.astro'
 import SecteursGrid from '@/components/home/SecteursGrid.astro'
 import StatsSection from '@/components/home/StatsSection.astro'
 import PageLayout from '@/layouts/PageLayout.astro'
+import { getParametres, getProduitVedette } from '@/lib/contenu'
 
 export const prerender = true
 
-const TITRE = 'PETROVOLL — Distribution multi-secteurs en Afrique de l’Ouest'
+const [parametres, produitVedette] = await Promise.all([getParametres(), getProduitVedette()])
+
+const TITRE = `${parametres.nomSociete} — Lubrifiants, transport et distribution au Burkina Faso`
 const DESCRIPTION =
-  'Huiles moteur PETROVOLL, transport, import-export, pneumatiques et fournitures de bureau : un partenaire unique en Afrique de l’Ouest.'
-
-/* ── Données (build-time, zéro JS client) ───────────────────────────────── */
-const produits = await getCollection('produits')
-const secteurs = await getCollection('secteurs')
-const produitPhare = produits.find((p) => p.data.estProduitPhare) ?? produits[0]
-
-/* ── JSON-LD complémentaires (BaseLayout ajoute déjà Organization) ───────── */
-const schemaSupplementaire: Array<Record<string, unknown>> = [
-  {
-    '@type': 'LocalBusiness',
-    // TODO [seo] : remplacer par la raison sociale + adresse exacte du client.
-    name: 'PETROVOLL',
-    areaServed: 'Afrique de l’Ouest',
-    // TODO [seo] : ajouter `geo`, `openingHoursSpecification`, `telephone`.
-  },
-]
+  parametres.slogan ??
+  'Lubrifiants Petrovöll, transport, import-export, pneumatiques et fournitures de bureau : un partenaire unique au Burkina Faso.'
 ---
 
-<PageLayout titre={TITRE} description={DESCRIPTION} schema={schemaSupplementaire}>
+<PageLayout titre={TITRE} titreComplet description={DESCRIPTION}>
   <HeroSection />
-  {produitPhare && <ProduitPhare slug={produitPhare.id} />}
-  <SecteursGrid secteurs={secteurs.map((s) => s.id)} />
+  {produitVedette && <ProduitPhare produit={produitVedette} />}
+  <SecteursGrid />
   <StatsSection />
   <ContactCTA />
 </PageLayout>

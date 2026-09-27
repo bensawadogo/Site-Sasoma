@@ -1,81 +1,59 @@
-# PETROVOLL — Site corporate (Astro 5 + Keystatic + Tailwind v4)
+# PETROVOLL — site vitrine & catalogue
 
-Squelette B2B/B2C multi-secteurs, **mobile-first** (Afrique de l'Ouest, 3G/4G).
-Produit phare : huiles moteur **PETROVOLL** (bidon 3D en hero).
+Astro 5 · Keystatic (admin) · Tailwind v4 · three.js · Cloudflare Pages.
+Conçu mobile-first pour l'Afrique de l'Ouest : smartphones d'entrée de gamme, 3G.
 
 ## Commandes
 
 ```bash
-npm install        # dependances
-npm run dev        # dev local : http://127.0.0.1:4321
-npm run build      # build statique + verif types (astro check)
-npm run preview    # previsualiser dist/
-npm run deploy     # publier dist/ sur Cloudflare Pages (wrangler)
+npm install
+npm run dev       # http://127.0.0.1:4321  — admin : /keystatic
+npm run check     # vérification des types (doit afficher 0 erreur)
+npm test          # tests unitaires (vitest)
+npm run build     # site de production dans dist/
 ```
 
-Admin CMS (dev) : **http://127.0.0.1:4321/keystatic**
+## Qui modifie quoi
 
-## Ajouter un produit via Keystatic
-
-1. `npm run dev` → ouvrir `/keystatic`
-2. Collection **Produits** → *Create* → remplir titre, secteur, marque,
-   reference, images (max 5, alt obligatoire), cocher **Produit phare**
-   pour la Home → *Save* (ecrit `src/content/produits/<slug>.mdoc`)
-3. Rebuild auto en prod (commit Git → Cloudflare Pages).
-
-## Placer le .glb du bidon
-
-1. Deposer `bidon.glb` dans `public/models/` (< 1 Mo, Draco si possible)
-2. Dans `src/components/3d/BidonScene.astro` : decommenter section 4
-   (GLTFLoader), supprimer le cylindre section 3
-3. Procedure detaillee : `src/scripts/bidon-three.js`
-
-## Compresser le scan Meshy (SANS Blender)
-
-> Contexte : le scan brut `assets-source/bidon-meshy.glb` (HORS `public/`,
-> jamais deploye) fait **33 Mo** (~18 Mo de textures JPEG + ~15 Mo de
-> geometrie) — inutilisable sur 3G.
-> Ce pipeline le ramene a **~2-4 Mo** via `@gltf-transform/cli`
-> (outil de Don McCurdy, standard industrie 2026).
-
-```bash
-npm install                  # installe @gltf-transform/cli (devDependency)
-npm run bidon:audit          # audit : repartition textures vs geometrie
-npm run bidon:compress       # weld → resample → resize 1024 → webp → draco → optimize
-npm run bidon:inspect public/models/bidon.glb   # controle le resultat
-```
-
-Apres compression, activer les decodeurs Draco dans
-`src/components/3d/BidonScene.astro` (suivre `TODO [3d-decoders]`) :
-copier `node_modules/three/examples/jsm/libs/draco/` vers `public/draco/`,
-decommenter le bloc DRACO, recharger. Le procedural d'origine est
-sauvegarde en `public/models/bidon-procedural-backup.glb`.
-
-### Depannage compression
-
-| Probleme | Cause probable | Solution |
-|---|---|---|
-| `npx gltf-transform` introuvable | `npm install` non lance | `npm install` puis relancer |
-| Erreur Sharp a l'install | Binaire natif manquant | Voir https://sharp.pixelplumbing.com/install |
-| Resultat encore > 5 Mo | Geometrie tres dense | Ajouter `simplify` : `npx gltf-transform simplify in.glb out.glb --ratio 0.3` avant l'etape Draco |
-| Cylindrе orange au lieu du scan | Bloc DRACO pas decommente | Suivre `TODO [3d-decoders]` dans BidonScene.astro |
-| Textures floues | Resize 1024 trop agressif | Relancer avec `--width 2048 --height 2048` (etape resize) |
-
-## Deployer sur Cloudflare Pages
-
-1. `wrangler login` → `npm run build` → `npm run deploy`
-   (ou connecter le repo Git : build `npm run build`, dossier `dist/`)
-2. Variables : `PUBLIC_SITE_URL` (domaine prod), `PUBLIC_WHATSAPP_NUMBER`
-3. Verifier : `/robots.txt`, `/sitemap.xml`, `/llms.txt`, validator.schema.org
-
-## Ecarts vs spec initiale (assumes, documentes)
-
-| Spec | Realite Astro 5 / Tailwind v4 |
+| Contenu | Où |
 |---|---|
-| `output: 'hybrid'` | Supprime en v5 → `output: 'server'` + `prerender: true`/page |
-| `@astrojs/tailwind` + `@astrojs/sitemap` | Deprecie / doublon → `@tailwindcss/vite` + `sitemap.xml.js` maison |
-| `src/content/config.ts` | Deplace en v5 → `src/content.config.ts` (Content Layer + `glob()`) |
-| `.yaml` produits | Keystatic ecrit `.mdoc` (frontmatter + rich text unifies) |
-| ProduitFiltre React `client:load` | Wrapper Astro + `FiltreIsland.tsx` (island explicite) |
-| `motion` (Framer) | Optionnel : `npm i motion` si animations orchestrees (squelette : CSS + `scroll-reveal.js` ~1 Ko) |
-| FAQ + page 404 | Non generees (a ajouter : `faq.astro` + `404.astro`) |
+| Produits (prix, photos, stock), secteurs, textes des pages, coordonnées, WhatsApp | **Le client**, dans l'admin `/keystatic` (depuis son téléphone) |
+| Mise en page, couleurs, polices, bidon 3D | Le développeur, dans `src/` |
+| Clés Keystatic Cloud et formulaire | Le développeur, variables d'environnement (`.env.example`) |
+
+Chaque enregistrement dans l'admin crée un commit ; Cloudflare Pages reconstruit
+le site en 1 à 2 minutes. Les schémas de `src/content.config.ts` sont
+volontairement tolérants : une saisie incomplète ne bloque jamais la mise en ligne.
+
+## Organisation
+
+```
+keystatic.config.ts      champs de l'admin (libellés et aides en français)
+src/content.config.ts    relecture de ces contenus par Astro
+src/content/             contenus écrits par l'admin (.mdoc / .yaml)
+src/assets/produits/     photos envoyées par le client (optimisées au build)
+src/lib/contenu.ts       accès au contenu + valeurs de repli (point d'entrée unique)
+src/lib/format.ts        prix FCFA, liens WhatsApp/tel, extraits (testé)
+src/components/3d/       bidon : image WebP instantanée, puis 3D si l'appareil le permet
+src/scripts/bidon-3d.ts  rendu three.js, chargé à la demande
+```
+
+## Bidon 3D
+
+- `src/assets/bidon/bidon-lite.glb` (161k triangles, couleur 2048 px, 1 Mo) pour les smartphones,
+  `src/assets/bidon/bidon.glb` (269k triangles, 2048 px, 1,5 Mo) pour les ordinateurs.
+  Sous ~160k triangles, le relief du scan ne colle plus à la forme : le bidon paraît cabossé.
+- Générés depuis le scan brut `assets-source/bidon-meshy.glb` (33 Mo, textures 4096 px,
+  non versionné) : `npm run bidon:all`. La texture du scan n'est jamais retouchée ;
+  seules la taille et la compression changent (voir l'en-tête de `scripts/build-bidon.mjs`).
+- Le scan a recopié l'étiquette en miroir au dos : `bidon-3d.ts` la neutralise au rendu
+  (`neutraliserDosEtiquette`), ce qui permet la rotation complète.
+- `src/assets/bidon/bidon-400.webp` / `bidon-800.webp` : rendu fixe du bidon avec le
+  même cadrage et le même éclairage que la scène 3D. À régénérer si l'un des deux change.
+
+## Mise en ligne (Cloudflare Pages)
+
+1. Connecter le dépôt GitHub à Cloudflare Pages — dossier racine
+   `petrovoll-astro`, commande `npm run build`, dossier de sortie `dist`.
+2. Variables d'environnement : `PUBLIC_KEYSTATIC_PROJECT`, `PUBLIC_WEB3FORMS_KEY`.
+3. Remplacer `site` dans `astro.config.mjs` par le vrai domaine (seul endroit).

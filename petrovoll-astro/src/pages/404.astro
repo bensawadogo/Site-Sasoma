@@ -1,0 +1,18 @@
+---
+/** Page introuvable : renvoie vers les pages utiles plutôt qu'une impasse. */
+import PageLayout from '@/layouts/PageLayout.astro'
+
+export const prerender = true
+---
+
+<PageLayout titre="Page introuvable" description="Cette page n’existe pas ou a été déplacée." noindex>
+  <div class="container-page py-16 text-center lg:py-24">
+    <p class="font-display text-7xl text-accent">404</p>
+    <h1 class="mt-4 text-3xl sm:text-4xl">Page introuvable</h1>
+    <p class="mx-auto mt-4 max-w-md text-attenue">Cette page n’existe pas ou a été déplacée.</p>
+    <div class="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row sm:justify-center">
+      <a href="/" class="btn-primary w-full sm:w-auto">Accueil</a>
+      <a href="/produits" class="btn-outline w-full sm:w-auto">Catalogue</a>
+    </div>
+  </div>
+</PageLayout>

@@ -10,7 +10,7 @@ import keystatic from '@keystatic/astro'
 import tailwindcss from '@tailwindcss/vite'
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   astro.config.mjs — PETROVOLL
+   astro.config.mjs — SASOMA
    ═══════════════════════════════════════════════════════════════════════════
    ⚠️  3 CORRECTIONS PAR RAPPORT À LA SPEC INITIALE (voir README § « Écarts »)
 
@@ -41,7 +41,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   /* ── URL publique (canonical, sitemap, og:url, llms.txt) ─────────────────
      TODO [seo] : remplacer par le domaine de production définitif. */
-  site: 'https://petrovoll.example',
+  site: 'https://sasoma.example',
 
   /* ── Rendu ───────────────────────────────────────────────────────────────
      'server' + prerender=true par page = équivalent Astro 5 du « hybrid »
@@ -54,7 +54,10 @@ export default defineConfig({
        adapter: cloudflare({ platformProxy: { enabled: true } })
      Prérequis Cloudflare Workers pour Keystatic (APIs Node) :
        compatibility_flags = ["nodejs_compat"]   → voir wrangler.toml */
-  adapter: cloudflare(),
+  // imageService 'compile' : les photos du client sont redimensionnées et
+  // converties en WebP par sharp AU BUILD (Cloudflare n'a pas sharp à
+  // l'exécution). Toutes les pages publiques étant prérendues, c'est suffisant.
+  adapter: cloudflare({ imageService: 'compile' }),
 
   /* ── Intégrations ────────────────────────────────────────────────────────
      react()    → islands React (filtre produits) uniquement

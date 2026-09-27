@@ -1,19 +1,12 @@
 ---
 /**
- * ─────────────────────────────────────────────────────────────────────────────
- * ContactCTA.astro — appel à l'action B2B (devis / WhatsApp / téléphone)
- * ────────────────────────────────────────────────────────────────────────────
- *  Mobile-first : CTA empilés pleine largeur sur mobile, en ligne dès sm:.
- *  Zéro JS : liens <a> natifs (tel:, wa.me, /contact). Touch targets ≥ 48px.
- *
- *  TODO [contenu] :
- *   - [ ] Numéro WhatsApp via PUBLIC_WHATSAPP_NUMBER (.env) — voir HeroSection
- *   - [ ] Téléphone / email via singleton `parametresSite` (getEntry)
- *   - [ ] Texte d'accroche validé client (délais, zones livrées, MOQ)
+ * ContactCTA.astro — encadré « devis » (textes : admin → Page d'accueil).
+ * Liens natifs uniquement (tel:, wa.me, /contact) : zéro JS, cibles ≥ 48 px.
  */
-const lienWhatsApp = import.meta.env.PUBLIC_WHATSAPP_NUMBER
-  ? `https://wa.me/${import.meta.env.PUBLIC_WHATSAPP_NUMBER.replace(/[^\d]/g, '')}?text=${encodeURIComponent('Bonjour, je souhaite un devis PETROVOLL.')}`
-  : null
+import { getAccueil, getParametres } from '@/lib/contenu'
+
+const [accueil, parametres] = await Promise.all([getAccueil(), getParametres()])
+const lienWhatsApp = parametres.whatsapp()
 ---
 
 <section class="container-page py-14 lg:py-20" aria-labelledby="contact-cta-titre">
@@ -21,18 +14,13 @@ const lienWhatsApp = import.meta.env.PUBLIC_WHATSAPP_NUMBER
     <div
       aria-hidden="true"
       class="pointer-events-none absolute inset-0"
-      style="background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(212,66,10,0.25), transparent 70%);"
-    />
+      style="background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(230,103,17,0.14), transparent 70%);"
+    >
+    </div>
 
     <div class="relative">
-      <h2 id="contact-cta-titre" class="text-3xl sm:text-4xl lg:text-5xl">
-        Besoin d’un devis <span class="text-accent">professionnel&nbsp;?</span>
-      </h2>
-      <p class="mx-auto mt-4 max-w-xl text-base text-muted">
-        {/* TODO [contenu] : promesse commerciale (réponse sous 24 h, livraison, MOQ). */}
-        Huiles PETROVOLL, pneumatiques, fournitures : envoyez votre besoin, notre
-        équipe commerciale vous répond avec un devis détaillé.
-      </p>
+      <h2 id="contact-cta-titre" class="text-3xl sm:text-4xl lg:text-5xl">{accueil.appelTitre}</h2>
+      {accueil.appelTexte && <p class="mx-auto mt-4 max-w-xl text-base text-attenue">{accueil.appelTexte}</p>}
 
       <div class="mx-auto mt-8 flex max-w-lg flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
         <a href="/contact" class="btn-primary w-full sm:w-auto">Demander un devis</a>
@@ -43,7 +31,13 @@ const lienWhatsApp = import.meta.env.PUBLIC_WHATSAPP_NUMBER
             </a>
           )
         }
-        {/* TODO [contact] : <a href={`tel:${telephone}`}> avec le numéro du singleton. */}
+        {
+          parametres.lienTelephone && (
+            <a href={parametres.lienTelephone} class="btn-outline w-full sm:w-auto">
+              Appeler
+            </a>
+          )
+        }
       </div>
     </div>
   </div>

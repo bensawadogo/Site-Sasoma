@@ -13,6 +13,8 @@
  *   • twitter:card = summary_large_image
  *   • og:url TOUJOURS absolue et identique au canonical
  */
+import { urlSite } from '@/lib/contenu'
+
 interface Props {
   title: string
   description: string
@@ -38,7 +40,7 @@ const {
 // og:image doit être une URL ABSOLUE pour être exploitée par les plateformes
 const imageAbsolue = image.startsWith('http')
   ? image
-  : new URL(image, Astro.site ?? 'https://petrovoll.example').toString()
+  : new URL(image, urlSite(Astro.site)).toString()
 ---
 
 <!-- Open Graph -->

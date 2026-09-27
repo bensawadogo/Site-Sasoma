@@ -17,15 +17,16 @@
  */
 import '@/styles/global.css'
 
-import { getEntry } from 'astro:content'
-
 import CanonicalUrl from '@/components/seo/CanonicalUrl.astro'
 import OpenGraph from '@/components/seo/OpenGraph.astro'
 import SchemaOrg from '@/components/seo/SchemaOrg.astro'
+import { getParametres, urlSite } from '@/lib/contenu'
 
 interface Props {
-  /** Titre de la page — viser 60 caractères maximum. */
+  /** Titre de la page ; « — <nom de l'entreprise> » est ajouté automatiquement. */
   titre: string
+  /** true si `titre` contient déjà le nom de l'entreprise (page d'accueil). */
+  titreComplet?: boolean
   /** Meta description — viser 155 caractères maximum. */
   description: string
   /** Visuel de partage (1200×630). Défaut : /images/og-default.png */
@@ -42,7 +43,8 @@ interface Props {
 }
 
 const {
-  titre,
+  titre: titrePage,
+  titreComplet = false,
   description,
   ogImage = '/images/og-default.png',
   ogType = 'website',
@@ -52,16 +54,10 @@ const {
   langue = 'fr',
 } = Astro.props
 
-/* ── Identité de l'entreprise (singleton Keystatic) ─────────────────────── */
-const parametres = await getEntry('parametresSite', 'index')
-const nomSociete = parametres?.data.nomSociete ?? 'PETROVOLL'
-const slogan = parametres?.data.slogan ?? ''
-const telephone = parametres?.data.telephone ?? ''
-const email = parametres?.data.email ?? ''
-const adresse = parametres?.data.adresse ?? ''
-const reseauxSociaux = (parametres?.data.reseauxSociaux ?? [])
-  .map((r) => r.url)
-  .filter((url): url is string => Boolean(url))
+/* ── Identité de l'entreprise (éditée par le client) ────────────────────── */
+const { nomSociete, slogan, telephone, email, adresse, reseaux } = await getParametres()
+const reseauxSociaux = reseaux.map((r) => r.url)
+const titre = titreComplet ? titrePage : `${titrePage} — ${nomSociete}`
 
 /* ── Garde-fous SEO (visibles uniquement en développement) ───────────────
    Les limites sont des recommandations de longueur d'affichage dans les SERP.
@@ -80,7 +76,7 @@ if (import.meta.env.DEV) {
 }
 
 /* ── URL absolue / canonical ────────────────────────────────────────────── */
-const site = Astro.site ?? new URL('https://petrovoll.example')
+const site = urlSite(Astro.site)
 const cheminCanonical = canonicalChemin ?? Astro.url.pathname
 const urlCanonical = new URL(cheminCanonical, site).toString()
 const baseSite = site.toString().replace(/\/+$/, '')
@@ -152,9 +148,9 @@ const descriptionFinale =
     />
     <meta name="googlebot" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
 
-    <!-- Couleur de la barre d'adresse mobile (charte PETROVOLL) -->
-    <meta name="theme-color" content="#0A0A0A" />
-    <meta name="color-scheme" content="dark" />
+    <!-- Couleur de la barre d'adresse mobile -->
+    <meta name="theme-color" content="#FFFFFF" />
+    <meta name="color-scheme" content="light" />
     <!-- Évite la mise en forme automatique des numéros sur iOS -->
     <meta name="format-detection" content="telephone=no" />
 
@@ -178,16 +174,9 @@ const descriptionFinale =
     <link rel="preload" href="/fonts/bebas-neue-400.woff2" as="font" type="font/woff2" crossorigin />
     -->
 
-    <!-- ── Ressources tierces ──────────────────────────────────────────────
-         Preconnect uniquement si Cloudinary est réellement utilisé (évite une
-         connexion inutile). TODO [perf] : décommenter si urlCloudinary est en usage. -->
-    <!-- <link rel="preconnect" href="https://res.cloudinary.com" crossorigin /> -->
-
-    <!-- ── Favicons / PWA ──────────────────────────────────────────────────
-         TODO [branding] : déposer favicon.ico, icon.svg et apple-icon.png
-         dans public/ (fournis par le client). -->
+    <!-- ── Icônes (générées depuis le logo : python scripts/build-logo.py) ── -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="apple-touch-icon" href="/apple-icon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- ── Vérification des consoles ───────────────────────────────────────
          TODO [seo] : renseigner les codes de validation fournis par Google
@@ -204,24 +193,14 @@ const descriptionFinale =
          Toujours charger en `async`/`defer` pour préserver l'INP. -->
 
     <!-- ── Script critique inline (indispensable au premier rendu) ─────────
-         Deux rôles, ~0,2 Ko, aucune dépendance :
-         1. `js-reveal-ready` → active les animations au scroll SANS jamais
-            laisser de contenu invisible si le JS échoue (progressive enhancement)
-         2. détection WebGL → classe `no-webgl` qui masque la scène 3D et
-            laisse le fallback image s'afficher (mobile bas de gamme / vieux iOS)
+         `js-reveal-ready` active les animations au scroll SANS jamais laisser
+         de contenu invisible si le JS échoue (progressive enhancement).
+         Le test WebGL est fait par BidonScene, seulement sur la page qui en a
+         besoin : créer un contexte GPU sur CHAQUE page coûtait cher aux
+         téléphones d'entrée de gamme.
          TODO [securite] : si une CSP est ajoutée, fournir un `nonce` à ce script. -->
     <script is:inline>
-      (function () {
-        var racine = document.documentElement
-        try {
-          racine.classList.add('js-reveal-ready')
-          var canvas = document.createElement('canvas')
-          var gl = canvas.getContext('webgl2') || canvas.getContext('webgl')
-          if (!gl) racine.classList.add('no-webgl')
-        } catch (e) {
-          racine.classList.add('no-webgl')
-        }
-      })()
+      document.documentElement.classList.add('js-reveal-ready')
     </script>
 
     <!-- Révélation au scroll : script bundlé (defer auto), ~1 Ko, sans dépendance.
@@ -230,7 +209,7 @@ const descriptionFinale =
     <script src="@/scripts/scroll-reveal.js"></script>
   </head>
 
-  <body class="min-h-dvh bg-primary text-text">
+  <body class="min-h-dvh bg-fond text-texte">
     <!-- Lien d'évitement : premier élément focusable (accessibilité clavier) -->
     <a
       href="#contenu"

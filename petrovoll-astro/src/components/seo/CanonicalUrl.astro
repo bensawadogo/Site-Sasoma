@@ -11,6 +11,8 @@
  *
  *  ⚠️  Le canonical doit être ABSOLU et stable (jamais de parametres UTM).
  */
+import { urlSite } from '@/lib/contenu'
+
 interface Props {
   /** Chemin courant (Astro.url.pathname) ou URL absolue déjà formée. */
   chemin: string
@@ -22,7 +24,7 @@ interface Props {
 
 const { chemin, langue = 'fr', alternates } = Astro.props
 
-const base = Astro.site ?? new URL('https://petrovoll.example')
+const base = urlSite(Astro.site)
 // Nouvelle URL pour garantir l'absolu sans muter Astro.url
 const canonical = new URL(chemin, base).toString()
 ---

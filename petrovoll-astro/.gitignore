@@ -12,13 +12,11 @@ dist/
 .dev.vars
 
 # ── Médias lourds ────────────────────────────────────────────────────────────
-# SEUL bidon.glb (1,6 Mo, Draco) est commité : BidonScene le charge de /models/.
-# La source brute du scan (assets-source/bidon-meshy.glb, 33 Mo) reste LOCALE :
-# Cloudflare Pages refuse > 25 Mo/fichier et le dépôt Git (Keystatic) gonflerait.
+# Les modèles du bidon vivent dans src/assets/bidon/ (commités, nom haché au build).
+# Le scan brut assets-source/bidon-meshy.glb (33 Mo) reste LOCAL : Cloudflare Pages
+# refuse les fichiers > 25 Mo.
 assets-source/*.glb
-public/models/*.glb
-!public/models/bidon.glb
-!public/models/bidon-procedural-backup.glb
+assets-source/*.bak
 public/models/*.gltf
 public/models/*.hdr
 public/videos/*.mp4

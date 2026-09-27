@@ -20,16 +20,7 @@ pages_build_output_dir = "./dist"
 compatibility_date = "2026-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-# ── Build (si vous utilisez l'intégration Git de Cloudflare Pages) ──────────
-[build]
-command = "npm run build"
-cwd = "/"
-
-# ── Observabilité (optionnel) ───────────────────────────────────────────────
-[observability]
-enabled = true
-
-# TODO [infra] : bindings optionnels
-# [[kv_namespaces]]
-# binding = "SESSION"
-# id = "xxxx"
+# ⚠️ Pas de section [build] ni [observability] : Cloudflare PAGES les refuse
+#    (« Configuration file for Pages projects does not support "build" ») et
+#    bloque le déploiement. La commande de build (`npm run build`) et le
+#    dossier racine (`petrovoll-astro`) se règlent dans le dashboard Pages.

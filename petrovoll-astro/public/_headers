@@ -1,0 +1,20 @@
+# En-têtes HTTP appliqués par Cloudflare Pages.
+# Pas de Content-Security-Policy stricte pour l'instant : l'admin Keystatic et
+# les scripts inline d'Astro demanderaient une liste fine à maintenir ; à
+# ajouter une fois les domaines tiers définitifs connus.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# Fichiers au nom haché par Astro : ils ne changent jamais, cache 1 an.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Modèles 3D et image du bidon : dans /_astro/ (nom haché), donc déjà couverts
+# ci-dessus. Décodeurs Draco : nom fixe, cache 30 jours.
+/draco/*
+  Cache-Control: public, max-age=2592000

@@ -1,4 +1,5 @@
 import { getCollection } from 'astro:content'
+import { urlSite } from '@/lib/contenu'
 
 /**
  * ════════════════════════════════════════════════════════════════════════════
@@ -16,7 +17,7 @@ import { getCollection } from 'astro:content'
  *  TODO [seo] :
  *   - [ ] Soumettre le sitemap dans Google Search Console + Bing Webmaster
  *   - [ ] Ajouter <image:image> si le référencement images devient prioritaire
- *   - [ ] Vérifier le rendu : https://petrovoll.example/sitemap.xml
+ *   - [ ] Vérifier le rendu : <domaine>/sitemap.xml
  */
 
 export const prerender = true
@@ -27,6 +28,7 @@ const PAGES_STATIQUES = [
   ['/produits', '0.9', 'daily'],
   ['/a-propos', '0.6', 'monthly'],
   ['/contact', '0.8', 'monthly'],
+  ['/mentions-legales', '0.2', 'yearly'],
 ]
 
 /** Échappe les caractères réservés XML. */
@@ -46,7 +48,7 @@ function formatLastmod(date) {
 }
 
 export async function GET({ site }) {
-  const base = (site ?? new URL('https://petrovoll.example')).toString().replace(/\/+$/, '')
+  const base = urlSite(site).toString().replace(/\/+$/, '')
   const dateBuild = new Date()
 
   // Chargement parallèle : build plus rapide sur de gros catalogues
@@ -72,7 +74,7 @@ export async function GET({ site }) {
       loc: `${base}/produits/${produit.id}`,
       lastmod: formatLastmod(dateBuild),
       changefreq: 'monthly',
-      priority: produit.data.estProduitPhare ? '0.9' : '0.7',
+      priority: produit.data.enAvant ? '0.9' : '0.7',
     })),
 
     ...secteurs.map((secteur) => ({

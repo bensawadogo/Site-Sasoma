@@ -1,39 +1,13 @@
 ---
-/**
- * A propos — page PRERENDUE (histoire, metiers, atouts B2B).
- * Mobile-first : sections empilees, timeline verticale sur mobile.
- *
- * TODO [contenu] : histoire, equipe, certifications, photos (client).
- * TODO [seo] : AboutPage JSON-LD + liens vers secteurs/produits.
- */
+/** À propos — texte édité dans l'admin (Pages → Page « À propos »). */
 import ContactCTA from '@/components/home/ContactCTA.astro'
 import StatsSection from '@/components/home/StatsSection.astro'
-import PageLayout from '@/layouts/PageLayout.astro'
+import PageEditoriale from '@/components/ui/PageEditoriale.astro'
 
 export const prerender = true
 ---
 
-<PageLayout
-  titre="À propos — PETROVOLL, distribution multi-secteurs"
-  description="Qui sommes-nous : groupe de distribution multi-secteurs en Afrique de l’Ouest (lubrifiants PETROVOLL, transport, import-export)."
->
-  <div class="container-page py-10 lg:py-14">
-    <p class="text-xs font-semibold uppercase tracking-widest text-gold">À propos</p>
-    <h1 class="mt-2 text-3xl sm:text-4xl lg:text-5xl">Un partenaire unique, cinq métiers</h1>
-    <span class="section-line" aria-hidden="true" />
-
-    <div class="rich-text mt-6 max-w-3xl">
-      {/* TODO [contenu] : texte institutionnel valide par le client. */}
-      <p>
-        Société de distribution multi-secteurs basée en Afrique de l’Ouest :
-        lubrifiants PETROVOLL, transport et logistique, distribution et
-        import-export, pneumatiques, fournitures de bureau.
-      </p>
-    </div>
-
-    {/* TODO [contenu] : timeline (jalons), valeurs, certifications. */}
-  </div>
-
+<PageEditoriale id="a-propos" titreParDefaut="Qui sommes-nous ?" surtitre="À propos">
   <StatsSection />
   <ContactCTA />
-</PageLayout>
+</PageEditoriale>

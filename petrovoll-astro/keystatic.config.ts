@@ -1,201 +1,138 @@
 import { collection, config, fields, singleton } from '@keystatic/core'
 
+import { ICONES_SECTEUR } from './src/lib/icones'
+
 /**
- * ════════════════════════════════════════════════════════════════════════════
- *  keystatic.config.ts — Admin Git-based du site PETROVOLL
- * ════════════════════════════════════════════════════════════════════════════
- *  • Local   (dev)  : npm run dev → http://127.0.0.1:4321/keystatic
- *                     Les modifications écrivent directement dans src/content/
- *  • GitHub  (prod) : édition depuis le navigateur, chaque save = un commit
- *                     → rebuild automatique Cloudflare Pages
+ * keystatic.config.ts — panneau d'administration du client (/keystatic).
  *
- *  ⚠️  POINTS CLÉS DE CONFIGURATION (à connaître avant d'éditer ce fichier)
+ * Écrit pour une personne qui n'est PAS informaticienne et qui modifie son site
+ * depuis son téléphone : libellés en français, une aide sous chaque champ,
+ * aucun code à saisir (ni couleur hexadécimale, ni nom d'icône technique).
  *
- *  1. FORMAT DE FICHIER — un champ `document` (rich text) ne peut PAS être
- *     sérialisé dans un .yaml. Avec `format: { contentField: 'description' }`,
- *     Keystatic regroupe TOUT dans UN SEUL fichier par entrée :
+ * Chaque « Enregistrer » crée un commit sur GitHub ; Cloudflare Pages
+ * reconstruit alors le site (1 à 2 minutes). Le schéma Astro qui relit ces
+ * fichiers (src/content.config.ts) est volontairement TOLÉRANT : une saisie
+ * incomplète ne doit jamais casser la mise en ligne.
  *
- *        src/content/produits/petrovoll-huile-5w30.mdoc
- *        ┌── frontmatter YAML : titre, secteur, marque, images…
- *        └── corps           : la description riche (Markdoc)
- *
- *     C'est le format recommandé ici (1 produit = 1 fichier). L'alternative
- *     « données en YAML + description dans un fichier séparé » génère un
- *     DOSSIER par entrée (index.yaml + description.mdoc) : plus verbeux et
- *     plus difficile à charger avec Astro Content Collections.
- *
- *  2. IMAGES — `fields.cloudImage` de Keystatic = IMAGE LIBRARY DE KEYSTATIC
- *     CLOUD (service hébergé Thinkmill), ce n'est PAS Cloudinary.
- *     Ici on utilise donc :
- *       • `fields.image` → fichier versionné dans le dépôt, optimisé au build
- *         par <Image /> d'Astro (WebP/AVIF, dimensions auto, zéro CLS) ;
- *       • `fields.url`   → pour une image déjà hébergée sur Cloudinary.
- *
- *  3. LIMITE DE 5 IMAGES — le champ `array` de Keystatic n'expose AUCUNE
- *     validation de longueur (min/max). La règle « 5 maximum » est donc :
- *       • documentée dans le label du champ (côté éditeur) ;
- *       • vérifiée au build / en CI (voir TODO dans src/content.config.ts).
- *
- *  TODO [cms] :
- *   - [ ] Passer en `storage: { kind: 'github', … }` pour l'édition en ligne
- *         (voir le bloc commenté plus bas + README § Admin)
- *   - [ ] Ajouter une collection `actualites` si le client veut une section blog
- *   - [ ] Brancher `fields.relationship` pour lier produits ↔ secteurs
- *         (évite la désynchronisation des sélecteurs)
- *   - [ ] Ajouter `fields.date` (dateAjout) si un tri chronologique est requis
+ * Stockage :
+ *   - PUBLIC_KEYSTATIC_PROJECT défini → Keystatic Cloud (connexion par e-mail)
+ *   - sinon                           → fichiers locaux (développement)
  */
 
-/** Secteurs d'activité — référence unique partagée par tous les sélecteurs. */
-export const SECTEURS = [
-  { label: 'Huile moteur & lubrifiants', value: 'lubrifiants' },
-  { label: 'Transport & logistique', value: 'transport' },
-  { label: 'Distribution & import-export', value: 'distribution' },
-  { label: 'Pneumatiques', value: 'pneumatiques' },
-  { label: 'Fournitures de bureau', value: 'fournitures' },
-] as const
+const projetCloud = import.meta.env.PUBLIC_KEYSTATIC_PROJECT as string | undefined
+
+/** Texte riche réduit à l'essentiel : moins d'options = moins d'erreurs. */
+const TEXTE_RICHE = {
+  bold: true,
+  italic: true,
+  heading: [2, 3] as const,
+  unorderedList: true,
+  orderedList: true,
+  link: true,
+  strikethrough: false,
+  code: false,
+  codeBlock: false,
+  blockquote: false,
+  table: false,
+  divider: false,
+  image: false,
+}
+
+/* Les images sont rangées dans src/assets (optimisées au build par Astro) ;
+   le chemin enregistré est relatif au fichier de contenu, ce qu'attend le
+   schéma `image()` d'Astro. */
+const photo = (label: string, dossier: string, description?: string) =>
+  fields.image({
+    label,
+    description,
+    directory: `src/assets/${dossier}`,
+    publicPath: `../../assets/${dossier}/`,
+    validation: { isRequired: true },
+  })
 
 export default config({
-  /* ── Stockage ────────────────────────────────────────────────────────────
-     'local' = le contenu est écrit sur le disque (dev / éditeur sur sa
-     machine). À passer en 'github' pour éditer depuis le navigateur en
-     production. */
-  storage: { kind: 'local' },
+  storage: projetCloud ? { kind: 'cloud' } : { kind: 'local' },
+  ...(projetCloud ? { cloud: { project: projetCloud } } : {}),
+  locale: 'fr-FR', // boutons de l'interface (Enregistrer, Ajouter…) en français
 
-  // storage: {
-  //   kind: 'github',
-  //   repo: { owner: 'petrovoll', name: 'site-petrovoll' },
-  //   // Nécessite KEYSTATIC_GITHUB_CLIENT_ID / _CLIENT_SECRET / KEYSTATIC_SECRET
-  //   // dans .env (voir .env.example) + une GitHub App configurée.
-  //   // ⚠️ Le mode GitHub exige du rendu à la demande (SSR) : l'admin ne
-  //   //    fonctionne que si `output: 'server'` (déjà le cas) ET que l'hôte
-  //   //    fournit les APIs Node (Cloudflare → compatibility_flags
-  //   //    ["nodejs_compat"], voir wrangler.toml).
-  // },
-
-  /* ── Interface d'administration ─────────────────────────────────────── */
   ui: {
-    brand: { name: 'PETROVOLL — Administration' },
+    brand: { name: 'Mon site SASOMA' },
+    navigation: {
+      Catalogue: ['produits', 'secteurs'],
+      Pages: ['accueil', 'aPropos', 'mentionsLegales'],
+      Réglages: ['parametresSite'],
+    },
   },
 
-  /* ── Collections ─────────────────────────────────────────────────────── */
   collections: {
-    /* ──────────────────────────────────────────────────────────────────────
-       COLLECTION : produits
-       ──────────────────────────────────────────────────────────────────────
-       Produit phare (estProduitPhare = true) → mise en avant en héros sur la
-       Home, bloc visuellement dominant (voir home/ProduitPhare.astro).
-       ─────────────────────────────────────────────────────────────────── */
     produits: collection({
       label: 'Produits',
-      // Le slug est dérivé du titre ; il devient le NOM DU FICHIER
-      // (donc l'ID de l'entrée Astro) et n'est pas dupliqué dans les données.
-      slugField: 'titre',
+      slugField: 'nom',
       path: 'src/content/produits/*',
-      // Un seul fichier .mdoc par produit (frontmatter + description riche)
-      // slugField: 'titre' — le slug (nom de fichier) est dérivé du titre et
-      // N'EST PAS stocké dans le frontmatter (évite toute dérive titre/slug).
       format: { contentField: 'description' },
-      entryLayout: 'content',
-      columns: ['titre', 'secteur', 'marque', 'estProduitPhare', 'disponible'],
+      columns: ['nom', 'prix'],
       schema: {
-        titre: fields.slug({
+        nom: fields.slug({
           name: {
-            label: 'Titre',
-            description: 'Ex. « Huile moteur PETROVOLL 5W-30 — bidon 5 L »',
+            label: 'Nom du produit',
+            description: 'Ex. « Huile moteur Petrovöll STÄRK 5W-30 — bidon 5 L »',
             validation: { isRequired: true },
           },
           slug: {
-            label: 'Slug (URL)',
-            description: 'Généré depuis le titre. URL finale : /produits/<slug>',
+            label: 'Adresse de la page',
+            description: 'Remplie automatiquement à partir du nom. Inutile d’y toucher.',
           },
         }),
-
-        secteur: fields.select({
+        secteur: fields.relationship({
           label: 'Secteur',
-          description: 'Détermine la page /secteurs/<slug> sur laquelle le produit apparaît.',
-          options: [...SECTEURS],
-          defaultValue: 'lubrifiants',
+          description: 'Rubrique du catalogue dans laquelle le produit apparaît.',
+          collection: 'secteurs',
+          validation: { isRequired: true },
         }),
-
-        marque: fields.text({
-          label: 'Marque',
-          description: 'Marque commerciale. Ex. « PETROVOLL ».',
-          defaultValue: 'PETROVOLL',
+        prix: fields.integer({
+          label: 'Prix (FCFA)',
+          description: 'Chiffres uniquement, sans espace ni point. Ex. 12500. Laisser vide pour afficher « Prix sur demande ».',
+          validation: { min: 0 },
         }),
-
-        reference: fields.text({
-          label: 'Référence',
-          description: 'Référence commerciale / fournisseur. Ex. « PTV-5W30-5L ».',
+        conditionnement: fields.text({
+          label: 'Format',
+          description: 'Ex. « Bidon 5 L », « Carton de 12 », « Pneu 195/65 R15 ».',
         }),
-
-        description: fields.document({
-          label: 'Description',
-          description: 'Contenu riche affiché sur la fiche produit.',
-          // TODO [cms] : affiner la mise en forme si besoin, ex.
-          //   formatting: { headingLevels: [2, 3], listTypes: ['ordered', 'unordered'] }
-          dividers: true,
-          links: true,
-          images: true,
+        photos: fields.array(photo('Photo', 'produits'), {
+          label: 'Photos',
+          description: '5 photos maximum. La première est la photo principale. Une photo prise au téléphone convient : elle est allégée automatiquement.',
+          itemLabel: (props) => (props.value ? `Photo (${props.value.filename})` : 'Nouvelle photo'),
+          validation: { length: { max: 5 } },
         }),
-
-        /**
-         * Galerie — ⚠️ Keystatic ne sait PAS plafonner un array à 5 éléments.
-         * La contrainte est documentée dans le label et vérifiée au build.
-         */
-        images: fields.array(
-          fields.object({
-            image: fields.image({
-              label: 'Image (fichier du dépôt)',
-              // Optimisée au build par <Image /> d'Astro (WebP/AVIF + dimensions)
-              directory: 'src/assets/produits',
-              publicPath: '/images/produits',
-            }),
-            urlCloudinary: fields.url({
-              label: 'URL Cloudinary (alternative)',
-              description: 'À utiliser si l’image est déjà hébergée sur Cloudinary.',
-            }),
-            alt: fields.text({
-              label: 'Texte alternatif',
-              description: 'Obligatoire : accessibilité + SEO + citations par les IA.',
-              validation: { isRequired: true },
-            }),
-          }),
-          {
-            label: 'Images — 5 maximum',
-            itemLabel: (props) => props.fields.alt.value || 'Nouvelle image',
-          },
-        ),
-
-        estProduitPhare: fields.checkbox({
-          label: 'Produit phare (mis en avant sur la Home)',
-          description:
-            'Si coché, le produit apparaît dans la section PETROVOLL de la page d’accueil, en grand format.',
+        disponible: fields.checkbox({
+          label: 'En stock',
+          description: 'Décocher si le produit est momentanément indisponible : la page affichera « Sur commande ».',
+          defaultValue: true,
+        }),
+        enAvant: fields.checkbox({
+          label: 'Mettre en avant sur la page d’accueil',
+          description: 'Un seul produit à la fois : c’est le premier coché qui est affiché.',
           defaultValue: false,
         }),
-
-        disponible: fields.checkbox({
-          label: 'Disponible',
-          description: 'Décocher pour afficher le badge « sur commande ».',
-          defaultValue: true,
+        marque: fields.text({ label: 'Marque', defaultValue: 'Petrovöll' }),
+        reference: fields.text({
+          label: 'Référence (facultatif)',
+          description: 'Code interne du produit, s’il y en a un.',
+        }),
+        description: fields.markdoc({
+          label: 'Description',
+          description: 'Caractéristiques, usages, avantages…',
+          options: TEXTE_RICHE,
         }),
       },
     }),
 
-    /* ──────────────────────────────────────────────────────────────────────
-       COLLECTION : secteurs
-       ──────────────────────────────────────────────────────────────────────
-       5 entrées attendues : lubrifiants · transport · distribution ·
-       pneumatiques · fournitures.
-       TODO [cms] : initialiser ces 5 entrées depuis la console Keystatic
-       (elles ne sont pas générées ici pour respecter « aucun contenu réel »).
-       ─────────────────────────────────────────────────────────────────── */
     secteurs: collection({
-      label: 'Secteurs',
+      label: 'Secteurs d’activité',
       slugField: 'nom',
       path: 'src/content/secteurs/*',
       format: { contentField: 'description' },
-      entryLayout: 'content',
-      columns: ['nom', 'icone', 'couleur'],
+      columns: ['nom', 'ordre'],
       schema: {
         nom: fields.slug({
           name: {
@@ -203,96 +140,161 @@ export default config({
             description: 'Ex. « Transport & logistique ».',
             validation: { isRequired: true },
           },
+          slug: {
+            label: 'Adresse de la page',
+            description: 'Remplie automatiquement à partir du nom. Inutile d’y toucher.',
+          },
         }),
-
-        description: fields.document({
-          label: 'Description',
-          description: 'Texte de présentation du métier (page /secteurs/<slug>).',
-          dividers: true,
-          links: true,
-          images: true,
+        icone: fields.select({
+          label: 'Icône',
+          options: ICONES_SECTEUR.map(({ value, label }) => ({ value, label })),
+          defaultValue: 'boite',
         }),
-
-        icone: fields.text({
-          label: 'Icône (nom Lucide)',
-          description:
-            'Nom EXACT de l’icône lucide.dev en PascalCase. Ex. Droplet, Truck, Globe, CircleDot, Paperclip.',
-          defaultValue: 'Droplet',
-          // TODO [cms] : le nom est converti en composant dans
-          // src/components/home/SecteursGrid.astro via une map explicite
-          // (évite d'embarquer tout lucide-react dans le bundle).
+        ordre: fields.integer({
+          label: 'Position',
+          description: '1 = affiché en premier sur la page d’accueil.',
+          defaultValue: 10,
         }),
-
-        couleur: fields.text({
-          label: 'Couleur d’accent (hex)',
-          description: 'Code hexadécimal. Ex. « #D4420A » (rouge PETROVOLL) ou « #F5A623 » (or).',
-          defaultValue: '#D4420A',
-          validation: { isRequired: true },
+        resume: fields.text({
+          label: 'Phrase de présentation',
+          description: 'Une ou deux phrases, affichées sur la carte du secteur en page d’accueil.',
+          multiline: true,
+        }),
+        description: fields.markdoc({
+          label: 'Présentation complète',
+          description: 'Texte de la page du secteur.',
+          options: TEXTE_RICHE,
         }),
       },
     }),
   },
 
-  /* ── Singletons (contenu unique, non listé) ──────────────────────────── */
   singletons: {
-    /* ──────────────────────────────────────────────────────────────────────
-       SINGLETON : parametresSite
-       ──────────────────────────────────────────────────────────────────────
-       Coordonnées et informations globales réutilisées par le footer, la page
-       contact et les schémas JSON-LD (Organization / LocalBusiness).
-       Fichier généré : src/content/parametresSite/index.yaml
-       ─────────────────────────────────────────────────────────────────── */
+    accueil: singleton({
+      label: 'Page d’accueil',
+      path: 'src/content/accueil/',
+      schema: {
+        surtitre: fields.text({
+          label: 'Petite ligne au-dessus du titre',
+          defaultValue: 'LUBRIFIANTS · TRANSPORT · DISTRIBUTION',
+        }),
+        titreDebut: fields.text({ label: 'Titre — début', defaultValue: 'L’énergie qui' }),
+        titreCouleur: fields.text({
+          label: 'Titre — mots en couleur',
+          defaultValue: 'fait avancer',
+        }),
+        titreFin: fields.text({ label: 'Titre — fin', defaultValue: 'vos machines' }),
+        texte: fields.text({
+          label: 'Texte sous le titre',
+          multiline: true,
+        }),
+        chiffres: fields.array(
+          fields.object({
+            valeur: fields.text({
+              label: 'Chiffre',
+              description: 'Ex. « 15 », « 500+ », « 24 h ».',
+              validation: { isRequired: true },
+            }),
+            libelle: fields.text({
+              label: 'Légende',
+              description: 'Ex. « années d’expérience ».',
+              validation: { isRequired: true },
+            }),
+          }),
+          {
+            label: 'Chiffres clés',
+            description: 'Uniquement des chiffres vrais. Laisser vide pour masquer la section.',
+            itemLabel: (props) => `${props.fields.valeur.value} ${props.fields.libelle.value}`.trim() || 'Nouveau chiffre',
+            validation: { length: { max: 4 } },
+          },
+        ),
+        appelTitre: fields.text({
+          label: 'Encadré « devis » — titre',
+          defaultValue: 'Besoin d’un devis professionnel ?',
+        }),
+        appelTexte: fields.text({ label: 'Encadré « devis » — texte', multiline: true }),
+      },
+    }),
+
+    aPropos: singleton({
+      label: 'Page « À propos »',
+      path: 'src/content/pages/a-propos',
+      format: { contentField: 'contenu' },
+      schema: {
+        titre: fields.text({ label: 'Titre de la page', defaultValue: 'Qui sommes-nous ?' }),
+        contenu: fields.markdoc({ label: 'Texte de la page', options: TEXTE_RICHE }),
+      },
+    }),
+
+    mentionsLegales: singleton({
+      label: 'Mentions légales',
+      path: 'src/content/pages/mentions-legales',
+      format: { contentField: 'contenu' },
+      schema: {
+        titre: fields.text({ label: 'Titre de la page', defaultValue: 'Mentions légales' }),
+        contenu: fields.markdoc({
+          label: 'Texte de la page',
+          description: 'Raison sociale, RCCM, IFU, responsable de publication, hébergeur, données personnelles.',
+          options: TEXTE_RICHE,
+        }),
+      },
+    }),
+
     parametresSite: singleton({
-      label: 'Paramètres du site',
+      label: 'Coordonnées et réseaux',
       path: 'src/content/parametresSite/',
       schema: {
         nomSociete: fields.text({
-          label: 'Nom de la société',
-          defaultValue: 'PETROVOLL',
+          label: 'Nom de l’entreprise',
+          defaultValue: 'SASOMA',
           validation: { isRequired: true },
         }),
-
         slogan: fields.text({
-          label: 'Slogan',
-          description: 'Phrase de positionnement courte (aussi utilisée en og:description).',
+          label: 'Phrase de présentation',
+          description: 'Affichée en bas de chaque page et dans les résultats Google.',
+          multiline: true,
         }),
-
         telephone: fields.text({
           label: 'Téléphone',
-          description: 'Format international affiché. Ex. « +225 00 00 00 00 ».',
+          description: 'Avec l’indicatif. Ex. « +226 70 00 00 00 ».',
         }),
-
-        email: fields.text({
-          label: 'Email de contact',
-          description: 'Adresse commerciale affichée publiquement.',
+        whatsapp: fields.text({
+          label: 'Numéro WhatsApp',
+          description: 'Avec l’indicatif. Ex. « +226 70 00 00 00 ». Laisser vide pour masquer les boutons WhatsApp.',
         }),
-
-        adresse: fields.text({
-          label: 'Adresse',
+        email: fields.text({ label: 'E-mail affiché sur le site' }),
+        adresse: fields.text({ label: 'Adresse', multiline: true }),
+        horaires: fields.text({
+          label: 'Horaires d’ouverture',
+          description: 'Ex. « Lun–Ven 8h–18h, Sam 8h–13h ».',
           multiline: true,
-          description: 'Adresse postale du siège (utilisée par le schema.org LocalBusiness).',
         }),
-
         reseauxSociaux: fields.array(
           fields.object({
             plateforme: fields.select({
-              label: 'Plateforme',
+              label: 'Réseau',
               options: [
-                { label: 'LinkedIn', value: 'linkedin' },
                 { label: 'Facebook', value: 'facebook' },
                 { label: 'Instagram', value: 'instagram' },
-                { label: 'WhatsApp', value: 'whatsapp' },
+                { label: 'TikTok', value: 'tiktok' },
+                { label: 'LinkedIn', value: 'linkedin' },
                 { label: 'YouTube', value: 'youtube' },
               ],
-              defaultValue: 'linkedin',
+              defaultValue: 'facebook',
             }),
-            url: fields.url({ label: 'URL du profil' }),
+            url: fields.url({
+              label: 'Lien de la page',
+              description: 'Copier l’adresse de la page depuis l’application du réseau.',
+              validation: { isRequired: true },
+            }),
           }),
           {
             label: 'Réseaux sociaux',
-            itemLabel: (props) => props.fields.plateforme.value ?? 'Réseau',
+            itemLabel: (props) => props.fields.plateforme.value,
           },
         ),
+        rccm: fields.text({ label: 'N° RCCM (facultatif)' }),
+        ifu: fields.text({ label: 'N° IFU (facultatif)' }),
       },
     }),
   },

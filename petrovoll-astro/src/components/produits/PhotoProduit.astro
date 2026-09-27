@@ -1,0 +1,58 @@
+---
+/**
+ * PhotoProduit.astro — photo d'un produit, ou image du bidon par défaut.
+ *
+ * Les photos envoyées par le client depuis son téléphone (souvent 4-12 Mo)
+ * sont redimensionnées et converties en WebP AU BUILD par Astro : le visiteur
+ * ne télécharge que la taille adaptée à son écran (quelques dizaines de Ko).
+ */
+import type { ImageMetadata } from 'astro'
+import { Image } from 'astro:assets'
+
+import { IMAGE_BIDON } from '@/lib/image-bidon'
+
+interface Props {
+  photo?: ImageMetadata
+  alt: string
+  /** Largeurs générées (px) et taille affichée selon l'écran. */
+  largeurs?: number[]
+  sizes: string
+  prioritaire?: boolean
+  class?: string
+}
+
+const { photo, alt, largeurs = [320, 640, 960], sizes, prioritaire = false, class: classe = '' } = Astro.props
+// Jamais d'agrandissement : une petite photo garde sa taille d'origine.
+const largeursUtiles = photo ? largeurs.filter((l) => l <= photo.width) : []
+const widths = photo ? (largeursUtiles.length ? largeursUtiles : [photo.width]) : []
+const chargement = prioritaire
+  ? ({ loading: 'eager', fetchpriority: 'high' } as const)
+  : ({ loading: 'lazy' } as const)
+---
+
+{
+  photo ? (
+    <Image
+      src={photo}
+      alt={alt}
+      widths={widths}
+      sizes={sizes}
+      format="webp"
+      quality={75}
+      class:list={['object-cover', classe]}
+      {...chargement}
+    />
+  ) : (
+    <img
+      src={IMAGE_BIDON.src}
+      srcset={IMAGE_BIDON.srcset}
+      sizes={sizes}
+      alt={alt}
+      width="800"
+      height="800"
+      decoding="async"
+      class:list={['object-contain p-3', classe]}
+      {...chargement}
+    />
+  )
+}

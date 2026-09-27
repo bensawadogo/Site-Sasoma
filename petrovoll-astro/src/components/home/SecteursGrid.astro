@@ -1,88 +1,45 @@
 ---
 /**
- * ─────────────────────────────────────────────────────────────────────────────
- * SecteursGrid.astro — les 5 secteurs d'activité en cards
- * ────────────────────────────────────────────────────────────────────────────
- *  Mobile-first : 1 colonne → 2 colonnes dès sm: → 3+2 (ou 5) dès lg:.
- *  Le secteur « lubrifiants » (PETROVOLL) porte un badge « Produit phare ».
- *  Icônes Lucide mappées EXPLICITEMENT (pas d'import dynamique = bundle maîtrisé).
- *
- *  TODO [ui] :
- *   - [ ] Valider les 5 slugs Keystatic : lubrifiants, transport, distribution,
- *         pneumatiques, fournitures (ordre d'affichage ci-dessous)
- *   - [ ] Remplacer les emojis/icônes temporaires par des composants Lucide
- *         individuels (ex. `import { Droplet } from 'lucide-react'` — à ajouter
- *         au package.json) ou des SVG inline (mieux : zéro dépendance)
- *   - [ ] Utiliser `couleur` de chaque secteur pour le filet / le badge
+ * SecteursGrid.astro — cartes des secteurs d'activité (admin → Secteurs).
+ * Ordre = champ « Position » ; icône et phrase choisies par le client.
+ * Mobile : 1 colonne → 2 dès sm: → 3 dès lg:.
  */
-import { getCollection } from 'astro:content'
+import IconeSecteur from '@/components/ui/IconeSecteur.astro'
+import { getSecteurs } from '@/lib/contenu'
 
-interface Props {
-  /** Slugs des secteurs à afficher (ordre = ordre d'affichage). */
-  secteurs?: string[]
-}
-
-const { secteurs: slugsDemandes } = Astro.props
-
-const tousSecteurs = await getCollection('secteurs')
-
-/* Ordre métier imposé (lubrifiants en premier = produit phare). */
-const ORDRE_DEFAUT = ['lubrifiants', 'transport', 'distribution', 'pneumatiques', 'fournitures']
-const ordre = slugsDemandes?.length ? slugsDemandes : ORDRE_DEFAUT
-
-const secteursAffiches = ordre
-  .map((slug) => tousSecteurs.find((s) => s.id === slug))
-  .filter((s): s is (typeof tousSecteurs)[number] => Boolean(s))
-
-/* TODO [fallback] : si la collection est vide (avant saisie CMS), afficher 5
-   cards statiques avec les noms des secteurs + liens /secteurs/<slug>. */
+const secteurs = await getSecteurs()
 ---
 
-<section class="container-page py-14 lg:py-20" aria-labelledby="secteurs-titre">
-  <div class="reveal max-w-2xl">
-    <p class="text-xs font-semibold uppercase tracking-widest text-gold">Nos métiers</p>
-    <h2 id="secteurs-titre" class="mt-3 text-3xl sm:text-4xl lg:text-5xl">Cinq secteurs, un seul partenaire</h2>
-    <span class="section-line" aria-hidden="true" />
-  </div>
+{
+  secteurs.length > 0 && (
+    <section id="secteurs" class="container-page scroll-mt-20 py-14 lg:py-20" aria-labelledby="secteurs-titre">
+      <div class="reveal max-w-2xl">
+        <p class="text-xs font-semibold uppercase tracking-widest text-vif">Nos métiers</p>
+        <h2 id="secteurs-titre" class="mt-3 text-3xl sm:text-4xl lg:text-5xl">
+          {secteurs.length > 1 ? `${secteurs.length} secteurs, un seul partenaire` : 'Notre métier'}
+        </h2>
+        <span class="section-line" aria-hidden="true" />
+      </div>
 
-  {
-    secteursAffiches.length > 0 ? (
       <ul class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {secteursAffiches.map((secteur) => (
+        {secteurs.map((secteur) => (
           <li class="reveal">
             <a
               href={`/secteurs/${secteur.id}`}
-              class="group flex min-h-[132px] flex-col justify-between rounded-md border border-border bg-surface p-5 transition-colors hover:border-accent/50"
+              class="group flex h-full min-h-[132px] flex-col gap-4 rounded-md border border-bordure bg-surface p-5 transition-colors hover:border-accent/50"
             >
-              <div class="flex items-start justify-between gap-3">
-                {/* TODO [icones] : remplacer par le composant Lucide mappé depuis `secteur.data.icone`. */}
-                <span
-                  class="inline-flex h-11 w-11 items-center justify-center rounded bg-primary text-xl"
-                  aria-hidden="true"
-                >
-                  ◆
-                </span>
-                {secteur.id === 'lubrifiants' && (
-                  <span class="rounded bg-accent/15 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-accent">
-                    Produit phare
-                  </span>
-                )}
-              </div>
-
-              <div class="mt-4">
-                <h3 class="font-display text-xl tracking-wide group-hover:text-gold">{secteur.data.nom}</h3>
-                {/* TODO [contenu] : extrait de `secteur.body` (truncate 100 car.). */}
-                <p class="mt-1 text-sm text-muted">Découvrir le secteur →</p>
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded bg-fond text-vif">
+                <IconeSecteur icone={secteur.data.icone} />
+              </span>
+              <div>
+                <h3 class="font-display text-xl tracking-wide group-hover:text-vif">{secteur.data.nom}</h3>
+                {secteur.data.resume && <p class="mt-1 text-sm text-attenue">{secteur.data.resume}</p>}
+                <p class="mt-2 text-sm text-vif">Découvrir →</p>
               </div>
             </a>
           </li>
         ))}
       </ul>
-    ) : (
-      <p class="mt-10 rounded-md border border-dashed border-border p-6 text-center text-sm text-muted">
-        {/* TODO [cms] : créer les 5 secteurs dans /keystatic (collection « secteurs »). */}
-        Secteurs en cours de saisie — créez les 5 secteurs dans l’admin Keystatic.
-      </p>
-    )
-  }
-</section>
+    </section>
+  )
+}

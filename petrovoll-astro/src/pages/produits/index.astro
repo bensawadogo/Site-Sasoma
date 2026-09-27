@@ -1,45 +1,34 @@
 ---
 /**
- * Catalogue produits — page PRERENDUE (SSG au build).
- * Mobile-first : titre compact, filtre React (client:load), grille 1->2->3 col.
- * Donnees : getCollection('produits') au build, zero JS sauf l'ilot filtre.
- *
- * TODO [produit] : preselection du secteur via ?secteur= (lire Astro.url).
+ * Catalogue — page prérendue. Produits et secteurs édités dans l'admin.
+ * Filtre en JS natif (FiltreCatalogue) ; sans JS, tout le catalogue s'affiche.
  */
-import { getCollection } from 'astro:content'
-
-import ProduitFiltre from '@/components/produits/ProduitFiltre.astro'
+import FiltreCatalogue from '@/components/produits/FiltreCatalogue.astro'
 import ProduitGrid from '@/components/produits/ProduitGrid.astro'
 import PageLayout from '@/layouts/PageLayout.astro'
+import { getProduits, getSecteurs } from '@/lib/contenu'
 
 export const prerender = true
 
-const produits = await getCollection('produits')
-const items = produits.map((p) => ({
-  slug: p.id,
-  titre: p.data.titre,
-  marque: p.data.marque,
-  secteur: p.data.secteur,
-  disponible: p.data.disponible,
-  estProduitPhare: p.data.estProduitPhare,
-  visuel: p.data.images[0] as { image?: string | null; urlCloudinary?: string | null; alt: string } | undefined,
-}))
+const [produits, secteurs] = await Promise.all([getProduits(), getSecteurs()])
+// Seuls les secteurs qui contiennent au moins un produit ont un bouton filtre.
+const secteursAvecProduits = secteurs.filter((s) => produits.some((p) => p.data.secteur === s.id))
 ---
 
 <PageLayout
-  titre="Catalogue produits — PETROVOLL"
-  description="Catalogue : huiles moteur PETROVOLL, pneumatiques, fournitures et plus. Filtrez par secteur."
+  titre="Catalogue et prix"
+  description="Catalogue et prix : lubrifiants Petrovöll, pneumatiques, fournitures et plus. Filtrez par secteur."
 >
   <div class="container-page py-10 lg:py-14">
-    <p class="text-xs font-semibold uppercase tracking-widest text-gold">Catalogue</p>
+    <p class="text-xs font-semibold uppercase tracking-widest text-vif">Catalogue</p>
     <h1 class="mt-2 text-3xl sm:text-4xl lg:text-5xl">Nos produits</h1>
     <span class="section-line" aria-hidden="true" />
 
     <div class="mt-8">
-      <ProduitFiltre
-        produits={produits.map((p) => ({ slug: p.id, titre: p.data.titre, marque: p.data.marque, secteur: p.data.secteur, disponible: p.data.disponible }))}
-      />
-      <ProduitGrid produits={items} />
+      {secteursAvecProduits.length > 1 || produits.length > 6 ? (
+        <FiltreCatalogue secteurs={secteursAvecProduits} total={produits.length} />
+      ) : null}
+      <ProduitGrid produits={produits} />
     </div>
   </div>
 </PageLayout>

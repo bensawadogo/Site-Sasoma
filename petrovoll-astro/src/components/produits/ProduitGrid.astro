@@ -1,34 +1,26 @@
 ---
 /**
- * ProduitGrid.astro — grille catalogue (HTML pur, zero JS).
- * Mobile-first : 1 col -> 2 col des sm: -> 3 col des lg:.
- * Le filtrage interactif vit dans FiltreIsland.tsx (client:load).
- *
- * TODO [produit] : etats vide/erreur accessibles (role="status").
+ * ProduitGrid.astro — grille de produits (1 → 2 → 3 colonnes).
+ * Le message « aucun produit » sert aussi au filtre du catalogue, qui
+ * l'affiche quand aucun résultat ne correspond.
  */
 import ProduitCard from '@/components/produits/ProduitCard.astro'
+import type { Produit } from '@/lib/contenu'
 
-interface Item {
-  slug: string; titre: string; marque?: string; reference?: string
-  secteur: string; disponible?: boolean; estProduitPhare?: boolean
-  visuel?: { image?: string | null; urlCloudinary?: string | null; alt: string } | null
+interface Props {
+  produits: Produit[]
 }
-interface Props { produits: Item[] }
 const { produits } = Astro.props
 ---
 
-{
-  produits.length > 0 ? (
-    <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-      {produits.map((p) => (
-        <li>
-          <ProduitCard {...p} />
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <p role="status" class="rounded-md border border-dashed border-border p-8 text-center text-sm text-muted">
-      Aucun produit dans cette selection. Modifiez les filtres ou contactez-nous.
-    </p>
-  )
-}
+<ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" data-grille-produits>
+  {produits.map((produit) => <ProduitCard produit={produit} />)}
+</ul>
+<p
+  role="status"
+  class="rounded-md border border-dashed border-bordure p-8 text-center text-sm text-attenue"
+  data-aucun-produit
+  hidden={produits.length > 0}
+>
+  Aucun produit ne correspond. Essayez un autre mot ou contactez-nous.
+</p>

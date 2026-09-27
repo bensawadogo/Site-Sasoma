@@ -1,83 +1,65 @@
 ---
 /**
- * ─────────────────────────────────────────────────────────────────────────────
- * StatsSection.astro — chiffres clés animés (compteurs, zero-JS sans IO)
- * ────────────────────────────────────────────────────────────────────────────
- *  Mobile-first : 2 colonnes sur mobile → 4 colonnes dès lg:.
- *  Animation : compteurs via <script> léger + IntersectionObserver (pas de
- *  librairie). Sans JS : les valeurs finales restent lisibles (progressive
- *  enhancement — le HTML contient déjà la valeur, le script ne fait qu'animer).
+ * StatsSection.astro — chiffres clés saisis par le client (Page d'accueil).
+ * Masquée tant qu'aucun chiffre n'est renseigné : on ne publie jamais de
+ * chiffres inventés.
  *
- *  TODO [contenu] : remplacer les 4 valeurs par les chiffres validés client.
- *  TODO [seo] : ne publier QUE des chiffres vérifiables (les IA les citent).
+ * Le compteur n'anime que la partie numérique au début du texte (« 500+ »,
+ * « 24 h ») ; sans JS, la valeur finale est déjà dans le HTML.
  */
-const stats = [
-  { valeur: 5, libelle: 'Secteurs d’activité' },
-  { valeur: 100, suffixe: '+', libelle: 'Références catalogue' },
-  { valeur: 50, suffixe: '+', libelle: 'Clients professionnels' },
-  { valeur: 3, suffixe: '+', libelle: 'Pays desservis' },
-]
+import { getAccueil } from '@/lib/contenu'
+
+const { chiffres } = await getAccueil()
 ---
 
-<section class="border-y border-border bg-surface" aria-labelledby="stats-titre">
-  <div class="container-page py-12 lg:py-16">
-    <h2 id="stats-titre" class="sr-only">Chiffres clés</h2>
-
-    <dl class="grid grid-cols-2 gap-8 text-center lg:grid-cols-4" data-compteurs>
-      {
-        stats.map((stat) => (
-          <div class="reveal">
-            <dd
-              class="font-display text-4xl text-gold lg:text-5xl"
-              data-valeur={stat.valeur}
-              data-suffixe={stat.suffixe ?? ''}
-            >
-              {stat.valeur}
-              {stat.suffixe ?? ''}
-            </dd>
-            <dt class="mt-2 text-xs uppercase tracking-wide text-muted">{stat.libelle}</dt>
-          </div>
-        ))
-      }
-    </dl>
-  </div>
-</section>
+{
+  chiffres.length > 0 && (
+    <section class="border-y border-bordure bg-surface" aria-labelledby="stats-titre">
+      <div class="container-page py-12 lg:py-16">
+        <h2 id="stats-titre" class="sr-only">Chiffres clés</h2>
+        <dl class="grid grid-cols-2 gap-8 text-center lg:grid-cols-4" data-compteurs>
+          {chiffres.map((c) => (
+            <div class="reveal">
+              <dd class="font-display text-4xl text-vif lg:text-5xl" data-compteur>
+                {c.valeur}
+              </dd>
+              <dt class="mt-2 text-xs uppercase tracking-wide text-attenue">{c.libelle}</dt>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  )
+}
 
 <script>
-  // Compteurs animés : se déclenchent une fois, quand la section devient visible.
-  // NOTE : script client en JS pur (aucune annotation TS : Astro le sert tel quel
-  // au navigateur). TODO [perf] : extraire dans src/scripts/compteurs.js si réutilisé.
-  (function () {
-    const conteneur = document.querySelector('[data-compteurs]')
-    if (!conteneur || !('IntersectionObserver' in window)) return
+  const conteneur = document.querySelector<HTMLElement>('[data-compteurs]')
+  const mouvementReduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    const duree = 1200
-    function animer(element) {
-      const cible = Number(element.dataset.valeur ?? '0')
-      const suffixe = element.dataset.suffixe ?? ''
-      const debut = performance.now()
-      function frame(maintenant) {
-        const progression = Math.min((maintenant - debut) / duree, 1)
-        // Ease-out : rapide au début, doux à l'arrivée.
-        const valeur = Math.round(cible * (1 - Math.pow(1 - progression, 3)))
-        element.textContent = `${valeur}${suffixe}`
-        if (progression < 1) requestAnimationFrame(frame)
-      }
-      requestAnimationFrame(frame)
+  const animer = (element: HTMLElement) => {
+    const texte = element.textContent?.trim() ?? ''
+    const [, nombre, suite] = texte.match(/^(\d+)(.*)$/s) ?? []
+    if (!nombre) return // « — », « N/A »… : rien à animer
+    const cible = Number(nombre)
+    const debut = performance.now()
+    const frame = (maintenant: number) => {
+      const progression = Math.min((maintenant - debut) / 1200, 1)
+      const valeur = Math.round(cible * (1 - Math.pow(1 - progression, 3)))
+      element.textContent = `${valeur}${suite}`
+      if (progression < 1) requestAnimationFrame(frame)
     }
+    requestAnimationFrame(frame)
+  }
 
+  if (conteneur && !mouvementReduit && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver(
-      (entrees) => {
-        for (const entree of entrees) {
-          if (entree.isIntersecting) {
-            conteneur.querySelectorAll('[data-valeur]').forEach(animer)
-            observer.disconnect()
-            break
-          }
-        }
+      ([entree]) => {
+        if (!entree.isIntersecting) return
+        conteneur.querySelectorAll<HTMLElement>('[data-compteur]').forEach(animer)
+        observer.disconnect()
       },
       { threshold: 0.4 },
     )
     observer.observe(conteneur)
-  })()
+  }
 </script>

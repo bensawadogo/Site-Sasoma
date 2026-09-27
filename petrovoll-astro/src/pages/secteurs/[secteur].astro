@@ -1,54 +1,54 @@
 ---
 /**
- * Page secteur — PRERENDUE (getStaticPaths sur les 5 secteurs).
- * Affiche la description riche du secteur + ses produits (ProduitGrid).
- *
- * TODO [contenu] : creer les 5 fichiers secteurs via /keystatic.
- * TODO [seo] : CollectionPage JSON-LD + liens croises vers llms.txt.
+ * Page secteur — une page prérendue par secteur de l'admin :
+ * présentation (texte riche) + produits du secteur.
  */
-import { getCollection, render, type CollectionEntry } from 'astro:content'
+import { render } from 'astro:content'
 
 import ProduitGrid from '@/components/produits/ProduitGrid.astro'
+import IconeSecteur from '@/components/ui/IconeSecteur.astro'
 import PageLayout from '@/layouts/PageLayout.astro'
+import { getProduits, getSecteurs, type Secteur } from '@/lib/contenu'
+import { extraitTexte } from '@/lib/format'
 
 export const prerender = true
 
 export async function getStaticPaths() {
-  const secteurs = await getCollection('secteurs')
-  return secteurs.map((s) => ({ params: { secteur: s.id }, props: { secteur: s } }))
+  const secteurs = await getSecteurs()
+  return secteurs.map((secteur) => ({ params: { secteur: secteur.id }, props: { secteur } }))
 }
 
-interface Props { secteur: CollectionEntry<'secteurs'> }
+interface Props {
+  secteur: Secteur
+}
 const { secteur } = Astro.props
-// Astro 5 Content Layer : render(entry) comme fonction libre (voir [slug].astro).
 const { Content } = await render(secteur)
-const produits = await getCollection('produits')
-const items = produits
-  .filter((p) => p.data.secteur === secteur.id)
-  .map((p) => ({
-    slug: p.id, titre: p.data.titre, marque: p.data.marque,
-    secteur: p.data.secteur, disponible: p.data.disponible,
-    estProduitPhare: p.data.estProduitPhare, visuel: undefined,
-  }))
+const produits = (await getProduits()).filter((p) => p.data.secteur === secteur.id)
+const description =
+  secteur.data.resume ?? (extraitTexte(secteur.body) || `${secteur.data.nom} au Burkina Faso et en Afrique de l’Ouest.`)
 ---
 
-<PageLayout
-  titre={`${secteur.data.nom} — PETROVOLL`}
-  description={`Découvrez notre offre ${secteur.data.nom} en Afrique de l’Ouest.`}
-  canonicalChemin={`/secteurs/${secteur.id}`}
->
+<PageLayout titre={secteur.data.nom} description={description} canonicalChemin={`/secteurs/${secteur.id}`}>
   <div class="container-page py-10 lg:py-14">
-    <p class="text-xs font-semibold uppercase tracking-widest text-gold">Secteur</p>
-    <h1 class="mt-2 text-3xl sm:text-4xl lg:text-5xl">{secteur.data.nom}</h1>
+    <span class="inline-flex h-12 w-12 items-center justify-center rounded bg-surface text-vif">
+      <IconeSecteur icone={secteur.data.icone} class="h-7 w-7" />
+    </span>
+    <h1 class="mt-4 text-3xl sm:text-4xl lg:text-5xl">{secteur.data.nom}</h1>
     <span class="section-line" aria-hidden="true" />
 
     <div class="rich-text mt-6 max-w-3xl">
       <Content />
     </div>
 
-    <h2 class="mt-12 text-2xl lg:text-3xl">Produits — {secteur.data.nom}</h2>
-    <div class="mt-6">
-      <ProduitGrid produits={items} />
-    </div>
+    {
+      produits.length > 0 && (
+        <>
+          <h2 class="mt-12 text-2xl lg:text-3xl">Nos produits</h2>
+          <div class="mt-6">
+            <ProduitGrid produits={produits} />
+          </div>
+        </>
+      )
+    }
   </div>
 </PageLayout>

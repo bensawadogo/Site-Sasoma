@@ -1,94 +1,57 @@
 ---
 /**
- * ─────────────────────────────────────────────────────────────────────────────
- * ProduitPhare.astro — spotlight PETROVOLL (section DOMINANTE de la Home)
- * ────────────────────────────────────────────────────────────────────────────
- *  Règle design : cette section doit être visiblement PLUS GRANDE que les autres
- *  (typographie 1.5×, visuel hero, fond dégradé accent). Le produit phare est le
- *  bidon plastique industriel PETROVOLL — visuellement dominant partout.
- *
- *  Mobile-first : empilement vertical (texte → visuel), 2 colonnes dès lg:.
- *  Zéro JS : HTML pur + image Astro optimisée.
- *
- *  TODO [contenu] :
- *   - [ ] Galerie multi-images (champ `images`, max 5) avec miniatures tactiles
- *   - [ ] Badges : marque, référence, disponibilité (depuis la collection)
- *   - [ ] CTA « Demander un devis » → /contact?produit=<slug>
- *   - [ ] Remplacer le visuel par le packshot client (src/assets/ + <Image />)
+ * ProduitPhare.astro — le produit « mis en avant » (case cochée dans l'admin),
+ * section dominante de la page d'accueil : photo, prix, extrait, liens.
  */
-import { getEntry } from 'astro:content'
+import PhotoProduit from '@/components/produits/PhotoProduit.astro'
+import type { Produit } from '@/lib/contenu'
+import { extraitTexte, formaterPrix } from '@/lib/format'
 
 interface Props {
-  /** Slug du produit à mettre en vedette (id de la collection `produits`). */
-  slug: string
+  produit: Produit
 }
-
-const { slug } = Astro.props
-
-const produit = await getEntry('produits', slug)
+const { produit } = Astro.props
+const { nom, photos, prix, conditionnement, marque } = produit.data
+const extrait = extraitTexte(produit.body, 180)
 ---
 
-{
-  produit ? (
-    <section class="relative overflow-hidden bg-surface" aria-labelledby="produit-phare-titre">
-      {/* Halo accent : identité industrielle, purement décoratif */}
-      <div
-        aria-hidden="true"
-        class="pointer-events-none absolute inset-0"
-        style="background: radial-gradient(ellipse 70% 60% at 30% 50%, rgba(212,66,10,0.22), transparent 70%);"
+<section class="relative overflow-hidden bg-surface" aria-labelledby="produit-phare-titre">
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0"
+    style="background: radial-gradient(ellipse 70% 60% at 30% 50%, rgba(230,103,17,0.12), transparent 70%);"
+  >
+  </div>
+
+  <div class="container-page relative grid items-center gap-10 py-14 lg:grid-cols-2 lg:gap-16 lg:py-24">
+    <div class="reveal mx-auto aspect-square w-full max-w-[520px] overflow-hidden rounded-md">
+      <PhotoProduit
+        photo={photos[0]}
+        alt={nom}
+        largeurs={[400, 800]}
+        sizes="(min-width: 1024px) 520px, 100vw"
+        class="h-full w-full"
       />
+    </div>
 
-      <div class="container-page relative grid items-center gap-10 py-14 lg:grid-cols-2 lg:gap-16 lg:py-24">
-        {/* ── Visuel (1er sur mobile = impact immédiat) ─────────────────── */}
-        <div class="reveal">
-          {/* TODO [images] : <Image src={packshot} widths={[400,800,1200]} formats={['avif','webp','jpeg']} /> */}
-          <img
-            class="mx-auto w-full max-w-[520px] rounded-md shadow-glow"
-            src="/images/bidon-fallback.png"
-            alt={`Bidon ${produit.data.marque} — ${produit.data.titre}`}
-            width="1040"
-            height="780"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-
-        {/* ── Texte (typographie 1.5× : section dominante) ──────────────── */}
-        <div class="reveal">
-          <p class="inline-flex items-center gap-2 rounded border border-accent/40 bg-accent/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-widest text-accent">
-            Produit phare · {produit.data.marque}
-          </p>
-
-          <h2 id="produit-phare-titre" class="mt-5 text-3xl leading-[0.95] sm:text-4xl lg:text-6xl">
-            {produit.data.titre}
-          </h2>
-          <span class="section-line" aria-hidden="true" />
-
-          <p class="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-            {/* TODO [contenu] : extrait de la description riche (140 car. via truncate()). */}
-            Huiles moteur et lubrifiants {produit.data.marque} — la référence
-            industrielle pour vos moteurs en Afrique de l’Ouest.
-          </p>
-
-          {/* TODO [produit] : badges référence / disponibilité / secteur. */}
-
-          <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <a href={`/produits/${produit.id}`} class="btn-primary w-full sm:w-auto">
-              Voir la fiche produit
-            </a>
-            <a href={`/contact?produit=${produit.id}`} class="btn-outline w-full sm:w-auto">
-              Demander un devis
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  ) : (
-    <section class="container-page py-14" aria-label="Produit phare à configurer">
-      <p class="rounded-md border border-dashed border-border p-6 text-center text-sm text-muted">
-        {/* TODO [cms] : cocher « Produit phare » sur un produit dans /keystatic. */}
-        Aucun produit phare configuré — cochez « Produit phare » dans l’admin Keystatic.
+    <div class="reveal">
+      <p class="inline-flex items-center gap-2 rounded border border-vif/40 bg-vif/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-widest text-vif">
+        Produit phare{marque ? ` · ${marque}` : ''}
       </p>
-    </section>
-  )
-}
+
+      <h2 id="produit-phare-titre" class="mt-5 text-3xl leading-[0.95] sm:text-4xl lg:text-6xl">{nom}</h2>
+      <span class="section-line" aria-hidden="true" />
+
+      <p class="mt-4 font-display text-3xl tracking-wide text-vif">
+        {formaterPrix(prix)}
+        {conditionnement && <span class="ml-2 font-sans text-base text-attenue">· {conditionnement}</span>}
+      </p>
+      {extrait && <p class="mt-4 max-w-xl text-base leading-relaxed text-attenue sm:text-lg">{extrait}</p>}
+
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <a href={`/produits/${produit.id}`} class="btn-primary w-full sm:w-auto">Voir le produit</a>
+        <a href={`/contact?produit=${encodeURIComponent(nom)}`} class="btn-outline w-full sm:w-auto">Demander un devis</a>
+      </div>
+    </div>
+  </div>
+</section>

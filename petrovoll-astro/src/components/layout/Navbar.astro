@@ -3,21 +3,15 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * Navbar.astro — barre de navigation sticky (mobile-first)
  * ────────────────────────────────────────────────────────────────────────────
- *  Comportement :
- *   • pleine largeur, collée en haut, au-dessus du contenu (z-index élevé)
- *   • fond transparent au top de la page → glassmorphism dès le scroll
- *   • burger accessible sur mobile (44×44 px minimum), menu desktop en lg:
- *
- *  PERFORMANCE : l'état « collé » est détecté avec un IntersectionObserver sur
- *  un sentinelle invisible (pas de listener `scroll`, donc aucun travail sur le
- *  thread principal pendant le défilement → protège l'INP).
+ *  Barre blanche fixe avec le logo SASOMA en couleur (fond clair = logo
+ *  d'origine, sans version modifiée). Burger ≥ 44 px sur mobile, liens en lg:.
+ *  Aucun JS de défilement : la barre est toujours opaque.
  */
 import MobileMenu from '@/components/layout/MobileMenu.astro'
 
-/** Liens de navigation — TODO [cms] : éditorialiser via un singleton Keystatic. */
 const LIENS = [
   { libelle: 'Produits', href: '/produits' },
-  { libelle: 'Secteurs', href: '/secteurs/lubrifiants' },
+  { libelle: 'Nos métiers', href: '/#secteurs' },
   { libelle: 'À propos', href: '/a-propos' },
   { libelle: 'Contact', href: '/contact' },
 ]
@@ -25,22 +19,17 @@ const LIENS = [
 const cheminCourant = Astro.url.pathname
 ---
 
-<!-- Sentinelle : sa sortie du viewport déclenche l'état « collé » -->
-<div id="navbar-sentinelle" aria-hidden="true" class="absolute top-0 h-px w-full"></div>
-
-<header
-  id="navbar"
-  class="fixed inset-x-0 top-0 z-40 transition-colors duration-200"
-  data-navbar
->
+<header id="navbar" class="fixed inset-x-0 top-0 z-40 border-b border-bordure bg-fond">
   <nav class="container-page flex h-16 items-center justify-between gap-3 lg:h-20" aria-label="Navigation principale">
-    <!-- Logo / marque — TODO [branding] : remplacer par le SVG officiel -->
-    <a
-      href="/"
-      class="flex shrink-0 items-center gap-2 font-display text-xl tracking-wide text-text lg:text-2xl"
-      aria-label="PETROVOLL — retour à l'accueil"
-    >
-      PETROVOLL
+    <a href="/" class="flex shrink-0 items-center" aria-label="SASOMA — retour à l'accueil">
+      <img
+        src="/images/logo/sasoma-horizontal.webp"
+        alt="SASOMA"
+        width="385"
+        height="80"
+        class="h-9 w-auto lg:h-11"
+        fetchpriority="high"
+      />
     </a>
 
     <!-- Liens desktop uniquement (mobile-first : cachés par défaut) -->
@@ -50,7 +39,7 @@ const cheminCourant = Astro.url.pathname
           <li>
             <a
               href={lien.href}
-              class="text-sm font-medium uppercase tracking-wide text-muted transition-colors hover:text-text"
+              class="text-sm font-medium uppercase tracking-wide text-attenue transition-colors hover:text-texte"
               aria-current={cheminCourant.startsWith(lien.href) ? 'page' : undefined}
             >
               {lien.libelle}
@@ -68,7 +57,7 @@ const cheminCourant = Astro.url.pathname
       <button
         type="button"
         id="menu-toggle"
-        class="inline-flex size-11 items-center justify-center rounded border border-border text-text lg:hidden"
+        class="inline-flex size-11 items-center justify-center rounded border border-bordure text-texte lg:hidden"
         aria-expanded="false"
         aria-controls="menu-mobile"
         aria-label="Ouvrir le menu"
@@ -83,19 +72,3 @@ const cheminCourant = Astro.url.pathname
   <MobileMenu liens={LIENS} cheminCourant={cheminCourant} />
 </header>
 
-<script>
-  /* État « collé » : applique le fond glassmorphism après 8 px de défilement.
-     Coût nul pendant le scroll (IntersectionObserver, pas de listener). */
-  const navbar = document.querySelector('[data-navbar]')
-  const sentinelle = document.getElementById('navbar-sentinelle')
-
-  if (navbar && sentinelle) {
-    const observateur = new IntersectionObserver(
-      ([entree]) => {
-        navbar.classList.toggle('glass', !entree.isIntersecting)
-      },
-      { rootMargin: '0px', threshold: 0 },
-    )
-    observateur.observe(sentinelle)
-  }
-</script>

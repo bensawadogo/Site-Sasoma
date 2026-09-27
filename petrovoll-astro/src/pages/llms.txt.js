@@ -1,4 +1,5 @@
-import { getCollection, getEntry } from 'astro:content'
+import { getParametres, getProduits, getSecteurs, urlSite } from '@/lib/contenu'
+import { formaterPrix } from '@/lib/format'
 
 /**
  * ════════════════════════════════════════════════════════════════════════════
@@ -30,36 +31,34 @@ import { getCollection, getEntry } from 'astro:content'
 export const prerender = true
 
 export async function GET({ site }) {
-  const base = (site ?? new URL('https://petrovoll.example')).toString().replace(/\/+$/, '')
+  const base = urlSite(site).toString().replace(/\/+$/, '')
 
   const [parametres, secteurs, produits] = await Promise.all([
-    getEntry('parametresSite', 'index').catch(() => undefined),
-    getCollection('secteurs'),
-    getCollection('produits'),
+    getParametres(),
+    getSecteurs(),
+    getProduits(),
   ])
 
-  const nom = parametres?.data.nomSociete ?? 'PETROVOLL'
+  const nom = parametres.nomSociete
   const slogan =
-    parametres?.data.slogan ??
+    parametres.slogan ??
     'Groupe de distribution multi-secteurs en Afrique de l’Ouest : lubrifiants, transport, distribution, pneumatiques et fournitures de bureau.'
-  const telephone = parametres?.data.telephone ?? ''
-  const email = parametres?.data.email ?? ''
-  const adresse = parametres?.data.adresse ?? ''
+  const { telephone, email, adresse } = parametres
 
-  const produitsPhare = produits.filter((p) => p.data.estProduitPhare)
-  const produitsStandard = produits.filter((p) => !p.data.estProduitPhare)
+  const produitsPhare = produits.filter((p) => p.data.enAvant)
+  const produitsStandard = produits.filter((p) => !p.data.enAvant)
 
   const ligneProduit = (p) =>
-    `- [${p.data.titre}](${base}/produits/${p.id}): marque ${p.data.marque}${
-      p.data.reference ? ` · réf. ${p.data.reference}` : ''
-    } · secteur ${p.data.secteur}${p.data.disponible ? '' : ' · sur commande'}`
+    `- [${p.data.nom}](${base}/produits/${p.id}): ${formaterPrix(p.data.prix)}${
+      p.data.conditionnement ? ` · ${p.data.conditionnement}` : ''
+    }${p.data.reference ? ` · réf. ${p.data.reference}` : ''}${p.data.disponible ? '' : ' · sur commande'}`
 
   const contenu = `# ${nom}
 
 > ${slogan}
 
 ${nom} est une société de distribution multi-secteurs implantée en Afrique de
-l’Ouest. Elle distribue notamment les lubrifiants de la marque PETROVOLL
+l’Ouest, basée au Burkina Faso. Elle distribue notamment les lubrifiants de la marque allemande Petrovöll
 (huiles moteur conditionnées en bidons plastiques) et opère sur quatre autres
 activités : transport et logistique, distribution et import-export,
 pneumatiques, et fournitures de bureau.
@@ -94,7 +93,7 @@ ${produitsStandard.map(ligneProduit).join('\n')}
 ${
   secteurs.length > 0
     ? secteurs.map((s) => `- [${s.data.nom}](${base}/secteurs/${s.id})`).join('\n')
-    : `- Lubrifiants (huile moteur PETROVOLL)
+    : `- Lubrifiants (Petrovöll)
 - Transport & logistique
 - Distribution & import-export
 - Pneumatiques
@@ -112,7 +111,7 @@ ${email ? `- Email : ${email}` : '- Email : à compléter (éditable dans l’ad
 ${adresse ? `- Adresse : ${adresse.replace(/\n/g, ', ')}` : '- Adresse : à compléter'}
 
 ## Informations complémentaires
-- Les demandes de prix professionnels (B2B) passent par la page contact :
+- Les prix affichés sont indicatifs ; les devis professionnels (B2B) passent par la page contact :
   ${base}/contact
 - Conditions commerciales, quantités minimum et zones de livraison : à préciser
   avec l’équipe commerciale.
@@ -120,7 +119,7 @@ ${adresse ? `- Adresse : ${adresse.replace(/\n/g, ', ')}` : '- Adresse : à comp
 ## Politique d’usage par les modèles de langage
 - Les bots de RECHERCHE IA (OAI-SearchBot, ChatGPT-User, Claude-SearchBot,
   Claude-User, PerplexityBot, YouBot, Applebot-Extended) sont autorisés à
-  indexer ce site et à CITOR cette page comme source.
+  indexer ce site et à CITER cette page comme source.
 - Les crawlers d’ENTRAÎNEMENT (GPTBot, ClaudeBot, anthropic-ai,
   Google-Extended, CCBot, Meta-ExternalAgent, Bytespider, Amazonbot,
   cohere-ai, Diffbot) sont refusés — voir ${base}/robots.txt

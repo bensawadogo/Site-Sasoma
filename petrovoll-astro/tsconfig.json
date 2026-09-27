@@ -17,5 +17,7 @@
     "verbatimModuleSyntax": true
   },
   "include": [".astro/types.d.ts", "src/**/*", "keystatic.config.ts", "*.mjs"],
-  "exclude": ["dist", "node_modules", ".astro"]
+  // NE PAS exclure `.astro` : il contient les types générés des collections
+  // (sans eux, getCollection() renvoie `any` et astro check échoue).
+  "exclude": ["dist", "node_modules"]
 }

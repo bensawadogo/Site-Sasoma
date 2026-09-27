@@ -1,216 +1,87 @@
 ---
 /**
- * ─────────────────────────────────────────────────────────────────────────────
- * HeroSection.astro — section d'ouverture (100 % HTML, zéro JS par défaut)
- * ────────────────────────────────────────────────────────────────────────────
- *  MOBILE-FIRST (contrainte N°1) :
- *   • mobile  : texte EN PREMIER, la vidéo EN DESSOUS (empilement vertical)
- *   • desktop : deux colonnes côte à côte (texte à gauche, vidéo à droite)
- *  L'ordre du DOM est donc texte → vidéo, et `lg:grid-cols-2` fait le reste.
- *  Aucune inversion `order-*` : sur mobile, le lecteur voit d'abord le message.
+ * HeroSection.astro — ouverture de la page d'accueil.
+ * Textes édités par le client (admin → Pages → Page d'accueil).
  *
- *  LE MEDIA N'EST JAMAIS DANS LE CHEMIN CRITIQUE :
- *   • le H1 et les CTA sont du HTML pur : le LCP ne dépend pas du média
- *   • la vidéo est un <video muted playsinline autoplay loop> : aucun JS
- *     bloquant, et un poster dérivé de la même image couvre le cas où le
- *     navigateur refuse l'autoplay (mobile en économie de données)
- *   • la 3D (Three.js) est chargee UNIQUEMENT quand l'utilisateur demande
- *     la vue 3D : elle ne coûte donc rien au chargement initial.
+ * Mobile : titre → bidon → texte, pour que le bidon soit visible sans défiler.
+ * Desktop : texte à gauche, bidon à droite. L'ordre du DOM suit le mobile.
  *
- *  DEUX VUES, UN SEUL SUPPORT (pas de doublon visuel) :
- *   • « Vidéo »  → le showcase Tripo nettoyé (sans QR ni crédit IA)
- *   • « 3D »     → le bidon Three.js, rotatif et manipulable au doigt
- *   Les deux partagent la même boîte carrée : bascule instantanée, zéro saut
- *   de mise en page, et le hero reste centré sur le produit dans les deux cas.
+ * Le bidon 3D n'est jamais dans le chemin critique : une image WebP de 19-34 Ko
+ * s'affiche d'abord, la 3D la remplace ensuite si le téléphone le permet
+ * (voir BidonScene).
  */
-import HeroVideo from '@/components/home/HeroVideo.astro'
 import BidonScene from '@/components/3d/BidonScene.astro'
+import { getAccueil, getParametres } from '@/lib/contenu'
 
-const lienWhatsApp = import.meta.env.PUBLIC_WHATSAPP_NUMBER
-  ? `https://wa.me/${import.meta.env.PUBLIC_WHATSAPP_NUMBER.replace(/[^\d]/g, '')}`
-  : null
-
-/** Micro-preuves affichées sous les CTA — TODO [contenu] : valeurs client. */
-const chiffres = [
-  { libelle: 'Secteurs d’activité', valeur: '5' },
-  { libelle: 'Références catalogue', valeur: '—' },
-  { libelle: 'Pays desservis', valeur: '—' },
-]
+const [accueil, parametres] = await Promise.all([getAccueil(), getParametres()])
+const lienWhatsApp = parametres.whatsapp()
 ---
 
-<section class="relative overflow-hidden bg-primary" aria-labelledby="hero-titre">
-  <!-- Halos industriels (purement décoratifs, aucun impact sur le LCP) -->
+<section class="zone-sombre relative overflow-hidden" aria-labelledby="hero-titre">
   <div
     aria-hidden="true"
     class="pointer-events-none absolute inset-0"
-    style="background: radial-gradient(ellipse 80% 60% at 70% 30%, rgba(212,66,10,0.18), transparent 70%);"
+    style="background: radial-gradient(ellipse 80% 60% at 70% 30%, rgba(230,103,17,0.18), transparent 70%);"
   >
   </div>
 
-  <div class="container-page relative grid items-center gap-10 py-10 lg:grid-cols-2 lg:gap-16 lg:py-20">
-    <!-- ── Colonne texte (1re dans le DOM = 1re sur mobile) ─────────────── -->
-    <div class="reveal">
-      <p class="inline-flex items-center gap-2 rounded border border-gold/30 bg-gold/5 px-3 py-1.5 font-display text-xs tracking-widest text-gold">
-        LUBRIFIANTS · TRANSPORT · DISTRIBUTION
+  <div class="hero-grille container-page relative py-6 lg:py-20">
+    <div class="hero-titre reveal">
+      <p class="inline-flex items-center gap-2 rounded border border-vif/30 bg-vif/5 px-3 py-1.5 font-display text-xs uppercase tracking-widest text-vif">
+        {accueil.surtitre}
       </p>
 
-      <h1 id="hero-titre" class="mt-5 text-4xl leading-[0.95] sm:text-5xl lg:text-7xl">
-        L’ÉNERGIE QUI
+      <h1 id="hero-titre" class="mt-5 text-4xl uppercase leading-[0.95] sm:text-5xl lg:text-7xl">
+        {accueil.titreDebut}
         <br />
-        <span class="text-accent">FAIT AVANCER</span>
+        <span class="text-vif">{accueil.titreCouleur}</span>
         <br />
-        VOS MACHINES
+        {accueil.titreFin}
       </h1>
+    </div>
 
-      <p class="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-        Huiles moteur et lubrifiants <strong class="text-text">PETROVOLL</strong>, logistique,
-        import-export, pneumatiques et fournitures de bureau — un partenaire unique pour
-        vos approvisionnements en Afrique de l’Ouest.
-      </p>
+    <div class="hero-bidon mx-auto aspect-square w-full max-w-[300px] sm:max-w-[420px] lg:max-w-[620px]">
+      <BidonScene sizes="(min-width: 1024px) 620px, (min-width: 640px) 420px, 300px" />
+    </div>
 
-      <!-- CTA : empilés en largeur pleine sur mobile (toucher facile) -->
+    <div class="hero-texte reveal">
+      {accueil.texte && <p class="max-w-xl text-base leading-relaxed text-attenue sm:text-lg">{accueil.texte}</p>}
+
+      <!-- CTA empilés en pleine largeur sur mobile (toucher facile) -->
       <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <a href="/produits" class="btn-primary w-full sm:w-auto">Voir le catalogue</a>
         <a href="/contact" class="btn-outline w-full sm:w-auto">Demander un devis</a>
         {
           lienWhatsApp && (
-            <a
-              href={lienWhatsApp}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-outline w-full sm:w-auto"
-            >
+            <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="btn-outline w-full sm:w-auto">
               WhatsApp
             </a>
           )
         }
       </div>
-
-      <!-- Micro-preuves -->
-      <dl class="mt-8 grid grid-cols-3 gap-4 border-t border-border pt-6">
-        {
-          chiffres.map((item) => (
-            <div>
-              <dd class="font-display text-2xl text-gold lg:text-3xl">{item.valeur}</dd>
-              <dt class="mt-1 text-xs uppercase tracking-wide text-muted">{item.libelle}</dt>
-            </div>
-          ))
-        }
-      </dl>
-    </div>
-
-    <!-- ── Média produit : une seule boîte, deux vues (vidéo / 3D) ────────── -->
-    <div class="flex flex-col items-center gap-4">
-      <div
-        class="hero-media relative aspect-square w-full max-w-[560px] overflow-hidden rounded-md lg:max-w-[620px]"
-        data-hero-media
-      >
-        <!-- Vue 1 : la vidéo nettoyée (défaut, aucun coût GPU) -->
-        <div
-          class="hero-media-pane absolute inset-0"
-          data-pane="video"
-          id="hero-panneau-video"
-          role="tabpanel"
-          aria-labelledby="hero-onglet-video"
-        >
-          <HeroVideo />
-        </div>
-
-        <!-- Vue 2 : la 3D, chargée à la demande (lazy) -->
-        <div
-          class="hero-media-pane absolute inset-0 hidden"
-          data-pane="3d"
-          id="hero-panneau-3d"
-          role="tabpanel"
-          aria-labelledby="hero-onglet-3d"
-          data-3d-host
-        >
-          <BidonScene />
-        </div>
-      </div>
-
-      <!-- Bascule vidéo / 3D — boutons accessibles, 44px mini (tactile) -->
-      <div
-        class="inline-flex rounded border border-border bg-surface/80 p-1"
-        role="tablist"
-        aria-label="Choisir la vue du bidon"
-      >
-        <button
-          type="button"
-          role="tab"
-          id="hero-onglet-video"
-          aria-selected="true"
-          aria-controls="hero-panneau-video"
-          data-hero-tab="video"
-          class="min-h-[44px] rounded-sm px-4 text-sm font-semibold text-text"
-        >
-          Vidéo
-        </button>
-        <button
-          type="button"
-          role="tab"
-          id="hero-onglet-3d"
-          aria-selected="false"
-          aria-controls="hero-panneau-3d"
-          data-hero-tab="3d"
-          class="min-h-[44px] rounded-sm px-4 text-sm font-semibold text-muted"
-        >
-          3D interactif
-        </button>
-      </div>
-
-      <p class="text-center text-xs text-muted">
-        Faites pivoter le bidon 3D au doigt ou à la souris.
-      </p>
     </div>
   </div>
 </section>
 
 <style>
-  /* L'onglet actif se distingue par le fond accent, pas seulement par la
-     couleur du texte (lisibilité daltonienne + contraste WCAG). */
-  [data-hero-tab][aria-selected='true'] {
-    background-color: var(--color-accent);
-    color: #fff;
+  .hero-grille {
+    display: grid;
+    grid-template-areas: 'titre' 'bidon' 'texte';
+    gap: 1.25rem;
+  }
+  .hero-titre { grid-area: titre; }
+  .hero-bidon { grid-area: bidon; }
+  .hero-texte { grid-area: texte; }
+
+  @media (min-width: 64rem) {
+    .hero-grille {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: 'titre bidon' 'texte bidon';
+      column-gap: 4rem;
+      row-gap: 1.25rem;
+    }
+    .hero-titre { align-self: end; }
+    .hero-texte { align-self: start; }
+    .hero-bidon { align-self: center; }
   }
 </style>
-
-<script>
-  /* Bascule Vidéo <-> 3D.
-     - La 3D n'est instanciée qu'au PREMIER clic sur l'onglet 3D (Three.js
-       + 1,6 Mo de GLB ne sont téléchargés que si l'utilisateur le veut).
-     - Le <canvas> est déjà dans le DOM (HTML statique, zéro JS au build) :
-       on l'active donc ici, et on ne le désactive plus (le keep-alive évite
-       un rechargement de 1,6 Mo lors des allers-retours entre les onglets). */
-  const media = document.querySelector<HTMLElement>('[data-hero-media]')
-  const onglets = document.querySelectorAll<HTMLButtonElement>('[data-hero-tab]')
-
-  if (media && onglets.length) {
-    const panes = media.querySelectorAll<HTMLElement>('[data-pane]')
-
-    const activer = (vue: string) => {
-      panes.forEach((p) => {
-        p.classList.toggle('hidden', p.dataset.pane !== vue)
-      })
-      onglets.forEach((b) => {
-        const actif = b.dataset.heroTab === vue
-        b.setAttribute('aria-selected', String(actif))
-      })
-      // La vidéo ne doit pas tourner en arrière-plan quand elle est masquée
-      // (BidonScene s'initialise tout seul à l'affichage de son panneau).
-      const video = media.querySelector<HTMLVideoElement>('video.hero-video')
-      if (video) {
-        if (vue === 'video') {
-          if (video.paused) video.play().catch(() => undefined)
-        } else {
-          video.pause()
-        }
-      }
-    }
-
-    onglets.forEach((bouton) => {
-      bouton.addEventListener('click', () => activer(bouton.dataset.heroTab ?? 'video'))
-    })
-  }
-</script>
-
