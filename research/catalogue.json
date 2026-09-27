@@ -1,0 +1,1071 @@
+{
+  "source": "https://petrovoll.com/Products",
+  "releve": "2026-09-27",
+  "avertissement": "Relevé automatique du site officiel, à valider avec le représentant et les fiches techniques (TDS). Les conditionnements 1L/4L/5L/20L/208L sont affichés à l'identique pour tous les produits, y compris graisses et additifs : à confirmer.",
+  "categories": [
+    {
+      "id": "huiles-essence",
+      "nom": "Huiles moteur essence",
+      "url": "https://petrovoll.com/GasolineEngineOils",
+      "produits": [
+        {
+          "id": "stark-synthetique",
+          "nom": "STÄRK Fully Synthetic",
+          "base": "Synthétique (PAO)",
+          "viscosites": [
+            "5W-30",
+            "5W-40",
+            "10W-30",
+            "10W-40",
+            "20W-30",
+            "20W-40"
+          ],
+          "normes": [
+            "API SN",
+            "ACEA A5/B5-04"
+          ],
+          "homologations": [
+            "MB 229.1",
+            "MB 229.3",
+            "Porsche C20",
+            "VW 502.00",
+            "VW 505.00",
+            "BMW Longlife",
+            "Peugeot-Citroën",
+            "Ferrari"
+          ],
+          "usage": "Moteurs essence et diesel modernes",
+          "motsCles": [
+            "STÄRK",
+            "STARK",
+            "Voll Synthetisch",
+            "Fully Synthetic"
+          ],
+          "url": "https://petrovoll.com/GasolineEngineOils/StarkFullySyntheticGasolineEngineOil",
+          "photoOfficielle": "photos/produits/stark.jpg"
+        },
+        {
+          "id": "stark-semi-synthetique",
+          "nom": "STÄRK Semi Synthetic",
+          "base": "Semi-synthétique",
+          "viscosites": [
+            "5W-30",
+            "5W-40",
+            "10W-30",
+            "10W-40",
+            "20W-30",
+            "20W-40"
+          ],
+          "normes": [
+            "API SM",
+            "ACEA A3/B4-04"
+          ],
+          "homologations": [
+            "MB 229.1",
+            "Ford M2C-153E",
+            "BMW Longlife-98",
+            "VW 505.00",
+            "VW 500.00"
+          ],
+          "usage": "Moteurs essence et diesel",
+          "motsCles": [
+            "STÄRK",
+            "Semi Synthetic",
+            "Teilsynthetisch"
+          ],
+          "url": "https://petrovoll.com/GasolineEngineOils/StarkSemiSyntheticGasolineEngineOil",
+          "photoOfficielle": "photos/produits/stark_ss.jpg"
+        },
+        {
+          "id": "volex",
+          "nom": "VÖLEX Multi-Grade Mineral",
+          "base": "Minérale",
+          "viscosites": [
+            "5W-30",
+            "5W-40",
+            "10W-30",
+            "10W-40",
+            "20W-30",
+            "20W-40"
+          ],
+          "normes": [
+            "API SL",
+            "ACEA A3/B3"
+          ],
+          "homologations": [
+            "MB 229.1",
+            "VW 501.01",
+            "VW 505.00"
+          ],
+          "usage": "Moteurs essence et diesel, turbo ou non",
+          "motsCles": [
+            "VÖLEX",
+            "VOLEX"
+          ],
+          "url": "https://petrovoll.com/GasolineEngineOils/VolexMultiGradeMineralGasolineEngineOil",
+          "photoOfficielle": "photos/produits/volex.jpg"
+        },
+        {
+          "id": "vono",
+          "nom": "VÖNO Mineral",
+          "base": "Minérale",
+          "viscosites": [
+            "5W-30",
+            "5W-40",
+            "10W-30",
+            "10W-40",
+            "20W-30",
+            "20W-40"
+          ],
+          "normes": [
+            "API SL/SJ/SF",
+            "CCMC G2/D1"
+          ],
+          "homologations": [
+            "MIL-L-46152C"
+          ],
+          "usage": "Moteurs essence et diesel avec ou sans turbo",
+          "motsCles": [
+            "VÖNO",
+            "VONO"
+          ],
+          "url": "https://petrovoll.com/GasolineEngineOils/VonoMineralGasolineEngineOil",
+          "photoOfficielle": "photos/produits/vono.jpg"
+        }
+      ]
+    },
+    {
+      "id": "huiles-diesel",
+      "nom": "Huiles moteur diesel",
+      "url": "https://petrovoll.com/DieselEngineOils",
+      "produits": [
+        {
+          "id": "viro-tec-synthetique",
+          "nom": "VIRÖ-TEC Fully Synthetic",
+          "base": "Synthétique",
+          "viscosites": [
+            "0W-40",
+            "5W-20",
+            "5W-30",
+            "5W-40",
+            "10W-30"
+          ],
+          "normes": [
+            "API CK-4/CJ-4/CI-4/CH-4",
+            "ACEA E7-08, A3/B4"
+          ],
+          "homologations": [
+            "JASO DH-1",
+            "Volvo VDS-3",
+            "Allison C4",
+            "MB 228.3",
+            "MAN 3275",
+            "CAT ECF-1a",
+            "Cummins CES 20077"
+          ],
+          "usage": "Diesel forte charge, vidanges espacées",
+          "motsCles": [
+            "VIRÖ-TEC",
+            "VIRO-TEC",
+            "VIRÖTEC"
+          ],
+          "url": "https://petrovoll.com/DieselEngineOils/VIRO-TECFullySyntheticDieselEngineOil",
+          "photoOfficielle": "photos/produits/viro_fs.jpg"
+        },
+        {
+          "id": "viro-tec-semi-synthetique",
+          "nom": "VIRÖ-TEC Semi Synthetic",
+          "base": "Semi-synthétique",
+          "viscosites": [
+            "10W-40",
+            "15W-40",
+            "20W-50"
+          ],
+          "normes": [
+            "API CI-4/CH-4/CG-4/CF-4/CF",
+            "ACEA E3, E5/E7"
+          ],
+          "homologations": [
+            "Volvo VDS-3",
+            "Allison C4",
+            "MB 228.3",
+            "MAN 271"
+          ],
+          "usage": "Transport routier, chantiers",
+          "motsCles": [
+            "VIRÖ-TEC",
+            "Semi Synthetic"
+          ],
+          "url": "https://petrovoll.com/DieselEngineOils/VIRO-TECSemiSyntheticDieselEngineOilAboutUs",
+          "photoOfficielle": "photos/produits/viro_ss.jpg"
+        },
+        {
+          "id": "d-tec",
+          "nom": "D-TEC Mineral",
+          "base": "Minérale",
+          "viscosites": [
+            "SAE 30",
+            "SAE 40",
+            "SAE 50",
+            "15W-40",
+            "20W-50"
+          ],
+          "normes": [
+            "API CF/CE/CD/SF/CC/SC"
+          ],
+          "homologations": [
+            "MIL-L-2104B",
+            "MIL-L-2105D",
+            "CAT-T02",
+            "Ford M2C159B"
+          ],
+          "usage": "Flottes anciennes, camions longue distance",
+          "motsCles": [
+            "D-TEC",
+            "DTEC"
+          ],
+          "url": "https://petrovoll.com/DieselEngineOils/D-TECMineralDieselEngineOil",
+          "photoOfficielle": "photos/produits/dtec_mineral.jpg"
+        },
+        {
+          "id": "cng-tec",
+          "nom": "CNG-TEC",
+          "base": "Non indiqué",
+          "viscosites": [
+            "15W-40"
+          ],
+          "normes": [
+            "API CG-4/CF-4",
+            "ACEA E2"
+          ],
+          "homologations": [
+            "MAN 3271-1",
+            "MB 226.9",
+            "Renault RGD",
+            "MAN 271",
+            "MB 228.1"
+          ],
+          "usage": "Moteurs au gaz (GNC/GNL) de camions et bus",
+          "motsCles": [
+            "CNG-TEC",
+            "CNG"
+          ],
+          "url": "https://petrovoll.com/DieselEngineOils/CNG-TECDieselEngineOil",
+          "photoOfficielle": "photos/produits/cngtec.jpg"
+        }
+      ]
+    },
+    {
+      "id": "huiles-moto",
+      "nom": "Huiles moto",
+      "url": "https://petrovoll.com/MotorCycleOils",
+      "produits": [
+        {
+          "id": "motpro-4t",
+          "nom": "MÖTPRO 4T",
+          "base": "Synthétique (PAO)",
+          "viscosites": [
+            "20W-40",
+            "20W-50"
+          ],
+          "normes": [
+            "API SN",
+            "JASO MA-2",
+            "ACEA A5/B5-04"
+          ],
+          "homologations": [
+            "MB 229.1",
+            "MB 229.3"
+          ],
+          "usage": "Motos et scooters 4 temps (moteur, embrayage et boîte lubrifiés ensemble)",
+          "motsCles": [
+            "MÖTPRO",
+            "MOTPRO",
+            "4T",
+            "4-Stroke"
+          ],
+          "url": "https://petrovoll.com/MotorCycleOils/MOTPRO4-StrokeMotorcycleOil",
+          "photoOfficielle": "photos/produits/motpro_4t.jpg"
+        },
+        {
+          "id": "motpro-2t",
+          "nom": "MÖTPRO 2T",
+          "base": "Minérale",
+          "viscosites": [],
+          "normes": [
+            "API TC",
+            "JASO FB/FC/FD",
+            "ISO-L-EGD"
+          ],
+          "homologations": [],
+          "usage": "Moteurs 2 temps : motos, scooters, tricycles",
+          "motsCles": [
+            "MÖTPRO",
+            "MOTPRO",
+            "2T",
+            "2-Stroke"
+          ],
+          "url": "https://petrovoll.com/MotorCycleOils/MOTPRO2-StrokeMotorcycleOil",
+          "photoOfficielle": "photos/produits/motpro_2t.jpg"
+        }
+      ]
+    },
+    {
+      "id": "huiles-marines",
+      "nom": "Huiles marines",
+      "url": "https://petrovoll.com/MarineOils",
+      "produits": [
+        {
+          "id": "marineol-cylindre-synthetique",
+          "nom": "MARINEÖL Synthetic Marine Cylinder",
+          "base": "Synthétique HC",
+          "viscosites": [
+            "15W-40"
+          ],
+          "normes": [
+            "TBN 15/20/40/50",
+            "MAN Diesel & Turbo",
+            "WinGD",
+            "Wärtsilä",
+            "NMMA FC-W"
+          ],
+          "homologations": [],
+          "usage": "Moteurs marins inboard/outboard modernes",
+          "motsCles": [
+            "MARINEÖL",
+            "MARINEOL",
+            "Cylinder"
+          ],
+          "url": "https://petrovoll.com/MarineOils/MARINEOLSyntheticMarineCylinderOil",
+          "photoOfficielle": "photos/produits/marineol_1.jpg"
+        },
+        {
+          "id": "marineol-minerale",
+          "nom": "MARINEÖL Mineral Marine",
+          "base": "Minérale",
+          "viscosites": [
+            "SAE 40",
+            "SAE 50"
+          ],
+          "normes": [
+            "TBN 55/70/85/100",
+            "MAN",
+            "WinGD",
+            "Wärtsilä",
+            "Mitsubishi"
+          ],
+          "homologations": [],
+          "usage": "Diesel marins lents, fiouls lourds",
+          "motsCles": [
+            "MARINEÖL",
+            "Mineral"
+          ],
+          "url": "https://petrovoll.com/MarineOils/MARINEOLmineralMarineOil",
+          "photoOfficielle": "photos/produits/marineol_2.jpg"
+        },
+        {
+          "id": "marineol-trunk-piston",
+          "nom": "MARINEÖL Trunk Piston",
+          "base": "Minérale",
+          "viscosites": [
+            "SAE 40",
+            "SAE 50"
+          ],
+          "normes": [
+            "TBN 15/20/40/50/55",
+            "Wärtsilä 4T",
+            "Wärtsilä 8L38"
+          ],
+          "homologations": [],
+          "usage": "Moteurs à fourreau (trunk piston)",
+          "motsCles": [
+            "MARINEÖL",
+            "Trunk Piston"
+          ],
+          "url": "https://petrovoll.com/MarineOils/MARINEOLTrunkPistonMarineOil",
+          "photoOfficielle": "photos/produits/marineol_3.jpg"
+        },
+        {
+          "id": "marineol-2t",
+          "nom": "MARINEÖL 2T Outboard",
+          "base": "Minérale",
+          "viscosites": [],
+          "normes": [
+            "API TC",
+            "NMMA TC-W3"
+          ],
+          "homologations": [],
+          "usage": "Moteurs hors-bord 2 temps",
+          "motsCles": [
+            "MARINEÖL",
+            "2T",
+            "Outboard"
+          ],
+          "url": "https://petrovoll.com/MarineOils/MARINEOL2-StrokeOutboardOil",
+          "photoOfficielle": "photos/produits/marineol_4.jpg"
+        }
+      ]
+    },
+    {
+      "id": "huiles-industrielles",
+      "nom": "Huiles industrielles",
+      "url": "https://petrovoll.com/IndustrialOils",
+      "produits": [
+        {
+          "id": "hydkon",
+          "nom": "HYDKÖN Hydraulique",
+          "base": "Minérale",
+          "viscosites": [
+            "ISO VG 10",
+            "15",
+            "22",
+            "32",
+            "37",
+            "46",
+            "68",
+            "100",
+            "150",
+            "220"
+          ],
+          "normes": [
+            "DIN 51524-2",
+            "Parker Denison HF0/HF1/HF2",
+            "Vickers M-2950-S"
+          ],
+          "homologations": [],
+          "usage": "Circuits hydrauliques industriels et engins",
+          "motsCles": [
+            "HYDKÖN",
+            "HYDKON",
+            "Hydraulic"
+          ],
+          "url": "https://petrovoll.com/IndustrialOils/HYDKONHydraulicOil",
+          "photoOfficielle": "photos/produits/hydkon.jpg"
+        },
+        {
+          "id": "lub-tec-grob",
+          "nom": "LUB-TEC GRÖB Engrenages industriels",
+          "base": "Minérale + additifs EP",
+          "viscosites": [
+            "ISO VG 68",
+            "100",
+            "150",
+            "220",
+            "320",
+            "460",
+            "680",
+            "1000"
+          ],
+          "normes": [
+            "AGMA 9005-D94 EP",
+            "US Steel 224"
+          ],
+          "homologations": [],
+          "usage": "Réducteurs industriels, mines, cimenteries",
+          "motsCles": [
+            "LUB-TEC",
+            "GRÖB",
+            "Industrial Gear"
+          ],
+          "url": "https://petrovoll.com/IndustrialOils/LUB-TECGROBIndustrialGearOils",
+          "photoOfficielle": "photos/produits/lube_tec_grob.jpg",
+          "photoRemarque": "fût générique partagé par les huiles industrielles"
+        },
+        {
+          "id": "turbine",
+          "nom": "Huile turbine",
+          "base": "Minérale haut VI, sans zinc",
+          "viscosites": [],
+          "normes": [
+            "ISO 6743-3 DAB",
+            "AGMA 250.04"
+          ],
+          "homologations": [],
+          "usage": "Turbines",
+          "motsCles": [
+            "TURBINE"
+          ],
+          "url": "https://petrovoll.com/IndustrialOils/TURBINEOil",
+          "photoOfficielle": "photos/produits/lube_tec_grob.jpg",
+          "photoRemarque": "fût générique partagé par les huiles industrielles"
+        },
+        {
+          "id": "scom",
+          "nom": "SCÖM Compresseur",
+          "base": "Minérale",
+          "viscosites": [],
+          "normes": [
+            "DIN 51515 I & II",
+            "Siemens TLV 9013 04"
+          ],
+          "homologations": [],
+          "usage": "Compresseurs d'air, câbles, glissières, chaînes",
+          "motsCles": [
+            "SCÖM",
+            "SCOM",
+            "Compressor"
+          ],
+          "url": "https://petrovoll.com/IndustrialOils/SCOMCompressorOil",
+          "photoOfficielle": "photos/produits/lube_tec_grob.jpg",
+          "photoRemarque": "fût générique partagé par les huiles industrielles"
+        },
+        {
+          "id": "schneidol",
+          "nom": "SCHNEIDÖL Huile de coupe",
+          "base": "Minérale soluble (biocide)",
+          "viscosites": [],
+          "normes": [],
+          "homologations": [],
+          "usage": "Usinage : meulage, fraisage, tournage, perçage (dilution 4 à 8 %)",
+          "motsCles": [
+            "SCHNEIDÖL",
+            "SCHNEIDOL",
+            "Cutting"
+          ],
+          "url": "https://petrovoll.com/IndustrialOils/SCHNEIDOLCuttingOil",
+          "photoOfficielle": "photos/produits/lube_tec_grob.jpg",
+          "photoRemarque": "fût générique partagé par les huiles industrielles"
+        },
+        {
+          "id": "transformateur",
+          "nom": "Huile transformateur",
+          "base": "Naphténique non inhibée",
+          "viscosites": [],
+          "normes": [
+            "IEC 296",
+            "BS 148"
+          ],
+          "homologations": [],
+          "usage": "Transformateurs électriques, disjoncteurs",
+          "motsCles": [
+            "TRANSFORMER"
+          ],
+          "url": "https://petrovoll.com/IndustrialOils/TRANSFORMEROil",
+          "photoOfficielle": "photos/produits/lube_tec_grob.jpg",
+          "photoRemarque": "fût générique partagé par les huiles industrielles"
+        },
+        {
+          "id": "trans-tech",
+          "nom": "TRANS-TECH Transmission industrielle",
+          "base": "Minérale",
+          "viscosites": [
+            "SAE 10W",
+            "SAE 30",
+            "SAE 40",
+            "SAE 50"
+          ],
+          "normes": [
+            "Caterpillar TO-4",
+            "Allison C-4",
+            "ZF TE-ML 01/03",
+            "API CF-2"
+          ],
+          "homologations": [],
+          "usage": "Transmissions, ponts et engins de chantier",
+          "motsCles": [
+            "TRANS-TECH",
+            "TRANS-TEC"
+          ],
+          "url": "https://petrovoll.com/IndustrialOils/TRANS-TECHIndustrialTransmissionOil",
+          "photoOfficielle": "photos/produits/lube_tec_grob.jpg",
+          "photoRemarque": "fût générique partagé par les huiles industrielles"
+        },
+        {
+          "id": "refrigeration",
+          "nom": "Huile réfrigération",
+          "base": "Naphténique",
+          "viscosites": [],
+          "normes": [],
+          "homologations": [],
+          "usage": "Compresseurs frigorifiques",
+          "motsCles": [
+            "REFRIGERATION"
+          ],
+          "url": "https://petrovoll.com/IndustrialOils/REFRIGERATIONOil",
+          "photoOfficielle": "photos/produits/lube_tec_grob.jpg",
+          "photoRemarque": "fût générique partagé par les huiles industrielles"
+        },
+        {
+          "id": "caloporteur",
+          "nom": "Huile caloporteuse",
+          "base": "Minérale",
+          "viscosites": [],
+          "normes": [],
+          "homologations": [],
+          "usage": "Circuits de chauffage jusqu'à 260 °C",
+          "motsCles": [
+            "HEAT TRANSFER"
+          ],
+          "url": "https://petrovoll.com/IndustrialOils/HEATTRANSFEROil",
+          "photoOfficielle": "photos/produits/lube_tec_grob.jpg",
+          "photoRemarque": "fût générique partagé par les huiles industrielles"
+        },
+        {
+          "id": "circulation",
+          "nom": "Huile de circulation",
+          "base": "Minérale",
+          "viscosites": [],
+          "normes": [],
+          "homologations": [],
+          "usage": "Turbines, paliers, engrenages",
+          "motsCles": [
+            "CIRCULATION"
+          ],
+          "url": "https://petrovoll.com/IndustrialOils/CIRCULATIONOil",
+          "photoOfficielle": "photos/produits/lube_tec_grob.jpg",
+          "photoRemarque": "fût générique partagé par les huiles industrielles"
+        }
+      ]
+    },
+    {
+      "id": "boites-automatiques",
+      "nom": "Huiles de boîte automatique (ATF)",
+      "url": "https://petrovoll.com/AutomaticTransmissionFluids",
+      "produits": [
+        {
+          "id": "dexo-cvt",
+          "nom": "DEXÖ ATF CVT",
+          "base": "Synthétique",
+          "viscosites": [],
+          "normes": [
+            "JATCO FF",
+            "Nissan SF",
+            "Honda HCF-2",
+            "Toyota CVT TC/FE",
+            "VW TL 52 180"
+          ],
+          "homologations": [],
+          "usage": "Boîtes CVT (à variation continue)",
+          "motsCles": [
+            "DEXÖ",
+            "DEXO",
+            "CVT"
+          ],
+          "url": "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-CVT",
+          "photoOfficielle": "photos/produits/dexo_atf_cvt.jpg"
+        },
+        {
+          "id": "dexo-dexron-vi",
+          "nom": "DEXÖ ATF DEXRON VI",
+          "base": "Synthétique",
+          "viscosites": [],
+          "normes": [
+            "DEXRON VI",
+            "MERCON LV",
+            "JASO 1A-LV",
+            "MB 236.41"
+          ],
+          "homologations": [],
+          "usage": "Boîtes automatiques modernes 6 à 9 rapports",
+          "motsCles": [
+            "DEXÖ",
+            "DEXRON VI"
+          ],
+          "url": "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-VI",
+          "photoOfficielle": "photos/produits/dexo_atf_vi.jpg"
+        },
+        {
+          "id": "dexo-dexron-iii",
+          "nom": "DEXÖ ATF DEXRON III",
+          "base": "Non indiqué",
+          "viscosites": [],
+          "normes": [
+            "DEXRON III",
+            "MERCON V",
+            "Allison C-4",
+            "CAT TO-4",
+            "MB 236.6"
+          ],
+          "homologations": [],
+          "usage": "Boîtes automatiques, direction assistée",
+          "motsCles": [
+            "DEXÖ",
+            "DEXRON III"
+          ],
+          "url": "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-III",
+          "photoOfficielle": "photos/produits/dexo_atf_iii.jpg"
+        },
+        {
+          "id": "dexo-dexron-ii",
+          "nom": "DEXÖ ATF DEXRON II",
+          "base": "Non indiqué",
+          "viscosites": [],
+          "normes": [
+            "GM DEXRON II"
+          ],
+          "homologations": [],
+          "usage": "Boîtes automatiques, direction assistée",
+          "motsCles": [
+            "DEXÖ",
+            "DEXRON II"
+          ],
+          "url": "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-II",
+          "photoOfficielle": "photos/produits/dexo_atf_ii.jpg"
+        },
+        {
+          "id": "dexo-type-a",
+          "nom": "DEXÖ ATF Type A Suffix A",
+          "base": "Non indiqué",
+          "viscosites": [],
+          "normes": [
+            "GM Type A Suffix A",
+            "MB 236.2",
+            "Allison C4"
+          ],
+          "homologations": [],
+          "usage": "Camions, engins tout-terrain, hydraulique",
+          "motsCles": [
+            "DEXÖ",
+            "TYPE A"
+          ],
+          "url": "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-TYPE_A-SUFFIX_A",
+          "photoOfficielle": "photos/produits/dexo_atf_typea.jpg"
+        }
+      ]
+    },
+    {
+      "id": "boites-manuelles",
+      "nom": "Huiles de boîte manuelle et ponts",
+      "url": "https://petrovoll.com/AutomotiveManualGearOils",
+      "produits": [
+        {
+          "id": "max-grob-synthetique",
+          "nom": "MAX-GRÖB Synthetic",
+          "base": "Synthétique",
+          "viscosites": [
+            "75W-90",
+            "80W-140"
+          ],
+          "normes": [
+            "API GL-5",
+            "MT-1",
+            "MIL-L-2105D"
+          ],
+          "homologations": [
+            "Eaton 90-104"
+          ],
+          "usage": "Boîtes et ponts, extrême pression",
+          "motsCles": [
+            "MAX-GRÖB",
+            "MAX-GROB",
+            "Synthetic"
+          ],
+          "url": "https://petrovoll.com/AutomotiveManualGearOils/MAX-GROBSyntheticGearOil",
+          "photoOfficielle": "photos/produits/max_grob.jpg"
+        },
+        {
+          "id": "max-grob",
+          "nom": "MAX-GRÖB Gear Oil",
+          "base": "Minérale",
+          "viscosites": [
+            "80W-90",
+            "85W-140",
+            "SAE 90",
+            "SAE 140"
+          ],
+          "normes": [
+            "API GL-5 / GL-4 / GL-1"
+          ],
+          "homologations": [
+            "AGMA 250.04",
+            "David Brown Table M"
+          ],
+          "usage": "Boîtes manuelles, ponts",
+          "motsCles": [
+            "MAX-GRÖB",
+            "Gear Oil"
+          ],
+          "url": "https://petrovoll.com/AutomotiveManualGearOils/MAX-GROBGearOil",
+          "photoOfficielle": "photos/produits/max_grob_gear_oil.jpg"
+        }
+      ]
+    },
+    {
+      "id": "liquides-frein",
+      "nom": "Liquides de frein",
+      "url": "https://petrovoll.com/BrakeFluids",
+      "produits": [
+        {
+          "id": "dot-5-1",
+          "nom": "Liquide de frein DOT 5.1",
+          "base": "Non indiqué",
+          "viscosites": [],
+          "normes": [
+            "FMVSS 116 DOT 5.1",
+            "SAE J1703/J1704",
+            "ISO 4925 classes 3/4/5.1"
+          ],
+          "homologations": [],
+          "usage": "Freins et embrayages hydrauliques",
+          "motsCles": [
+            "DOT 5.1",
+            "BRAKE FLUID"
+          ],
+          "url": "https://petrovoll.com/BrakeFluids/DOT5_1BrakeFluid",
+          "photoOfficielle": "photos/produits/dot_brakefluid.jpg",
+          "photoRemarque": "même visuel pour DOT 5.1 et DOT 4/3"
+        },
+        {
+          "id": "dot-4-3",
+          "nom": "Liquide de frein DOT 4 / DOT 3",
+          "base": "Non indiqué",
+          "viscosites": [],
+          "normes": [
+            "FMVSS 116 DOT 4",
+            "SAE J1703/J1704",
+            "ISO 4925"
+          ],
+          "homologations": [],
+          "usage": "Freins et circuits hydrauliques",
+          "motsCles": [
+            "DOT 4",
+            "DOT 3",
+            "BRAKE FLUID"
+          ],
+          "url": "https://petrovoll.com/BrakeFluids/DOT4And3BrakeFluid",
+          "photoOfficielle": "photos/produits/dot_brakefluid.jpg",
+          "photoRemarque": "même visuel pour DOT 5.1 et DOT 4/3"
+        }
+      ]
+    },
+    {
+      "id": "refroidissement",
+      "nom": "Liquides de refroidissement",
+      "url": "https://petrovoll.com/CoolantsAndAntiFreeze",
+      "produits": [
+        {
+          "id": "kuhler",
+          "nom": "KÜHLER Coolant & Antifreeze",
+          "base": "Monopropylène glycol, technologie OAT",
+          "viscosites": [],
+          "normes": [
+            "Protection jusqu'à -36 °C à 50 %",
+            "Sans nitrite, amine, phosphate ni silicate"
+          ],
+          "homologations": [],
+          "usage": "Radiateurs : refroidissement, antigel, anti-ébullition. Vert, rouge ou bleu",
+          "motsCles": [
+            "KÜHLER",
+            "KUHLER",
+            "Coolant"
+          ],
+          "url": "https://petrovoll.com/CoolantsAndAntiFreeze/Kuhler",
+          "photoOfficielle": "photos/produits/kuhler.jpg"
+        }
+      ]
+    },
+    {
+      "id": "graisses",
+      "nom": "Graisses",
+      "url": "https://petrovoll.com/Greases",
+      "produits": [
+        {
+          "id": "glat-ep-lithium",
+          "nom": "GLÄT EP0 / EP1 / EP2 Lithium",
+          "base": "Savon lithium, extrême pression",
+          "viscosites": [
+            "NLGI 0",
+            "NLGI 1",
+            "NLGI 2"
+          ],
+          "normes": [
+            "-30 à 120 °C"
+          ],
+          "homologations": [],
+          "usage": "Roulements, usage industriel normal à lourd, milieux humides",
+          "motsCles": [
+            "GLÄT",
+            "GLAT",
+            "EP"
+          ],
+          "url": "https://petrovoll.com/Greases/GLAT-EP0-EP1-EP2ExtremePressureLithiumGrease",
+          "photoOfficielle": "photos/produits/glat_ep0.jpg"
+        },
+        {
+          "id": "glat-lithium-complexe",
+          "nom": "GLÄT EP2 / EP3 Lithium complexe",
+          "base": "Complexe lithium",
+          "viscosites": [
+            "NLGI 2",
+            "NLGI 3"
+          ],
+          "normes": [
+            "-15 à 160 °C"
+          ],
+          "homologations": [],
+          "usage": "Mines, chantiers, charges lourdes, milieux corrosifs",
+          "motsCles": [
+            "GLÄT",
+            "Complex"
+          ],
+          "url": "https://petrovoll.com/Greases/GLAT-EP2-EP3LithiumComplexGrease",
+          "photoOfficielle": "photos/produits/glat_ep3.jpg"
+        },
+        {
+          "id": "glat-multi-usage",
+          "nom": "GLÄT Multi-usage (calcium)",
+          "base": "Savon calcium",
+          "viscosites": [
+            "NLGI 2",
+            "NLGI 3"
+          ],
+          "normes": [],
+          "homologations": [],
+          "usage": "Roulements de roues, paliers, milieux humides",
+          "motsCles": [
+            "GLÄT",
+            "Multi Purpose"
+          ],
+          "url": "https://petrovoll.com/Greases/GLATMultiPurposeGrease",
+          "photoOfficielle": "photos/produits/glat_mp.jpg"
+        }
+      ]
+    },
+    {
+      "id": "additifs",
+      "nom": "Additifs et entretien",
+      "url": "https://petrovoll.com/AdditivesAndCarCare",
+      "produits": [
+        {
+          "id": "nettoyant-injecteurs-essence",
+          "nom": "Nettoyant injecteurs essence",
+          "base": "",
+          "viscosites": [],
+          "normes": [],
+          "homologations": [],
+          "usage": "Nettoie injecteurs et soupapes (essence)",
+          "motsCles": [
+            "Fuel Injector Cleaner"
+          ],
+          "url": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLFuelInjectorCleaner",
+          "photoOfficielle": "photos/produits/fuel_injector_cleaner.jpg"
+        },
+        {
+          "id": "nettoyant-injecteurs-diesel",
+          "nom": "Nettoyant injecteurs diesel",
+          "base": "",
+          "viscosites": [],
+          "normes": [],
+          "homologations": [],
+          "usage": "Nettoie injecteurs et chambres de combustion (diesel)",
+          "motsCles": [
+            "Diesel Injector Cleaner"
+          ],
+          "url": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLDieselInjectorCleaner",
+          "photoOfficielle": "photos/produits/diesel_injector_cleaner.jpg"
+        },
+        {
+          "id": "nettoyant-circuit-carburant",
+          "nom": "Nettoyant circuit carburant complet",
+          "base": "",
+          "viscosites": [],
+          "normes": [],
+          "homologations": [],
+          "usage": "Injecteurs, soupapes, pistons (essence et diesel)",
+          "motsCles": [
+            "Complete Fuel System Cleaner"
+          ],
+          "url": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCompleteFuelSystemCleaner",
+          "photoOfficielle": "photos/produits/complete_fuel_system_scanner.jpg"
+        },
+        {
+          "id": "booster-octane",
+          "nom": "Booster d'octane",
+          "base": "",
+          "viscosites": [],
+          "normes": [],
+          "homologations": [],
+          "usage": "Augmente l'indice d'octane (essence)",
+          "motsCles": [
+            "Octane Booster"
+          ],
+          "url": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLOctaneBooster",
+          "photoOfficielle": "photos/produits/octane_booster.jpg"
+        },
+        {
+          "id": "traitement-huile",
+          "nom": "Traitement d'huile",
+          "base": "",
+          "viscosites": [],
+          "normes": [],
+          "homologations": [],
+          "usage": "Anti-usure, réduit les frottements",
+          "motsCles": [
+            "Oil Treatment"
+          ],
+          "url": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLOilTreatment",
+          "photoOfficielle": "photos/produits/oil_treatment.jpg"
+        },
+        {
+          "id": "anti-fuite-huile",
+          "nom": "Anti-fuite d'huile",
+          "base": "",
+          "viscosites": [],
+          "normes": [],
+          "homologations": [],
+          "usage": "Régénère les joints, réduit la consommation d'huile",
+          "motsCles": [
+            "Oil Stop Leak"
+          ],
+          "url": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLOilStopLeak",
+          "photoOfficielle": "photos/produits/oil_stop_leak.jpg"
+        },
+        {
+          "id": "nettoyant-carburateur",
+          "nom": "Nettoyant carburateur et starter",
+          "base": "",
+          "viscosites": [],
+          "normes": [],
+          "homologations": [],
+          "usage": "Dissout dépôts et gommes du carburateur (essence)",
+          "motsCles": [
+            "Carburetor",
+            "Choke Cleaner"
+          ],
+          "url": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCarburetorAndChokeCleaner",
+          "photoOfficielle": null
+        },
+        {
+          "id": "rincage-moteur",
+          "nom": "Rinçage moteur",
+          "base": "",
+          "viscosites": [],
+          "normes": [],
+          "homologations": [],
+          "usage": "Élimine les boues avant vidange",
+          "motsCles": [
+            "Engine Flush"
+          ],
+          "url": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLEngineFlush",
+          "photoOfficielle": null
+        }
+      ]
+    }
+  ],
+  "sourceDonnees": "Pages produits de petrovoll.com. Le site ne publie AUCUNE fiche technique (TDS) : seulement des certificats. Règle 5 du brief : ces données restent une RÉFÉRENCE tant que assets/tds/ est vide.",
+  "certificats": [
+    "https://petrovoll.com/assets/images/certificates/certificates/2019/EOLCS_CERTIFICATE_GCO_10-Apr-2019.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/409310910.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/EOLCS%20Certificate%20GCON%2011-May-2018pdf.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/EOLCS%20Certificate%20GULF%20CONTINENTAL%20OIL%20AND%20GREASE%20FACTORY%2008-May-2020.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/JASO_OEM_APPROVAL_4T.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/MB-Approval.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/OHSAS-PETROVOLL.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/PARKER%20GCON%20HYDRATEC%20HYDRAULIC%20APPROVAL.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/PARKER%20PETROVOLL%20HYDKON%20HYDRAULIC%20APPROVAL.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/Petrovoll_H8766B%20S%20of%20Q%20-%20ECF-1a.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/Petrovoll_H8766B%20S%20of%20Q%20-%20M3275-1.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/Petrovoll_Viro-tec_15W-40.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/Volkswagen.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/nov2018/mb228-3.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/nov2018/mb229-3.pdf",
+    "https://petrovoll.com/assets/images/certificates/certificates/nov2018/porsche.pdf"
+  ],
+  "photosManquantes": {
+    "ids": [
+      "nettoyant-carburateur",
+      "rincage-moteur"
+    ],
+    "raison": "le site affiche un visuel vide (plain.jpg, 800×500, 7 Ko) ou aucun visuel"
+  }
+}

@@ -1,0 +1,1522 @@
+{
+ "source": "https://petrovoll.com (Playwright, 2026-09-27)",
+ "droits": "Visuels © Petrovöll GmbH. Usage public interdit sans autorisation écrite de la marque. Fichiers image NON commités (research/photos/.gitignore).",
+ "total": 76,
+ "parGroupe": {
+  "produits": 35,
+  "bannieres": 30,
+  "usine": 9,
+  "logo": 2
+ },
+ "utilisablesHero": [],
+ "conclusion": "Aucune photo officielle n'est utilisable pour P1–P4 : ce sont des rendus de synthèse sur fond blanc. Les photos réelles du bidon doivent être prises (assets/photos/).",
+ "fichiers": [
+  {
+   "fichier": "bannieres/banners_aboutus-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/aboutus-mobile.jpg",
+   "alt": "About Petrovoll Gmbh",
+   "largeur": 1946,
+   "hauteur": 1001,
+   "mode": "RGB",
+   "octets": 361508,
+   "sha1": "94f40ade95b6",
+   "pages": [
+    "https://petrovoll.com/AboutUs/AboutPetrovoll",
+    "https://petrovoll.com/AboutUs/OurFacility"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_aboutus-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/aboutus-web.jpg",
+   "alt": "About Petrovoll Gmbh",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 1063604,
+   "sha1": "05bd0ee32ec0",
+   "pages": [
+    "https://petrovoll.com/AboutUs/AboutPetrovoll",
+    "https://petrovoll.com/AboutUs/OurFacility"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_banner1-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/banner1-mobile.jpg",
+   "alt": "Petrovoll Distributors",
+   "largeur": 3167,
+   "hauteur": 1500,
+   "mode": "RGB",
+   "octets": 381123,
+   "sha1": "89a396b2b15d",
+   "pages": [
+    "https://petrovoll.com/"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_banner1-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/banner1-web.jpg",
+   "alt": "Petrovoll Distributors",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 1151914,
+   "sha1": "0b3c92265c0f",
+   "pages": [
+    "https://petrovoll.com/"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_additives-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/additives-mobile.jpg",
+   "alt": "Petrovoll Additives and Car Care",
+   "largeur": 1000,
+   "hauteur": 474,
+   "mode": "RGB",
+   "octets": 320293,
+   "sha1": "f6e9f8327e9c",
+   "pages": [
+    "https://petrovoll.com/AdditivesAndCarCare",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCarburetorAndChokeCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCompleteFuelSystemCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLDieselInjectorCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLEngineFlush"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_additives-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/additives-web.jpg",
+   "alt": "Petrovoll Additives and Car Care",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 1062488,
+   "sha1": "89fd5d237f03",
+   "pages": [
+    "https://petrovoll.com/AdditivesAndCarCare",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCarburetorAndChokeCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCompleteFuelSystemCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLDieselInjectorCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLEngineFlush"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_all-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/all-mobile.jpg",
+   "alt": "All Products from Petrovoll",
+   "largeur": 1500,
+   "hauteur": 711,
+   "mode": "RGB",
+   "octets": 671705,
+   "sha1": "3d52cc0b0d59",
+   "pages": [
+    "https://petrovoll.com/Products"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_all-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/all-web.jpg",
+   "alt": "All Products from Petrovoll",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 933809,
+   "sha1": "2c71cf0d4f37",
+   "pages": [
+    "https://petrovoll.com/Products"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_amgo-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/amgo-mobile.jpg",
+   "alt": "Petrovoll Automotive Manual Gear Oil",
+   "largeur": 1000,
+   "hauteur": 474,
+   "mode": "RGB",
+   "octets": 163088,
+   "sha1": "236f8596dd4b",
+   "pages": [
+    "https://petrovoll.com/AutomotiveManualGearOils",
+    "https://petrovoll.com/AutomotiveManualGearOils/MAX-GROBGearOil",
+    "https://petrovoll.com/AutomotiveManualGearOils/MAX-GROBSyntheticGearOil"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_amgo-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/amgo-web.jpg",
+   "alt": "Petrovoll Automotive Manual Gear Oil",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 487196,
+   "sha1": "344a824ece5b",
+   "pages": [
+    "https://petrovoll.com/AutomotiveManualGearOils",
+    "https://petrovoll.com/AutomotiveManualGearOils/MAX-GROBGearOil",
+    "https://petrovoll.com/AutomotiveManualGearOils/MAX-GROBSyntheticGearOil"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_atf-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/atf-mobile.jpg",
+   "alt": "Petrovoll Automatic Transmission Fluids",
+   "largeur": 1000,
+   "hauteur": 474,
+   "mode": "RGB",
+   "octets": 217561,
+   "sha1": "edfd206bb45d",
+   "pages": [
+    "https://petrovoll.com/AutomaticTransmissionFluids",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-CVT",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-II",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-III",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-VI"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_atf-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/atf-web.jpg",
+   "alt": "Petrovoll Automatic Transmission Fluids",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 862843,
+   "sha1": "0f96dc3f848d",
+   "pages": [
+    "https://petrovoll.com/AutomaticTransmissionFluids",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-CVT",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-II",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-III",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-VI"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_brakes-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/brakes-mobile.jpg",
+   "alt": "Petrovoll Brake Fluids",
+   "largeur": 1500,
+   "hauteur": 711,
+   "mode": "RGB",
+   "octets": 488682,
+   "sha1": "b6400570ee63",
+   "pages": [
+    "https://petrovoll.com/BrakeFluids",
+    "https://petrovoll.com/BrakeFluids/DOT4And3BrakeFluid",
+    "https://petrovoll.com/BrakeFluids/DOT5_1BrakeFluid"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_brakes-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/brakes-web.jpg",
+   "alt": "Petrovoll Brake Fluids",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 1078319,
+   "sha1": "93f550186676",
+   "pages": [
+    "https://petrovoll.com/BrakeFluids",
+    "https://petrovoll.com/BrakeFluids/DOT4And3BrakeFluid",
+    "https://petrovoll.com/BrakeFluids/DOT5_1BrakeFluid"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_coolant-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/coolant-mobile.jpg",
+   "alt": "Petrovoll Coolants and Anti Freeze",
+   "largeur": 1500,
+   "hauteur": 711,
+   "mode": "RGB",
+   "octets": 429262,
+   "sha1": "80c84c64d546",
+   "pages": [
+    "https://petrovoll.com/CoolantsAndAntiFreeze",
+    "https://petrovoll.com/CoolantsAndAntiFreeze/Kuhler"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_coolant-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/coolant-web.jpg",
+   "alt": "Petrovoll Coolants and Anti Freeze",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 1156639,
+   "sha1": "8631336d84fd",
+   "pages": [
+    "https://petrovoll.com/CoolantsAndAntiFreeze",
+    "https://petrovoll.com/CoolantsAndAntiFreeze/Kuhler"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_diesel-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/diesel-mobile.jpg",
+   "alt": "Petrovoll Diesel Engine Oils",
+   "largeur": 1500,
+   "hauteur": 711,
+   "mode": "RGB",
+   "octets": 511320,
+   "sha1": "8c5c8f44a683",
+   "pages": [
+    "https://petrovoll.com/DieselEngineOils",
+    "https://petrovoll.com/DieselEngineOils/CNG-TECDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/D-TECMineralDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/VIRO-TECFullySyntheticDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/VIRO-TECSemiSyntheticDieselEngineOilAboutUs"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_diesel-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/diesel-web.jpg",
+   "alt": "Petrovoll Diesel Engine Oils",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 1353065,
+   "sha1": "4ad4cdc02521",
+   "pages": [
+    "https://petrovoll.com/DieselEngineOils",
+    "https://petrovoll.com/DieselEngineOils/CNG-TECDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/D-TECMineralDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/VIRO-TECFullySyntheticDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/VIRO-TECSemiSyntheticDieselEngineOilAboutUs"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_gasoline-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/gasoline-mobile.jpg",
+   "alt": "Petrovoll Gasoline Engine Oils",
+   "largeur": 1000,
+   "hauteur": 474,
+   "mode": "RGB",
+   "octets": 325223,
+   "sha1": "a4eadf69235e",
+   "pages": [
+    "https://petrovoll.com/GasolineEngineOils",
+    "https://petrovoll.com/GasolineEngineOils/StarkFullySyntheticGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/StarkSemiSyntheticGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/VolexMultiGradeMineralGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/VonoMineralGasolineEngineOil"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_gasoline-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/gasoline-web.jpg",
+   "alt": "Petrovoll Gasoline Engine OilsPetrovoll Gasoline Engine Oils",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 1536245,
+   "sha1": "31faec3d40d0",
+   "pages": [
+    "https://petrovoll.com/GasolineEngineOils",
+    "https://petrovoll.com/GasolineEngineOils/StarkFullySyntheticGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/StarkSemiSyntheticGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/VolexMultiGradeMineralGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/VonoMineralGasolineEngineOil"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_greases-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/greases-mobile.jpg",
+   "alt": "Petrovoll  Greases",
+   "largeur": 1000,
+   "hauteur": 474,
+   "mode": "RGB",
+   "octets": 310379,
+   "sha1": "7891e917e5f7",
+   "pages": [
+    "https://petrovoll.com/Greases",
+    "https://petrovoll.com/Greases/GLAT-EP0-EP1-EP2ExtremePressureLithiumGrease",
+    "https://petrovoll.com/Greases/GLAT-EP2-EP3LithiumComplexGrease",
+    "https://petrovoll.com/Greases/GLATMultiPurposeGrease"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_greases-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/greases-web.jpg",
+   "alt": "Petrovoll  Greases",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 1217162,
+   "sha1": "6ad2cb7ebbf2",
+   "pages": [
+    "https://petrovoll.com/Greases",
+    "https://petrovoll.com/Greases/GLAT-EP0-EP1-EP2ExtremePressureLithiumGrease",
+    "https://petrovoll.com/Greases/GLAT-EP2-EP3LithiumComplexGrease",
+    "https://petrovoll.com/Greases/GLATMultiPurposeGrease"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_industrial-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/industrial-mobile.jpg",
+   "alt": "Petrovoll Industrial Oils",
+   "largeur": 380,
+   "hauteur": 180,
+   "mode": "RGB",
+   "octets": 132158,
+   "sha1": "3be094fb2890",
+   "pages": [
+    "https://petrovoll.com/IndustrialOils",
+    "https://petrovoll.com/IndustrialOils/CIRCULATIONOil",
+    "https://petrovoll.com/IndustrialOils/HEATTRANSFEROil",
+    "https://petrovoll.com/IndustrialOils/HYDKONHydraulicOil",
+    "https://petrovoll.com/IndustrialOils/LUB-TECGROBIndustrialGearOils"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_industrial-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/industrial-web.jpg",
+   "alt": "Petrovoll Industrial Oils",
+   "largeur": 2200,
+   "hauteur": 611,
+   "mode": "RGB",
+   "octets": 769534,
+   "sha1": "de96fe45b147",
+   "pages": [
+    "https://petrovoll.com/IndustrialOils",
+    "https://petrovoll.com/IndustrialOils/CIRCULATIONOil",
+    "https://petrovoll.com/IndustrialOils/HEATTRANSFEROil",
+    "https://petrovoll.com/IndustrialOils/HYDKONHydraulicOil",
+    "https://petrovoll.com/IndustrialOils/LUB-TECGROBIndustrialGearOils"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_marine-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/marine-mobile.jpg",
+   "alt": "Petrovoll Marine Oil",
+   "largeur": 1200,
+   "hauteur": 568,
+   "mode": "RGB",
+   "octets": 544677,
+   "sha1": "049f6fc98e44",
+   "pages": [
+    "https://petrovoll.com/MarineOils",
+    "https://petrovoll.com/MarineOils/MARINEOL2-StrokeOutboardOil",
+    "https://petrovoll.com/MarineOils/MARINEOLSyntheticMarineCylinderOil",
+    "https://petrovoll.com/MarineOils/MARINEOLTrunkPistonMarineOil",
+    "https://petrovoll.com/MarineOils/MARINEOLmineralMarineOil"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_marine-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/marine-web.jpg",
+   "alt": "Petrovoll Marine Oil",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 1429034,
+   "sha1": "4155f7d7b24c",
+   "pages": [
+    "https://petrovoll.com/MarineOils",
+    "https://petrovoll.com/MarineOils/MARINEOL2-StrokeOutboardOil",
+    "https://petrovoll.com/MarineOils/MARINEOLSyntheticMarineCylinderOil",
+    "https://petrovoll.com/MarineOils/MARINEOLTrunkPistonMarineOil",
+    "https://petrovoll.com/MarineOils/MARINEOLmineralMarineOil"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_motorcycle-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/motorcycle-mobile.jpg",
+   "alt": "Petrovoll Motorcycle Oils",
+   "largeur": 1000,
+   "hauteur": 474,
+   "mode": "RGB",
+   "octets": 482512,
+   "sha1": "0efc51715e15",
+   "pages": [
+    "https://petrovoll.com/MotorCycleOils",
+    "https://petrovoll.com/MotorCycleOils/MOTPRO2-StrokeMotorcycleOil",
+    "https://petrovoll.com/MotorCycleOils/MOTPRO4-StrokeMotorcycleOil"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_categories_motorcycle-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/categories/motorcycle-web.jpg",
+   "alt": "Petrovoll Motorcycle Oils",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 1377191,
+   "sha1": "2a10101e4e18",
+   "pages": [
+    "https://petrovoll.com/MotorCycleOils",
+    "https://petrovoll.com/MotorCycleOils/MOTPRO2-StrokeMotorcycleOil",
+    "https://petrovoll.com/MotorCycleOils/MOTPRO4-StrokeMotorcycleOil"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_distributors-mobile.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/distributors-mobile.jpg",
+   "alt": "Petrovoll Distributors",
+   "largeur": 1000,
+   "hauteur": 474,
+   "mode": "RGB",
+   "octets": 366737,
+   "sha1": "221d00a9e9ba",
+   "pages": [
+    "https://petrovoll.com/Distribution"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "bannieres/banners_distributors-web.jpg",
+   "groupe": "bannieres",
+   "source": "https://petrovoll.com/assets/images/banners/distributors-web.jpg",
+   "alt": "Petrovoll Distributors",
+   "largeur": 3200,
+   "hauteur": 889,
+   "mode": "RGB",
+   "octets": 786864,
+   "sha1": "17613fb8ebb4",
+   "pages": [
+    "https://petrovoll.com/Distribution"
+   ],
+   "statut": "reference",
+   "raison": "Ambiance/direction artistique seulement : contient bidons, texte ou logos (règle 4) — interdit comme image d'entrée IA.",
+   "hero": false
+  },
+  {
+   "fichier": "usine/environmental.jpg",
+   "groupe": "usine",
+   "source": "https://petrovoll.com/assets/images/factories/environmental.jpg",
+   "alt": "",
+   "largeur": 421,
+   "hauteur": 150,
+   "mode": "RGB",
+   "octets": 34770,
+   "sha1": "640f99b2f409",
+   "pages": [
+    "https://petrovoll.com/AboutUs/AboutPetrovoll",
+    "https://petrovoll.com/AboutUs/OurFacility"
+   ],
+   "statut": "reference",
+   "raison": "Page À propos possible avec autorisation ; hors sujet pour le hero.",
+   "hero": false
+  },
+  {
+   "fichier": "usine/environmental.png",
+   "groupe": "usine",
+   "source": "https://petrovoll.com/assets/images/factories/environmental.png",
+   "alt": "",
+   "largeur": 1280,
+   "hauteur": 456,
+   "mode": "RGB",
+   "octets": 210237,
+   "sha1": "0fb0455bbab7",
+   "pages": [
+    "https://petrovoll.com/AboutUs/AboutPetrovoll",
+    "https://petrovoll.com/AboutUs/OurFacility"
+   ],
+   "statut": "reference",
+   "raison": "Page À propos possible avec autorisation ; hors sujet pour le hero.",
+   "hero": false
+  },
+  {
+   "fichier": "usine/factory-about.jpg",
+   "groupe": "usine",
+   "source": "https://petrovoll.com/assets/images/factories/factory-about.jpg",
+   "alt": "",
+   "largeur": 1182,
+   "hauteur": 1772,
+   "mode": "RGB",
+   "octets": 1237515,
+   "sha1": "880dc78dcaed",
+   "pages": [
+    "https://petrovoll.com/"
+   ],
+   "statut": "reference",
+   "raison": "Page À propos possible avec autorisation ; hors sujet pour le hero.",
+   "hero": false
+  },
+  {
+   "fichier": "usine/factory-main.jpg",
+   "groupe": "usine",
+   "source": "https://petrovoll.com/assets/images/factories/factory-main.jpg",
+   "alt": "",
+   "largeur": 352,
+   "hauteur": 125,
+   "mode": "RGB",
+   "octets": 49788,
+   "sha1": "25b0b8144de6",
+   "pages": [
+    "https://petrovoll.com/AboutUs/AboutPetrovoll",
+    "https://petrovoll.com/AboutUs/OurFacility"
+   ],
+   "statut": "reference",
+   "raison": "Page À propos possible avec autorisation ; hors sujet pour le hero.",
+   "hero": false
+  },
+  {
+   "fichier": "usine/factory-main.png",
+   "groupe": "usine",
+   "source": "https://petrovoll.com/assets/images/factories/factory-main.png",
+   "alt": "",
+   "largeur": 5197,
+   "hauteur": 1844,
+   "mode": "RGBA",
+   "octets": 2920273,
+   "sha1": "afb6f7d0f2c9",
+   "pages": [
+    "https://petrovoll.com/AboutUs/AboutPetrovoll",
+    "https://petrovoll.com/AboutUs/OurFacility"
+   ],
+   "statut": "reference",
+   "raison": "Page À propos possible avec autorisation ; hors sujet pour le hero.",
+   "hero": false
+  },
+  {
+   "fichier": "usine/factory2.jpg",
+   "groupe": "usine",
+   "source": "https://petrovoll.com/assets/images/factories/factory2.jpg",
+   "alt": "",
+   "largeur": 1772,
+   "hauteur": 1182,
+   "mode": "RGB",
+   "octets": 293851,
+   "sha1": "0b5a04715cd0",
+   "pages": [
+    "https://petrovoll.com/AboutUs/AboutPetrovoll",
+    "https://petrovoll.com/AboutUs/OurFacility"
+   ],
+   "statut": "reference",
+   "raison": "Page À propos possible avec autorisation ; hors sujet pour le hero.",
+   "hero": false
+  },
+  {
+   "fichier": "usine/factory5.jpg",
+   "groupe": "usine",
+   "source": "https://petrovoll.com/assets/images/factories/factory5.jpg",
+   "alt": "",
+   "largeur": 1772,
+   "hauteur": 1182,
+   "mode": "RGB",
+   "octets": 509497,
+   "sha1": "852c1c053740",
+   "pages": [
+    "https://petrovoll.com/AboutUs/AboutPetrovoll",
+    "https://petrovoll.com/AboutUs/OurFacility"
+   ],
+   "statut": "reference",
+   "raison": "Page À propos possible avec autorisation ; hors sujet pour le hero.",
+   "hero": false
+  },
+  {
+   "fichier": "usine/factory6.jpg",
+   "groupe": "usine",
+   "source": "https://petrovoll.com/assets/images/factories/factory6.jpg",
+   "alt": "",
+   "largeur": 1772,
+   "hauteur": 1182,
+   "mode": "RGB",
+   "octets": 472648,
+   "sha1": "b8107c8d3f5c",
+   "pages": [
+    "https://petrovoll.com/AboutUs/AboutPetrovoll",
+    "https://petrovoll.com/AboutUs/OurFacility"
+   ],
+   "statut": "reference",
+   "raison": "Page À propos possible avec autorisation ; hors sujet pour le hero.",
+   "hero": false
+  },
+  {
+   "fichier": "usine/factory7.jpg",
+   "groupe": "usine",
+   "source": "https://petrovoll.com/assets/images/factories/factory7.jpg",
+   "alt": "",
+   "largeur": 1772,
+   "hauteur": 1182,
+   "mode": "RGB",
+   "octets": 1172244,
+   "sha1": "23986ec4314c",
+   "pages": [
+    "https://petrovoll.com/AboutUs/AboutPetrovoll",
+    "https://petrovoll.com/AboutUs/OurFacility"
+   ],
+   "statut": "reference",
+   "raison": "Page À propos possible avec autorisation ; hors sujet pour le hero.",
+   "hero": false
+  },
+  {
+   "fichier": "logo/petrovoll-logo-map.png",
+   "groupe": "logo",
+   "source": "https://petrovoll.com/assets/images/petrovoll-logo-map.png",
+   "alt": "logo carte",
+   "largeur": 70,
+   "hauteur": 53,
+   "mode": "RGBA",
+   "octets": 21263,
+   "sha1": "d1efc935898e",
+   "pages": [
+    "https://petrovoll.com/"
+   ],
+   "statut": "reference",
+   "raison": "Logo matriciel 70×53 px : trop petit, demander le SVG officiel au représentant.",
+   "hero": false
+  },
+  {
+   "fichier": "logo/petrovoll-logo.png",
+   "groupe": "logo",
+   "source": "https://petrovoll.com/assets/images/petrovoll-logo.png",
+   "alt": "",
+   "largeur": 220,
+   "hauteur": 132,
+   "mode": "RGBA",
+   "octets": 37141,
+   "sha1": "b14904e6c2d4",
+   "pages": [
+    "https://petrovoll.com/",
+    "https://petrovoll.com/AboutUs/AboutPetrovoll",
+    "https://petrovoll.com/AboutUs/OurFacility",
+    "https://petrovoll.com/AdditivesAndCarCare",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCarburetorAndChokeCleaner"
+   ],
+   "statut": "reference",
+   "raison": "Logo matriciel 220×132 px : trop petit, demander le SVG officiel au représentant.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/complete_fuel_system_scanner.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/additives/complete_fuel_system_scanner.jpg",
+   "alt": "PETROVÖLL COMPLETE FUEL SYSTEM CLEANER",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 87150,
+   "sha1": "590496abb9db",
+   "pages": [
+    "https://petrovoll.com/AdditivesAndCarCare",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCarburetorAndChokeCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCompleteFuelSystemCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLDieselInjectorCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLEngineFlush"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/diesel_injector_cleaner.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/additives/diesel_injector_cleaner.jpg",
+   "alt": "PETROVÖLL DIESEL INJECTOR CLEANER",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 85200,
+   "sha1": "280a7687f3a8",
+   "pages": [
+    "https://petrovoll.com/AdditivesAndCarCare",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCarburetorAndChokeCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCompleteFuelSystemCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLDieselInjectorCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLEngineFlush"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/fuel_injector_cleaner.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/additives/fuel_injector_cleaner.jpg",
+   "alt": "PETROVÖLL FUEL INJECTOR CLEANER",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 55909,
+   "sha1": "81b713a1fc98",
+   "pages": [
+    "https://petrovoll.com/AdditivesAndCarCare",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCarburetorAndChokeCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCompleteFuelSystemCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLDieselInjectorCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLEngineFlush"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/octane_booster.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/additives/octane_booster.jpg",
+   "alt": "PETROVÖLL OCATANE BOOSTER",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 85827,
+   "sha1": "6c1305dfe640",
+   "pages": [
+    "https://petrovoll.com/AdditivesAndCarCare",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCarburetorAndChokeCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCompleteFuelSystemCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLDieselInjectorCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLEngineFlush"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/oil_stop_leak.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/additives/oil_stop_leak.jpg",
+   "alt": "PETROVÖLL OIL STOP LEAK",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 136249,
+   "sha1": "08dbbda89c52",
+   "pages": [
+    "https://petrovoll.com/AdditivesAndCarCare",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCarburetorAndChokeCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCompleteFuelSystemCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLDieselInjectorCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLEngineFlush"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/oil_treatment.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/additives/oil_treatment.jpg",
+   "alt": "PETROVÖLL OIL TREATMENT",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 133360,
+   "sha1": "bc5610884c2b",
+   "pages": [
+    "https://petrovoll.com/AdditivesAndCarCare",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCarburetorAndChokeCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCompleteFuelSystemCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLDieselInjectorCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLEngineFlush"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/plain.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/additives/plain.jpg",
+   "alt": "PETROVÖLL CARBURETOR AND CHOKE CLEANER",
+   "largeur": 800,
+   "hauteur": 500,
+   "mode": "RGB",
+   "octets": 7063,
+   "sha1": "74b803cb6069",
+   "pages": [
+    "https://petrovoll.com/AdditivesAndCarCare",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCarburetorAndChokeCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCompleteFuelSystemCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLDieselInjectorCleaner",
+    "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLEngineFlush"
+   ],
+   "statut": "rejet",
+   "raison": "Visuel vide (placeholder du site officiel)",
+   "hero": false
+  },
+  {
+   "fichier": "produits/max_grob.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/automatic_manual_gear/max_grob.jpg",
+   "alt": "MAX-GRÖB SYNTHETIC GEAR OIL",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 141132,
+   "sha1": "7804866da835",
+   "pages": [
+    "https://petrovoll.com/AutomotiveManualGearOils",
+    "https://petrovoll.com/AutomotiveManualGearOils/MAX-GROBGearOil",
+    "https://petrovoll.com/AutomotiveManualGearOils/MAX-GROBSyntheticGearOil",
+    "https://petrovoll.com/Products"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/max_grob_gear_oil.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/automatic_manual_gear/max_grob_gear_oil.jpg",
+   "alt": "MAX-GRÖB GEAR OIL",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 134400,
+   "sha1": "6ba8bdec1890",
+   "pages": [
+    "https://petrovoll.com/AutomotiveManualGearOils",
+    "https://petrovoll.com/AutomotiveManualGearOils/MAX-GROBGearOil",
+    "https://petrovoll.com/AutomotiveManualGearOils/MAX-GROBSyntheticGearOil",
+    "https://petrovoll.com/Products"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/dexo_atf_cvt.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_cvt.jpg",
+   "alt": "DEXÖ ATF CVT AUTOMATIC TRANSMISSION FLUID ",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 127846,
+   "sha1": "735d5f9c2f3c",
+   "pages": [
+    "https://petrovoll.com/AutomaticTransmissionFluids",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-CVT",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-II",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-III",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-VI"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/dexo_atf_ii.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_ii.jpg",
+   "alt": "DEXÖ ATF DEXRON II",
+   "largeur": 3333,
+   "hauteur": 4167,
+   "mode": "RGB",
+   "octets": 4522253,
+   "sha1": "3b6c71398f6c",
+   "pages": [
+    "https://petrovoll.com/AutomaticTransmissionFluids",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-CVT",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-II",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-III",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-VI"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/dexo_atf_iii.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_iii.jpg",
+   "alt": "DEXÖ ATF DEXRON III",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 130860,
+   "sha1": "f4ab0a1fa416",
+   "pages": [
+    "https://petrovoll.com/AutomaticTransmissionFluids",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-CVT",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-II",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-III",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-VI"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/dexo_atf_typea.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_typea.jpg",
+   "alt": "DEXÖ ATF - TYPE A, SUFFIX A",
+   "largeur": 3333,
+   "hauteur": 4167,
+   "mode": "RGB",
+   "octets": 4515251,
+   "sha1": "3182cb93164b",
+   "pages": [
+    "https://petrovoll.com/AutomaticTransmissionFluids",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-CVT",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-II",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-III",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-VI"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/dexo_atf_vi.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_vi.jpg",
+   "alt": "DEXÖ ATF DEXRON VI",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 123918,
+   "sha1": "f5e733e60e7f",
+   "pages": [
+    "https://petrovoll.com/AutomaticTransmissionFluids",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-CVT",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-II",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-III",
+    "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-VI"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/dot_brakefluid.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/brake/dot_brakefluid.jpg",
+   "alt": "DOT 5.1 BRAKE FLUID",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 65994,
+   "sha1": "dc5f90d6853a",
+   "pages": [
+    "https://petrovoll.com/BrakeFluids",
+    "https://petrovoll.com/BrakeFluids/DOT4And3BrakeFluid",
+    "https://petrovoll.com/BrakeFluids/DOT5_1BrakeFluid",
+    "https://petrovoll.com/Products"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/kuhler.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/coolants/kuhler.jpg",
+   "alt": "KÜHLER COOLANT & ANTI FREEZE",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 96282,
+   "sha1": "11c0ccd43bdc",
+   "pages": [
+    "https://petrovoll.com/CoolantsAndAntiFreeze",
+    "https://petrovoll.com/CoolantsAndAntiFreeze/Kuhler",
+    "https://petrovoll.com/Products"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/cngtec.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/diesel/cngtec.jpg",
+   "alt": "CNG-TEC",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 130353,
+   "sha1": "1610369461c7",
+   "pages": [
+    "https://petrovoll.com/DieselEngineOils",
+    "https://petrovoll.com/DieselEngineOils/CNG-TECDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/D-TECMineralDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/VIRO-TECFullySyntheticDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/VIRO-TECSemiSyntheticDieselEngineOilAboutUs"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/dtec_mineral.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/diesel/dtec_mineral.jpg",
+   "alt": "D-TEC",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 119791,
+   "sha1": "022b6a5bc81f",
+   "pages": [
+    "https://petrovoll.com/DieselEngineOils",
+    "https://petrovoll.com/DieselEngineOils/CNG-TECDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/D-TECMineralDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/VIRO-TECFullySyntheticDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/VIRO-TECSemiSyntheticDieselEngineOilAboutUs"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/viro_fs.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/diesel/viro_fs.jpg",
+   "alt": "VIRÖ-TEC",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 121995,
+   "sha1": "74f8e7eb8d5c",
+   "pages": [
+    "https://petrovoll.com/DieselEngineOils",
+    "https://petrovoll.com/DieselEngineOils/CNG-TECDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/D-TECMineralDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/VIRO-TECFullySyntheticDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/VIRO-TECSemiSyntheticDieselEngineOilAboutUs"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/viro_ss.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/diesel/viro_ss.jpg",
+   "alt": "VIRÖ-TEC",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 124384,
+   "sha1": "82b903351a20",
+   "pages": [
+    "https://petrovoll.com/DieselEngineOils",
+    "https://petrovoll.com/DieselEngineOils/CNG-TECDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/D-TECMineralDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/VIRO-TECFullySyntheticDieselEngineOil",
+    "https://petrovoll.com/DieselEngineOils/VIRO-TECSemiSyntheticDieselEngineOilAboutUs"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/stark.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/gasoline/stark.jpg",
+   "alt": "STÄRK Fully Synthetic",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 124492,
+   "sha1": "38c8a027eef7",
+   "pages": [
+    "https://petrovoll.com/GasolineEngineOils",
+    "https://petrovoll.com/GasolineEngineOils/StarkFullySyntheticGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/StarkSemiSyntheticGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/VolexMultiGradeMineralGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/VonoMineralGasolineEngineOil"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/stark_ss.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/gasoline/stark_ss.jpg",
+   "alt": "STÄRK Semi synthetic",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 127747,
+   "sha1": "d227a15d0373",
+   "pages": [
+    "https://petrovoll.com/GasolineEngineOils",
+    "https://petrovoll.com/GasolineEngineOils/StarkFullySyntheticGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/StarkSemiSyntheticGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/VolexMultiGradeMineralGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/VonoMineralGasolineEngineOil"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/volex.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/gasoline/volex.jpg",
+   "alt": "VÖLEX",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 124471,
+   "sha1": "9de17443584e",
+   "pages": [
+    "https://petrovoll.com/GasolineEngineOils",
+    "https://petrovoll.com/GasolineEngineOils/StarkFullySyntheticGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/StarkSemiSyntheticGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/VolexMultiGradeMineralGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/VonoMineralGasolineEngineOil"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/vono.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/gasoline/vono.jpg",
+   "alt": "VÖNO",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 123945,
+   "sha1": "fa1f528b7b5d",
+   "pages": [
+    "https://petrovoll.com/GasolineEngineOils",
+    "https://petrovoll.com/GasolineEngineOils/StarkFullySyntheticGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/StarkSemiSyntheticGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/VolexMultiGradeMineralGasolineEngineOil",
+    "https://petrovoll.com/GasolineEngineOils/VonoMineralGasolineEngineOil"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/glat_ep0.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/greases/glat_ep0.jpg",
+   "alt": "GLÄT  EP0, EP1, EP2 EXTREME PRESSURE LITHIUM GREASE",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 88020,
+   "sha1": "7627703a76f5",
+   "pages": [
+    "https://petrovoll.com/Greases",
+    "https://petrovoll.com/Greases/GLAT-EP0-EP1-EP2ExtremePressureLithiumGrease",
+    "https://petrovoll.com/Greases/GLAT-EP2-EP3LithiumComplexGrease",
+    "https://petrovoll.com/Greases/GLATMultiPurposeGrease",
+    "https://petrovoll.com/Products"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/glat_ep3.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/greases/glat_ep3.jpg",
+   "alt": "GLÄT  EP2, EP3 LITHIUM COMPLEX GREASE",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 106830,
+   "sha1": "128d2eb726b4",
+   "pages": [
+    "https://petrovoll.com/Greases",
+    "https://petrovoll.com/Greases/GLAT-EP0-EP1-EP2ExtremePressureLithiumGrease",
+    "https://petrovoll.com/Greases/GLAT-EP2-EP3LithiumComplexGrease",
+    "https://petrovoll.com/Greases/GLATMultiPurposeGrease",
+    "https://petrovoll.com/Products"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/glat_mp.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/greases/glat_mp.jpg",
+   "alt": "GLÄT  MULTI PURPOSE GREASE, CALCIUM BASE",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 87343,
+   "sha1": "4d308d61018d",
+   "pages": [
+    "https://petrovoll.com/Greases",
+    "https://petrovoll.com/Greases/GLAT-EP0-EP1-EP2ExtremePressureLithiumGrease",
+    "https://petrovoll.com/Greases/GLAT-EP2-EP3LithiumComplexGrease",
+    "https://petrovoll.com/Greases/GLATMultiPurposeGrease",
+    "https://petrovoll.com/Products"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/hydkon.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/industrial/hydkon.jpg",
+   "alt": "HYDKÖN HYDRAULIC OIL",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 87041,
+   "sha1": "0810b27dc0a8",
+   "pages": [
+    "https://petrovoll.com/IndustrialOils",
+    "https://petrovoll.com/IndustrialOils/CIRCULATIONOil",
+    "https://petrovoll.com/IndustrialOils/HEATTRANSFEROil",
+    "https://petrovoll.com/IndustrialOils/HYDKONHydraulicOil",
+    "https://petrovoll.com/IndustrialOils/LUB-TECGROBIndustrialGearOils"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/lube_tec_grob.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/industrial/lube_tec_grob.jpg",
+   "alt": "LUB-TEC GRÖB INDUSTRIAL GEAR OILS",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 55112,
+   "sha1": "48d26cbea1d0",
+   "pages": [
+    "https://petrovoll.com/IndustrialOils",
+    "https://petrovoll.com/IndustrialOils/CIRCULATIONOil",
+    "https://petrovoll.com/IndustrialOils/HEATTRANSFEROil",
+    "https://petrovoll.com/IndustrialOils/HYDKONHydraulicOil",
+    "https://petrovoll.com/IndustrialOils/LUB-TECGROBIndustrialGearOils"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/marineol_1.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/marine/marineol_1.jpg",
+   "alt": "MARINEÖL SYNTHETIC MARINE CYLINDER OIL",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 125044,
+   "sha1": "cab5e51c1f79",
+   "pages": [
+    "https://petrovoll.com/MarineOils",
+    "https://petrovoll.com/MarineOils/MARINEOL2-StrokeOutboardOil",
+    "https://petrovoll.com/MarineOils/MARINEOLSyntheticMarineCylinderOil",
+    "https://petrovoll.com/MarineOils/MARINEOLTrunkPistonMarineOil",
+    "https://petrovoll.com/MarineOils/MARINEOLmineralMarineOil"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/marineol_2.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/marine/marineol_2.jpg",
+   "alt": "MARINEÖL MINERAL MARINE OIL",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 131352,
+   "sha1": "e7d3e2e34010",
+   "pages": [
+    "https://petrovoll.com/MarineOils",
+    "https://petrovoll.com/MarineOils/MARINEOL2-StrokeOutboardOil",
+    "https://petrovoll.com/MarineOils/MARINEOLSyntheticMarineCylinderOil",
+    "https://petrovoll.com/MarineOils/MARINEOLTrunkPistonMarineOil",
+    "https://petrovoll.com/MarineOils/MARINEOLmineralMarineOil"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/marineol_3.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/marine/marineol_3.jpg",
+   "alt": "MARINEÖL TRUNK PISTON MARINE OIL",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 120908,
+   "sha1": "1b2be80a8172",
+   "pages": [
+    "https://petrovoll.com/MarineOils",
+    "https://petrovoll.com/MarineOils/MARINEOL2-StrokeOutboardOil",
+    "https://petrovoll.com/MarineOils/MARINEOLSyntheticMarineCylinderOil",
+    "https://petrovoll.com/MarineOils/MARINEOLTrunkPistonMarineOil",
+    "https://petrovoll.com/MarineOils/MARINEOLmineralMarineOil"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/marineol_4.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/marine/marineol_4.jpg",
+   "alt": "MARINEÖL 2-STROKE OUTBOARD OIL, WATER COOLED",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 138688,
+   "sha1": "d4ae3ee20f86",
+   "pages": [
+    "https://petrovoll.com/MarineOils",
+    "https://petrovoll.com/MarineOils/MARINEOL2-StrokeOutboardOil",
+    "https://petrovoll.com/MarineOils/MARINEOLSyntheticMarineCylinderOil",
+    "https://petrovoll.com/MarineOils/MARINEOLTrunkPistonMarineOil",
+    "https://petrovoll.com/MarineOils/MARINEOLmineralMarineOil"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/motpro_2t.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/motorcycle/motpro_2t.jpg",
+   "alt": "MÖTPRO 2T",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 123812,
+   "sha1": "af1dbc1fea42",
+   "pages": [
+    "https://petrovoll.com/MotorCycleOils",
+    "https://petrovoll.com/MotorCycleOils/MOTPRO2-StrokeMotorcycleOil",
+    "https://petrovoll.com/MotorCycleOils/MOTPRO4-StrokeMotorcycleOil",
+    "https://petrovoll.com/Products"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  },
+  {
+   "fichier": "produits/motpro_4t.jpg",
+   "groupe": "produits",
+   "source": "https://petrovoll.com/assets/images/products/motorcycle/motpro_4t.jpg",
+   "alt": "MÖTPRO 4T",
+   "largeur": 800,
+   "hauteur": 1000,
+   "mode": "RGB",
+   "octets": 132187,
+   "sha1": "c8dd0ed9ac51",
+   "pages": [
+    "https://petrovoll.com/MotorCycleOils",
+    "https://petrovoll.com/MotorCycleOils/MOTPRO2-StrokeMotorcycleOil",
+    "https://petrovoll.com/MotorCycleOils/MOTPRO4-StrokeMotorcycleOil",
+    "https://petrovoll.com/Products"
+   ],
+   "statut": "reference",
+   "raison": "Rendu 3D de synthèse (pas une photo réelle), fond blanc, 1 L + 4/5 L superposés : incompatible P1–P4 (règle 3, fond noir, bidon seul, version sans bouchon). Catalogue du site possible avec autorisation écrite.",
+   "hero": false
+  }
+ ]
+}

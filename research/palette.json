@@ -1,0 +1,41 @@
+{
+  "source": "petrovoll.com — feuille de style https://petrovoll.com/assets/css/custom-index_6.css (numéros de ligne) + échantillonnage du logo petrovoll-logo.png (pixels opaques, quantifiés par pas de 12)",
+  "releve": "2026-09-27",
+  "avertissement": "Couleurs du SITE WEB de la marque, pas une charte graphique officielle. À faire confirmer par le représentant (demander la charte + le logo vectoriel).",
+  "marque": {
+    "rouge":        { "hex": "#c7161c", "usage": "titres produits, soulignés, accents (.text-products, .h1-underline)", "css": "l.128-143, 289, 302" },
+    "jaune":        { "hex": "#FFEA00", "usage": "fond de l'en-tête (.bg-header)", "css": "l.138" },
+    "jauneBarre":   { "hex": "#f5d525", "usage": "barre de navigation (.bg-like-navbar)", "css": "l.204" },
+    "degradeLogo":  { "css": "linear-gradient(#FFEA00, #f2d03a)", "usage": ".bg-logo-gradient", "ligne": "l.275" },
+    "texteTitres":  { "hex": "#0A100D", "usage": ".heading-font", "css": "l.167" },
+    "texte":        { "hex": "#212529", "usage": "texte courant (Bootstrap), couleur la plus fréquente de la page d'accueil (981 éléments)" }
+  },
+  "logoMesure": {
+    "fichier": "photos/logo/petrovoll-logo.png",
+    "orDominants": ["#f0cc30", "#e4c030", "#cc9c0c", "#d8b424", "#f0d89c"],
+    "rougeDominants": ["#c00c0c", "#a80c00"]
+  },
+  "categories": {
+    "huiles-essence":       "#bfc1c4",
+    "huiles-diesel":        "#289972",
+    "huiles-moto":          "#fed304",
+    "huiles-marines":       "#0aa1ba",
+    "huiles-industrielles": "#bfaf49",
+    "boites-automatiques":  "#4b4c4d",
+    "boites-manuelles":     "#ee282e",
+    "liquides-frein":       "#36afc7",
+    "refroidissement":      "#4eb8cd",
+    "graisses":             "#f48d35",
+    "additifs":             "#1c80c2",
+    "css": "l.339-409 (.bg-gasoline … .bg-additives)"
+  },
+  "polices": {
+    "texte":  { "nom": "Azo Sans Light", "fichier": "https://www.petrovoll.com/assets/fonts/AzoSansLight.woff", "licence": "commerciale — ne pas auto-héberger sans licence" },
+    "titres": { "nom": "Avenir LT Std Medium", "fichier": "https://www.petrovoll.com/assets/fonts/AvenirLTStd-Medium.otf", "licence": "commerciale — ne pas auto-héberger sans licence" }
+  },
+  "pourLeHero": {
+    "orHuile": "Reprendre l'or du logo (#f0cc30 → #cc9c0c) pour le filet et l'huile : cohérent avec la marque et avec la consigne « huile dorée ».",
+    "accent": "#c7161c (rouge marque) pour le bouton final, contrasté sur fond noir.",
+    "site": "Le site SASOMA garde ses propres jetons (marine #00244a, orange #e66711) ; Petrovöll n'apparaît que dans les zones produit."
+  }
+}

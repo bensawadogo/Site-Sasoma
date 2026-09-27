@@ -1,0 +1,5 @@
+# Visuels © Petrovöll GmbH : copies locales de référence, jamais publiées.
+# Seul l'index est versionné (source, dimensions, statut).
+*
+!.gitignore
+!index.json
