@@ -173,21 +173,8 @@ export default config({
     accueil: singleton({
       label: 'Page d’accueil',
       path: 'src/content/accueil/',
+      // Le hero (animation du haut de page) ne se règle PAS ici : src/hero.config.ts.
       schema: {
-        surtitre: fields.text({
-          label: 'Petite ligne au-dessus du titre',
-          defaultValue: 'LUBRIFIANTS · TRANSPORT · DISTRIBUTION',
-        }),
-        titreDebut: fields.text({ label: 'Titre — début', defaultValue: 'L’énergie qui' }),
-        titreCouleur: fields.text({
-          label: 'Titre — mots en couleur',
-          defaultValue: 'fait avancer',
-        }),
-        titreFin: fields.text({ label: 'Titre — fin', defaultValue: 'vos machines' }),
-        texte: fields.text({
-          label: 'Texte sous le titre',
-          multiline: true,
-        }),
         chiffres: fields.array(
           fields.object({
             valeur: fields.text({

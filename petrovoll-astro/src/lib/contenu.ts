@@ -34,11 +34,6 @@ export async function getParametres() {
 export async function getAccueil() {
   const a = (await getEntry('accueil', 'index'))?.data
   return {
-    surtitre: a?.surtitre ?? 'LUBRIFIANTS · TRANSPORT · DISTRIBUTION',
-    titreDebut: a?.titreDebut ?? 'L’énergie qui',
-    titreCouleur: a?.titreCouleur ?? 'fait avancer',
-    titreFin: a?.titreFin ?? 'vos machines',
-    texte: a?.texte,
     chiffres: a?.chiffres ?? [],
     appelTitre: a?.appelTitre ?? 'Besoin d’un devis professionnel ?',
     appelTexte: a?.appelTexte,

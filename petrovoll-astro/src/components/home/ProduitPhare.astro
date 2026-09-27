@@ -1,8 +1,12 @@
 ---
 /**
  * ProduitPhare.astro — le produit « mis en avant » (case cochée dans l'admin),
- * section dominante de la page d'accueil : photo, prix, extrait, liens.
+ * juste sous le hero : visuel, prix, extrait, liens.
+ *
+ * Visuel : le bidon 3D pour un produit Petrovöll (marque saisie dans l'admin),
+ * sinon la première photo du produit.
  */
+import BidonScene from '@/components/3d/BidonScene.astro'
 import PhotoProduit from '@/components/produits/PhotoProduit.astro'
 import type { Produit } from '@/lib/contenu'
 import { extraitTexte, formaterPrix } from '@/lib/format'
@@ -13,6 +17,7 @@ interface Props {
 const { produit } = Astro.props
 const { nom, photos, prix, conditionnement, marque } = produit.data
 const extrait = extraitTexte(produit.body, 180)
+const bidon3d = /petrov/i.test(marque ?? '')
 ---
 
 <section class="relative overflow-hidden bg-surface" aria-labelledby="produit-phare-titre">
@@ -25,13 +30,19 @@ const extrait = extraitTexte(produit.body, 180)
 
   <div class="container-page relative grid items-center gap-10 py-14 lg:grid-cols-2 lg:gap-16 lg:py-24">
     <div class="reveal mx-auto aspect-square w-full max-w-[520px] overflow-hidden rounded-md">
-      <PhotoProduit
-        photo={photos[0]}
-        alt={nom}
-        largeurs={[400, 800]}
-        sizes="(min-width: 1024px) 520px, 100vw"
-        class="h-full w-full"
-      />
+      {
+        bidon3d ? (
+          <BidonScene sizes="(min-width: 1024px) 520px, 100vw" />
+        ) : (
+          <PhotoProduit
+            photo={photos[0]}
+            alt={nom}
+            largeurs={[400, 800]}
+            sizes="(min-width: 1024px) 520px, 100vw"
+            class="h-full w-full"
+          />
+        )
+      }
     </div>
 
     <div class="reveal">

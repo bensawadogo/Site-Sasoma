@@ -91,13 +91,15 @@ export const HERO = {
   zones: {
     mobile: {
       entete: { x: 0, y: 0, l: 1, h: 0.12 },
-      bidon: { x: 0.3, y: 0.12, l: 0.4, h: 0.26 },
+      bidon: { x: 0.32, y: 0.13, l: 0.36, h: 0.22 }, // basculé, il doit tenir dans la largeur
       textes: { x: 0.06, y: 0.72, l: 0.88, h: 0.24 },
+      fin: { x: 0.06, y: 0.3, l: 0.88, h: 0.66 }, // le bidon est sorti : la fin prend la place
     },
     desktop: {
       entete: { x: 0, y: 0, l: 1, h: 0.12 },
       bidon: { x: 0.06, y: 0.18, l: 0.24, h: 0.46 },
       textes: { x: 0.05, y: 0.7, l: 0.42, h: 0.25 },
+      fin: { x: 0.05, y: 0.3, l: 0.5, h: 0.62 },
     },
   } satisfies Record<Format, Record<string, Zone>>,
 
@@ -105,8 +107,8 @@ export const HERO = {
   ancres: {
     /** Dans les photos du bidon P1/P2 (phase 4). */
     bidon: {
-      spout: { x: 0.5, y: 0.08, aMesurer: true }, // goulot : départ du filet
-      bottlePivot: { x: 0.5, y: 0.62, aMesurer: true }, // centre de rotation
+      spout: { x: 0.26, y: 0.04, aMesurer: true }, // goulot : départ du filet
+      bottlePivot: { x: 0.5, y: 0.6, aMesurer: true }, // centre de rotation
     },
     /** Dans les images moteur E1 : ouverture de remplissage (arrivée du filet), tolérance ±3 %. */
     filler: {
@@ -115,8 +117,14 @@ export const HERO = {
     },
     tolerance: 0.03,
     /**
+     * Où le goulot doit arriver en fin de bascule (fractions de l'écran).
+     * Mobile : juste au-dessus du filler (x = filler) → versement vertical.
+     * Desktop : reste à gauche → filet en diagonale jusqu'au filler.
+     */
+    cibleGoulot: { mobile: { y: 0.34 }, desktop: { x: 0.38, y: 0.38 } },
+    /**
      * Zone horizontale toujours visible d'une image 9:16 recadrée sur un
-     * écran 360×800 (on perd 12,5 % de chaque côté) : le filler doit y rester.
+     * écran 360×800 (on perd 10 % de chaque côté ; marge de sécurité à 15 %) : le filler doit y rester.
      */
     zoneSure: { mobile: { xMin: 0.15, xMax: 0.85 } },
   },

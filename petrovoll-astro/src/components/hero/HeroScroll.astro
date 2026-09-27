@@ -1,0 +1,337 @@
+---
+/**
+ * HeroScroll.astro — hero au scroll (BRIEF-MAITRE.md §8).
+ *
+ * Réglages et textes : src/hero.config.ts (volontairement HORS de l'admin).
+ * Animation : src/scripts/hero-scroll.ts (un seul écouteur de scroll passif,
+ * rendu dans requestAnimationFrame, uniquement opacity/transform).
+ *
+ * Sans JavaScript : un écran fixe avec le titre et l'affiche (hauteur 100svh).
+ * Avec JavaScript : la scène reste collée pendant 250svh (300svh sur desktop).
+ *
+ * PHASE 3 : bidon SVG et séquences provisoires (npm run hero:frames -- --provisoire).
+ * Les vraies photos (phase 4) et vidéos (phases 5-7) remplacent ces fichiers
+ * sans changer ce composant.
+ */
+import manifeste from '@/assets/hero/manifest.json'
+import e1DesktopAvif from '@/assets/hero/posters/e1-desktop.avif'
+import e1DesktopWebp from '@/assets/hero/posters/e1-desktop.webp'
+import e1MobileAvif from '@/assets/hero/posters/e1-mobile.avif'
+import e1MobileWebp from '@/assets/hero/posters/e1-mobile.webp'
+import e2DesktopAvif from '@/assets/hero/posters/e2-desktop.avif'
+import e2DesktopWebp from '@/assets/hero/posters/e2-desktop.webp'
+import e2MobileAvif from '@/assets/hero/posters/e2-mobile.avif'
+import e2MobileWebp from '@/assets/hero/posters/e2-mobile.webp'
+import e3DesktopAvif from '@/assets/hero/posters/e3-desktop.avif'
+import e3DesktopWebp from '@/assets/hero/posters/e3-desktop.webp'
+import e3MobileAvif from '@/assets/hero/posters/e3-mobile.avif'
+import e3MobileWebp from '@/assets/hero/posters/e3-mobile.webp'
+import BidonProvisoire from '@/components/hero/BidonProvisoire.astro'
+import { HERO } from '@/hero.config'
+import { getParametres } from '@/lib/contenu'
+
+const parametres = await getParametres()
+const avecSociete = (texte: string) => texte.replaceAll('{societe}', parametres.nomSociete)
+const lienWhatsApp = parametres.whatsapp(avecSociete(HERO.messageWhatsApp))
+const { textes } = HERO
+
+// Plages d'affichage des textes : t3 est partagé en trois (cames, pistons, vilebrequin).
+const plage = (id: string) => HERO.temps.find((t) => t.id === id)!
+const t3 = plage('t3')
+const tiers = (t3.fin - t3.debut) / 3
+const blocs = [
+  { ...plage('t1'), ...textes.t1 },
+  { ...plage('t2'), ...textes.t2 },
+  ...textes.t3.map((t, i) => ({ debut: t3.debut + i * tiers, fin: t3.debut + (i + 1) * tiers, ...t })),
+]
+
+const AFFICHES = [
+  { id: 'e1', mobile: [e1MobileAvif, e1MobileWebp], desktop: [e1DesktopAvif, e1DesktopWebp] },
+  { id: 'e2', mobile: [e2MobileAvif, e2MobileWebp], desktop: [e2DesktopAvif, e2DesktopWebp] },
+  { id: 'e3', mobile: [e3MobileAvif, e3MobileWebp], desktop: [e3DesktopAvif, e3DesktopWebp] },
+] as const
+// Même valeur que HERO.pointDeRupture (une media query ne peut pas lire une variable).
+const DESKTOP = '(min-width: 900px)'
+
+// Zones de la config → variables CSS (--textes-mobile-x : 6% …).
+const variables = [
+  `--hauteur-mobile:${HERO.hauteur.mobile}`,
+  `--hauteur-desktop:${HERO.hauteur.desktop}`,
+  ...Object.entries(HERO.zones).flatMap(([format, zones]) =>
+    Object.entries(zones).flatMap(([nom, z]) =>
+      (['x', 'y', 'l', 'h'] as const).map((c) => `--${nom}-${format}-${c}:${+(z[c] * 100).toFixed(2)}%`),
+    ),
+  ),
+].join(';')
+---
+
+<section
+  class="hero zone-sombre relative -mt-16 lg:-mt-20"
+  style={variables}
+  data-hero
+  data-palier="lite"
+  data-version={manifeste.version}
+  aria-labelledby="hero-titre"
+>
+  <div class="hero-scene">
+    <div class="hero-fond" aria-hidden="true">
+      {
+        AFFICHES.map(({ id, mobile, desktop }) => (
+          <picture class="hero-affiche" data-affiche={id}>
+            <source media={DESKTOP} type="image/avif" srcset={desktop[0].src} />
+            <source media={DESKTOP} type="image/webp" srcset={desktop[1].src} />
+            <source type="image/avif" srcset={mobile[0].src} />
+            <img
+              src={mobile[1].src}
+              alt=""
+              width={mobile[1].width}
+              height={mobile[1].height}
+              decoding="async"
+              fetchpriority={id === 'e1' ? 'high' : 'low'}
+            />
+          </picture>
+        ))
+      }
+      <canvas class="hero-sequence" data-sequence></canvas>
+    </div>
+    <div class="hero-voile" aria-hidden="true"></div>
+    <canvas class="hero-filet" data-filet aria-hidden="true"></canvas>
+
+    <div class="hero-bidon" data-bidon-hero aria-hidden="true">
+      <BidonProvisoire />
+    </div>
+
+    <div class="hero-bloc hero-textes" data-debut="0" data-fin={plage('ouverture').fin}>
+      <p class="hero-surtitre">{textes.ouverture.surtitre}</p>
+      <h1 id="hero-titre" class="hero-titre">{textes.ouverture.titre}</h1>
+      <p class="hero-indice" aria-hidden="true">{textes.ouverture.indice} <span>↓</span></p>
+    </div>
+
+    {
+      blocs.map((b) => (
+        <div class="hero-bloc hero-textes" data-debut={b.debut} data-fin={b.fin}>
+          <h2 class="hero-titre-etape">{b.titre}</h2>
+          <p class="hero-texte">{b.texte}</p>
+        </div>
+      ))
+    }
+
+    <div class="hero-bloc hero-fin" data-debut={plage('fin').debut} data-fin="1" data-fin-bloc>
+      <h2 class="hero-titre-etape">{textes.fin.titre}</h2>
+      <p class="hero-texte">{avecSociete(textes.fin.texte)}</p>
+      <ul class="hero-produits">
+        {
+          HERO.produitsFin.map((p, i) => (
+            <li class="hero-produit">
+              <BidonProvisoire variante={i === 0 ? 'voiture' : 'moto'} petit />
+              <span class="hero-produit-libelle">{p.libelle}</span>
+              <span class="hero-produit-nom">{p.nom}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="hero-actions">
+        {
+          lienWhatsApp ? (
+            <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="btn-primary hero-cta">
+              {textes.fin.cta}
+            </a>
+          ) : (
+            <a href="/contact" class="btn-primary hero-cta">
+              Nous contacter
+            </a>
+          )
+        }
+        <a href={textes.fin.lienSecondaire} class="btn-outline">{textes.fin.ctaSecondaire}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    height: 100svh; /* sans JS : un seul écran */
+    background: #000;
+  }
+  .hero[data-pret] {
+    height: var(--hauteur-mobile);
+  }
+  .hero-scene {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    contain: layout paint;
+  }
+  .hero-fond,
+  .hero-affiche,
+  .hero-affiche img,
+  .hero-sequence,
+  .hero-filet,
+  .hero-voile {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .hero-affiche img {
+    object-fit: cover;
+  }
+  .hero-affiche:not([data-affiche='e1']) {
+    opacity: 0;
+  }
+  .hero-sequence {
+    opacity: 0;
+  }
+  .hero[data-sequence-prete] .hero-sequence {
+    opacity: 1;
+  }
+  /* Palier standard/full : la séquence remplace les affiches e2/e3. */
+  .hero:not([data-palier='lite']) .hero-affiche:not([data-affiche='e1']) {
+    display: none;
+  }
+  /* Bas assombri pour la lisibilité des textes (§6.2). */
+  .hero-voile {
+    background: linear-gradient(to bottom, transparent 55%, rgb(0 0 0 / 0.85) 78%, #000 100%);
+    pointer-events: none;
+  }
+  .hero-filet {
+    pointer-events: none;
+  }
+
+  .hero-bidon {
+    position: absolute;
+    will-change: transform, opacity;
+  }
+  .hero-bidon :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .hero-bloc {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity, transform;
+  }
+  .hero-bloc[data-debut='0'] {
+    opacity: 1;
+  }
+  .hero-bloc[data-actif] {
+    pointer-events: auto;
+  }
+  .hero-textes {
+    left: var(--textes-mobile-x);
+    top: var(--textes-mobile-y);
+    width: var(--textes-mobile-l);
+    height: var(--textes-mobile-h);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .hero-fin {
+    left: var(--fin-mobile-x);
+    top: var(--fin-mobile-y);
+    width: var(--fin-mobile-l);
+    height: var(--fin-mobile-h);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+
+  .hero-surtitre {
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #f0cc30;
+  }
+  .hero-titre {
+    margin-top: 0.4rem;
+    font-size: clamp(2.25rem, 11vw, 5rem);
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+  .hero-indice {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--color-attenue);
+  }
+  .hero-titre-etape {
+    font-size: clamp(1.75rem, 8vw, 3.5rem);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .hero-texte {
+    margin-top: 0.4rem;
+    font-size: 1rem;
+    line-height: 1.45;
+    color: var(--color-attenue);
+    max-width: 34rem;
+  }
+
+  .hero-produits {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .hero-produit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid rgb(255 255 255 / 0.15);
+    border-radius: 0.5rem;
+    background: rgb(255 255 255 / 0.04);
+  }
+  .hero-produit :global(svg) {
+    height: 5.5rem;
+    width: auto;
+  }
+  .hero-produit-libelle {
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #f0cc30;
+  }
+  .hero-produit-nom {
+    font-weight: 700;
+  }
+  .hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .hero-cta {
+    background: #c7161c; /* rouge Petrovöll (research/palette.json) */
+  }
+
+  @media (min-width: 900px) {
+    .hero[data-pret] {
+      height: var(--hauteur-desktop);
+    }
+    .hero-textes {
+      left: var(--textes-desktop-x);
+      top: var(--textes-desktop-y);
+      width: var(--textes-desktop-l);
+      height: var(--textes-desktop-h);
+    }
+    .hero-fin {
+      left: var(--fin-desktop-x);
+      top: var(--fin-desktop-y);
+      width: var(--fin-desktop-l);
+      height: var(--fin-desktop-h);
+    }
+    .hero-actions {
+      flex-direction: row;
+    }
+  }
+</style>
+
+<script>
+  import { lancerHero } from '@/scripts/hero-scroll'
+
+  document.querySelectorAll<HTMLElement>('[data-hero]').forEach(lancerHero)
+</script>

@@ -61,11 +61,6 @@ const pages = defineCollection({
 const accueil = defineCollection({
   loader: glob({ pattern: 'index.yaml', base: './src/content/accueil' }),
   schema: z.object({
-    surtitre: texte,
-    titreDebut: texte,
-    titreCouleur: texte,
-    titreFin: texte,
-    texte: texte,
     chiffres: z
       .array(z.object({ valeur: z.string(), libelle: z.string() }))
       .nullish()

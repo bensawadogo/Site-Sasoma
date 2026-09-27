@@ -1,0 +1,49 @@
+---
+/**
+ * BidonProvisoire.astro — silhouette SVG du bidon pour le prototype (phase 3).
+ * Remplacée en phase 4 par les photos réelles P1-P4 (règle 3 du brief :
+ * le bidon ne vient que de photos). Géométrie alignée sur HERO.ancres.bidon :
+ * goulot (spout) en (0,26 ; 0,04), pivot en (0,5 ; 0,6) du cadre 200×260.
+ */
+interface Props {
+  variante?: 'voiture' | 'moto'
+  /** Vignette de l'écran de fin : pas de niveau d'huile ni de bouchon animés. */
+  petit?: boolean
+}
+const { variante = 'voiture', petit = false } = Astro.props
+const couleurs = variante === 'voiture' ? { corps: '#8d9297', etiquette: '#2d5fa8' } : { corps: '#26292c', etiquette: '#f2c21b' }
+const id = `bidon-${Math.random().toString(36).slice(2, 8)}`
+const CORPS = 'M30 40H118L176 70Q186 76 186 90V244Q186 258 172 258H28Q14 258 14 244V58Q14 40 30 40Z'
+---
+
+<svg viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg" data-aspect={200 / 260}>
+  <defs>
+    <clipPath id={`${id}-corps`}><path d={CORPS}></path></clipPath>
+    <linearGradient id={`${id}-volume`} x1="0" x2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.18"></stop>
+      <stop offset="0.5" stop-color="#fff" stop-opacity="0"></stop>
+      <stop offset="1" stop-color="#000" stop-opacity="0.3"></stop>
+    </linearGradient>
+    <linearGradient id={`${id}-huile`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0cc30"></stop>
+      <stop offset="1" stop-color="#cc9c0c"></stop>
+    </linearGradient>
+  </defs>
+  <rect x="38" y="10" width="28" height="32" fill={couleurs.corps}></rect>
+  <path d={CORPS} fill={couleurs.corps}></path>
+  <!-- Effet « rayons X » : l'huile monte dans le bidon pendant t1 -->
+  {
+    !petit && (
+      <g clip-path={`url(#${id}-corps)`}>
+        <rect data-niveau x="0" y="0" width="200" height="260" fill={`url(#${id}-huile)`} opacity="0.85" transform="translate(0 260)"></rect>
+      </g>
+    )
+  }
+  <path d="M112 54H158L170 62V96H112Z" fill="#000" opacity="0.55"></path>
+  <rect x="30" y="112" width="140" height="118" rx="6" fill={couleurs.etiquette} opacity="0.92"></rect>
+  <text x="100" y="178" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#fff">PROVISOIRE</text>
+  <path d={CORPS} fill={`url(#${id}-volume)`}></path>
+  <g data-bouchon={petit ? undefined : ''}>
+    <rect x="33" y="0" width="38" height="18" rx="3" fill="#c7161c"></rect>
+  </g>
+</svg>

@@ -1,0 +1,65 @@
+{
+ "360x800/lite": {
+  "palierAffiche": "lite",
+  "sequencePrete": false,
+  "initialKo": 91,
+  "heroKo": 19,
+  "totalKo": 1270
+ },
+ "360x800/standard": {
+  "palierAffiche": "standard",
+  "sequencePrete": true,
+  "initialKo": 341,
+  "heroKo": 268,
+  "totalKo": 1607
+ },
+ "360x800/full": {
+  "palierAffiche": "full",
+  "sequencePrete": true,
+  "initialKo": 871,
+  "heroKo": 799,
+  "totalKo": 2137
+ },
+ "390x844/lite": {
+  "palierAffiche": "lite",
+  "sequencePrete": false,
+  "initialKo": 101,
+  "heroKo": 19,
+  "totalKo": 1368
+ },
+ "390x844/standard": {
+  "palierAffiche": "standard",
+  "sequencePrete": true,
+  "initialKo": 351,
+  "heroKo": 268,
+  "totalKo": 1617
+ },
+ "390x844/full": {
+  "palierAffiche": "full",
+  "sequencePrete": true,
+  "initialKo": 881,
+  "heroKo": 799,
+  "totalKo": 2147
+ },
+ "1440x900/lite": {
+  "palierAffiche": "lite",
+  "sequencePrete": false,
+  "initialKo": 106,
+  "heroKo": 23,
+  "totalKo": 1816
+ },
+ "1440x900/standard": {
+  "palierAffiche": "standard",
+  "sequencePrete": true,
+  "initialKo": 371,
+  "heroKo": 288,
+  "totalKo": 2169
+ },
+ "1440x900/full": {
+  "palierAffiche": "full",
+  "sequencePrete": true,
+  "initialKo": 1026,
+  "heroKo": 944,
+  "totalKo": 2824
+ }
+}

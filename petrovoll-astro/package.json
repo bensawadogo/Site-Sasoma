@@ -22,7 +22,8 @@
     "bidon:decoders": "node scripts/copy-draco-decoders.mjs",
     "bidon:mobile": "python scripts/mobile-check.py",
     "bidon:all": "npm run bidon:build && npm run bidon:decoders",
-    "deploy": "wrangler pages deploy dist"
+    "deploy": "wrangler pages deploy dist",
+    "hero:frames": "node scripts/build-frames.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.0.0",

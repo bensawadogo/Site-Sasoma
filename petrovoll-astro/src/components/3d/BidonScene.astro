@@ -5,9 +5,11 @@
  * ─────────────────────────────────────────────────────────────────────────────
  *  Pensé pour les smartphones d'entrée de gamme en 3G (Afrique de l'Ouest) :
  *
- *  1. L'image WebP (19-34 Ko) s'affiche TOUT DE SUITE : c'est elle qui sert de
- *     LCP. Elle est rendue depuis la scène 3D elle-même (même cadrage).
- *  2. Après le chargement complet de la page, on choisit un niveau :
+ *  1. L'image WebP (19-34 Ko) s'affiche d'abord. Elle est rendue depuis la
+ *     scène 3D elle-même (même cadrage). Placée sous le hero, elle se charge
+ *     en différé (loading="lazy") pour ne pas concurrencer le hero.
+ *  2. Quand le bidon approche de l'écran (et après le chargement de la page),
+ *     on choisit un niveau :
  *       • image — économie de données / 2G / ≤ 1 Go de RAM / pas de WebGL :
  *                 rien n'est téléchargé ; un bouton propose la 3D.
  *       • lite  — smartphone ou petit processeur : modèle 161k triangles (1 Mo).
@@ -34,7 +36,7 @@ const { sizes = '(min-width: 1024px) 620px, (min-width: 640px) 560px, 100vw' } =
     width="800"
     height="800"
     alt="Bidon d'huile moteur Petrovöll STÄRK 5W-30"
-    fetchpriority="high"
+    loading="lazy"
     decoding="async"
   />
   <canvas class="bidon-canvas absolute inset-0 h-full w-full" aria-hidden="true"></canvas>
@@ -194,10 +196,21 @@ const { sizes = '(min-width: 1024px) 620px, (min-width: 640px) 560px, 100vw' } =
       lancer(niveau)
     }
 
-    // Dès la fin du chargement de la page (texte, images et boutons passent
-    // d'abord) — sans attendre en plus un « temps mort » du navigateur, qui
-    // retardait la rotation de plusieurs secondes sur les téléphones lents.
-    if (document.readyState === 'complete') demarrer()
-    else window.addEventListener('load', demarrer, { once: true })
+    // Quand le bidon est à moins d'un écran de distance : la 3D (1 à 1,5 Mo)
+    // ne concurrence pas le hero, et un visiteur qui ne descend pas ne la
+    // télécharge pas.
+    const approcher = () => {
+      const obs = new IntersectionObserver(
+        (entrees) => {
+          if (!entrees.some((e) => e.isIntersecting)) return
+          obs.disconnect()
+          demarrer()
+        },
+        { rootMargin: '100% 0px' },
+      )
+      obs.observe(hote)
+    }
+    if (document.readyState === 'complete') approcher()
+    else window.addEventListener('load', approcher, { once: true })
   })
 </script>

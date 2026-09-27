@@ -1,14 +1,15 @@
 ---
 /**
  * Accueil — page prérendue. Ordre du DOM = ordre sur mobile :
- * hero (bidon 3D) → produit phare → secteurs → chiffres clés → devis.
- * Chaque section lit son contenu dans l'admin et se masque si elle est vide.
+ * hero au scroll → produit phare (bidon 3D) → secteurs → chiffres clés → devis.
+ * Le hero se règle dans src/hero.config.ts (hors admin) ; les autres sections
+ * lisent leur contenu dans l'admin et se masquent si elles sont vides.
  */
 import ContactCTA from '@/components/home/ContactCTA.astro'
-import HeroSection from '@/components/home/HeroSection.astro'
 import ProduitPhare from '@/components/home/ProduitPhare.astro'
 import SecteursGrid from '@/components/home/SecteursGrid.astro'
 import StatsSection from '@/components/home/StatsSection.astro'
+import HeroScroll from '@/components/hero/HeroScroll.astro'
 import PageLayout from '@/layouts/PageLayout.astro'
 import { getParametres, getProduitVedette } from '@/lib/contenu'
 
@@ -23,7 +24,7 @@ const DESCRIPTION =
 ---
 
 <PageLayout titre={TITRE} titreComplet description={DESCRIPTION}>
-  <HeroSection />
+  <HeroScroll />
   {produitVedette && <ProduitPhare produit={produitVedette} />}
   <SecteursGrid />
   <StatsSection />
