@@ -23,7 +23,6 @@
     "bidon:mobile": "python scripts/mobile-check.py",
     "bidon:all": "npm run bidon:build && npm run bidon:decoders",
     "deploy": "wrangler pages deploy dist",
-    "hero:frames": "node scripts/build-frames.mjs",
     "hero:bidon": "node scripts/build-bidon-hero.mjs"
   },
   "dependencies": {

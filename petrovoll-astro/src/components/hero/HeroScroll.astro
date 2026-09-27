@@ -6,25 +6,13 @@
  * Animation : src/scripts/hero-scroll.ts (un seul écouteur de scroll passif,
  * rendu dans requestAnimationFrame, uniquement opacity/transform).
  *
- * Sans JavaScript : un écran fixe avec le titre et l'affiche (hauteur 100svh).
+ * Sans JavaScript : un écran fixe avec le titre, le bidon et le moteur (100svh).
  * Avec JavaScript : la scène reste collée pendant 250svh (300svh sur desktop).
  *
  * Bidon : photo P1 découpée en corps + bouchon (npm run hero:bidon). L'huile
  * qui monte est un dégradé masqué par la silhouette du corps (mask-image).
+ * Moteur : illustration vectorielle animée (MoteurSVG, décision D3 de TODO.md).
  */
-import manifeste from '@/assets/hero/manifest.json'
-import e1DesktopAvif from '@/assets/hero/posters/e1-desktop.avif'
-import e1DesktopWebp from '@/assets/hero/posters/e1-desktop.webp'
-import e1MobileAvif from '@/assets/hero/posters/e1-mobile.avif'
-import e1MobileWebp from '@/assets/hero/posters/e1-mobile.webp'
-import e2DesktopAvif from '@/assets/hero/posters/e2-desktop.avif'
-import e2DesktopWebp from '@/assets/hero/posters/e2-desktop.webp'
-import e2MobileAvif from '@/assets/hero/posters/e2-mobile.avif'
-import e2MobileWebp from '@/assets/hero/posters/e2-mobile.webp'
-import e3DesktopAvif from '@/assets/hero/posters/e3-desktop.avif'
-import e3DesktopWebp from '@/assets/hero/posters/e3-desktop.webp'
-import e3MobileAvif from '@/assets/hero/posters/e3-mobile.avif'
-import e3MobileWebp from '@/assets/hero/posters/e3-mobile.webp'
 import { Image } from 'astro:assets'
 
 import bouchon from '@/assets/hero/bidon/bouchon.webp'
@@ -33,6 +21,7 @@ import corps from '@/assets/hero/bidon/corps.webp'
 import geometrie from '@/assets/hero/bidon/geometrie.json'
 import vignetteStark from '@/assets/hero/bidon/vignette.webp'
 import photoMotpro from '@/assets/hero/fin/motpro-4t.jpg'
+import MoteurSVG from '@/components/hero/MoteurSVG.astro'
 import { HERO } from '@/hero.config'
 import { getParametres } from '@/lib/contenu'
 
@@ -58,14 +47,6 @@ const blocs = [
   ...textes.t3.map((t, i) => ({ debut: t3.debut + i * tiers, fin: t3.debut + (i + 1) * tiers, ...t })),
 ]
 
-const AFFICHES = [
-  { id: 'e1', mobile: [e1MobileAvif, e1MobileWebp], desktop: [e1DesktopAvif, e1DesktopWebp] },
-  { id: 'e2', mobile: [e2MobileAvif, e2MobileWebp], desktop: [e2DesktopAvif, e2DesktopWebp] },
-  { id: 'e3', mobile: [e3MobileAvif, e3MobileWebp], desktop: [e3DesktopAvif, e3DesktopWebp] },
-] as const
-// Même valeur que HERO.pointDeRupture (une media query ne peut pas lire une variable).
-const DESKTOP = '(min-width: 900px)'
-
 // Zones de la config → variables CSS (--textes-mobile-x : 6% …).
 const variables = [
   `--hauteur-mobile:${HERO.hauteur.mobile}`,
@@ -83,29 +64,12 @@ const variables = [
   style={variables}
   data-hero
   data-palier="lite"
-  data-version={manifeste.version}
   aria-labelledby="hero-titre"
 >
   <div class="hero-scene">
-    <div class="hero-fond" aria-hidden="true">
-      {
-        AFFICHES.map(({ id, mobile, desktop }) => (
-          <picture class="hero-affiche" data-affiche={id}>
-            <source media={DESKTOP} type="image/avif" srcset={desktop[0].src} />
-            <source media={DESKTOP} type="image/webp" srcset={desktop[1].src} />
-            <source type="image/avif" srcset={mobile[0].src} />
-            <img
-              src={mobile[1].src}
-              alt=""
-              width={mobile[1].width}
-              height={mobile[1].height}
-              decoding="async"
-              fetchpriority={id === 'e1' ? 'high' : 'low'}
-            />
-          </picture>
-        ))
-      }
-      <canvas class="hero-sequence" data-sequence></canvas>
+    <div class="hero-fond" aria-hidden="true"></div>
+    <div class="hero-moteur" data-moteur-cadre>
+      <MoteurSVG />
     </div>
     <div class="hero-voile" aria-hidden="true"></div>
     <canvas class="hero-filet" data-filet aria-hidden="true"></canvas>
@@ -115,7 +79,7 @@ const variables = [
       data-bidon-hero
       data-aspect={g.cadre.l / g.cadre.h}
       aria-hidden="true"
-      style={`--masque:url(${corps.src});--goulot-x:${pc(g.spout.x)};--goulot-y:${pc(g.spout.y)};--ouverture:${pc(g.ouverture.l)}`}
+      style={`--aspect:${g.cadre.l / g.cadre.h};--masque:url(${corps.src});--goulot-x:${pc(g.spout.x)};--goulot-y:${pc(g.spout.y)};--ouverture:${pc(g.ouverture.l)}`}
     >
       <picture>
         <source type="image/avif" srcset={corpsAvif.src} />
@@ -200,9 +164,6 @@ const variables = [
     contain: layout paint;
   }
   .hero-fond,
-  .hero-affiche,
-  .hero-affiche img,
-  .hero-sequence,
   .hero-filet,
   .hero-voile {
     position: absolute;
@@ -210,21 +171,25 @@ const variables = [
     width: 100%;
     height: 100%;
   }
-  .hero-affiche img {
-    object-fit: cover;
+  /* Studio noir, lumière chaude venant de la gauche (§6.2). */
+  .hero-fond {
+    background: radial-gradient(ellipse 70% 55% at 22% 38%, rgb(255 190 110 / 0.14), transparent 70%), #000;
   }
-  .hero-affiche:not([data-affiche='e1']) {
-    opacity: 0;
+  /* Position sans JS (zone de la config) ; le script la remplace par le carré
+     exact du dessin, puis n'y écrit plus que transform (cadrages) et opacity. */
+  .hero-moteur {
+    position: absolute;
+    left: var(--moteur-mobile-x);
+    top: var(--moteur-mobile-y);
+    width: var(--moteur-mobile-l);
+    height: var(--moteur-mobile-h);
+    transform-origin: 0 0;
+    will-change: transform;
   }
-  .hero-sequence {
-    opacity: 0;
-  }
-  .hero[data-sequence-prete] .hero-sequence {
-    opacity: 1;
-  }
-  /* Palier standard/full : la séquence remplace les affiches e2/e3. */
-  .hero:not([data-palier='lite']) .hero-affiche:not([data-affiche='e1']) {
-    display: none;
+  .hero-moteur :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
   /* Bas assombri pour la lisibilité des textes (§6.2). */
   .hero-voile {
@@ -237,6 +202,10 @@ const variables = [
 
   .hero-bidon {
     position: absolute;
+    left: var(--bidon-mobile-x);
+    top: var(--bidon-mobile-y);
+    height: var(--bidon-mobile-h);
+    aspect-ratio: var(--aspect);
     will-change: transform, opacity;
   }
   .hero-bidon-corps {
@@ -390,9 +359,21 @@ const variables = [
     background: #c7161c; /* rouge Petrovöll (research/palette.json) */
   }
 
+  /* 900px = HERO.pointDeRupture (une media query ne peut pas lire la config) */
   @media (min-width: 900px) {
     .hero[data-pret] {
       height: var(--hauteur-desktop);
+    }
+    .hero-moteur {
+      left: var(--moteur-desktop-x);
+      top: var(--moteur-desktop-y);
+      width: var(--moteur-desktop-l);
+      height: var(--moteur-desktop-h);
+    }
+    .hero-bidon {
+      left: var(--bidon-desktop-x);
+      top: var(--bidon-desktop-y);
+      height: var(--bidon-desktop-h);
     }
     .hero-textes {
       left: var(--textes-desktop-x);

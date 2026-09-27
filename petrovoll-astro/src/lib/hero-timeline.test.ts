@@ -1,26 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  choisirPalier,
-  couvrir,
-  fenetre,
-  imageDepuis,
-  opaciteBloc,
-  ordreChargement,
-  palierInferieur,
-  plusProche,
-  tournerAutour,
-} from './hero-timeline'
-
-describe('couvrir', () => {
-  it('image 9:16 sur écran 360×800 : 10 % coupés de chaque côté', () => {
-    const image = { l: 1080, h: 1920 }
-    const ecran = { l: 360, h: 800 }
-    expect(couvrir({ x: 0.5, y: 0.5 }, image, ecran)).toEqual({ x: 180, y: 400 })
-    expect(couvrir({ x: 0.1, y: 0 }, image, ecran).x).toBeCloseTo(0) // 0,1 × 450 − 45 : bord de l'écran
-    expect(couvrir({ x: 0.05, y: 0 }, image, ecran).x).toBeLessThan(0) // hors écran
-  })
-})
+import { cadrageA, choisirPalier, opaciteBloc, palierInferieur, tournerAutour, transformCadrage } from './hero-timeline'
 
 describe('tournerAutour', () => {
   it('90° dans le sens horaire à l’écran (y vers le bas)', () => {
@@ -66,19 +46,23 @@ describe('choisirPalier', () => {
   })
 })
 
-describe('séquence', () => {
-  it('ordre de chargement : 1 sur 4, la dernière, puis les trous — chaque image une fois', () => {
-    const ordre = ordreChargement(10)
-    expect(ordre.slice(0, 4)).toEqual([0, 9, 4, 8])
-    expect([...ordre].sort((a, b) => a - b)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+describe('cadrage du moteur', () => {
+  const cles = [
+    { t: 0, x: 0.5, y: 0.5, zoom: 1 },
+    { t: 0.5, x: 0.5, y: 0.2, zoom: 2 },
+    { t: 1, x: 0.5, y: 0.2, zoom: 2 },
+  ]
+  it('interpole entre deux clés, tient le plan entre deux clés identiques', () => {
+    expect(cadrageA(0, cles)).toEqual({ x: 0.5, y: 0.5, zoom: 1 })
+    expect(cadrageA(0.25, cles).zoom).toBeCloseTo(1.5)
+    expect(cadrageA(0.75, cles)).toEqual({ x: 0.5, y: 0.2, zoom: 2 })
+    expect(cadrageA(2, cles)).toEqual({ x: 0.5, y: 0.2, zoom: 2 })
   })
-  it('index, fenêtre de décodage et image la plus proche', () => {
-    expect(imageDepuis(0, 48)).toBe(0)
-    expect(imageDepuis(1, 48)).toBe(47)
-    expect(fenetre(0, 48, 12)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
-    expect(fenetre(47, 48, 12)[0]).toBe(36)
-    expect(fenetre(3, 5, 12)).toEqual([0, 1, 2, 3, 4])
-    expect(plusProche(5, [0, 4, 8])).toBe(4)
-    expect(plusProche(5, [])).toBeNull()
+  it('amène le point visé du dessin sur la cible de l’écran', () => {
+    const carre = { x0: 10, y0: 20, cote: 300 }
+    const c = { x: 0.5, y: 0.2, zoom: 2 }
+    const { tx, ty, s } = transformCadrage(c, carre, { x: 180, y: 400 })
+    expect(carre.x0 + tx + s * c.x * carre.cote).toBeCloseTo(180)
+    expect(carre.y0 + ty + s * c.y * carre.cote).toBeCloseTo(400)
   })
 })

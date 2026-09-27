@@ -4,60 +4,54 @@
  *  - un seul écouteur de scroll passif ; tout le rendu dans requestAnimationFrame ;
  *  - on n'écrit que opacity et transform (la mise en page n'est recalculée
  *    qu'au redimensionnement) ;
- *  - séquence sur canvas : ~12 images décodées à la fois (createImageBitmap),
- *    les autres libérées avec close() ; 1 image sur 4 chargée d'abord ;
+ *  - moteur vectoriel (MoteurSVG) : vilebrequin, pistons et cames tournent avec
+ *    le scroll, la « caméra » zoome pièce par pièce (décision D3, TODO.md) ;
  *  - garde-fou : si le rendu tombe sous ~40 i/s (24 ms par image) pendant 2 s,
- *    on descend d'un palier.
+ *    on descend d'un palier (canvas du filet moins défini, reflet fixe).
  * Tous les calculs sont dans src/lib/hero-timeline.ts (testés).
  */
-import manifeste from '@/assets/hero/manifest.json'
 import { type Format, HERO, type Palier } from '@/hero.config'
 import {
   borner,
+  cadrageA,
   choisirPalier,
-  couvrir,
   doux,
-  fenetre,
-  imageDepuis,
   local,
   mix,
   opaciteBloc,
-  ordreChargement,
   palierInferieur,
-  plusProche,
   tournerAutour,
+  transformCadrage,
 } from '@/lib/hero-timeline'
+import { animerMoteur } from '@/scripts/moteur-svg'
 
 type Pt = { x: number; y: number }
 type NavigatorEtendu = Navigator & {
   connection?: { saveData?: boolean; effectiveType?: string }
   deviceMemory?: number
 }
-type Sequence = { dossier: string; images: number; ext: string }
 
 const plage = (id: string) => HERO.temps.find((t) => t.id === id)!
 const T1 = plage('t1')
 const T2 = plage('t2')
 const T3 = plage('t3')
-const CHARGEMENTS_SIMULTANES = 4
+const FIN = plage('fin')
+const M = HERO.moteur
 
 export function lancerHero(racine: HTMLElement): void {
   const scene = racine.querySelector<HTMLElement>('.hero-scene')!
-  const canvasSeq = racine.querySelector<HTMLCanvasElement>('[data-sequence]')!
   const canvasFilet = racine.querySelector<HTMLCanvasElement>('[data-filet]')!
   const bidon = racine.querySelector<HTMLElement>('[data-bidon-hero]')!
   const niveau = bidon.querySelector<HTMLElement>('[data-niveau]')
   const bouchon = bidon.querySelector<HTMLElement>('[data-bouchon]')
   const aspectBidon = Number(bidon.dataset.aspect ?? 0.64)
+  const moteur = racine.querySelector<HTMLElement>('[data-moteur-cadre]')!
+  const svgMoteur = moteur.querySelector<SVGSVGElement>('svg')!
   const blocs = [...racine.querySelectorAll<HTMLElement>('.hero-bloc')].map((el) => ({
     el,
     debut: Number(el.dataset.debut),
     fin: Number(el.dataset.fin),
   }))
-  const affiches = Object.fromEntries(
-    [...racine.querySelectorAll<HTMLElement>('[data-affiche]')].map((el) => [el.dataset.affiche!, el]),
-  )
-  const ctxSeq = canvasSeq.getContext('2d')
   const ctxFilet = canvasFilet.getContext('2d')
   const mouvementReduit = matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -82,30 +76,38 @@ export function lancerHero(racine: HTMLElement): void {
   let filler: Pt = { x: 0, y: 0 }
   let deplacement: Pt = { x: 0, y: 0 } // translation du bidon en fin de bascule
   let hauteurBidon = 0
+  let carre = { x0: 0, y0: 0, cote: 0 } // dessin du moteur (carré) à l'écran
+  let centreMoteur: Pt = { x: 0, y: 0 }
 
   function mesurer() {
     format = innerWidth >= HERO.pointDeRupture ? 'desktop' : 'mobile'
     ecran = { l: scene.clientWidth, h: scene.clientHeight }
     dpr = Math.min(devicePixelRatio || 1, HERO.paliers[palier].dprMax)
-    for (const c of [canvasSeq, canvasFilet]) {
-      c.width = Math.round(ecran.l * dpr)
-      c.height = Math.round(ecran.h * dpr)
-    }
+    canvasFilet.width = Math.round(ecran.l * dpr)
+    canvasFilet.height = Math.round(ecran.h * dpr)
 
-    const z = HERO.zones[format].bidon
-    const h = z.h * ecran.h
+    // Bidon : hauteur de sa zone, centré dedans.
+    const zb = HERO.zones[format].bidon
+    const h = zb.h * ecran.h
     const l = h * aspectBidon
     hauteurBidon = h
-    const gauche = z.x * ecran.l + (z.l * ecran.l - l) / 2
-    const haut = z.y * ecran.h
+    const gauche = zb.x * ecran.l + (zb.l * ecran.l - l) / 2
+    const haut = zb.y * ecran.h
     Object.assign(bidon.style, { left: `${gauche}px`, top: `${haut}px`, width: `${l}px`, height: `${h}px` })
     const { spout, bottlePivot } = HERO.ancres.bidon
     bidon.style.transformOrigin = `${bottlePivot.x * 100}% ${bottlePivot.y * 100}%`
     goulotRepos = { x: gauche + spout.x * l, y: haut + spout.y * h }
     pivot = { x: gauche + bottlePivot.x * l, y: haut + bottlePivot.y * h }
 
-    const [il, ih] = manifeste.formats[format].source
-    filler = couvrir(HERO.ancres.filler[format], { l: il, h: ih }, ecran)
+    // Moteur : le plus grand carré qui tient dans sa zone, centré.
+    const zm = HERO.zones[format].moteur
+    const cote = Math.min(zm.l * ecran.l, zm.h * ecran.h)
+    carre = { x0: zm.x * ecran.l + (zm.l * ecran.l - cote) / 2, y0: zm.y * ecran.h + (zm.h * ecran.h - cote) / 2, cote }
+    centreMoteur = { x: carre.x0 + cote / 2, y: carre.y0 + cote / 2 }
+    Object.assign(moteur.style, { left: `${carre.x0}px`, top: `${carre.y0}px`, width: `${cote}px`, height: `${cote}px` })
+    filler = { x: carre.x0 + M.filler.x * cote, y: carre.y0 + M.filler.y * cote }
+
+    // Arrivée du goulot en fin de bascule.
     const cible = HERO.ancres.cibleGoulot
     const arrivee =
       format === 'mobile'
@@ -113,87 +115,6 @@ export function lancerHero(racine: HTMLElement): void {
         : { x: cible.desktop.x * ecran.l, y: cible.desktop.y * ecran.h }
     const goulotBascule = tournerAutour(goulotRepos, pivot, HERO.angleVersement)
     deplacement = { x: arrivee.x - goulotBascule.x, y: arrivee.y - goulotBascule.y }
-  }
-
-  // ── Séquence d'images ──────────────────────────────────────────────────────
-  let seq: Sequence | null = null
-  let fichiers: (Blob | undefined)[] = []
-  let decodees = new Map<number, ImageBitmap>()
-  const enDecodage = new Set<number>()
-  let generation = 0 // invalide les chargements d'une séquence abandonnée
-  let imageDessinee = -1
-  let imageVoulue = 0
-
-  function viderSequence() {
-    generation++
-    decodees.forEach((b) => b.close())
-    decodees = new Map()
-    enDecodage.clear()
-    fichiers = []
-    imageDessinee = -1
-    delete racine.dataset.sequencePrete
-  }
-
-  function chargerSequence() {
-    viderSequence()
-    racine.dataset.palier = palier
-    seq = palier === 'lite' || !ctxSeq ? null : manifeste.paliers[palier][format]
-    if (!seq) return
-    const s = seq
-    const gen = generation
-    const file = ordreChargement(s.images)
-    const suivant = async (): Promise<void> => {
-      const i = file.shift()
-      if (i === undefined || gen !== generation) return
-      try {
-        const r = await fetch(`${s.dossier}/${String(i).padStart(3, '0')}.${s.ext}?v=${manifeste.version}`)
-        if (gen !== generation) return
-        fichiers[i] = await r.blob()
-        decoderAutour()
-      } catch {
-        /* image manquante : l'image voisine la plus proche sera affichée */
-      }
-      return suivant()
-    }
-    for (let k = 0; k < CHARGEMENTS_SIMULTANES; k++) void suivant()
-  }
-
-  function decoderAutour() {
-    if (!seq) return
-    const gardees = new Set(fenetre(imageVoulue, seq.images, HERO.fenetreDecodage))
-    for (const [i, b] of decodees) {
-      if (!gardees.has(i)) {
-        b.close()
-        decodees.delete(i)
-      }
-    }
-    const gen = generation
-    // Les plus proches de l'image voulue d'abord : elle s'affiche au plus vite.
-    for (const i of [...gardees].sort((a, b) => Math.abs(a - imageVoulue) - Math.abs(b - imageVoulue))) {
-      const blob = fichiers[i]
-      if (!blob || decodees.has(i) || enDecodage.has(i)) continue
-      enDecodage.add(i)
-      createImageBitmap(blob)
-        .then((b) => {
-          enDecodage.delete(i)
-          if (gen !== generation || !gardees.has(i)) return b.close()
-          decodees.set(i, b)
-          demanderRendu()
-        })
-        .catch(() => enDecodage.delete(i))
-    }
-  }
-
-  function dessinerSequence() {
-    if (!seq || !ctxSeq) return
-    const i = decodees.has(imageVoulue) ? imageVoulue : plusProche(imageVoulue, decodees.keys())
-    if (i === null || i === imageDessinee) return
-    const b = decodees.get(i)!
-    const { width: cl, height: ch } = canvasSeq
-    const e = Math.max(cl / b.width, ch / b.height)
-    ctxSeq.drawImage(b, (cl - b.width * e) / 2, (ch - b.height * e) / 2, b.width * e, b.height * e)
-    imageDessinee = i
-    racine.dataset.sequencePrete = ''
   }
 
   // ── Filet d'huile (canvas) ────────────────────────────────────────────────
@@ -223,12 +144,12 @@ export function lancerHero(racine: HTMLElement): void {
     ctxFilet.lineWidth = format === 'mobile' ? 6 : 8
     ctxFilet.strokeStyle = degrade
     ctxFilet.stroke()
-    // Reflet qui défile vers le bas.
+    // Reflet qui défile vers le bas (fixe sur le palier lite).
     ctxFilet.lineWidth = 2
     ctxFilet.strokeStyle = HERO.couleurs.refletHuile
     ctxFilet.globalAlpha = 0.75
     ctxFilet.setLineDash([14, 26])
-    ctxFilet.lineDashOffset = -temps * 0.15
+    ctxFilet.lineDashOffset = HERO.paliers[palier].refletAnime ? -temps * 0.15 : 0
     ctxFilet.stroke()
     ctxFilet.restore()
   }
@@ -254,11 +175,10 @@ export function lancerHero(racine: HTMLElement): void {
       b.el.toggleAttribute('data-actif', o > 0.5)
     }
 
-    // t1 : l'huile monte dans le bidon.
-    // Le niveau s'arrête sous l'épaule du bidon (32 % du cadre depuis le haut).
+    // t1 : l'huile monte dans le bidon, jusque sous l'épaule (32 % du cadre).
     if (niveau) niveau.style.transform = `translate3d(0, ${mix(100, 32, doux(local(p, T1.debut, T1.fin)))}%, 0)`
 
-    // t2 : le bouchon saute, le bidon bascule et se place au-dessus du filler.
+    // t2 : le bouchon saute, le bidon bascule et se place au-dessus de l'orifice.
     const t2 = local(p, T2.debut, T2.fin)
     const t3 = local(p, T3.debut, T3.fin)
     const sautBouchon = doux(local(t2, 0, 0.2))
@@ -282,18 +202,19 @@ export function lancerHero(racine: HTMLElement): void {
       imageFiletPresente = filetVisible
     }
 
-    // t3 : séquence (standard/full) ou affiches en fondu (lite).
-    if (seq) {
-      const voulue = imageDepuis(t3, seq.images)
-      if (voulue !== imageVoulue) {
-        imageVoulue = voulue
-        decoderAutour()
-      }
-      dessinerSequence()
-    } else {
-      affiches.e2?.style.setProperty('opacity', String(local(t3, 0, 0.1) * (1 - local(t3, 0.5, 0.6))))
-      affiches.e3?.style.setProperty('opacity', String(local(t3, 0.5, 0.6)))
-    }
+    // t3 : le moteur s'ouvre, tourne, et l'huile le lubrifie pièce par pièce.
+    animerMoteur(svgMoteur, {
+      angle: mouvementReduit ? 0 : t3 * M.tours * 360,
+      coupe: local(t3, M.coupe[0], M.coupe[1]),
+      huileCames: local(t3, M.huile.cames[0], M.huile.cames[1]),
+      huilePistons: local(t3, M.huile.pistons[0], M.huile.pistons[1]),
+      huileVilebrequin: local(t3, M.huile.vilebrequin[0], M.huile.vilebrequin[1]),
+    })
+    const c = mouvementReduit ? M.cadrages[0] : cadrageA(t3, M.cadrages)
+    const { tx, ty, s } = transformCadrage(c, carre, centreMoteur)
+    moteur.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${s})`
+    // Écran de fin : le moteur s'efface derrière les produits.
+    moteur.style.opacity = String(1 - 0.75 * local(p, FIN.debut - 0.02, FIN.debut + 0.02))
   }
 
   // ── Boucle : rendu à la demande, garde-fou de performance ─────────────────
@@ -314,7 +235,7 @@ export function lancerHero(racine: HTMLElement): void {
     if (ecart < 100) surveiller(temps, ecart) // seules les images consécutives comptent
     lireProgression()
     rendre(temps)
-    if (filetVisible) demanderRendu() // le reflet du filet défile tant qu'il est visible
+    if (filetVisible && HERO.paliers[palier].refletAnime) demanderRendu() // le reflet défile
   }
 
   function surveiller(temps: number, ecart: number) {
@@ -325,10 +246,10 @@ export function lancerHero(racine: HTMLElement): void {
     const moyenne = echantillons.reduce((s, e) => s + e.d, 0) / echantillons.length
     if (couvert >= HERO.gardeFou.dureeMs * 0.9 && moyenne > HERO.gardeFou.msParImage) {
       palier = palierInferieur(palier)
+      racine.dataset.palier = palier
       echantillons = []
       console.info(`[hero] rendu trop lent (${moyenne.toFixed(1)} ms/image) → palier ${palier}`)
       mesurer()
-      chargerSequence()
     }
   }
 
@@ -340,34 +261,12 @@ export function lancerHero(racine: HTMLElement): void {
   rendre(0)
   addEventListener('scroll', demanderRendu, { passive: true })
 
-  let formatPrecedent: Format = format
   let minuterie = 0
   addEventListener('resize', () => {
     clearTimeout(minuterie)
     minuterie = window.setTimeout(() => {
       mesurer()
-      imageDessinee = -1
-      if (format !== formatPrecedent) {
-        formatPrecedent = format
-        chargerSequence()
-      }
       demanderRendu()
     }, 150)
   })
-
-  // La séquence ne se charge qu'après la page (l'affiche e1 reste le LCP) et
-  // quand le hero est proche de l'écran.
-  const demarrerSequence = () => {
-    const obs = new IntersectionObserver(
-      (entrees) => {
-        if (!entrees.some((e) => e.isIntersecting)) return
-        obs.disconnect()
-        chargerSequence()
-      },
-      { rootMargin: '50% 0px' },
-    )
-    obs.observe(racine)
-  }
-  if (document.readyState === 'complete') demarrerSequence()
-  else addEventListener('load', demarrerSequence, { once: true })
 }

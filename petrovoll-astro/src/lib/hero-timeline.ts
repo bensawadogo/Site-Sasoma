@@ -3,12 +3,7 @@
  * testés dans hero-timeline.test.ts. Le script src/scripts/hero-scroll.ts
  * ne fait que lire le DOM, appeler ces fonctions et écrire des transform.
  */
-import type { Palier, Point } from '@/hero.config'
-
-export interface Taille {
-  l: number
-  h: number
-}
+import type { Palier } from '@/hero.config'
 
 export const borner = (v: number, min = 0, max = 1) => Math.min(max, Math.max(min, v))
 
@@ -31,17 +26,6 @@ export function opaciteBloc(p: number, debut: number, fin: number, fondu = 0.02)
   const entree = debut <= 0 ? 1 : local(p, debut, debut + fondu)
   const sortie = fin >= 1 ? 1 : 1 - local(p, fin - fondu, fin)
   return borner(Math.min(entree, sortie))
-}
-
-/**
- * Position à l'écran (px) d'un point exprimé en fractions d'une image
- * affichée en `object-fit: cover` centré.
- */
-export function couvrir(point: Point, image: Taille, ecran: Taille): { x: number; y: number } {
-  const echelle = Math.max(ecran.l / image.l, ecran.h / image.h)
-  const dx = (ecran.l - image.l * echelle) / 2
-  const dy = (ecran.h - image.h * echelle) / 2
-  return { x: dx + point.x * image.l * echelle, y: dy + point.y * image.h * echelle }
 }
 
 /** Rotation de `point` autour de `pivot` (degrés, sens horaire à l'écran). */
@@ -76,36 +60,35 @@ export function choisirPalier(s: SignauxAppareil): Palier {
 /** Palier inférieur (garde-fou de performance). */
 export const palierInferieur = (p: Palier): Palier => (p === 'full' ? 'standard' : 'lite')
 
-/** Index d'image (0 … n-1) pour un avancement 0 → 1 de la séquence. */
-export const imageDepuis = (t: number, n: number) => Math.round(borner(t) * (n - 1))
-
-/** Ordre de chargement : 1 image sur `pas` d'abord, puis on comble les trous. */
-export function ordreChargement(n: number, pas = 4): number[] {
-  // La première puis la dernière image d'abord : début et fin du scroll nets.
-  const ordre = n > 1 ? [0, n - 1] : [0]
-  const vus = new Set(ordre)
-  for (let p = pas; p >= 1; p = Math.floor(p / 2)) {
-    for (let i = 0; i < n; i += p) {
-      if (!vus.has(i)) {
-        vus.add(i)
-        ordre.push(i)
-      }
-    }
-  }
-  return ordre
+/** Clé de cadrage : à l'avancement `t` (0 → 1), le point (x, y) du dessin est au centre, zoomé. */
+export interface CleCadrage {
+  t: number
+  x: number
+  y: number
+  zoom: number
 }
 
-/** Images à garder décodées autour de l'image courante. */
-export function fenetre(courant: number, n: number, taille: number): number[] {
-  const debut = borner(courant - Math.floor(taille / 2), 0, Math.max(0, n - taille))
-  return Array.from({ length: Math.min(taille, n) }, (_, i) => debut + i)
+/** Cadrage à l'avancement `t`, interpolé en douceur entre deux clés consécutives. */
+export function cadrageA(t: number, cles: readonly CleCadrage[]): Omit<CleCadrage, 't'> {
+  const apres = cles.findIndex((c) => c.t > t)
+  if (apres <= 0) {
+    const { x, y, zoom } = cles[apres === -1 ? cles.length - 1 : 0]
+    return { x, y, zoom }
+  }
+  const a = cles[apres - 1]
+  const b = cles[apres]
+  const u = doux(local(t, a.t, b.t))
+  return { x: mix(a.x, b.x, u), y: mix(a.y, b.y, u), zoom: mix(a.zoom, b.zoom, u) }
 }
 
-/** Image chargée la plus proche de `cible` (null si aucune). */
-export function plusProche(cible: number, disponibles: Iterable<number>): number | null {
-  let meilleur: number | null = null
-  for (const i of disponibles) {
-    if (meilleur === null || Math.abs(i - cible) < Math.abs(meilleur - cible)) meilleur = i
-  }
-  return meilleur
+/**
+ * Transformation (origine en haut à gauche) qui amène le point `c` d'un dessin
+ * carré de côté `cote` au point `cible` de l'écran. Le dessin est posé en (x0, y0).
+ */
+export function transformCadrage(
+  c: Omit<CleCadrage, 't'>,
+  carre: { x0: number; y0: number; cote: number },
+  cible: { x: number; y: number },
+): { tx: number; ty: number; s: number } {
+  return { tx: cible.x - carre.x0 - c.zoom * c.x * carre.cote, ty: cible.y - carre.y0 - c.zoom * c.y * carre.cote, s: c.zoom }
 }

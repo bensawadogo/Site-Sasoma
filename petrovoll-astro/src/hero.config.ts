@@ -2,19 +2,20 @@
  * hero.config.ts — configuration UNIQUE du hero au scroll (BRIEF-MAITRE.md §8).
  *
  * Tout ce qui se règle sans toucher au code est ici : paliers, temps de la
- * timeline, mise en page, ancres, textes et CTA. Les prompts de génération
- * vivent dans scenario/shots.md et reprennent les mêmes ancres.
+ * timeline, mise en page, ancres, cadrages du moteur, textes et CTA.
  *
  * Conventions :
  *  - progression du scroll de 0 (haut du hero) à 1 (fin du hero) ;
- *  - ancres en FRACTIONS de l'image source (x, y ∈ [0, 1], origine en haut à
- *    gauche). Le code les convertit en pixels selon le recadrage `cover` ;
- *  - `aMesurer: true` = valeur provisoire, remplacée par la mesure réelle
- *    (phase 4 pour le bidon, phase 5 pour le moteur). Le test
- *    hero.config.test.ts vérifie la cohérence de l'ensemble.
+ *  - zones en fractions de l'ÉCRAN ; ancres du bidon en fractions de la photo ;
+ *    points du moteur en fractions de son dessin (repère carré 1000×1000) ;
+ *  - hero.config.test.ts vérifie la cohérence de l'ensemble.
+ *
+ * Décision D3 (TODO.md) : le moteur est une illustration SVG animée par le
+ * scroll (src/components/hero/MoteurSVG.astro), pas une vidéo IA.
  */
 
 import geometrieBidon from '@/assets/hero/bidon/geometrie.json'
+import type { CleCadrage } from '@/lib/hero-timeline'
 
 export type Palier = 'lite' | 'standard' | 'full'
 export type Format = 'mobile' | 'desktop'
@@ -22,7 +23,6 @@ export type Format = 'mobile' | 'desktop'
 export interface Point {
   x: number
   y: number
-  aMesurer?: boolean
 }
 
 /** Rectangle en fractions de l'écran. */
@@ -50,41 +50,23 @@ export const HERO = {
     { id: 'ouverture', debut: 0, fin: 0.08 },
     { id: 't1', debut: 0.08, fin: 0.35 }, // l'huile monte dans le bidon
     { id: 't2', debut: 0.35, fin: 0.55 }, // bouchon, bascule 115°, filet d'huile
-    { id: 't3', debut: 0.55, fin: 0.92 }, // séquence V1 + V2 : cames → pistons → vilebrequin
+    { id: 't3', debut: 0.55, fin: 0.92 }, // moteur : cames → pistons → vilebrequin
     { id: 'fin', debut: 0.92, fin: 1 }, // produits + CTA
   ] satisfies Temps[],
-  /** Découpage de t3 entre les deux vidéos (fraction de t3). */
-  partageSequence: { v1: 0.5, v2: 0.5 },
   /** Bascule du bidon pendant t2 (degrés, sens horaire sur mobile). */
   angleVersement: 115,
 
   // ── Paliers (§8) ───────────────────────────────────────────────────────────
+  // Le moteur étant vectoriel, les paliers ne changent plus le poids téléchargé
+  // (identique partout) mais le coût de rendu : définition du canvas du filet et
+  // animations continues.
   paliers: {
-    lite: {
-      // saveData, 2g/3g, deviceMemory ≤ 2 ou prefers-reduced-motion
-      dprMax: 1,
-      images: 0, // affiches fixes + CSS/SVG, aucune séquence
-      budgetKo: 500,
-    },
-    standard: {
-      dprMax: 1.5,
-      images: 48,
-      taille: { mobile: [540, 960], desktop: [960, 540] },
-      format: 'webp',
-      qualite: 55,
-    },
-    full: {
-      // deviceMemory ≥ 6 et 4g/wifi
-      dprMax: 2,
-      images: 96,
-      taille: { mobile: [1080, 1920], desktop: [1920, 1080] },
-      format: 'avif',
-    },
+    lite: { dprMax: 1, refletAnime: false }, // saveData, 2g/3g, ≤ 2 Go ou mouvement réduit
+    standard: { dprMax: 1.5, refletAnime: true },
+    full: { dprMax: 2, refletAnime: true }, // ≥ 6 Go et 4g/wifi, ou ordinateur
   },
   /** Garde-fou : on descend d'un palier si une image dépasse ce temps moyen pendant `duree`. */
   gardeFou: { msParImage: 24, dureeMs: 2000 },
-  /** Nombre d'images décodées gardées en mémoire autour de l'image courante. */
-  fenetreDecodage: 12,
   /** Forçage manuel du palier : ?tier=lite|standard|full */
   parametreForcage: 'tier',
 
@@ -94,13 +76,15 @@ export const HERO = {
     mobile: {
       entete: { x: 0, y: 0, l: 1, h: 0.12 },
       bidon: { x: 0.32, y: 0.13, l: 0.36, h: 0.22 }, // basculé, il doit tenir dans la largeur
+      moteur: { x: 0.04, y: 0.34, l: 0.92, h: 0.38 },
       textes: { x: 0.06, y: 0.72, l: 0.88, h: 0.24 },
       fin: { x: 0.06, y: 0.3, l: 0.88, h: 0.66 }, // le bidon est sorti : la fin prend la place
     },
     desktop: {
       entete: { x: 0, y: 0, l: 1, h: 0.12 },
-      bidon: { x: 0.06, y: 0.18, l: 0.24, h: 0.46 },
-      textes: { x: 0.05, y: 0.7, l: 0.42, h: 0.25 },
+      bidon: { x: 0.14, y: 0.16, l: 0.24, h: 0.36 },
+      moteur: { x: 0.44, y: 0.3, l: 0.52, h: 0.66 },
+      textes: { x: 0.05, y: 0.7, l: 0.36, h: 0.25 },
       fin: { x: 0.05, y: 0.3, l: 0.5, h: 0.62 },
     },
   } satisfies Record<Format, Record<string, Zone>>,
@@ -109,29 +93,37 @@ export const HERO = {
   ancres: {
     /** Mesurées sur la photo P1 par scripts/build-bidon-hero.mjs (goulot : départ du filet ; pivot : centre de masse). */
     bidon: { spout: geometrieBidon.spout, bottlePivot: geometrieBidon.bottlePivot },
-    /** Dans les images moteur E1 : ouverture de remplissage (arrivée du filet), tolérance ±3 %. */
-    filler: {
-      mobile: { x: 0.5, y: 0.5, aMesurer: true },
-      desktop: { x: 0.6, y: 0.46, aMesurer: true },
-    },
-    tolerance: 0.03,
     /**
      * Où le goulot doit arriver en fin de bascule (fractions de l'écran).
-     * Mobile : juste au-dessus du filler (x = filler) → versement vertical.
-     * Desktop : reste à gauche → filet en diagonale jusqu'au filler.
+     * Mobile : juste au-dessus de l'orifice du moteur (même x) → versement vertical.
+     * Desktop : à gauche du moteur → filet en arc jusqu'à l'orifice.
      */
-    cibleGoulot: { mobile: { y: 0.34 }, desktop: { x: 0.38, y: 0.38 } },
-    /**
-     * Zone horizontale toujours visible d'une image 9:16 recadrée sur un
-     * écran 360×800 (on perd 10 % de chaque côté ; marge de sécurité à 15 %) : le filler doit y rester.
-     */
-    zoneSure: { mobile: { xMin: 0.15, xMax: 0.85 } },
+    cibleGoulot: { mobile: { y: 0.3 }, desktop: { x: 0.52, y: 0.24 } },
   },
 
-  // ── Fichiers ───────────────────────────────────────────────────────────────
-  sources: {
-    photos: 'assets/photos/stark', // P1 ; corps sans bouchon et bouchon en sont dérivés (npm run hero:bidon)
-    ia: 'assets/ai', // E1-916, E1-169, E2-…, E3-…, V1-M, V1-D, V2-M, V2-D
+  // ── Moteur SVG (repère du dessin : fractions de 1000×1000) ─────────────────
+  moteur: {
+    /** Orifice de remplissage : arrivée du filet d'huile. */
+    filler: { x: 0.5, y: 0.12 },
+    /** Tours de vilebrequin pendant t3. */
+    tours: 4,
+    /** Plages (fractions de t3) : révélation de l'intérieur, puis huile pièce par pièce. */
+    coupe: [0, 0.12],
+    huile: { cames: [0.05, 0.33], pistons: [0.33, 0.66], vilebrequin: [0.66, 0.95] },
+    /**
+     * Cadrages pendant t3 (t = fraction de t3) : le point (x, y) du dessin est
+     * amené au centre de la zone moteur, avec ce zoom. Interpolés en douceur ;
+     * deux clés identiques = plan fixe. Vue d'ensemble → cames → pistons → vilebrequin.
+     */
+    cadrages: [
+      { t: 0, x: 0.5, y: 0.5, zoom: 1 },
+      { t: 0.1, x: 0.5, y: 0.26, zoom: 1.7 },
+      { t: 0.3, x: 0.5, y: 0.26, zoom: 1.7 },
+      { t: 0.4, x: 0.5, y: 0.52, zoom: 1.5 },
+      { t: 0.62, x: 0.5, y: 0.52, zoom: 1.5 },
+      { t: 0.72, x: 0.5, y: 0.8, zoom: 1.6 },
+      { t: 1, x: 0.5, y: 0.8, zoom: 1.6 },
+    ] satisfies CleCadrage[],
   },
 
   // ── Couleurs (research/palette.json) ──────────────────────────────────────
