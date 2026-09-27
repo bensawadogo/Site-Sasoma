@@ -1,0 +1,1098 @@
+{
+ "source": "Collecte navigateur (Playwright) du 2026-09-27 : petrovoll.com, haliburg.com (maison mère), revendeurs sayarati.online, amitechkenya.com, driveright.co.ke, madukani.co.ke, safezoneautospares.com",
+ "droits": "Visuels © Petrovöll GmbH ou © du revendeur qui a pris la photo. Copies de travail locales, NON versionnées. Publication sur le site uniquement avec l'autorisation écrite de la marque (et du revendeur pour ses photos).",
+ "regleFiligrane": "Toute image filigranée est rejetée (règle 7 du brief) : jamais recadrée ni retouchée pour retirer le filigrane.",
+ "produits": {
+  "stark-synthetique": {
+   "nom": "STÄRK Fully Synthetic",
+   "categorie": "huiles-essence",
+   "candidats": [
+    {
+     "fichier": "huiles-essence/stark-synthetique/officiel-800x1000-stark.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 975,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/540320280/3908031182.png",
+     "page": "https://sayarati.online/products/Petrovoll-5w30-SN-CF-Full-Synthetic-METAL-p540320280",
+     "type": "STÄRK Voll Synthetisch 5W30, bidon MÉTAL 1 L (étiquette à plat)",
+     "statut": "ok",
+     "fichier": "huiles-essence/stark-synthetique/sayarati-975x1500-17.png"
+    },
+    {
+     "l": 975,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/524707232/3429131815.jpg",
+     "page": "https://sayarati.online/products/Petrovoll-5w20-SN-CF-Full-Synt-p524707232",
+     "type": "STÄRK Voll Synthetisch 5W20 1 L, photo fond noir — meilleur candidat P1 du hero",
+     "statut": "ok",
+     "fichier": "huiles-essence/stark-synthetique/sayarati-975x1500-25.png"
+    },
+    {
+     "l": 1620,
+     "h": 1620,
+     "source": "driveright",
+     "image": "https://d8jbk05ikns31.cloudfront.net/qpcquwihtsgkfxyg2nkw.webp",
+     "page": "https://driveright.co.ke/lubricants/engine-oils/petrov-ll-st-rk-5w-40-1l-fully-synthetic",
+     "type": "STÄRK 5W40 1 L — filigrane driveright.co.ke",
+     "statut": "rejet-filigrane",
+     "fichier": "huiles-essence/stark-synthetique/REJET-driveright-1620x1620-0.webp"
+    },
+    {
+     "l": 964,
+     "h": 1296,
+     "source": "madukani",
+     "image": "https://i0.wp.com/madukani.co.ke/wp-content/uploads/2022/07/Petrovoll-Stark-SAE-5W40-Fully-Synthetic-Engine-Oil-10000Km-.jpg?fit=964%2C1296&ssl=1",
+     "page": "https://madukani.co.ke/product/petrovoll-stark-sae-5w40-fully-synthetic-engine-oil-10000km/",
+     "type": "STÄRK 5W40 4 L métal (dos) — filigrane Madukani",
+     "statut": "rejet-filigrane",
+     "fichier": "huiles-essence/stark-synthetique/REJET-madukani-964x1296-36.jpg"
+    },
+    {
+     "l": 1012,
+     "h": 1228,
+     "source": "madukani",
+     "image": "https://i0.wp.com/madukani.co.ke/wp-content/uploads/2022/07/Petrovoll-Stark-SAE-5W40-Fully-Synthetic-Engine-Oil-10000Km-2.jpg?fit=1012%2C1228&ssl=1",
+     "page": "https://madukani.co.ke/product/petrovoll-stark-sae-5w40-fully-synthetic-engine-oil-10000km/",
+     "type": "STÄRK 5W40 4 L métal — filigrane Madukani",
+     "statut": "rejet-filigrane",
+     "fichier": "huiles-essence/stark-synthetique/REJET-madukani-1012x1228-37.jpg"
+    },
+    {
+     "l": 972,
+     "h": 1128,
+     "source": "madukani",
+     "image": "https://i0.wp.com/madukani.co.ke/wp-content/uploads/2022/07/Petrovoll-Stark-SAE-5W40-Fully-Synthetic-Engine-Oil-10000Km-3.jpg?fit=972%2C1128&ssl=1",
+     "page": "https://madukani.co.ke/product/petrovoll-stark-sae-5w40-fully-synthetic-engine-oil-10000km/",
+     "type": "STÄRK 5W40 4 L métal — filigrane Madukani",
+     "statut": "rejet-filigrane",
+     "fichier": "huiles-essence/stark-synthetique/REJET-madukani-972x1128-38.jpg"
+    },
+    {
+     "l": 900,
+     "h": 900,
+     "source": "madukani",
+     "image": "https://i0.wp.com/madukani.co.ke/wp-content/uploads/2022/07/Petrovoll-Stark-SAE-5W40-Fully-Synthetic-Engine-Oil-10000Km-2.jpg?zoom=3&resize=300%2C300&ssl=1",
+     "page": "https://madukani.co.ke/?s=petrovoll&post_type=product",
+     "type": "STÄRK 5W40 4 L métal — filigrane Madukani",
+     "statut": "rejet-filigrane",
+     "fichier": "huiles-essence/stark-synthetique/REJET-madukani-900x900-66.jpg"
+    },
+    {
+     "l": 671,
+     "h": 1024,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/524707234/4602898980.jpg",
+     "page": "https://sayarati.online/products/Petrovoll-5w40-SN-CF-Full-Synthetic-p524707234",
+     "type": "STÄRK 5W40 4 L métal — filigrane « Enterprise »",
+     "statut": "rejet-filigrane",
+     "fichier": "huiles-essence/stark-synthetique/REJET-sayarati-671x1024-91.jpg"
+    }
+   ],
+   "meilleur": "huiles-essence/stark-synthetique/sayarati-975x1500-25.png"
+  },
+  "stark-semi-synthetique": {
+   "nom": "STÄRK Semi Synthetic",
+   "categorie": "huiles-essence",
+   "candidats": [
+    {
+     "fichier": "huiles-essence/stark-semi-synthetique/officiel-800x1000-stark_ss.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 1920,
+     "h": 1080,
+     "source": "amitech",
+     "image": "https://amitechkenya.com/assets/img/10%20w40.jpg",
+     "page": "https://amitechkenya.com/products.html",
+     "type": "STÄRK Teil Synthetisches 10W40 4 L, petit dans une bannière 1920×1080",
+     "statut": "reference",
+     "fichier": "huiles-essence/stark-semi-synthetique/amitech-1920x1080-5.jpg"
+    }
+   ],
+   "meilleur": "huiles-essence/stark-semi-synthetique/officiel-800x1000-stark_ss.jpg"
+  },
+  "volex": {
+   "nom": "VÖLEX Multi-Grade Mineral",
+   "categorie": "huiles-essence",
+   "candidats": [
+    {
+     "fichier": "huiles-essence/volex/officiel-800x1000-volex.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 975,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/524707227/3429109429.jpg",
+     "page": "https://sayarati.online/products/Petrovoll-20w50-SL-CF-p524707227",
+     "type": "VÖLEX Mineralöl 20W50 5 L, photo fond noir",
+     "statut": "ok",
+     "fichier": "huiles-essence/volex/sayarati-975x1500-19.png"
+    }
+   ],
+   "meilleur": "huiles-essence/volex/sayarati-975x1500-19.png"
+  },
+  "vono": {
+   "nom": "VÖNO Mineral",
+   "categorie": "huiles-essence",
+   "candidats": [
+    {
+     "fichier": "huiles-essence/vono/officiel-800x1000-vono.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-essence/vono/officiel-800x1000-vono.jpg"
+  },
+  "viro-tec-synthetique": {
+   "nom": "VIRÖ-TEC Fully Synthetic",
+   "categorie": "huiles-diesel",
+   "candidats": [
+    {
+     "fichier": "huiles-diesel/viro-tec-synthetique/officiel-800x1000-viro_fs.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 975,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/524707242/3437768291.jpg",
+     "page": "https://sayarati.online/products/Petrovoll-15w40-Diesel-API-CI-4-18L-p524707242",
+     "type": "VIRÖ-TEC Schwerlast 15W40 18 L (variante non lisible), fond noir",
+     "statut": "ok",
+     "fichier": "huiles-diesel/viro-tec-synthetique/sayarati-975x1500-27.png"
+    },
+    {
+     "l": 800,
+     "h": 800,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/702426904/4591255087.png",
+     "page": "https://sayarati.online/products/search?keyword=petrovoll",
+     "type": "VIRÖ-TEC 5 L vu de dos (contre-étiquette)",
+     "statut": "reference",
+     "fichier": "huiles-diesel/viro-tec-synthetique/sayarati-800x800-94.png"
+    }
+   ],
+   "meilleur": "huiles-diesel/viro-tec-synthetique/officiel-800x1000-viro_fs.jpg"
+  },
+  "viro-tec-semi-synthetique": {
+   "nom": "VIRÖ-TEC Semi Synthetic",
+   "categorie": "huiles-diesel",
+   "candidats": [
+    {
+     "fichier": "huiles-diesel/viro-tec-semi-synthetique/officiel-800x1000-viro_ss.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 1500,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/702426904/4591255081.png",
+     "page": "https://sayarati.online/products/Petrovoll-15w40-Diesel-API-CI-4-5L-p702426904",
+     "type": "VIRÖ-TEC Teil Synthetisches 15W40 5 L, photo fond noir",
+     "statut": "ok",
+     "fichier": "huiles-diesel/viro-tec-semi-synthetique/sayarati-1500x1500-2.png"
+    },
+    {
+     "l": 1920,
+     "h": 1080,
+     "source": "amitech",
+     "image": "https://amitechkenya.com/assets/img/Diesel.jpg",
+     "page": "https://amitechkenya.com/products.html",
+     "type": "VIRÖ-TEC 15W40 5 L, petit dans une bannière 1920×1080",
+     "statut": "reference",
+     "fichier": "huiles-diesel/viro-tec-semi-synthetique/amitech-1920x1080-6.jpg"
+    }
+   ],
+   "meilleur": "huiles-diesel/viro-tec-semi-synthetique/sayarati-1500x1500-2.png"
+  },
+  "d-tec": {
+   "nom": "D-TEC Mineral",
+   "categorie": "huiles-diesel",
+   "candidats": [
+    {
+     "fichier": "huiles-diesel/d-tec/officiel-800x1000-dtec_mineral.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-diesel/d-tec/officiel-800x1000-dtec_mineral.jpg"
+  },
+  "cng-tec": {
+   "nom": "CNG-TEC",
+   "categorie": "huiles-diesel",
+   "candidats": [
+    {
+     "fichier": "huiles-diesel/cng-tec/officiel-800x1000-cngtec.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-diesel/cng-tec/officiel-800x1000-cngtec.jpg"
+  },
+  "motpro-4t": {
+   "nom": "MÖTPRO 4T",
+   "categorie": "huiles-moto",
+   "candidats": [
+    {
+     "fichier": "huiles-moto/motpro-4t/officiel-800x1000-motpro_4t.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 650,
+     "h": 1000,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/559087881/3636931922.png",
+     "page": "https://sayarati.online/products/PTR-MOT10W40-1ME-Petrovoll-10w40-SN-4-Stroke-4T-Scooter-Plus-METAL-1L-p559087881",
+     "type": "MÖTPRO Scooter Plus 10W40 JASO MB, bidon MÉTAL 1 L, fond noir",
+     "statut": "ok",
+     "fichier": "huiles-moto/motpro-4t/sayarati-650x1000-93.png"
+    }
+   ],
+   "meilleur": "huiles-moto/motpro-4t/officiel-800x1000-motpro_4t.jpg"
+  },
+  "motpro-2t": {
+   "nom": "MÖTPRO 2T",
+   "categorie": "huiles-moto",
+   "candidats": [
+    {
+     "fichier": "huiles-moto/motpro-2t/officiel-800x1000-motpro_2t.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-moto/motpro-2t/officiel-800x1000-motpro_2t.jpg"
+  },
+  "marineol-cylindre-synthetique": {
+   "nom": "MARINEÖL Synthetic Marine Cylinder",
+   "categorie": "huiles-marines",
+   "candidats": [
+    {
+     "fichier": "huiles-marines/marineol-cylindre-synthetique/officiel-800x1000-marineol_1.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-marines/marineol-cylindre-synthetique/officiel-800x1000-marineol_1.jpg"
+  },
+  "marineol-minerale": {
+   "nom": "MARINEÖL Mineral Marine",
+   "categorie": "huiles-marines",
+   "candidats": [
+    {
+     "fichier": "huiles-marines/marineol-minerale/officiel-800x1000-marineol_2.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-marines/marineol-minerale/officiel-800x1000-marineol_2.jpg"
+  },
+  "marineol-trunk-piston": {
+   "nom": "MARINEÖL Trunk Piston",
+   "categorie": "huiles-marines",
+   "candidats": [
+    {
+     "fichier": "huiles-marines/marineol-trunk-piston/officiel-800x1000-marineol_3.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-marines/marineol-trunk-piston/officiel-800x1000-marineol_3.jpg"
+  },
+  "marineol-2t": {
+   "nom": "MARINEÖL 2T Outboard",
+   "categorie": "huiles-marines",
+   "candidats": [
+    {
+     "fichier": "huiles-marines/marineol-2t/officiel-800x1000-marineol_4.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-marines/marineol-2t/officiel-800x1000-marineol_4.jpg"
+  },
+  "hydkon": {
+   "nom": "HYDKÖN Hydraulique",
+   "categorie": "huiles-industrielles",
+   "candidats": [
+    {
+     "fichier": "huiles-industrielles/hydkon/officiel-800x1000-hydkon.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 975,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/524707241/3429147603.jpg",
+     "page": "https://sayarati.online/products/Petrovoll-Hydraulic-ISO-VG-68-18L-p524707241",
+     "type": "HYDKÖN Hydraulic 68 (ISO VG 68) 20 L, fond noir",
+     "statut": "ok",
+     "fichier": "huiles-industrielles/hydkon/sayarati-975x1500-24.png"
+    }
+   ],
+   "meilleur": "huiles-industrielles/hydkon/sayarati-975x1500-24.png"
+  },
+  "lub-tec-grob": {
+   "nom": "LUB-TEC GRÖB Engrenages industriels",
+   "categorie": "huiles-industrielles",
+   "candidats": [
+    {
+     "fichier": "huiles-industrielles/lub-tec-grob/officiel-800x1000-lube_tec_grob.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-industrielles/lub-tec-grob/officiel-800x1000-lube_tec_grob.jpg"
+  },
+  "turbine": {
+   "nom": "Huile turbine",
+   "categorie": "huiles-industrielles",
+   "candidats": [
+    {
+     "fichier": "huiles-industrielles/turbine/officiel-800x1000-lube_tec_grob.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-industrielles/turbine/officiel-800x1000-lube_tec_grob.jpg"
+  },
+  "scom": {
+   "nom": "SCÖM Compresseur",
+   "categorie": "huiles-industrielles",
+   "candidats": [
+    {
+     "fichier": "huiles-industrielles/scom/officiel-800x1000-lube_tec_grob.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-industrielles/scom/officiel-800x1000-lube_tec_grob.jpg"
+  },
+  "schneidol": {
+   "nom": "SCHNEIDÖL Huile de coupe",
+   "categorie": "huiles-industrielles",
+   "candidats": [
+    {
+     "fichier": "huiles-industrielles/schneidol/officiel-800x1000-lube_tec_grob.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-industrielles/schneidol/officiel-800x1000-lube_tec_grob.jpg"
+  },
+  "transformateur": {
+   "nom": "Huile transformateur",
+   "categorie": "huiles-industrielles",
+   "candidats": [
+    {
+     "fichier": "huiles-industrielles/transformateur/officiel-800x1000-lube_tec_grob.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-industrielles/transformateur/officiel-800x1000-lube_tec_grob.jpg"
+  },
+  "trans-tech": {
+   "nom": "TRANS-TECH Transmission industrielle",
+   "categorie": "huiles-industrielles",
+   "candidats": [
+    {
+     "fichier": "huiles-industrielles/trans-tech/officiel-800x1000-lube_tec_grob.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-industrielles/trans-tech/officiel-800x1000-lube_tec_grob.jpg"
+  },
+  "refrigeration": {
+   "nom": "Huile réfrigération",
+   "categorie": "huiles-industrielles",
+   "candidats": [
+    {
+     "fichier": "huiles-industrielles/refrigeration/officiel-800x1000-lube_tec_grob.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-industrielles/refrigeration/officiel-800x1000-lube_tec_grob.jpg"
+  },
+  "caloporteur": {
+   "nom": "Huile caloporteuse",
+   "categorie": "huiles-industrielles",
+   "candidats": [
+    {
+     "fichier": "huiles-industrielles/caloporteur/officiel-800x1000-lube_tec_grob.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-industrielles/caloporteur/officiel-800x1000-lube_tec_grob.jpg"
+  },
+  "circulation": {
+   "nom": "Huile de circulation",
+   "categorie": "huiles-industrielles",
+   "candidats": [
+    {
+     "fichier": "huiles-industrielles/circulation/officiel-800x1000-lube_tec_grob.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "huiles-industrielles/circulation/officiel-800x1000-lube_tec_grob.jpg"
+  },
+  "dexo-cvt": {
+   "nom": "DEXÖ ATF CVT",
+   "categorie": "boites-automatiques",
+   "candidats": [
+    {
+     "fichier": "boites-automatiques/dexo-cvt/officiel-800x1000-dexo_atf_cvt.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "boites-automatiques/dexo-cvt/officiel-800x1000-dexo_atf_cvt.jpg"
+  },
+  "dexo-dexron-vi": {
+   "nom": "DEXÖ ATF DEXRON VI",
+   "categorie": "boites-automatiques",
+   "candidats": [
+    {
+     "fichier": "boites-automatiques/dexo-dexron-vi/officiel-800x1000-dexo_atf_vi.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "boites-automatiques/dexo-dexron-vi/officiel-800x1000-dexo_atf_vi.jpg"
+  },
+  "dexo-dexron-iii": {
+   "nom": "DEXÖ ATF DEXRON III",
+   "categorie": "boites-automatiques",
+   "candidats": [
+    {
+     "fichier": "boites-automatiques/dexo-dexron-iii/officiel-800x1000-dexo_atf_iii.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 650,
+     "h": 1000,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/524707236/3636931770.png",
+     "page": "https://sayarati.online/products/Petrovoll-ATF-DEXRON-III-CLEAR-1L-p524707236",
+     "type": "DEXÖ ATF DEXRON III, bidon MÉTAL 1 L, fond noir",
+     "statut": "ok",
+     "fichier": "boites-automatiques/dexo-dexron-iii/sayarati-650x1000-92.png"
+    }
+   ],
+   "meilleur": "boites-automatiques/dexo-dexron-iii/officiel-800x1000-dexo_atf_iii.jpg"
+  },
+  "dexo-dexron-ii": {
+   "nom": "DEXÖ ATF DEXRON II",
+   "categorie": "boites-automatiques",
+   "candidats": [
+    {
+     "fichier": "boites-automatiques/dexo-dexron-ii/officiel-3333x4167-dexo_atf_ii.jpg",
+     "l": 3333,
+     "h": 4167,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "boites-automatiques/dexo-dexron-ii/officiel-3333x4167-dexo_atf_ii.jpg"
+  },
+  "dexo-type-a": {
+   "nom": "DEXÖ ATF Type A Suffix A",
+   "categorie": "boites-automatiques",
+   "candidats": [
+    {
+     "fichier": "boites-automatiques/dexo-type-a/officiel-3333x4167-dexo_atf_typea.jpg",
+     "l": 3333,
+     "h": 4167,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 975,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/524707235/3427400834.jpg",
+     "page": "https://sayarati.online/products/Petrovoll-ATF-Type-A-1L-p524707235",
+     "type": "DEXÖ ATF Type A Suffix A 1 L, photo fond noir",
+     "statut": "ok",
+     "fichier": "boites-automatiques/dexo-type-a/sayarati-975x1500-18.png"
+    }
+   ],
+   "meilleur": "boites-automatiques/dexo-type-a/officiel-3333x4167-dexo_atf_typea.jpg"
+  },
+  "max-grob-synthetique": {
+   "nom": "MAX-GRÖB Synthetic",
+   "categorie": "boites-manuelles",
+   "candidats": [
+    {
+     "fichier": "boites-manuelles/max-grob-synthetique/officiel-800x1000-max_grob.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 975,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/3429113077.jpg",
+     "page": "https://sayarati.online/products/Petrovoll-Gear-oil-80w90-GL-4-1L-p524707239",
+     "type": "MAXGRÖB synthetic premium 80W90 GL-5 1 L, fond noir",
+     "statut": "ok",
+     "fichier": "boites-manuelles/max-grob-synthetique/sayarati-975x1500-26.png"
+    }
+   ],
+   "meilleur": "boites-manuelles/max-grob-synthetique/sayarati-975x1500-26.png"
+  },
+  "max-grob": {
+   "nom": "MAX-GRÖB Gear Oil",
+   "categorie": "boites-manuelles",
+   "candidats": [
+    {
+     "fichier": "boites-manuelles/max-grob/officiel-800x1000-max_grob_gear_oil.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "boites-manuelles/max-grob/officiel-800x1000-max_grob_gear_oil.jpg"
+  },
+  "dot-5-1": {
+   "nom": "Liquide de frein DOT 5.1",
+   "categorie": "liquides-frein",
+   "candidats": [
+    {
+     "fichier": "liquides-frein/dot-5-1/officiel-800x1000-dot_brakefluid.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "liquides-frein/dot-5-1/officiel-800x1000-dot_brakefluid.jpg"
+  },
+  "dot-4-3": {
+   "nom": "Liquide de frein DOT 4 / DOT 3",
+   "categorie": "liquides-frein",
+   "candidats": [
+    {
+     "fichier": "liquides-frein/dot-4-3/officiel-800x1000-dot_brakefluid.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 800,
+     "h": 1000,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/3427283334.jpg",
+     "page": "https://sayarati.online/products/Petrovoll-Brake-Fluid-Dot-4-0-5L-p524707240",
+     "type": "DOT 4 (350 ml) + DOT 5 (500 ml), même visuel que le site officiel",
+     "statut": "ok",
+     "fichier": "liquides-frein/dot-4-3/sayarati-800x1000-89.jpg"
+    }
+   ],
+   "meilleur": "liquides-frein/dot-4-3/officiel-800x1000-dot_brakefluid.jpg"
+  },
+  "kuhler": {
+   "nom": "KÜHLER Coolant & Antifreeze",
+   "categorie": "refroidissement",
+   "candidats": [
+    {
+     "fichier": "refroidissement/kuhler/officiel-800x1000-kuhler.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 975,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/524707245/3427271223.jpg",
+     "page": "https://sayarati.online/products/Petrovoll-Antifreeze-coolant-50-red-p524707245",
+     "type": "KÜHLER coolant rouge (prêt à l’emploi) 1 L, fond noir",
+     "statut": "ok",
+     "fichier": "refroidissement/kuhler/sayarati-975x1500-20.png"
+    },
+    {
+     "l": 975,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/524707247/3427273840.jpg",
+     "page": "https://sayarati.online/products/Petrovoll-Antifreeze-100-concentrate-red-p524707247",
+     "type": "KÜHLER concentré, bouteille 1,5 L, fond noir",
+     "statut": "ok",
+     "fichier": "refroidissement/kuhler/sayarati-975x1500-21.png"
+    },
+    {
+     "l": 975,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/524707244/3427274161.jpg",
+     "page": "https://sayarati.online/products/Petrovoll-Antifreeze-coolant-50-green-p524707244",
+     "type": "KÜHLER coolant vert 1 L, fond noir",
+     "statut": "ok",
+     "fichier": "refroidissement/kuhler/sayarati-975x1500-23.png"
+    },
+    {
+     "l": 1000,
+     "h": 1000,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/products/715371463/4686467993.png",
+     "page": "https://sayarati.online/products/PTR-GR100-1-5-Petrovoll-Antifreeze-100-concentrate-green-1-5L-p715371463",
+     "type": "KÜHLER concentré, bouteille, fond vert",
+     "statut": "ok",
+     "fichier": "refroidissement/kuhler/sayarati-1000x1000-48.png"
+    }
+   ],
+   "meilleur": "refroidissement/kuhler/sayarati-975x1500-20.png"
+  },
+  "glat-ep-lithium": {
+   "nom": "GLÄT EP0 / EP1 / EP2 Lithium",
+   "categorie": "graisses",
+   "candidats": [
+    {
+     "fichier": "graisses/glat-ep-lithium/officiel-800x1000-glat_ep0.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "graisses/glat-ep-lithium/officiel-800x1000-glat_ep0.jpg"
+  },
+  "glat-lithium-complexe": {
+   "nom": "GLÄT EP2 / EP3 Lithium complexe",
+   "categorie": "graisses",
+   "candidats": [
+    {
+     "fichier": "graisses/glat-lithium-complexe/officiel-800x1000-glat_ep3.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "graisses/glat-lithium-complexe/officiel-800x1000-glat_ep3.jpg"
+  },
+  "glat-multi-usage": {
+   "nom": "GLÄT Multi-usage (calcium)",
+   "categorie": "graisses",
+   "candidats": [
+    {
+     "fichier": "graisses/glat-multi-usage/officiel-800x1000-glat_mp.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    },
+    {
+     "l": 1500,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/4743379971.png",
+     "page": "https://sayarati.online/products/PTR-MP3W-05-Petrovoll-Grease-MP-3-White-Yellow-500g-p722112571",
+     "type": "GLÄT-MP3 NLGI-MP3 calcium, pot 500 g, photo fond noir",
+     "statut": "ok",
+     "fichier": "graisses/glat-multi-usage/sayarati-1500x1500-3.png"
+    },
+    {
+     "l": 975,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/3437823543.jpg",
+     "page": "https://sayarati.online/products/Petrovoll-Grease-MP-3-15kg-p524707243",
+     "type": "GLÄT-MP3 seau 15 kg, fond noir",
+     "statut": "ok",
+     "fichier": "graisses/glat-multi-usage/sayarati-975x1500-22.png"
+    }
+   ],
+   "meilleur": "graisses/glat-multi-usage/sayarati-1500x1500-3.png"
+  },
+  "nettoyant-injecteurs-essence": {
+   "nom": "Nettoyant injecteurs essence",
+   "categorie": "additifs",
+   "candidats": [
+    {
+     "fichier": "additifs/nettoyant-injecteurs-essence/officiel-800x1000-fuel_injector_cleaner.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "additifs/nettoyant-injecteurs-essence/officiel-800x1000-fuel_injector_cleaner.jpg"
+  },
+  "nettoyant-injecteurs-diesel": {
+   "nom": "Nettoyant injecteurs diesel",
+   "categorie": "additifs",
+   "candidats": [
+    {
+     "fichier": "additifs/nettoyant-injecteurs-diesel/officiel-800x1000-diesel_injector_cleaner.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "additifs/nettoyant-injecteurs-diesel/officiel-800x1000-diesel_injector_cleaner.jpg"
+  },
+  "nettoyant-circuit-carburant": {
+   "nom": "Nettoyant circuit carburant complet",
+   "categorie": "additifs",
+   "candidats": [
+    {
+     "fichier": "additifs/nettoyant-circuit-carburant/officiel-800x1000-complete_fuel_system_scanner.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "additifs/nettoyant-circuit-carburant/officiel-800x1000-complete_fuel_system_scanner.jpg"
+  },
+  "booster-octane": {
+   "nom": "Booster d'octane",
+   "categorie": "additifs",
+   "candidats": [
+    {
+     "fichier": "additifs/booster-octane/officiel-800x1000-octane_booster.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "additifs/booster-octane/officiel-800x1000-octane_booster.jpg"
+  },
+  "traitement-huile": {
+   "nom": "Traitement d'huile",
+   "categorie": "additifs",
+   "candidats": [
+    {
+     "fichier": "additifs/traitement-huile/officiel-800x1000-oil_treatment.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "additifs/traitement-huile/officiel-800x1000-oil_treatment.jpg"
+  },
+  "anti-fuite-huile": {
+   "nom": "Anti-fuite d'huile",
+   "categorie": "additifs",
+   "candidats": [
+    {
+     "fichier": "additifs/anti-fuite-huile/officiel-800x1000-oil_stop_leak.jpg",
+     "l": 800,
+     "h": 1000,
+     "source": "petrovoll.com",
+     "type": "rendu 3D officiel, fond blanc, 1 L + 4/5 L",
+     "statut": "ok"
+    }
+   ],
+   "meilleur": "additifs/anti-fuite-huile/officiel-800x1000-oil_stop_leak.jpg"
+  },
+  "nettoyant-carburateur": {
+   "nom": "Nettoyant carburateur et starter",
+   "categorie": "additifs",
+   "candidats": [],
+   "meilleur": null
+  },
+  "rincage-moteur": {
+   "nom": "Rinçage moteur",
+   "categorie": "additifs",
+   "candidats": [
+    {
+     "l": 1500,
+     "h": 1500,
+     "source": "sayarati",
+     "image": "https://d2j6dbq0eux0bg.cloudfront.net/images/43948359/4763017363.png",
+     "page": "https://sayarati.online/products/PTR-EF-Petrovoll-Engine-Flush-250-mL-p725207515",
+     "type": "Ölschlamm-Spülung / Engine Flush 250 ml, photo sur fond noir",
+     "statut": "ok",
+     "fichier": "additifs/rincage-moteur/sayarati-1500x1500-1.png"
+    }
+   ],
+   "meilleur": "additifs/rincage-moteur/sayarati-1500x1500-1.png"
+  }
+ },
+ "horsCatalogue": [
+  {
+   "l": 1080,
+   "h": 1350,
+   "source": "driveright",
+   "image": "https://d8jbk05ikns31.cloudfront.net/Petrovoil%2010W60%205L.webp",
+   "page": "https://driveright.co.ke/search?q=petrovoll",
+   "type": "STÄRK 10W60 Racing 5 L (hors catalogue) — filigrane driveright",
+   "statut": "rejet-filigrane",
+   "fichier": "hors-catalogue/REJET-driveright-1080x1350-28.webp"
+  },
+  {
+   "l": 1080,
+   "h": 1350,
+   "source": "driveright",
+   "image": "https://d8jbk05ikns31.cloudfront.net/Petrovoil%20ATF%201L.webp",
+   "page": "https://driveright.co.ke/search?q=petrovoll",
+   "type": "DEXÖ Multi ATF 1 L (hors catalogue) — filigrane driveright",
+   "statut": "rejet-filigrane",
+   "fichier": "hors-catalogue/REJET-driveright-1080x1350-29.webp"
+  },
+  {
+   "l": 1080,
+   "h": 1350,
+   "source": "driveright",
+   "image": "https://d8jbk05ikns31.cloudfront.net/Petrovoil%20ATF%204L.webp",
+   "page": "https://driveright.co.ke/search?q=petrovoll",
+   "type": "DEXÖ Multi ATF 4 L métal (hors catalogue) — filigrane driveright",
+   "statut": "rejet-filigrane",
+   "fichier": "hors-catalogue/REJET-driveright-1080x1350-30.webp"
+  },
+  {
+   "l": 1080,
+   "h": 1350,
+   "source": "driveright",
+   "image": "https://d8jbk05ikns31.cloudfront.net/Petrovoil%20DCT.webp",
+   "page": "https://driveright.co.ke/search?q=petrovoll",
+   "type": "DEXÖ DCT 1 L (hors catalogue) — filigrane driveright",
+   "statut": "rejet-filigrane",
+   "fichier": "hors-catalogue/REJET-driveright-1080x1350-31.webp"
+  },
+  {
+   "l": 1080,
+   "h": 1350,
+   "source": "driveright",
+   "image": "https://d8jbk05ikns31.cloudfront.net/Petrovoil%2075W90.webp",
+   "page": "https://driveright.co.ke/search?q=petrovoll",
+   "type": "MAXGRÖB 75W90 1 L (hors catalogue) — filigrane driveright",
+   "statut": "rejet-filigrane",
+   "fichier": "hors-catalogue/REJET-driveright-1080x1350-32.webp"
+  },
+  {
+   "l": 1080,
+   "h": 1350,
+   "source": "driveright",
+   "image": "https://d8jbk05ikns31.cloudfront.net/Petrovoil%200W20%204L.webp",
+   "page": "https://driveright.co.ke/search?q=petrovoll",
+   "type": "KRÄFT 0W20 4 L (hors catalogue) — filigrane driveright",
+   "statut": "rejet-filigrane",
+   "fichier": "hors-catalogue/REJET-driveright-1080x1350-33.webp"
+  }
+ ],
+ "ambiance": [
+  {
+   "fichier": "ambiance/haliburg-1200x800-59.webp",
+   "l": 1200,
+   "h": 800,
+   "source": "petrovolldev",
+   "image": "https://haliburg.com/wp-content/uploads/2021/07/GASOLINE-ENGINE-OILS.webp",
+   "type": "Essence : KRÄFT, STÄRK, pick-up",
+   "statut": "reference"
+  },
+  {
+   "fichier": "ambiance/haliburg-1200x800-60.webp",
+   "l": 1200,
+   "h": 800,
+   "source": "petrovolldev",
+   "image": "https://haliburg.com/wp-content/uploads/2021/07/MOTORCYCLE-OILS.webp",
+   "type": "Moto : MÖTPRO, moto sportive",
+   "statut": "reference"
+  },
+  {
+   "fichier": "ambiance/haliburg-1200x800-61.webp",
+   "l": 1200,
+   "h": 800,
+   "source": "petrovolldev",
+   "image": "https://haliburg.com/wp-content/uploads/2021/07/MARINE-OILS.webp",
+   "type": "Marine : MARINEÖL, yacht",
+   "statut": "reference"
+  },
+  {
+   "fichier": "ambiance/haliburg-1200x800-62.webp",
+   "l": 1200,
+   "h": 800,
+   "source": "petrovolldev",
+   "image": "https://haliburg.com/wp-content/uploads/2021/07/INDUSTRIAL-OILS.webp",
+   "type": "Industrie : fût et HYDKÖN, pelleteuse",
+   "statut": "reference"
+  },
+  {
+   "fichier": "ambiance/haliburg-1200x800-63.webp",
+   "l": 1200,
+   "h": 800,
+   "source": "petrovolldev",
+   "image": "https://haliburg.com/wp-content/uploads/2021/07/BRAKE-FLUIDS.webp",
+   "type": "Freins : DOT, disque",
+   "statut": "reference"
+  },
+  {
+   "fichier": "ambiance/haliburg-1200x800-64.webp",
+   "l": 1200,
+   "h": 800,
+   "source": "petrovolldev",
+   "image": "https://haliburg.com/wp-content/uploads/2021/07/COOLANTS-AND-ANTI-FREEZE.webp",
+   "type": "Refroidissement : KÜHLER, voiture",
+   "statut": "reference"
+  },
+  {
+   "fichier": "ambiance/haliburg-900x600-95.webp",
+   "l": 900,
+   "h": 600,
+   "source": "petrovolldev",
+   "image": "https://haliburg.com/wp-content/uploads/2021/07/DIESEL-ENGINE-OILS.webp",
+   "type": "Diesel : VIRÖ-TEC, camion",
+   "statut": "reference"
+  },
+  {
+   "fichier": "ambiance/haliburg-900x600-96.webp",
+   "l": 900,
+   "h": 600,
+   "source": "petrovolldev",
+   "image": "https://haliburg.com/wp-content/uploads/2021/07/AUTOMATIC-TRANSITION-FLUIDS.webp",
+   "type": "Boîtes auto : DEXÖ",
+   "statut": "reference"
+  },
+  {
+   "fichier": "ambiance/haliburg-900x600-97.webp",
+   "l": 900,
+   "h": 600,
+   "source": "petrovolldev",
+   "image": "https://haliburg.com/wp-content/uploads/2021/07/AUTOMOTIVE-MANUAL-GEAR-OILS.webp",
+   "type": "Boîtes manuelles : MAXGRÖB",
+   "statut": "reference"
+  },
+  {
+   "fichier": "ambiance/haliburg-900x600-98.webp",
+   "l": 900,
+   "h": 600,
+   "source": "petrovolldev",
+   "image": "https://haliburg.com/wp-content/uploads/2021/07/GREASES.webp",
+   "type": "Graisses : GLÄT, roulements",
+   "statut": "reference"
+  },
+  {
+   "fichier": "ambiance/haliburg-900x600-99.webp",
+   "l": 900,
+   "h": 600,
+   "source": "petrovolldev",
+   "image": "https://haliburg.com/wp-content/uploads/2021/07/ADDITIVES-AND-CAR-CARE.webp",
+   "type": "Additifs : gamme complète",
+   "statut": "reference"
+  }
+ ]
+}

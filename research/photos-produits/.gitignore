@@ -1,0 +1,5 @@
+# Copies de travail (droits : voir index.json) : seuls l’index et le README sont versionnés.
+*
+!.gitignore
+!index.json
+!README.md
