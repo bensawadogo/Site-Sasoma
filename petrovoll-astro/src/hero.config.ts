@@ -14,6 +14,8 @@
  *    hero.config.test.ts vérifie la cohérence de l'ensemble.
  */
 
+import geometrieBidon from '@/assets/hero/bidon/geometrie.json'
+
 export type Palier = 'lite' | 'standard' | 'full'
 export type Format = 'mobile' | 'desktop'
 
@@ -105,11 +107,8 @@ export const HERO = {
 
   // ── Ancres ─────────────────────────────────────────────────────────────────
   ancres: {
-    /** Dans les photos du bidon P1/P2 (phase 4). */
-    bidon: {
-      spout: { x: 0.26, y: 0.04, aMesurer: true }, // goulot : départ du filet
-      bottlePivot: { x: 0.5, y: 0.6, aMesurer: true }, // centre de rotation
-    },
+    /** Mesurées sur la photo P1 par scripts/build-bidon-hero.mjs (goulot : départ du filet ; pivot : centre de masse). */
+    bidon: { spout: geometrieBidon.spout, bottlePivot: geometrieBidon.bottlePivot },
     /** Dans les images moteur E1 : ouverture de remplissage (arrivée du filet), tolérance ±3 %. */
     filler: {
       mobile: { x: 0.5, y: 0.5, aMesurer: true },
@@ -131,7 +130,7 @@ export const HERO = {
 
   // ── Fichiers ───────────────────────────────────────────────────────────────
   sources: {
-    photos: 'assets/photos/stark', // P1 avec bouchon, P2 sans bouchon, P3 bouchon, P4 bande de niveau
+    photos: 'assets/photos/stark', // P1 ; corps sans bouchon et bouchon en sont dérivés (npm run hero:bidon)
     ia: 'assets/ai', // E1-916, E1-169, E2-…, E3-…, V1-M, V1-D, V2-M, V2-D
   },
 
@@ -145,9 +144,9 @@ export const HERO = {
 
   // ── Produits (ids de research/catalogue.json) ─────────────────────────────
   // Le bidon qui verse est le STÄRK (voiture) ; la fin présente les deux gammes.
-  produitVerse: 'stark-synthetique',
+  produitVerse: 'stark-semi-synthetique', // la photo P1 : STÄRK Teil Synthetisches 10W40
   produitsFin: [
-    { id: 'stark-synthetique', libelle: 'Voiture', nom: 'STÄRK' },
+    { id: 'stark-semi-synthetique', libelle: 'Voiture', nom: 'STÄRK' },
     { id: 'motpro-4t', libelle: 'Moto', nom: 'MÖTPRO 4T' },
   ],
 

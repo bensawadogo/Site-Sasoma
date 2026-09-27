@@ -9,9 +9,8 @@
  * Sans JavaScript : un écran fixe avec le titre et l'affiche (hauteur 100svh).
  * Avec JavaScript : la scène reste collée pendant 250svh (300svh sur desktop).
  *
- * PHASE 3 : bidon SVG et séquences provisoires (npm run hero:frames -- --provisoire).
- * Les vraies photos (phase 4) et vidéos (phases 5-7) remplacent ces fichiers
- * sans changer ce composant.
+ * Bidon : photo P1 découpée en corps + bouchon (npm run hero:bidon). L'huile
+ * qui monte est un dégradé masqué par la silhouette du corps (mask-image).
  */
 import manifeste from '@/assets/hero/manifest.json'
 import e1DesktopAvif from '@/assets/hero/posters/e1-desktop.avif'
@@ -26,7 +25,14 @@ import e3DesktopAvif from '@/assets/hero/posters/e3-desktop.avif'
 import e3DesktopWebp from '@/assets/hero/posters/e3-desktop.webp'
 import e3MobileAvif from '@/assets/hero/posters/e3-mobile.avif'
 import e3MobileWebp from '@/assets/hero/posters/e3-mobile.webp'
-import BidonProvisoire from '@/components/hero/BidonProvisoire.astro'
+import { Image } from 'astro:assets'
+
+import bouchon from '@/assets/hero/bidon/bouchon.webp'
+import corpsAvif from '@/assets/hero/bidon/corps.avif'
+import corps from '@/assets/hero/bidon/corps.webp'
+import geometrie from '@/assets/hero/bidon/geometrie.json'
+import vignetteStark from '@/assets/hero/bidon/vignette.webp'
+import photoMotpro from '@/assets/hero/fin/motpro-4t.jpg'
 import { HERO } from '@/hero.config'
 import { getParametres } from '@/lib/contenu'
 
@@ -34,6 +40,13 @@ const parametres = await getParametres()
 const avecSociete = (texte: string) => texte.replaceAll('{societe}', parametres.nomSociete)
 const lienWhatsApp = parametres.whatsapp(avecSociete(HERO.messageWhatsApp))
 const { textes } = HERO
+const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
+const g = geometrie
+// Visuels de l'écran de fin, dans l'ordre de HERO.produitsFin (voiture, moto).
+const VIGNETTES = [
+  { src: vignetteStark, fond: 'sombre' },
+  { src: photoMotpro, fond: 'clair' }, // rendu officiel petrovoll.com (fond blanc)
+] as const
 
 // Plages d'affichage des textes : t3 est partagé en trois (cames, pistons, vilebrequin).
 const plage = (id: string) => HERO.temps.find((t) => t.id === id)!
@@ -97,8 +110,29 @@ const variables = [
     <div class="hero-voile" aria-hidden="true"></div>
     <canvas class="hero-filet" data-filet aria-hidden="true"></canvas>
 
-    <div class="hero-bidon" data-bidon-hero aria-hidden="true">
-      <BidonProvisoire />
+    <div
+      class="hero-bidon"
+      data-bidon-hero
+      data-aspect={g.cadre.l / g.cadre.h}
+      aria-hidden="true"
+      style={`--masque:url(${corps.src});--goulot-x:${pc(g.spout.x)};--goulot-y:${pc(g.spout.y)};--ouverture:${pc(g.ouverture.l)}`}
+    >
+      <picture>
+        <source type="image/avif" srcset={corpsAvif.src} />
+        <img class="hero-bidon-corps" src={corps.src} width={corps.width} height={corps.height} alt="" decoding="async" />
+      </picture>
+      <div class="hero-bidon-huile"><div class="hero-bidon-niveau" data-niveau></div></div>
+      <span class="hero-bidon-ouverture"></span>
+      <img
+        class="hero-bidon-bouchon"
+        data-bouchon
+        src={bouchon.src}
+        width={bouchon.width}
+        height={bouchon.height}
+        alt=""
+        decoding="async"
+        style={`left:${pc(g.bouchon.x)};top:${pc(g.bouchon.y)};width:${pc(g.bouchon.l)}`}
+      />
     </div>
 
     <div class="hero-bloc hero-textes" data-debut="0" data-fin={plage('ouverture').fin}>
@@ -123,7 +157,9 @@ const variables = [
         {
           HERO.produitsFin.map((p, i) => (
             <li class="hero-produit">
-              <BidonProvisoire variante={i === 0 ? 'voiture' : 'moto'} petit />
+              <span class:list={['hero-produit-visuel', `hero-produit-visuel--${VIGNETTES[i].fond}`]}>
+                <Image src={VIGNETTES[i].src} alt={p.nom} height={176} format="webp" quality={80} loading="lazy" />
+              </span>
               <span class="hero-produit-libelle">{p.libelle}</span>
               <span class="hero-produit-nom">{p.nom}</span>
             </li>
@@ -203,10 +239,45 @@ const variables = [
     position: absolute;
     will-change: transform, opacity;
   }
-  .hero-bidon :global(svg) {
+  .hero-bidon-corps {
+    display: block;
     width: 100%;
     height: 100%;
-    display: block;
+  }
+  /* L'huile monte à l'intérieur de la silhouette exacte du bidon (effet rayons X). */
+  .hero-bidon-huile {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    -webkit-mask: var(--masque) center / 100% 100% no-repeat;
+    mask: var(--masque) center / 100% 100% no-repeat;
+    /* overlay : dore le plastique argenté sans masquer l'étiquette (comparé en capture
+       avec multiply, soft-light, screen et normal). */
+    mix-blend-mode: overlay;
+    opacity: 0.65;
+  }
+  .hero-bidon-niveau {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, #fff4c2 0, #f0cc30 2%, #cc9c0c 100%);
+    transform: translate3d(0, 100%, 0);
+    will-change: transform;
+  }
+  /* Ouverture du goulot, cachée sous le bouchon jusqu'à ce qu'il saute. */
+  .hero-bidon-ouverture {
+    position: absolute;
+    left: var(--goulot-x);
+    top: var(--goulot-y);
+    width: var(--ouverture);
+    aspect-ratio: 3;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(closest-side, #000 55%, #3a3a3a 85%, #8a8a8a);
+  }
+  .hero-bidon-bouchon {
+    position: absolute;
+    height: auto;
+    will-change: transform, opacity;
   }
 
   .hero-bloc {
@@ -285,9 +356,20 @@ const variables = [
     border-radius: 0.5rem;
     background: rgb(255 255 255 / 0.04);
   }
-  .hero-produit :global(svg) {
+  .hero-produit-visuel {
+    display: flex;
+    justify-content: center;
+    width: 100%;
     height: 5.5rem;
+    border-radius: 0.375rem;
+  }
+  .hero-produit-visuel--clair {
+    background: #fff;
+  }
+  .hero-produit-visuel :global(img) {
+    height: 100%;
     width: auto;
+    object-fit: contain;
   }
   .hero-produit-libelle {
     margin-top: 0.5rem;

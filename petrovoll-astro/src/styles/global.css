@@ -77,30 +77,35 @@
    2. POLICES AUTO-HÉBERGÉES (public/fonts)
    `font-display: swap` IMPÉRATIF : le texte s'affiche immédiatement avec la
    police système puis bascule — aucun blocage du rendu (protection du LCP).
-   TODO [fonts] : déposer les .woff2 dans public/fonts/ (voir le README du
-   dossier). Format woff2 uniquement (support > 97 %, ~30 % plus léger).
+   Fichiers : sous-ensembles latin Fontsource 5.3.0 (SIL OFL 1.1), préchargés
+   dans BaseLayout.astro. Couverture vérifiée : accents français, « » ’ – — œ,
+   ä ö ü (Petrovöll, STÄRK, MÖTPRO). Voir public/fonts/README.md.
+   Pas de `local()` : une version installée sur le poste (Bebas Neue v1, Inter
+   statique) aurait des métriques ou des graisses différentes du fichier servi.
    ──────────────────────────────────────────────────────────────────────────── */
 @font-face {
   font-family: 'Bebas Neue';
-  src:
-    local('Bebas Neue'),
-    url('/fonts/bebas-neue-400.woff2') format('woff2');
+  src: url('/fonts/bebas-neue-400.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  /* Sous-ensemble latin de base : suffisant pour le français */
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+20AC;
+  /* Plage exacte du sous-ensemble latin livré (identique à Fontsource) */
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
   font-family: 'Inter Variable';
-  src:
-    local('Inter'),
-    url('/fonts/inter-variable.woff2') format('woff2-variations');
-  font-weight: 100 900; /* police variable : 1 seul fichier pour tous les poids */
+  src: url('/fonts/inter-variable.woff2') format('woff2-variations');
+  font-weight: 100 900; /* police variable (axe wght) : 1 seul fichier pour tous les poids */
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+20AC;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────

@@ -165,14 +165,11 @@ const descriptionFinale =
       type={ogType}
     />
 
-    <!-- ── Polices auto-hébergées ──────────────────────────────────────────
-         TODO [fonts] : décommenter APRÈS avoir déposé les 2 .woff2 dans
-         public/fonts/ (sinon le navigateur affiche un warning 404).
-         Préchargement des 2 polices critiques = LCP texte plus rapide. -->
-    <!--
+    <!-- ── Polices auto-hébergées (public/fonts, cf. @font-face de global.css)
+         Préchargement des 2 polices critiques = LCP texte plus rapide.
+         `crossorigin` obligatoire, sinon le préchargement n'est pas réutilisé. -->
     <link rel="preload" href="/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/bebas-neue-400.woff2" as="font" type="font/woff2" crossorigin />
-    -->
 
     <!-- ── Icônes (générées depuis le logo : python scripts/build-logo.py) ── -->
     <link rel="icon" href="/favicon.ico" sizes="any" />

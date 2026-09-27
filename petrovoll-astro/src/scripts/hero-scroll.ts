@@ -46,9 +46,9 @@ export function lancerHero(racine: HTMLElement): void {
   const canvasSeq = racine.querySelector<HTMLCanvasElement>('[data-sequence]')!
   const canvasFilet = racine.querySelector<HTMLCanvasElement>('[data-filet]')!
   const bidon = racine.querySelector<HTMLElement>('[data-bidon-hero]')!
-  const niveau = bidon.querySelector<SVGElement>('[data-niveau]')
-  const bouchon = bidon.querySelector<SVGElement>('[data-bouchon]')
-  const aspectBidon = Number(bidon.querySelector('svg')?.dataset.aspect ?? 0.77)
+  const niveau = bidon.querySelector<HTMLElement>('[data-niveau]')
+  const bouchon = bidon.querySelector<HTMLElement>('[data-bouchon]')
+  const aspectBidon = Number(bidon.dataset.aspect ?? 0.64)
   const blocs = [...racine.querySelectorAll<HTMLElement>('.hero-bloc')].map((el) => ({
     el,
     debut: Number(el.dataset.debut),
@@ -81,6 +81,7 @@ export function lancerHero(racine: HTMLElement): void {
   let pivot: Pt = { x: 0, y: 0 }
   let filler: Pt = { x: 0, y: 0 }
   let deplacement: Pt = { x: 0, y: 0 } // translation du bidon en fin de bascule
+  let hauteurBidon = 0
 
   function mesurer() {
     format = innerWidth >= HERO.pointDeRupture ? 'desktop' : 'mobile'
@@ -94,6 +95,7 @@ export function lancerHero(racine: HTMLElement): void {
     const z = HERO.zones[format].bidon
     const h = z.h * ecran.h
     const l = h * aspectBidon
+    hauteurBidon = h
     const gauche = z.x * ecran.l + (z.l * ecran.l - l) / 2
     const haut = z.y * ecran.h
     Object.assign(bidon.style, { left: `${gauche}px`, top: `${haut}px`, width: `${l}px`, height: `${h}px` })
@@ -253,14 +255,18 @@ export function lancerHero(racine: HTMLElement): void {
     }
 
     // t1 : l'huile monte dans le bidon.
-    niveau?.setAttribute('transform', `translate(0 ${mix(260, 70, doux(local(p, T1.debut, T1.fin)))})`)
+    // Le niveau s'arrête sous l'épaule du bidon (32 % du cadre depuis le haut).
+    if (niveau) niveau.style.transform = `translate3d(0, ${mix(100, 32, doux(local(p, T1.debut, T1.fin)))}%, 0)`
 
     // t2 : le bouchon saute, le bidon bascule et se place au-dessus du filler.
     const t2 = local(p, T2.debut, T2.fin)
     const t3 = local(p, T3.debut, T3.fin)
     const sautBouchon = doux(local(t2, 0, 0.2))
-    bouchon?.setAttribute('transform', `translate(${sautBouchon * 30} ${-sautBouchon * 90}) rotate(${sautBouchon * 40} 52 9)`)
-    bouchon?.setAttribute('opacity', String(1 - sautBouchon))
+    if (bouchon) {
+      const d = hauteurBidon * sautBouchon
+      bouchon.style.transform = `translate3d(${d * 0.12}px, ${-d * 0.35}px, 0) rotate(${sautBouchon * 35}deg)`
+      bouchon.style.opacity = String(1 - sautBouchon)
+    }
     const bascule = mouvementReduit ? 0 : doux(local(t2, 0.15, 0.7))
     const sortie = mouvementReduit ? local(t2, 0, 0.5) : local(t3, 0.1, 0.25)
     bidon.style.transform = `translate3d(${deplacement.x * bascule}px, ${deplacement.y * bascule}px, 0) rotate(${HERO.angleVersement * bascule}deg)`
