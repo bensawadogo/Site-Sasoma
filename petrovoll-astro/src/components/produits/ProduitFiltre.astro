@@ -1,0 +1,16 @@
+---
+/**
+ * ProduitFiltre.astro — wrapper Astro de l'island React (client:load).
+ * Le filtre est interactif par nature : chargement immediat mais hydrate
+ * UNIQUEMENT ce composant (le reste de la page reste statique).
+ *
+ * TODO [produit] : passer `secteurInitial` depuis l'URL (?secteur=...).
+ */
+import FiltreIsland from '@/components/produits/FiltreIsland'
+import type { ProduitFiltreItem } from '@/components/produits/FiltreIsland'
+
+interface Props { produits: ProduitFiltreItem[]; secteurInitial?: string }
+const { produits, secteurInitial = 'tous' } = Astro.props
+---
+
+<FiltreIsland client:load produits={produits} secteurInitial={secteurInitial} />

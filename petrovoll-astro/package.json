@@ -1,0 +1,57 @@
+{
+  "name": "petrovoll-site",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site corporate B2B/B2C multi-secteurs (PETROVOLL) — Astro 5 + Keystatic + Tailwind v4, mobile-first",
+  "engines": {
+    "node": ">=20.3.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "keystatic": "keystatic",
+    "bidon:gen": "node scripts/gen-bidon-glb.mjs",
+    "bidon:verify": "node scripts/verify-bidon-glb.mjs",
+    "bidon:audit": "node scripts/audit-glb-poids.mjs assets-source/bidon-meshy.glb",
+    "bidon:inspect": "node scripts/inspect-glb.mjs",
+    "bidon:compress": "node scripts/compress-bidon.mjs",
+    "bidon:compress-lite": "node scripts/compress-bidon-lite.mjs",
+    "bidon:fix": "node scripts/fix-bidon-texture.mjs",
+    "bidon:qa": "node scripts/qa-bidon.mjs assets-source/bidon-meshy.glb public/models/bidon.glb",
+    "bidon:qa-lite": "node scripts/qa-bidon-lite.mjs assets-source/bidon-meshy.glb public/models/bidon-lite.glb",
+    "bidon:fallback": "python scripts/gen-fallback-png.py",
+    "bidon:decoders": "node scripts/copy-draco-decoders.mjs",
+    "bidon:render": "python scripts/render-check.py models/bidon.glb",
+    "bidon:mobile": "python scripts/mobile-check.py",
+    "bidon:clean-video": "node scripts/clean-video.js",
+    "bidon:all": "npm run bidon:compress && npm run bidon:qa && npm run bidon:compress-lite && npm run bidon:qa-lite && npm run bidon:fallback && npm run bidon:decoders && npm run bidon:render && npm run bidon:mobile",
+  "deploy": "wrangler pages deploy dist"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.0.0",
+    "@astrojs/markdoc": ">=0.12.0 <0.14.0",
+    "@astrojs/react": "^4.0.0",
+    "@keystatic/astro": "^5.0.0",
+    "@keystatic/core": "^0.5.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "astro": "^5.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^4.0.0",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.0",
+    "@gltf-transform/cli": "^4.5.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/three": "^0.169.0",
+    "typescript": "^5.6.3"
+  }
+}
+

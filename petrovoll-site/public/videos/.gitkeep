@@ -1,0 +1,5 @@
+# Dossier des vidéos (présentations d'usine, flottes de camions, teasers).
+# ATTENTION au poids : viser < 5 Mo et proposer une source .webm + poster image,
+# car une part importante du trafic se fait en 3G/4G.
+# TODO [media] : héberger les vidéos sur Cloudinary (streaming + CDN) plutôt
+# que dans le dépôt Git.

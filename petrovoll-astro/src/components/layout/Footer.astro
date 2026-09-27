@@ -1,0 +1,169 @@
+---
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Footer.astro — pied de page (rendu statique, aucun JS)
+ * ────────────────────────────────────────────────────────────────────────────
+ *  Contenu lu depuis Keystatic :
+ *   • coordonnées : singleton `parametresSite`
+ *   • secteurs : collection `secteurs` (liens réels, pas de liste en dur)
+ *
+ *  Mobile-first : une seule colonne empilée en dessous de `lg:`, cibles
+ *  tactiles ≥ 44 px, texte secondaire en `text-muted` (contraste AA conservé).
+ */
+import { getCollection, getEntry } from 'astro:content'
+
+import { buildWhatsAppLink } from '@/lib/utils'
+
+const [parametres, secteurs] = await Promise.all([
+  getEntry('parametresSite', 'index'),
+  getCollection('secteurs'),
+])
+
+const nomSociete = parametres?.data.nomSociete ?? 'PETROVOLL'
+const telephone = parametres?.data.telephone ?? ''
+const email = parametres?.data.email ?? ''
+const adresse = parametres?.data.adresse ?? ''
+const reseaux = parametres?.data.reseauxSociaux ?? []
+
+const lienWhatsApp = buildWhatsAppLink(import.meta.env.PUBLIC_WHATSAPP_NUMBER)
+
+/** Navigation secondaire — TODO [cms] : éditorialiser si besoin. */
+const LIENS_ENTREPRISE = [
+  { libelle: 'À propos', href: '/a-propos' },
+  { libelle: 'Contact & devis', href: '/contact' },
+  { libelle: 'Mentions légales', href: '/mentions-legales' },
+  { libelle: 'Politique de confidentialité', href: '/politique-confidentialite' },
+]
+
+const annee = new Date().getFullYear()
+---
+
+<footer class="mt-20 border-t border-border bg-primary">
+  <div class="container-page grid gap-10 py-12 lg:grid-cols-4 lg:py-16">
+    <!-- Identité -->
+    <div class="lg:col-span-1">
+      <p class="font-display text-3xl tracking-wide text-text">{nomSociete}</p>
+      <p class="mt-4 max-w-xs text-base leading-relaxed text-muted">
+        Distribution multi-secteurs en Afrique de l’Ouest : lubrifiants PETROVOLL,
+        transport &amp; logistique, import-export, pneumatiques et fournitures de bureau.
+      </p>
+
+      {
+        reseaux.length > 0 && (
+          <ul class="mt-6 flex flex-wrap gap-4">
+            {reseaux.map((reseau) => (
+              <li>
+                <a
+                  href={reseau.url ?? '#'}
+                  class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded border border-border px-3 text-xs uppercase tracking-wide text-muted hover:text-gold"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {reseau.plateforme}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <!-- Secteurs (données réelles du CMS) -->
+    <nav aria-labelledby="footer-secteurs">
+      <h2 id="footer-secteurs" class="font-display text-sm tracking-widest text-gold">SECTEURS</h2>
+      <ul class="mt-4 space-y-1">
+        {
+          secteurs.length > 0 ? (
+            secteurs.map((secteur) => (
+              <li>
+                <a
+                  href={`/secteurs/${secteur.id}`}
+                  class="flex min-h-[44px] items-center text-sm text-muted hover:text-text"
+                >
+                  {secteur.data.nom}
+                </a>
+              </li>
+            ))
+          ) : (
+            <li class="text-sm text-muted">
+              Secteurs à publier depuis l’admin Keystatic.
+            </li>
+          )
+        }
+      </ul>
+    </nav>
+
+    <!-- Entreprise -->
+    <nav aria-labelledby="footer-entreprise">
+      <h2 id="footer-entreprise" class="font-display text-sm tracking-widest text-gold">ENTREPRISE</h2>
+      <ul class="mt-4 space-y-1">
+        {
+          LIENS_ENTREPRISE.map((lien) => (
+            <li>
+              <a href={lien.href} class="flex min-h-[44px] items-center text-sm text-muted hover:text-text">
+                {lien.libelle}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <!-- Contact -->
+    <div>
+      <h2 class="font-display text-sm tracking-widest text-gold">CONTACT</h2>
+      <ul class="mt-4 space-y-1 text-sm text-muted">
+        {
+          adresse ? (
+            <li class="whitespace-pre-line py-2">{adresse}</li>
+          ) : (
+            <li class="py-2">Adresse à renseigner (admin Keystatic)</li>
+          )
+        }
+        {
+          telephone ? (
+            <li>
+              <a href={`tel:${telephone.replace(/[^\d+]/g, '')}`} class="flex min-h-[44px] items-center hover:text-text">
+                {telephone}
+              </a>
+            </li>
+          ) : null
+        }
+        {
+          email ? (
+            <li>
+              <a href={`mailto:${email}`} class="flex min-h-[44px] items-center break-all hover:text-text">
+                {email}
+              </a>
+            </li>
+          ) : null
+        }
+        {
+          lienWhatsApp ? (
+            <li>
+              <a
+                href={lienWhatsApp}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex min-h-[44px] items-center text-gold hover:text-gold-strong"
+              >
+                WhatsApp
+              </a>
+            </li>
+          ) : null
+        }
+      </ul>
+    </div>
+  </div>
+
+  <!-- Mentions légales
+       TODO [legal] : insérer les identifiants réels selon les pays d'exercice
+       (RCCM, IFU, n° d'importateur) — obligatoires pour la crédibilité B2B et
+       utiles aux moteurs de réponse IA pour identifier l'entité juridique. -->
+  <div class="border-t border-border">
+    <div class="container-page flex flex-col gap-2 py-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
+      <p>© {annee} {nomSociete} — Tous droits réservés.</p>
+      <p>Identifiants légaux (RCCM / IFU) à compléter.</p>
+    </div>
+  </div>
+</footer>

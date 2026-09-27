@@ -1,0 +1,24 @@
+# ── Contexte de build Docker (tout ce qui n'est PAS nécessaire au build) ────
+node_modules
+.next
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# ── Secrets : jamais copiés dans l'image ───────────────────────────────────
+.env
+.env.*
+!.env.local.example
+
+# ── Médias locaux (volume en production) ───────────────────────────────────
+public/media/*
+public/videos/*
+public/models/*.glb
+
+# ── Divers ─────────────────────────────────────────────────────────────────
+README.md
+deploy
+*.log
+.DS_Store

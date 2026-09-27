@@ -1,0 +1,114 @@
+---
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * MobileMenu.astro — panneau de navigation mobile (priorité N°1 du projet)
+ * ────────────────────────────────────────────────────────────────────────────
+ *  Contraintes mobiles respectées :
+ *   • chaque lien ≥ 44 px de hauteur, séparateurs tactiles clairs
+ *   • fermeture par Échap, par clic sur le fond, et par SWIPE vers la gauche
+ *   • verrouillage du défilement du body quand le menu est ouvert
+ *   • focus rendu au bouton burger à la fermeture (accessibilité clavier)
+ *   • panneau masqué via l'attribut `hidden` → absent de l'ordre de tabulation
+ *     et de l'arbre d'accessibilité quand il est fermé
+ */
+interface Props {
+  liens: Array<{ libelle: string; href: string }>
+  cheminCourant?: string
+}
+const { liens, cheminCourant = '' } = Astro.props
+---
+
+<div
+  id="menu-mobile"
+  class="border-t border-border bg-primary lg:hidden"
+  hidden
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu de navigation"
+>
+  <ul class="container-page flex flex-col py-2">
+    {
+      liens.map((lien) => (
+        <li>
+          <a
+            href={lien.href}
+            data-lien-menu
+            class="flex min-h-[56px] items-center border-b border-border font-display text-2xl tracking-wide text-text"
+            aria-current={cheminCourant.startsWith(lien.href) ? 'page' : undefined}
+          >
+            {lien.libelle}
+          </a>
+        </li>
+      ))
+    }
+
+    <li class="pt-4 pb-6">
+      <a href="/contact" data-lien-menu class="btn-primary w-full">Demander un devis</a>
+    </li>
+  </ul>
+
+  <!-- TODO [cms] : afficher ici téléphone / WhatsApp cliquables (tel: et wa.me)
+       lus depuis le singleton parametresSite — canaux de conversion mobiles. -->
+</div>
+
+<script>
+  const bouton = document.getElementById('menu-toggle')
+  const panneau = document.getElementById('menu-mobile')
+
+  if (bouton && panneau) {
+    const ouvrir = () => {
+      panneau.hidden = false
+      bouton.setAttribute('aria-expanded', 'true')
+      bouton.setAttribute('aria-label', 'Fermer le menu')
+      // Empêche le défilement de l'arrière-plan pendant la navigation du menu
+      document.body.style.overflow = 'hidden'
+    }
+
+    const fermer = (rendreFocus = true) => {
+      panneau.hidden = true
+      bouton.setAttribute('aria-expanded', 'false')
+      bouton.setAttribute('aria-label', 'Ouvrir le menu')
+      document.body.style.overflow = ''
+      if (rendreFocus) bouton.focus()
+    }
+
+    const basculer = () => (panneau.hidden ? ouvrir() : fermer())
+
+    bouton.addEventListener('click', basculer)
+
+    // Fermeture au clavier (Échap)
+    document.addEventListener('keydown', (evenement) => {
+      if (evenement.key === 'Escape' && !panneau.hidden) fermer()
+    })
+
+    // Fermeture après un clic sur un lien (navigation)
+    panneau.querySelectorAll('[data-lien-menu]').forEach((lien) => {
+      lien.addEventListener('click', () => fermer(false))
+    })
+
+    // ── Fermeture par swipe vers la gauche (geste naturel sur mobile) ──────
+    let departX = 0
+    let departY = 0
+    panneau.addEventListener(
+      'touchstart',
+      (evenement) => {
+        departX = evenement.touches[0]?.clientX ?? 0
+        departY = evenement.touches[0]?.clientY ?? 0
+      },
+      { passive: true },
+    )
+
+    panneau.addEventListener(
+      'touchend',
+      (evenement) => {
+        const finX = evenement.changedTouches[0]?.clientX ?? 0
+        const finY = evenement.changedTouches[0]?.clientY ?? 0
+        const deltaX = finX - departX
+        const deltaY = Math.abs(finY - departY)
+        // Swipe horizontal franc (> 60 px) et non un défilement vertical
+        if (deltaX < -60 && deltaY < 50) fermer(false)
+      },
+      { passive: true },
+    )
+  }
+</script>

@@ -1,0 +1,101 @@
+---
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Navbar.astro — barre de navigation sticky (mobile-first)
+ * ────────────────────────────────────────────────────────────────────────────
+ *  Comportement :
+ *   • pleine largeur, collée en haut, au-dessus du contenu (z-index élevé)
+ *   • fond transparent au top de la page → glassmorphism dès le scroll
+ *   • burger accessible sur mobile (44×44 px minimum), menu desktop en lg:
+ *
+ *  PERFORMANCE : l'état « collé » est détecté avec un IntersectionObserver sur
+ *  un sentinelle invisible (pas de listener `scroll`, donc aucun travail sur le
+ *  thread principal pendant le défilement → protège l'INP).
+ */
+import MobileMenu from '@/components/layout/MobileMenu.astro'
+
+/** Liens de navigation — TODO [cms] : éditorialiser via un singleton Keystatic. */
+const LIENS = [
+  { libelle: 'Produits', href: '/produits' },
+  { libelle: 'Secteurs', href: '/secteurs/lubrifiants' },
+  { libelle: 'À propos', href: '/a-propos' },
+  { libelle: 'Contact', href: '/contact' },
+]
+
+const cheminCourant = Astro.url.pathname
+---
+
+<!-- Sentinelle : sa sortie du viewport déclenche l'état « collé » -->
+<div id="navbar-sentinelle" aria-hidden="true" class="absolute top-0 h-px w-full"></div>
+
+<header
+  id="navbar"
+  class="fixed inset-x-0 top-0 z-40 transition-colors duration-200"
+  data-navbar
+>
+  <nav class="container-page flex h-16 items-center justify-between gap-3 lg:h-20" aria-label="Navigation principale">
+    <!-- Logo / marque — TODO [branding] : remplacer par le SVG officiel -->
+    <a
+      href="/"
+      class="flex shrink-0 items-center gap-2 font-display text-xl tracking-wide text-text lg:text-2xl"
+      aria-label="PETROVOLL — retour à l'accueil"
+    >
+      PETROVOLL
+    </a>
+
+    <!-- Liens desktop uniquement (mobile-first : cachés par défaut) -->
+    <ul class="hidden items-center gap-8 lg:flex">
+      {
+        LIENS.map((lien) => (
+          <li>
+            <a
+              href={lien.href}
+              class="text-sm font-medium uppercase tracking-wide text-muted transition-colors hover:text-text"
+              aria-current={cheminCourant.startsWith(lien.href) ? 'page' : undefined}
+            >
+              {lien.libelle}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex items-center gap-2">
+      <!-- CTA commercial : visible sur tous les écrans (parcours B2B) -->
+      <a href="/contact" class="btn-primary hidden sm:inline-flex"> Devis </a>
+
+      <!-- Burger (mobile / tablette) : 44×44 px minimum -->
+      <button
+        type="button"
+        id="menu-toggle"
+        class="inline-flex size-11 items-center justify-center rounded border border-border text-text lg:hidden"
+        aria-expanded="false"
+        aria-controls="menu-mobile"
+        aria-label="Ouvrir le menu"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <MobileMenu liens={LIENS} cheminCourant={cheminCourant} />
+</header>
+
+<script>
+  /* État « collé » : applique le fond glassmorphism après 8 px de défilement.
+     Coût nul pendant le scroll (IntersectionObserver, pas de listener). */
+  const navbar = document.querySelector('[data-navbar]')
+  const sentinelle = document.getElementById('navbar-sentinelle')
+
+  if (navbar && sentinelle) {
+    const observateur = new IntersectionObserver(
+      ([entree]) => {
+        navbar.classList.toggle('glass', !entree.isIntersecting)
+      },
+      { rootMargin: '0px', threshold: 0 },
+    )
+    observateur.observe(sentinelle)
+  }
+</script>

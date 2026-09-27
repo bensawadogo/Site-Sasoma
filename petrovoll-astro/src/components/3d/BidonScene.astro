@@ -1,0 +1,255 @@
+---
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * BidonScene.astro — bidon 3D interactif (Three.js, sans island React)
+ * ─────────────────────────────────────────────────────────────────────────────
+ *  ISOLÉE dans ce composant pour que la 3D ne soit JAMAIS dans le chemin
+ *  critique du LCP : le composant ne dessine rien au build (zéro HTML lourd),
+ *  et le script ne s'exécute que si le <canvas> existe réellement dans la page.
+ *
+ *  ⚠️  CHARGEUR : desktop → bidon.glb (1024px WebP) ;
+ *      mobile/faible puissance → bidon-lite.glb (768px WebP).
+ *      Les deux sont servis par /public/models/ et copiés dans dist/ au build.
+ *
+ *  LUMIÈRE (calibrée sur un rendu réel, pas à l'estime) :
+ *   le modèle compressé est un produit PLASTIQUE clair : une exposition > 1
+ *   ou des intensities hautes saturent le blanc et rendent le libellé printed
+ *   illisible. On reste donc sous 1.0 et on pousse le contraste local.
+ *
+ *  SÉCURITÉ PERF : IntersectionObserver → la boucle de rendu ne tourne que
+ *  quand le bidon est visible, et le DPR est plafonné (coût GPU mobile).
+ *
+ *  Repli sans WebGL : <img class="webgl-fallback"> en data-src (zéro octet
+ *  téléchargé si la 3D marche) — le CSS global bascule via `no-webgl`.
+ */
+---
+
+<div class="bidon-scene relative mx-auto h-full w-full">
+  <canvas
+    id="bidon-canvas"
+    class="canvas-3d"
+    width="700"
+    height="700"
+    role="img"
+    aria-label="Bidon d'huile PETROVOLL en 3D (rotation automatique)"
+  >
+  </canvas>
+
+  <!-- Repli 2D : data-src seulement (pas de src) → rien n'est téléchargé
+       tant que la 3D n'a pas échoué (voir global.css). -->
+  <img
+    class="webgl-fallback absolute inset-0 h-full w-full object-contain"
+    data-src="/images/bidon-fallback.png"
+    alt="Bidon d'huile PETROVOLL"
+    width="1040"
+    height="780"
+    decoding="async"
+  />
+</div>
+
+<style>
+  /* Le canvas 3D occupe toute la boîte carrée du hero (il hérite de son
+     contexte de dimensionnement, donc vidéo et 3D sont superposables). */
+  .bidon-scene .canvas-3d {
+    height: 100%;
+    max-height: none;
+    touch-action: pan-y; /* le drag horizontal fait tourner, le scroll vertical reste possible */
+    cursor: grab;
+  }
+  .bidon-scene .canvas-3d:active {
+    cursor: grabbing;
+  }
+</style>
+
+<script>
+  import * as THREE from 'three'
+  import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+  import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+
+  const canvas = document.getElementById('bidon-canvas') as HTMLCanvasElement | null
+  const hote = canvas?.closest<HTMLElement>('[data-pane]')
+
+  /* Initialisation DIFFEREE : le hero affiche la vidéo par défaut. On n'instancie
+     Three.js + le GLB (1,6 Mo) qu'au premier affichage réel de la vue 3D, sinon
+     le bidon serait absent (clientWidth = 0) et on payerait le download pour rien. */
+  const paneVisible = (): boolean =>
+    !hote || !hote.classList.contains('hidden')
+
+  let initialise = false
+  const demarrer = () => {
+    if (initialise || !canvas) return
+    initialise = true
+    hote?.removeEventListener('transitionend', demarrer)
+    construire(canvas)
+  }
+
+  if (hote && !paneVisible()) {
+    hote.addEventListener('transitionend', demarrer)
+    // Repli si l'onglet 3D est déjà visible sans transition (pas d'animation).
+    new MutationObserver(() => {
+      if (paneVisible()) demarrer()
+    }).observe(hote, { attributes: true, attributeFilter: ['class'] })
+  } else {
+    demarrer()
+  }
+
+  function construire(canvas: HTMLCanvasElement) {
+    // 1. Test WebGL AVANT de construire quoi que ce soit (évite l'écran noir).
+    const testWebGL = (): boolean => {
+      try {
+        const c = document.createElement('canvas')
+        return !!(c.getContext('webgl2') || c.getContext('webgl'))
+      } catch {
+        return false
+      }
+    }
+
+    const poserFallback = (classe: 'no-webgl' | 'webgl-echec') => {
+      document.documentElement.classList.add(classe)
+      const img = canvas.parentElement?.querySelector<HTMLImageElement>('.webgl-fallback')
+      const src = img?.dataset.src
+      if (img && src && !img.src) img.src = src
+    }
+
+    if (!testWebGL()) {
+      poserFallback('no-webgl')
+    } else {
+      // 2. Scène
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true, // fond transparent : épouse la couleur de la section
+        antialias: true,
+        powerPreference: 'high-performance',
+      })
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+      renderer.outputColorSpace = THREE.SRGBColorSpace
+      // ACES Filmic DOIT rester sous 1.0 : au-delà, le plastique clair « burn »
+      // et le libellé imprimé disparaît dans le blanc. C'est la correction
+      // qui rend les écritures lisibles sans toucher à la texture.
+      renderer.toneMapping = THREE.ACESFilmicToneMapping
+      renderer.toneMappingExposure = 0.86
+
+      const scene = new THREE.Scene()
+      const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100)
+      camera.position.set(0, 0.4, 4.2)
+      camera.lookAt(0, 0, 0)
+
+      // 3. Lumières — toutes volontairement DISCIPLINÉES (cf. en-tête).
+      //    ambient 0.34 : évite de « laver » les ombres du relief.
+      //    key 0.92    : principale, légèrement décentrée.
+      //    fill 0.22   : froide, très faible.
+      //    rim 0.32    : chaude, détache le bidon du fond sombre.
+      scene.add(new THREE.AmbientLight(0xffffff, 0.34))
+
+      const key = new THREE.DirectionalLight(0xffffff, 0.92)
+      key.position.set(3, 4, 5)
+      scene.add(key)
+
+      const fill = new THREE.DirectionalLight(0x9db8d6, 0.22)
+      fill.position.set(-4, 1, 2)
+      scene.add(fill)
+
+      const rim = new THREE.DirectionalLight(0xf5a623, 0.32)
+      rim.position.set(-4, 2, -3)
+      scene.add(rim)
+
+
+      // 4. Chargement du modèle (lite sur petit écran / moins de 4 cœurs)
+      const estLeger =
+        window.matchMedia('(max-width: 47.99rem)').matches ||
+        (navigator.hardwareConcurrency ?? 8) <= 4
+      const url = estLeger ? '/models/bidon-lite.glb' : '/models/bidon.glb'
+
+      const draco = new DRACOLoader()
+      draco.setDecoderPath('/draco/')
+      const loader = new GLTFLoader()
+      loader.setDRACOLoader(draco)
+
+      let model: THREE.Object3D | null = null
+      loader.load(
+        url,
+        (gltf) => {
+          model = gltf.scene
+          // Centre la scène sur le modèle (les scans ne sont pas à l'origine).
+          const box = new THREE.Box3().setFromObject(model)
+          const center = box.getCenter(new THREE.Vector3())
+          const size = box.getSize(new THREE.Vector3())
+          model.position.sub(center)
+          const echelle = 2.3 / Math.max(size.x, size.y, size.z)
+          model.scale.setScalar(echelle)
+          scene.add(model)
+          document.documentElement.classList.add('webgl-3d-init')
+          // Libère le CPU : plus besoin des buffers de géométrie.
+          draco.dispose()
+        },
+        undefined,
+        () => poserFallback('webgl-echec'),
+      )
+
+      // 5. Interaction : rotation automatique + drag/tap (souris ET tactile).
+      let rotationAuto = true
+      let cibleX = 0
+      let angleX = 0
+      let glisse = false
+      let dernierX = 0
+
+      const conteneur = canvas.parentElement as HTMLElement
+      const debut = (e: Event) => {
+        const pe = e as PointerEvent
+        glisse = true
+        rotationAuto = false
+        dernierX = pe.clientX
+        canvas.setPointerCapture?.(pe.pointerId)
+      }
+      const bouge = (e: Event) => {
+        if (!glisse) return
+        const pe = e as PointerEvent
+        cibleX += (pe.clientX - dernierX) * 0.011
+        dernierX = pe.clientX
+      }
+      const fin = () => {
+        glisse = false
+      }
+      conteneur.addEventListener('pointerdown', debut)
+      conteneur.addEventListener('pointermove', bouge)
+      conteneur.addEventListener('pointerup', fin)
+      conteneur.addEventListener('pointercancel', fin)
+      conteneur.addEventListener('pointerleave', fin)
+
+      // 6. Redimensionnement : résolution plafonnée par le DPR.
+      const redimensionner = () => {
+        const l = conteneur.clientWidth
+        if (l === 0) return
+        renderer.setSize(l, l, false)
+        camera.aspect = 1
+        camera.updateProjectionMatrix()
+      }
+      redimensionner()
+      window.addEventListener('resize', redimensionner)
+
+      // 7. Boucle de rendu — SUSPENDUE hors champ (batterie mobile).
+      let visible = true
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(
+          ([e]) => {
+            visible = e.isIntersecting
+          },
+          { threshold: 0.05 },
+        ).observe(conteneur)
+      }
+
+      const boucle = () => {
+        requestAnimationFrame(boucle)
+        if (!visible) return
+        if (rotationAuto && model) cibleX += 0.0045
+        if (model) {
+          // Interpolation douce : le drag ne « saccade » jamais.
+          angleX += (cibleX - angleX) * 0.08
+          model.rotation.y = angleX
+        }
+        renderer.render(scene, camera)
+      }
+      boucle()
+    }
+  }
+</script>

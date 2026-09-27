@@ -1,0 +1,183 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   PETROVOLL — Feuille de styles globale
+   ────────────────────────────────────────────────────────────────────────────
+   1. Directives Tailwind
+   2. Design tokens (CSS variables → consommées par tailwind.config.ts / shadcn/ui)
+   3. Base layer (typographie, scrollbar, sélection)
+   4. Utilities custom (glassmorphism navbar, dégradés industriels)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   2. DESIGN TOKENS
+   Palette : #0A0A0A (noir profond) · #D4420A (rouge industriel) · #F5A623 (or)
+   Format shadcn/ui = triplets HSL sans `hsl()`.
+   ──────────────────────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    /* Surfaces claires (pages catalogue, formulaires, back-office public) */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 4%; /* #0A0A0A */
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 4%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 4%;
+
+    /* Action principale = rouge/orange industriel #D4420A */
+    --primary: 17 91% 44%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 9%; /* #171717 */
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 42%;
+
+    /* Accent = or/ambre #F5A623 */
+    --accent: 37 91% 55%;
+    --accent-foreground: 0 0% 4%;
+
+    --destructive: 0 72% 46%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 89%;
+    --input: 0 0% 89%;
+    --ring: 17 91% 44%;
+
+    /* Angles volontairement peu arrondis → style industriel */
+    --radius: 0.375rem;
+  }
+
+  /* Thème sombre — utilisé pour la navbar scrolled, le hero et la section
+     PETROVOLL (produit phare) mise en avant. */
+  .dark {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 17 91% 44%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 64%;
+
+    --accent: 37 91% 55%;
+    --accent-foreground: 0 0% 4%;
+
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 37 91% 55%;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   3. BASE — typographie & comportements par défaut
+   ──────────────────────────────────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    /* TODO [typography] : remplacer par font-feature-settings: 'cv11', 'ss01'
+       si le client fournit une police de marque avec des variantes OpenType. */
+  }
+
+  /* Titres impactants → Bebas Neue (via la variable injectée par next/font) */
+  h1,
+  h2,
+  h3,
+  .font-display {
+    @apply font-display tracking-industrial uppercase;
+  }
+
+  ::selection {
+    background-color: #d4420a;
+    color: #ffffff;
+  }
+
+  /* Scrollbar discrète, teinte ambre au survol */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #262626;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #f5a623;
+  }
+
+  /* Accessibilité : respect des préférences de réduction de mouvement
+     (indispensable car Framer Motion + scène 3D animée sont utilisés). */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   4. UTILITIES CUSTOM
+   ──────────────────────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Navbar sticky : fond glassmorphism léger activé au scroll.
+     TODO [navbar] : ajouter/retirer `.navbar-scrolled` depuis Navbar.tsx
+     (listener scroll ou useScroll de Framer Motion). */
+  .navbar-scrolled {
+    @apply bg-ink-900/80 backdrop-blur-md border-b border-white/10;
+  }
+
+  /* Conteneur glass générique (cards de secteurs, badges) */
+  .glass {
+    @apply bg-white/5 backdrop-blur-sm border border-white/10;
+  }
+
+  /* Texte en dégradé or → rouge (titres de section premium) */
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-gold-400 via-brand-500 to-gold-400 bg-clip-text text-transparent;
+  }
+
+  /* Filet lumineux horizontal sous les titres de section */
+  .section-underline::after {
+    content: '';
+    @apply mt-4 block h-px w-24 bg-gradient-to-r from-brand-500 to-transparent;
+  }
+
+  /* Masque les éléments 3D si WebGL est indisponible
+     (fallback 2D assuré par HeroSection / BidonScene) */
+  .no-webgl .canvas-3d {
+    display: none;
+  }
+}

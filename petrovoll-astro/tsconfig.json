@@ -1,0 +1,21 @@
+{
+  // Configuration TypeScript Astro 5.
+  // - `astro/tsconfigs/strict` : preset officiel le plus strict (équivalent
+  //   de `strict: true` + vérifications supplémentaires sur les .astro).
+  // - `@/*` → `src/*` : alias utilisé partout dans le projet.
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    // Islands React (src/components/produits/FiltreIsland.tsx)
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "target": "ES2022",
+    "verbatimModuleSyntax": true
+  },
+  "include": [".astro/types.d.ts", "src/**/*", "keystatic.config.ts", "*.mjs"],
+  "exclude": ["dist", "node_modules", ".astro"]
+}

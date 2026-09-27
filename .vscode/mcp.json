@@ -1,0 +1,30 @@
+{
+  // Serveurs MCP (Model Context Protocol) du workspace.
+  // VS Code / Muse les charge automatiquement au demarrage.
+  // Doc : https://code.visualstudio.com/docs/copilot/customization/mcp-servers
+  "servers": {
+    // Playwright MCP — officiel Microsoft.
+    // Permet a l'agent de piloter un vrai navigateur Chromium :
+    // navigation, snapshots d'accessibilite, clics, formulaires,
+    // screenshots, verification visuelle (hero 3D, responsive mobile...).
+    // --headless=false : fenetre visible (debug). En CI : passer a --headless.
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      // Decommente pour voir le navigateur travailler (utile en debug local) :
+      // "args": ["-y", "@playwright/mcp@latest", "--headless=false"],
+      "env": {
+        // Navigateur dedie aux tests agent (profil isole de ta navigation perso).
+        "PLAYWRIGHT_LAUNCH_OPTIONS_HEADLESS": "new"
+      }
+    },
+    // PLAN B — GLB Downloader (script local, PAS un serveur MCP) :
+    // scripts/mcp-glb-downloader.py — Playwright Python qui automatise
+    // l'image-to-3D (Upsampler/Cinevva/Hunyuan) : upload + attente + interception
+    // reseau du .glb + screenshots debug. Robuste la ou le MCP navigateur
+    // generique echoue (selecteurs FR+EN, repli bouton Download).
+    // Lancement manuel depuis le terminal :
+    //   python scripts/mcp-glb-downloader.py <image> [--site upsampler|cinevva|hunyuan]
+    // (Volontairement aucun bloc executable ici : ce n'est pas un serveur STDIO.)
+  }
+}

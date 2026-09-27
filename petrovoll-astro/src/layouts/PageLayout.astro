@@ -1,0 +1,53 @@
+---
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  PageLayout.astro — ossature commune du site public
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  Navigation + contenu + pied de page. Toutes les pages publiques passent par
+ *  ce layout, qui délègue le <head> complet à BaseLayout.astro.
+ *
+ *  Mobile-first :
+ *   - `<main id="contenu">` cible du lien d'évitement (accessibilité)
+ *   - padding supérieur égal à la hauteur de la navbar (empêche le recouvrement)
+ *   - aucune largeur fixe : tout repose sur `.container-page`
+ */
+import Footer from '@/components/layout/Footer.astro'
+import Navbar from '@/components/layout/Navbar.astro'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+
+interface Props {
+  titre: string
+  description: string
+  ogImage?: string
+  ogType?: 'website' | 'article' | 'product'
+  canonicalChemin?: string
+  noindex?: boolean
+  schema?: Array<Record<string, unknown>>
+}
+
+const { titre, description, ogImage, ogType, canonicalChemin, noindex, schema } = Astro.props
+---
+
+<BaseLayout
+  titre={titre}
+  description={description}
+  ogImage={ogImage}
+  ogType={ogType}
+  canonicalChemin={canonicalChemin}
+  noindex={noindex}
+  schema={schema}
+>
+  <div class="flex min-h-dvh flex-col">
+    <Navbar />
+
+    <!--
+      `pt-16` en mobile / `pt-20` en desktop = hauteur réelle de la navbar.
+      TODO [ui] : si la hauteur de navbar change, ajuster ici ET dans Navbar.astro.
+    -->
+    <main id="contenu" class="flex-1 pt-16 lg:pt-20">
+      <slot />
+    </main>
+
+    <Footer />
+  </div>
+</BaseLayout>

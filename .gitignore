@@ -1,0 +1,9 @@
+# Filet de sécurité global (chaque sous-projet a aussi son propre .gitignore)
+node_modules/
+.env
+.env.local
+.env.*.local
+.dev.vars
+*.log
+.DS_Store
+Thumbs.db

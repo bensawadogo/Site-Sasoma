@@ -1,0 +1,44 @@
+---
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * CanonicalUrl.astro — URL canonique + signaux i18n
+ * ────────────────────────────────────────────────────────────────────────────
+ *  Pourquoi c'est critique :
+ *   • évite le contenu dupliqué (ex. /produits et /produits/ → une seule URL)
+ *   • les moteurs de réponse IA ont besoin d'UNE URL de référence fiable pour
+ *     citer la source ; sans canonical, les citations pointent vers des
+ *     variantes paramétrées.
+ *
+ *  ⚠️  Le canonical doit être ABSOLU et stable (jamais de parametres UTM).
+ */
+interface Props {
+  /** Chemin courant (Astro.url.pathname) ou URL absolue déjà formée. */
+  chemin: string
+  /** Langue principale du site (fr par défaut). */
+  langue?: string
+  /** Variantes linguistiques : { 'fr-FR': '/', 'en-US': '/en/' } */
+  alternates?: Record<string, string>
+}
+
+const { chemin, langue = 'fr', alternates } = Astro.props
+
+const base = Astro.site ?? new URL('https://petrovoll.example')
+// Nouvelle URL pour garantir l'absolu sans muter Astro.url
+const canonical = new URL(chemin, base).toString()
+---
+
+<link rel="canonical" href={canonical} />
+
+<!-- Signal de langue pour la page courante -->
+<link rel="alternate" hreflang={langue} href={canonical} />
+<link rel="alternate" hreflang="x-default" href={canonical} />
+
+{
+  alternates &&
+    Object.entries(alternates).map(([code, url]) => (
+      <link rel="alternate" hreflang={code} href={new URL(url, base).toString()} />
+    ))
+}
+
+<!-- TODO [i18n] : générer les `alternates` depuis une config i18n Astro
+     (`i18n` dans astro.config.mjs) si une version anglaise est publiée. -->

@@ -1,0 +1,57 @@
+<!doctype html>
+<!-- render-page.html — page minimale de l'agent RENDU (render-check.py).
+  three.js via CDN (importmap), DRACOLoader sur /draco/ = DECODEURS LOCAUX
+  servis par render-check.py (mêmes fichiers que la production public/draco/),
+  rend 1 frame du GLB et expose window.__report = { lit, errs }.
+  __GLB__ est remplace par le chemin du modele au lancement. -->
+<html><body><canvas id="c" width="400" height="400"></canvas>
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+const errs = [];
+window.onerror = (m) => errs.push(String(m));
+window.__report = undefined;
+try {
+  const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c') });
+  renderer.setSize(400, 400, false);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.86;
+  const scene = new THREE.Scene();
+  scene.add(new THREE.AmbientLight(0xffffff, 0.34));
+  const key = new THREE.DirectionalLight(0xffffff, 0.92);
+  key.position.set(3, 4, 5); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.22);
+  fill.position.set(-2, 1, 4); scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xf5a623, 0.32);
+  rim.position.set(-4, 2, -3); scene.add(rim);
+  const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+  camera.position.set(0, 0.4, 4.2);
+  const loader = new GLTFLoader();
+  const draco = new DRACOLoader();
+  // Chemin IDENTIQUE a la production (BidonScene.astro : setDecoderPath('/draco/'))
+  draco.setDecoderPath('/draco/');
+  loader.setDRACOLoader(draco);
+  const gltf = await loader.loadAsync('__GLB__');
+  scene.add(gltf.scene);
+  renderer.render(scene, camera);
+  // Echantillonne les pixels : % non noirs (0 = ecran noir = ECHEC).
+  const img = new Image();
+  img.onload = () => {
+    const cv = document.createElement('canvas'); cv.width = cv.height = 64;
+    const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0, 64, 64);
+    const d = ctx.getImageData(0, 0, 64, 64).data;
+    let lit = 0;
+    for (let i = 0; i < d.length; i += 4) if (d[i] + d[i+1] + d[i+2] > 30) lit++;
+    // 64x64 = 4096 echantillons (pas 1024) : lit/4096 = fraction 0..1.
+    window.__report = { lit: lit / 4096, errs };
+  };
+  img.src = renderer.domElement.toDataURL();
+} catch (e) { window.__report = { lit: 0, errs: [...errs, String(e)] }; }
+</script></body></html>

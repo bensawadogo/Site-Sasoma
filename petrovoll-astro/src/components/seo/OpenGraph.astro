@@ -1,0 +1,63 @@
+---
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * OpenGraph.astro — balises Open Graph + Twitter Card
+ * ────────────────────────────────────────────────────────────────────────────
+ *  Ces balises déterminent l'aperçu du lien quand il est partagé sur WhatsApp,
+ *  LinkedIn, Facebook ou X — canaux de diffusion majeurs pour le B2B en Afrique
+ *  de l'Ouest. Un aperçu cassé = un clic perdu.
+ *
+ *  Règles appliquées :
+ *   • og:image en 1200×630 (obligatoire pour les grandes cartes)
+ *   • og:locale fr_FR (+ og:locale:alternate si ouverture anglophone)
+ *   • twitter:card = summary_large_image
+ *   • og:url TOUJOURS absolue et identique au canonical
+ */
+interface Props {
+  title: string
+  description: string
+  /** URL absolue de l'image (1200×630). Fallback sur /images/og-default.png */
+  image?: string
+  /** URL canonique absolue de la page */
+  url: string
+  siteName: string
+  locale?: string
+  type?: 'website' | 'article' | 'product'
+}
+
+const {
+  title,
+  description,
+  image = '/images/og-default.png',
+  url,
+  siteName,
+  locale = 'fr_FR',
+  type = 'website',
+} = Astro.props
+
+// og:image doit être une URL ABSOLUE pour être exploitée par les plateformes
+const imageAbsolue = image.startsWith('http')
+  ? image
+  : new URL(image, Astro.site ?? 'https://petrovoll.example').toString()
+---
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:locale" content={locale} />
+<!-- TODO [i18n] : ajouter <meta property="og:locale:alternate" content="en_US" /> si version anglaise -->
+<meta property="og:url" content={url} />
+<meta property="og:image" content={imageAbsolue} />
+<meta property="og:image:secure_url" content={imageAbsolue} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageAbsolue} />
+<!-- TODO [seo] : ajouter twitter:site / twitter:creator quand le compte X existe -->

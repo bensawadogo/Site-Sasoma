@@ -1,0 +1,35 @@
+{
+  // Configuration TypeScript du projet PETROVOLL.
+  // - `@/*`      -> racine du projet (alias shadcn/ui + conventions Next.js)
+  // - `@payload-config` -> chemin attendu par `withPayload()` et par la CLI `payload`
+  //   (Payload CMS v3 lit la config via cet alias, pas via un chemin relatif "en dur")
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "forceConsistentCasingInFileNames": true,
+    "plugins": [{ "name": "next" }],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@payload-config": ["./payload/payload.config.ts"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": ["node_modules", ".next", "dist"]
+}

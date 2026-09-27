@@ -1,0 +1,35 @@
+---
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * SchemaOrg.astro — données structurées JSON-LD (schema.org)
+ * ────────────────────────────────────────────────────────────────────────────
+ *  Le JSON-LD est le format d'information structurée à privilégier en 2026 :
+ *   • lu par Google/Bing (rich results),
+ *   • lu par les moteurs de réponse IA (ChatGPT, Perplexity, Gemini) pour
+ *     citer correctement l'entreprise, ses produits et ses contacts.
+ *
+ *  Types préparés :
+ *   - 'Organization'  → identité de l'entreprise (toutes les pages)
+ *   - 'LocalBusiness' → implantation physique, horaires (home + contact)
+ *   - 'Product'       → fiche produit (+ Offer quand un prix est publié)
+ *   - 'ContactPage'   → page de contact + ContactPoint
+ *   - 'FAQPage'       → page FAQ (à créer, structure déjà prête)
+ *
+ *  TODO [seo] :
+ *   - [ ] Renseigner `sameAs` (réseaux sociaux) depuis parametresSite
+ *   - [ ] Ajouter `geo` (latitude/longitude) et `openingHoursSpecification`
+ *         dès que le client communique l'adresse exacte et les horaires
+ *   - [ ] Ajouter `aggregateRating` UNIQUEMENT si de vrais avis existent
+ *         (inventer des notes expose à une pénalité manuelle Google)
+ *   - [ ] Ajouter `BreadcrumbList` sur les pages profondes
+ *   - [ ] Contrôler le rendu : https://validator.schema.org + Rich Results Test
+ */
+interface Props {
+  /** Structure JSON-LD complète (objet ou tableau de graphes). */
+  data: Record<string, unknown> | Array<Record<string, unknown>>
+}
+const { data } = Astro.props
+---
+
+<!-- JSON-LD : `set:html` évite l'échappement des guillemets par Astro -->
+<script type="application/ld+json" set:html={JSON.stringify(data)} is:inline />

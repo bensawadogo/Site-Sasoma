@@ -1,0 +1,11 @@
+# Paramètres globaux du site — fichier unique (singleton) édité via /keystatic
+# Champs volontairement VIDES : aucune donnée réelle n'est inventée.
+# TODO [contenu] : renseigner les coordonnées définitives du client
+#   → elles alimentent le footer, la page contact et le JSON-LD Organization.
+
+nomSociete: PETROVOLL
+slogan: ''
+telephone: ''
+email: ''
+adresse: ''
+reseauxSociaux: []

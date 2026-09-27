@@ -1,0 +1,72 @@
+---
+/**
+ * ProduitDetail.astro — fiche produit (galerie + infos + CTA devis).
+ * Mobile-first : galerie empilee, CTA sticky en bas sur mobile.
+ * SEO : JSON-LD Product + Offer construit par la page appelante.
+ *
+ * TODO [produit] :
+ *  - [ ] Galerie : image principale + miniatures (boutons >= 44px)
+ *  - [ ] Rendu Markdoc de la description (Content de entry.render())
+ *  - [ ] Fil d'Ariane (Accueil / Produits / <titre>) + BreadcrumbList JSON-LD
+ *  - [ ] CTA sticky mobile : tel: + WhatsApp + /contact?produit=<slug>
+ */
+interface Visuel { src: string; alt: string }
+interface Props {
+  titre: string
+  marque?: string
+  reference?: string
+  secteur: string
+  disponible?: boolean
+  visuels?: Visuel[]
+}
+const { titre, marque, reference, secteur, disponible = true, visuels = [] } = Astro.props
+const principal = visuels[0]
+---
+
+<article class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+  <div class="reveal">
+    {
+      principal ? (
+        <img
+          src={principal.src}
+          alt={principal.alt}
+          width="1200"
+          height="900"
+          loading="eager"
+          decoding="async"
+          class="w-full rounded-md border border-border"
+        />
+      ) : (
+        <img
+          src="/images/bidon-fallback.png"
+          alt={`Visuel ${titre}`}
+          width="1200"
+          height="900"
+          loading="eager"
+          decoding="async"
+          class="w-full rounded-md border border-border"
+        />
+      )
+    }
+    {/* TODO [produit] : miniatures si visuels.length > 1. */}
+  </div>
+
+  <div class="reveal">
+    <p class="text-xs font-semibold uppercase tracking-widest text-gold">{marque ?? secteur}</p>
+    <h1 class="mt-2 text-3xl sm:text-4xl lg:text-5xl">{titre}</h1>
+    {reference && <p class="mt-2 text-sm text-muted">Réf. {reference}</p>}
+    <p class={`mt-4 inline-flex items-center gap-2 text-sm font-medium ${disponible ? 'text-green-400' : 'text-gold'}`}>
+      <span class={`h-2 w-2 rounded-full ${disponible ? 'bg-green-400' : 'bg-gold'}`} aria-hidden="true" />
+      {disponible ? 'Disponible' : 'Sur commande — délai à confirmer'}
+    </p>
+
+    <div class="rich-text mt-6">
+      <slot />
+    </div>
+
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <a href="/contact" class="btn-primary w-full text-center sm:w-auto">Demander un devis</a>
+      <a href="/produits" class="btn-outline w-full text-center sm:w-auto">Retour catalogue</a>
+    </div>
+  </div>
+</article>

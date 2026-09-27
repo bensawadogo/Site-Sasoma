@@ -1,0 +1,35 @@
+# ════════════════════════════════════════════════════════════════════════════
+#  wrangler.toml — Cloudflare Pages
+# ════════════════════════════════════════════════════════════════════════════
+#  Utilisé par `wrangler pages deploy dist` (npm run deploy) et par les
+#  commandes wrangler de diagnostic (wrangler pages project list…).
+#
+#  ⚠️  `nodejs_compat` est INDISPENSABLE : Keystatic (mode GitHub) et le SSR
+#      utilisent des APIs Node (crypto, stream, buffer). Sans ce flag, l'admin
+#      /keystatic échoue en production avec des erreurs de runtime.
+#
+#  TODO [infra] :
+#   - [ ] Remplacer `name` par le nom réel du projet Cloudflare Pages
+#   - [ ] Aligner compatibility_date sur une date ≤ aujourd'hui
+#   - [ ] Déclarer les variables d'environnement dans le dashboard Cloudflare
+#         (Settings → Environment variables) — jamais de secret dans ce fichier
+# ════════════════════════════════════════════════════════════════════════════
+
+name = "petrovoll-site"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# ── Build (si vous utilisez l'intégration Git de Cloudflare Pages) ──────────
+[build]
+command = "npm run build"
+cwd = "/"
+
+# ── Observabilité (optionnel) ───────────────────────────────────────────────
+[observability]
+enabled = true
+
+# TODO [infra] : bindings optionnels
+# [[kv_namespaces]]
+# binding = "SESSION"
+# id = "xxxx"

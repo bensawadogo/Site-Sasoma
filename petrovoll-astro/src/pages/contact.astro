@@ -1,0 +1,75 @@
+---
+/**
+ * Contact — page PRERENDUE (coordonnees + formulaire, island React).
+ * Mobile-first : infos tactiles (tel:, WhatsApp) AVANT le formulaire.
+ * SEO : ContactPage + ContactPoint JSON-LD (telephone, zone desservie).
+ *
+ * TODO [contact] :
+ *  - [ ] Coordonnees via getEntry('parametresSite', 'index')
+ *  - [ ] Prefill ?produit=<slug> (lire Astro.url.searchParams)
+ *  - [ ] Endpoint de reception : formspree / resend / SSR Astro (a choisir)
+ *  - [ ] Honeypot anti-spam + confirmation accessible (role="status")
+ */
+import PageLayout from '@/layouts/PageLayout.astro'
+
+export const prerender = true
+
+const produitDemande = Astro.url.searchParams.get('produit')
+
+const schema: Array<Record<string, unknown>> = [
+  {
+    '@type': 'ContactPage',
+    // TODO [seo] : ContactPoint complet (telephone, email, areaServed, languages).
+  },
+]
+---
+
+<PageLayout
+  titre="Contact & devis — PETROVOLL"
+  description="Demandez un devis B2B : huiles PETROVOLL, pneumatiques, fournitures. Réponse rapide en Afrique de l’Ouest."
+  canonicalChemin="/contact"
+  schema={schema}
+>
+  <div class="container-page grid grid-cols-1 gap-10 py-10 lg:grid-cols-2 lg:py-14">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-widest text-gold">Contact</p>
+      <h1 class="mt-2 text-3xl sm:text-4xl lg:text-5xl">Demander un devis</h1>
+      <span class="section-line" aria-hidden="true" />
+
+      {/* TODO [contact] : telephone / email / adresse depuis parametresSite. */}
+      <ul class="mt-6 space-y-3 text-base">
+        <li><a href="tel:+2250000000000" class="text-gold underline underline-offset-4">+225 00 00 00 00</a></li>
+        <li><a href="mailto:contact@example.com" class="text-gold underline underline-offset-4">contact@example.com</a></li>
+      </ul>
+
+      {
+        produitDemande && (
+          <p class="mt-6 rounded-md border border-gold/30 bg-gold/5 p-4 text-sm">
+            Produit concerné : <strong>{produitDemande}</strong>
+          </p>
+        )
+      }
+    </div>
+
+    <div>
+      {/* TODO [contact] : remplacer par l'island formulaire React (client:visible)
+          avec validation + honeypot + etat de confirmation. */}
+      <form class="grid grid-cols-1 gap-4 rounded-md border border-border bg-surface p-5 sm:p-6" aria-label="Formulaire de devis (squelette)">
+        <label class="flex flex-col gap-1 text-sm">
+          Nom / Société
+          <input required name="nom" autocomplete="organization" class="min-h-[48px] rounded border border-border bg-primary px-3" placeholder="Votre nom" />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          Téléphone
+          <input required type="tel" name="telephone" autocomplete="tel" inputmode="tel" class="min-h-[48px] rounded border border-border bg-primary px-3" placeholder="+225 …" />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          Message
+          <textarea required name="message" rows="5" class="rounded border border-border bg-primary px-3 py-3" placeholder="Besoin, quantités, ville de livraison…" />
+        </label>
+        <button type="submit" class="btn-primary w-full">Envoyer la demande</button>
+        <p class="text-xs text-muted">Squelette : brancher l'endpoint de réception (voir TODO en tête).</p>
+      </form>
+    </div>
+  </div>
+</PageLayout>

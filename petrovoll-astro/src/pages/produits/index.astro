@@ -1,0 +1,45 @@
+---
+/**
+ * Catalogue produits — page PRERENDUE (SSG au build).
+ * Mobile-first : titre compact, filtre React (client:load), grille 1->2->3 col.
+ * Donnees : getCollection('produits') au build, zero JS sauf l'ilot filtre.
+ *
+ * TODO [produit] : preselection du secteur via ?secteur= (lire Astro.url).
+ */
+import { getCollection } from 'astro:content'
+
+import ProduitFiltre from '@/components/produits/ProduitFiltre.astro'
+import ProduitGrid from '@/components/produits/ProduitGrid.astro'
+import PageLayout from '@/layouts/PageLayout.astro'
+
+export const prerender = true
+
+const produits = await getCollection('produits')
+const items = produits.map((p) => ({
+  slug: p.id,
+  titre: p.data.titre,
+  marque: p.data.marque,
+  secteur: p.data.secteur,
+  disponible: p.data.disponible,
+  estProduitPhare: p.data.estProduitPhare,
+  visuel: p.data.images[0] as { image?: string | null; urlCloudinary?: string | null; alt: string } | undefined,
+}))
+---
+
+<PageLayout
+  titre="Catalogue produits — PETROVOLL"
+  description="Catalogue : huiles moteur PETROVOLL, pneumatiques, fournitures et plus. Filtrez par secteur."
+>
+  <div class="container-page py-10 lg:py-14">
+    <p class="text-xs font-semibold uppercase tracking-widest text-gold">Catalogue</p>
+    <h1 class="mt-2 text-3xl sm:text-4xl lg:text-5xl">Nos produits</h1>
+    <span class="section-line" aria-hidden="true" />
+
+    <div class="mt-8">
+      <ProduitFiltre
+        produits={produits.map((p) => ({ slug: p.id, titre: p.data.titre, marque: p.data.marque, secteur: p.data.secteur, disponible: p.data.disponible }))}
+      />
+      <ProduitGrid produits={items} />
+    </div>
+  </div>
+</PageLayout>

@@ -1,0 +1,245 @@
+---
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  BaseLayout.astro — Layout racine : <html>, SEO complet, polices, schema.org
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  TOUS les meta tags SEO sont centralisés ici (source de vérité unique) :
+ *   - title (≤ 60 car.) et description (≤ 155 car.) avec garde-fou en dev
+ *   - canonical absolu + hreflang + og:url alignés
+ *   - Open Graph 1200×630 + Twitter summary_large_image
+ *   - JSON-LD Organization/LocalBusiness sur TOUTES les pages
+ *     (+ données spécifiques injectées par la page via `schema`)
+ *   - viewport avec `viewport-fit=cover` (encoche iOS) + theme-color
+ *
+ *  ⚠️  Ce layout ne contient QUE le document et son <head>.
+ *      L'en-tête et le pied de page vivent dans PageLayout.astro
+ *      (le panel Keystatic, lui, n'utilise pas ce layout).
+ */
+import '@/styles/global.css'
+
+import { getEntry } from 'astro:content'
+
+import CanonicalUrl from '@/components/seo/CanonicalUrl.astro'
+import OpenGraph from '@/components/seo/OpenGraph.astro'
+import SchemaOrg from '@/components/seo/SchemaOrg.astro'
+
+interface Props {
+  /** Titre de la page — viser 60 caractères maximum. */
+  titre: string
+  /** Meta description — viser 155 caractères maximum. */
+  description: string
+  /** Visuel de partage (1200×630). Défaut : /images/og-default.png */
+  ogImage?: string
+  ogType?: 'website' | 'article' | 'product'
+  /** Chemin canonique (par défaut : l'URL courante) */
+  canonicalChemin?: string
+  /** true pour exclure la page de l'index (ex. page de remerciement) */
+  noindex?: boolean
+  /** JSON-LD additionnels SANS @context (Organization est déjà fourni) */
+  schema?: Array<Record<string, unknown>>
+  /** Langue du document (fr par défaut) */
+  langue?: string
+}
+
+const {
+  titre,
+  description,
+  ogImage = '/images/og-default.png',
+  ogType = 'website',
+  canonicalChemin,
+  noindex = false,
+  schema = [],
+  langue = 'fr',
+} = Astro.props
+
+/* ── Identité de l'entreprise (singleton Keystatic) ─────────────────────── */
+const parametres = await getEntry('parametresSite', 'index')
+const nomSociete = parametres?.data.nomSociete ?? 'PETROVOLL'
+const slogan = parametres?.data.slogan ?? ''
+const telephone = parametres?.data.telephone ?? ''
+const email = parametres?.data.email ?? ''
+const adresse = parametres?.data.adresse ?? ''
+const reseauxSociaux = (parametres?.data.reseauxSociaux ?? [])
+  .map((r) => r.url)
+  .filter((url): url is string => Boolean(url))
+
+/* ── Garde-fous SEO (visibles uniquement en développement) ───────────────
+   Les limites sont des recommandations de longueur d'affichage dans les SERP.
+   On avertit sans casser le build : le rédacteur corrige avant publication. */
+const TITRE_MAX = 60
+const DESCRIPTION_MAX = 155
+if (import.meta.env.DEV) {
+  if (titre.length > TITRE_MAX) {
+    console.warn(`[SEO] Titre trop long (${titre.length}/${TITRE_MAX}) : « ${titre} »`)
+  }
+  if (description.length > DESCRIPTION_MAX) {
+    console.warn(
+      `[SEO] Description trop longue (${description.length}/${DESCRIPTION_MAX}) sur « ${titre} »`,
+    )
+  }
+}
+
+/* ── URL absolue / canonical ────────────────────────────────────────────── */
+const site = Astro.site ?? new URL('https://petrovoll.example')
+const cheminCanonical = canonicalChemin ?? Astro.url.pathname
+const urlCanonical = new URL(cheminCanonical, site).toString()
+const baseSite = site.toString().replace(/\/+$/, '')
+
+/* ── JSON-LD global : Organization + LocalBusiness ───────────────────────
+   Un seul graphe par page ; les schémas spécifiques (Product, FAQPage…)
+   sont rattachés au même @graph pour éviter les déclarations concurrentes. */
+const schemaOrganisation: Record<string, unknown> = {
+  '@type': ['Organization', 'LocalBusiness'],
+  '@id': `${baseSite}#organisation`,
+  name: nomSociete,
+  url: baseSite,
+  description,
+  ...(slogan ? { slogan } : {}),
+  ...(telephone ? { telephone } : {}),
+  ...(email ? { email } : {}),
+  ...(adresse
+    ? {
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: adresse.replace(/\n/g, ', '),
+          // TODO [seo] : ajouter addressLocality / addressRegion / postalCode /
+          // addressCountry dès que l'adresse exacte est fournie par le client.
+        },
+      }
+    : {}),
+  // Zone desservie : donnée commerciale clé pour ce marché
+  areaServed: { '@type': 'Place', name: 'Afrique de l’Ouest' },
+  knowsAbout: [
+    'huile moteur',
+    'lubrifiants',
+    'transport et logistique',
+    'distribution et import-export',
+    'pneumatiques',
+    'fournitures de bureau',
+  ],
+  ...(reseauxSociaux.length > 0 ? { sameAs: reseauxSociaux } : {}),
+}
+
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@graph': [schemaOrganisation, ...schema],
+}
+
+/** Description finale (tronquée proprement au besoin). */
+const descriptionFinale =
+  description.length > DESCRIPTION_MAX
+    ? `${description.slice(0, DESCRIPTION_MAX - 1).replace(/\s+\S*$/, '')}…`
+    : description
+---
+
+<!doctype html>
+<html lang={langue}>
+  <head>
+    <meta charset="utf-8" />
+
+    <!-- Mobile-first : viewport-fit=cover pour gérer les encoches iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <title>{titre}</title>
+    <meta name="description" content={descriptionFinale} />
+
+    <!-- Indexation pilotée par la page -->
+    <meta
+      name="robots"
+      content={noindex
+        ? 'noindex, nofollow'
+        : 'index, follow, max-image-preview:large, max-snippet:-1'}
+    />
+    <meta name="googlebot" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+
+    <!-- Couleur de la barre d'adresse mobile (charte PETROVOLL) -->
+    <meta name="theme-color" content="#0A0A0A" />
+    <meta name="color-scheme" content="dark" />
+    <!-- Évite la mise en forme automatique des numéros sur iOS -->
+    <meta name="format-detection" content="telephone=no" />
+
+    <CanonicalUrl chemin={cheminCanonical} langue={langue} />
+
+    <OpenGraph
+      title={titre}
+      description={descriptionFinale}
+      image={ogImage}
+      url={urlCanonical}
+      siteName={nomSociete}
+      type={ogType}
+    />
+
+    <!-- ── Polices auto-hébergées ──────────────────────────────────────────
+         TODO [fonts] : décommenter APRÈS avoir déposé les 2 .woff2 dans
+         public/fonts/ (sinon le navigateur affiche un warning 404).
+         Préchargement des 2 polices critiques = LCP texte plus rapide. -->
+    <!--
+    <link rel="preload" href="/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/bebas-neue-400.woff2" as="font" type="font/woff2" crossorigin />
+    -->
+
+    <!-- ── Ressources tierces ──────────────────────────────────────────────
+         Preconnect uniquement si Cloudinary est réellement utilisé (évite une
+         connexion inutile). TODO [perf] : décommenter si urlCloudinary est en usage. -->
+    <!-- <link rel="preconnect" href="https://res.cloudinary.com" crossorigin /> -->
+
+    <!-- ── Favicons / PWA ──────────────────────────────────────────────────
+         TODO [branding] : déposer favicon.ico, icon.svg et apple-icon.png
+         dans public/ (fournis par le client). -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-icon.png" />
+
+    <!-- ── Vérification des consoles ───────────────────────────────────────
+         TODO [seo] : renseigner les codes de validation fournis par Google
+         Search Console et Bing Webmaster Tools. -->
+    <!-- <meta name="google-site-verification" content="…" /> -->
+    <!-- <meta name="msvalidate.01" content="…" /> -->
+
+    <!-- ── Données structurées (Organization + page) ───────────────────── -->
+    <SchemaOrg data={jsonLd} />
+
+    <!-- ── Analytics ───────────────────────────────────────────────────────
+         TODO [analytics] : brancher un outil sobre (Umami/Plausible auto-hébergé
+         = pas de bandeau cookies) plutôt qu'une régie publicitaire.
+         Toujours charger en `async`/`defer` pour préserver l'INP. -->
+
+    <!-- ── Script critique inline (indispensable au premier rendu) ─────────
+         Deux rôles, ~0,2 Ko, aucune dépendance :
+         1. `js-reveal-ready` → active les animations au scroll SANS jamais
+            laisser de contenu invisible si le JS échoue (progressive enhancement)
+         2. détection WebGL → classe `no-webgl` qui masque la scène 3D et
+            laisse le fallback image s'afficher (mobile bas de gamme / vieux iOS)
+         TODO [securite] : si une CSP est ajoutée, fournir un `nonce` à ce script. -->
+    <script is:inline>
+      (function () {
+        var racine = document.documentElement
+        try {
+          racine.classList.add('js-reveal-ready')
+          var canvas = document.createElement('canvas')
+          var gl = canvas.getContext('webgl2') || canvas.getContext('webgl')
+          if (!gl) racine.classList.add('no-webgl')
+        } catch (e) {
+          racine.classList.add('no-webgl')
+        }
+      })()
+    </script>
+
+    <!-- Révélation au scroll : script bundlé (defer auto), ~1 Ko, sans dépendance.
+         Le marquage `js-reveal-ready` est déjà posé par le script inline ci-dessus ;
+         ce fichier ajoute l'IntersectionObserver + `.is-visible`. -->
+    <script src="@/scripts/scroll-reveal.js"></script>
+  </head>
+
+  <body class="min-h-dvh bg-primary text-text">
+    <!-- Lien d'évitement : premier élément focusable (accessibilité clavier) -->
+    <a
+      href="#contenu"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-accent focus:px-4 focus:py-3 focus:text-white"
+    >
+      Aller au contenu principal
+    </a>
+
+    <slot />
+  </body>
+</html>
+

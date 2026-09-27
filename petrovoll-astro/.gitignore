@@ -1,0 +1,38 @@
+# ── Dépendances / build ─────────────────────────────────────────────────────
+node_modules/
+dist/
+.astro/
+.vercel/
+.wrangler/
+
+# ── Variables d'environnement (JAMAIS commitées) ────────────────────────────
+.env
+.env.local
+.env.*.local
+.dev.vars
+
+# ── Médias lourds ────────────────────────────────────────────────────────────
+# SEUL bidon.glb (1,6 Mo, Draco) est commité : BidonScene le charge de /models/.
+# La source brute du scan (assets-source/bidon-meshy.glb, 33 Mo) reste LOCALE :
+# Cloudflare Pages refuse > 25 Mo/fichier et le dépôt Git (Keystatic) gonflerait.
+assets-source/*.glb
+public/models/*.glb
+!public/models/bidon.glb
+!public/models/bidon-procedural-backup.glb
+public/models/*.gltf
+public/models/*.hdr
+public/videos/*.mp4
+# Les images produits passent par Cloudinary ou src/assets (optimisées au build)
+public/images/uploads/*
+
+# ── Artefacts QA (screenshots mobiles, captures de test) ────────────────────
+qa-screenshots/
+
+# ── Logs / divers ───────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json

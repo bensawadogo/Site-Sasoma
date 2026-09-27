@@ -1,0 +1,58 @@
+---
+/**
+ * HeroVideo.astro — Vidéo hero PETROVOLL.
+ *
+ * L'asset est importé depuis src/assets afin qu'Astro le copie et le
+ * hache dans dist/. Aucun chemin public codé en dur à maintenir.
+ */
+import heroVideo from '@/assets/hero-clean.mp4'
+import heroPoster from '@/assets/hero-poster.png'
+---
+
+<!-- Le poster est un import IMAGE (ImageMetadata) : il faut bien .src.
+     ⚠️ Un import .mp4 dans Astro renvoie DÉJÀ une chaîne (l'URL) :
+        ne PAS écrire heroVideo.src, l'attribut serait undefined et
+        supprimé au build (le navigateur n'aurait aucune vidéo).
+     📐 La vidéo REMPLIT son panneau (h-full w-full object-cover) : le panneau
+        impose le carré, donc la vidéo et la 3D occupent exactement la même
+        boîte — la bascule ne provoque aucun saut de mise en page. -->
+<video
+  class="hero-video h-full w-full object-cover"
+  autoplay
+  muted
+  loop
+  playsinline
+  preload="auto"
+  poster={heroPoster.src}
+  aria-label="Bidon d'huile PETROVOLL en showcase vidéo"
+>
+  <source src={heroVideo} type="video/mp4" />
+  <p class="text-xs text-muted">Votre navigateur ne supporte pas la vidéo hero.</p>
+</video>
+
+<script>
+  /* Repli autoplay : certains navigateurs (et les navigateurs mobiles en
+     économie de données) refusent lecture() sans interaction. Sans ce
+     repli, la vidéo reste figée sur le poster et « il ne se passe rien ».
+     ⚠️ On ne relance JAMAIS si le panneau vidéo est masqué : c'est le
+     comportement normal quand l'utilisateur bascule sur la vue 3D. */
+  const vids = document.querySelectorAll<HTMLVideoElement>('video.hero-video');
+  vids.forEach((v) => {
+    const visible = () => {
+      const pane = v.closest<HTMLElement>('[data-pane]');
+      return !pane || !pane.classList.contains('hidden');
+    };
+    const demarrer = () => {
+      if (!visible()) return;
+      v.play().catch(() => undefined);
+    };
+    if (v.autoplay && v.paused) demarrer();
+    // Relance si la vidéo se met en pause (visibilité, reprise, etc.).
+    v.addEventListener('pause', demarrer);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) demarrer();
+    });
+    // Un seul tap sur la page suffit à débloquer l'audio (sans audio ici).
+    v.addEventListener('click', demarrer, { once: true });
+  });
+</script>

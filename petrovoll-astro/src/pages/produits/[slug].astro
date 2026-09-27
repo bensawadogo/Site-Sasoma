@@ -1,0 +1,69 @@
+---
+/**
+ * Fiche produit — routes PRERENDUES (getStaticPaths sur la collection).
+ * SEO : JSON-LD Product + Offer (prix volontairement absent : B2B sur devis).
+ * TODO [seo] : ajouter AggregateRating UNIQUEMENT avec de vrais avis.
+ */
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+
+import ProduitDetail from '@/components/produits/ProduitDetail.astro'
+import PageLayout from '@/layouts/PageLayout.astro'
+import { resolveImageSource, truncate } from '@/lib/utils'
+
+export const prerender = true
+
+export async function getStaticPaths() {
+  const produits = await getCollection('produits')
+  return produits.map((p) => ({ params: { slug: p.id }, props: { produit: p } }))
+}
+
+interface Props { produit: CollectionEntry<'produits'> }
+const { produit } = Astro.props
+// Astro 5 Content Layer : render() est une fonction libre, pas une methode
+// d'entree (entry.render() n'existe plus — echec de build Astro 4 style).
+const { Content } = await render(produit)
+
+const titre = `${produit.data.titre} — ${produit.data.marque ?? 'PETROVOLL'}`
+const description = truncate(produit.body ?? produit.data.titre, 150)
+const visuels = (produit.data.images ?? [])
+  .map((img) => ({ src: resolveImageSource(img) ?? '', alt: img.alt }))
+  .filter((v) => v.src !== '')
+
+const schema: Array<Record<string, unknown>> = [
+  {
+    '@type': 'Product',
+    name: produit.data.titre,
+    brand: { '@type': 'Brand', name: produit.data.marque ?? 'PETROVOLL' },
+    // TODO [seo] : `image` absolue + `sku` (= reference) + `offers` si prix public.
+    category: produit.data.secteur,
+    availability: produit.data.disponible
+      ? 'https://schema.org/InStock'
+      : 'https://schema.org/PreOrder',
+  },
+]
+---
+
+<PageLayout titre={titre} description={description} ogType="product" canonicalChemin={`/produits/${produit.id}`} schema={schema}>
+  <div class="container-page py-10 lg:py-14">
+    <nav aria-label="Fil d'Ariane" class="mb-8 text-sm text-muted">
+      <ol class="flex flex-wrap gap-2">
+        <li><a href="/" class="hover:text-gold">Accueil</a></li>
+        <li aria-hidden="true">/</li>
+        <li><a href="/produits" class="hover:text-gold">Produits</a></li>
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" class="text-text">{produit.data.titre}</li>
+      </ol>
+      {/* TODO [seo] : BreadcrumbList JSON-LD miroir de ce fil. */}
+    </nav>
+
+    <ProduitDetail
+      titre={produit.data.titre}
+      marque={produit.data.marque}
+      secteur={produit.data.secteur}
+      disponible={produit.data.disponible}
+      visuels={visuels}
+    >
+      <Content />
+    </ProduitDetail>
+  </div>
+</PageLayout>
