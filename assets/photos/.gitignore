@@ -1,0 +1,4 @@
+# Photos du bidon : copies locales, droits à confirmer. Seul le journal de sélection est versionné.
+*
+!.gitignore
+!SELECTION.md
