@@ -16,7 +16,7 @@ Produit qui verse : **STÄRK** (voiture). La fin présente STÄRK (voiture) et M
 | Huile | Or brillant, `#f0cc30` → `#cc9c0c` (or du logo Petrovöll), visqueuse, coule **vers le bas** |
 | Haut de l'image (0–12 %) | Vide : réservé à l'en-tête |
 | Bas de l'image (70–100 %) | Sombre : les textes s'y posent |
-| Mobile (9:16) | Filler entre x = 0,15 et 0,85 : sur un écran 360×800, on perd 12,5 % de chaque côté |
+| Mobile (9:16) | Filler entre x = 0,15 et 0,85 : sur un écran 360×800, on perd 10 % de chaque côté (marge de sécurité à 15 %) |
 
 ### Négatif image (commun)
 ```
