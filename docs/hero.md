@@ -47,6 +47,12 @@ Le hero pèse le même poids partout : quelques dizaines de Ko d'images du bidon
 - **Garde-fou** : si l'intervalle moyen entre deux images dépasse 24 ms pendant 2 s (moins de 42 images/s), le hero descend d'un palier. Un téléphone en économie d'énergie bridé à 30 Hz descend donc aussi, sans gravité.
 - **Forcer un palier** : `?tier=lite`, `?tier=standard` ou `?tier=full` dans l'adresse (le garde-fou est alors désactivé).
 
+## Aperçu du moteur en images IA (`?moteur=ia`)
+
+Ajoute `?moteur=ia` à l'adresse (par exemple `/?moteur=ia`) : le dessin SVG est remplacé par les images IA E1 → E3, dans le même carré. Le script fait un fondu vers E2 puis E3, avec une poussée de caméra vers l'orifice suivie d'un recul, et le filet d'huile vise l'orifice de E1. Réglages : `moteurIA` dans `hero.config.ts`. Sans ce paramètre, aucune image IA n'est téléchargée.
+
+Pour changer les images : remplace `assets/ai/E1.png`, `E2.png` et `E3.png` (720×1280, origine notée dans `ops/credits.md`), puis lance `npm run hero:moteur-ia`. Le script découpe un carré centré sur le moteur.
+
 ## Plus tard : une vraie vidéo du moteur
 
 Le scénario de génération par IA (images E1 à E3, vidéos V1 et V2) reste décrit dans [scenario/shots.md](../scenario/shots.md), et son budget dans `ops/credits.md`. Le chargeur de séquences d'images a été retiré avec la décision D3, mais on peut le retrouver dans l'historique Git (commit `22ed5d0`, `scripts/build-frames.mjs`) si l'on branche un jour les outils du brief.

@@ -131,6 +131,28 @@ export const HERO = {
     ] satisfies CleCadrage[],
   },
 
+  // ── Aperçu : moteur en images IA (?moteur=ia) ─────────────────────────────
+  // Images E1 → E3 (ops/credits.md, npm run hero:moteur-ia) à la place du SVG,
+  // seulement avec ce paramètre d'adresse : le site reste sur le SVG (D3) tant
+  // que Ben n'a pas validé la version IA. Même carré, mêmes zones à l'écran.
+  moteurIA: {
+    parametre: 'moteur',
+    valeur: 'ia',
+    /** Orifice visible sur E1, en fractions du carré (arrivée du filet). */
+    filler: { x: 0.75, y: 0.33 },
+    /** Fondus pendant t3 (fractions de t3) : cache ouvert huilé (E2), puis moteur huilé (E3). */
+    fondus: { e2: [0.2, 0.45], e3: [0.6, 0.85] },
+    /** Caméra : poussée vers l'orifice (V1), puis recul sur tout le moteur (V2). */
+    cadrages: [
+      { t: 0, x: 0.5, y: 0.5, zoom: 1 },
+      { t: 0.08, x: 0.5, y: 0.5, zoom: 1 },
+      { t: 0.4, x: 0.66, y: 0.36, zoom: 1.5 },
+      { t: 0.55, x: 0.66, y: 0.36, zoom: 1.5 },
+      { t: 0.9, x: 0.5, y: 0.52, zoom: 1.05 },
+      { t: 1, x: 0.5, y: 0.52, zoom: 1.05 },
+    ] satisfies CleCadrage[],
+  },
+
   // ── Couleurs (research/palette.json) ──────────────────────────────────────
   couleurs: {
     huile: ['#f0cc30', '#cc9c0c'], // or du logo Petrovöll : dégradé du filet

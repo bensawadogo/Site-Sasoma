@@ -6,6 +6,7 @@
  *    qu'au redimensionnement) ;
  *  - moteur vectoriel (MoteurSVG) : vilebrequin, pistons et cames tournent avec
  *    le scroll, la « caméra » zoome pièce par pièce (décision D3, TODO.md) ;
+ *    aperçu ?moteur=ia : images IA E1 → E3 en fondu, avec poussée puis recul ;
  *  - garde-fou : si le rendu tombe sous ~40 i/s (24 ms par image) pendant 2 s,
  *    on descend d'un palier (canvas du filet moins défini, reflet fixe).
  * Tous les calculs sont dans src/lib/hero-timeline.ts (testés).
@@ -37,6 +38,7 @@ const T2 = plage('t2')
 const T3 = plage('t3')
 const FIN = plage('fin')
 const M = HERO.moteur
+const IA = HERO.moteurIA
 
 export function lancerHero(racine: HTMLElement): void {
   const scene = racine.querySelector<HTMLElement>('.hero-scene')!
@@ -47,6 +49,16 @@ export function lancerHero(racine: HTMLElement): void {
   const aspectBidon = Number(bidon.dataset.aspect ?? 0.64)
   const moteur = racine.querySelector<HTMLElement>('[data-moteur-cadre]')!
   const svgMoteur = moteur.querySelector<SVGSVGElement>('svg')!
+  const racineIA = moteur.querySelector<HTMLElement>('[data-moteur-ia]')
+  const modeIA = !!racineIA && new URLSearchParams(location.search).get(IA.parametre) === IA.valeur
+  const imagesIA = modeIA ? [...racineIA.querySelectorAll<HTMLImageElement>('img')] : []
+  if (modeIA) {
+    for (const img of imagesIA) img.src = img.dataset.src ?? ''
+    racineIA.hidden = false
+    svgMoteur.style.display = 'none'
+    racine.dataset.moteur = 'ia'
+  }
+  const cadrages = modeIA ? IA.cadrages : M.cadrages
   const blocs = [...racine.querySelectorAll<HTMLElement>('.hero-bloc')].map((el) => ({
     el,
     debut: Number(el.dataset.debut),
@@ -110,7 +122,8 @@ export function lancerHero(racine: HTMLElement): void {
     carre = { x0: zm.x * ecran.l + (zm.l * ecran.l - cote) / 2, y0: zm.y * ecran.h + (zm.h * ecran.h - cote) / 2, cote }
     centreMoteur = { x: carre.x0 + cote / 2, y: carre.y0 + cote / 2 }
     Object.assign(moteur.style, { left: `${carre.x0}px`, top: `${carre.y0}px`, width: `${cote}px`, height: `${cote}px` })
-    filler = { x: carre.x0 + M.filler.x * cote, y: carre.y0 + M.filler.y * cote }
+    const orifice = modeIA ? IA.filler : M.filler
+    filler = { x: carre.x0 + orifice.x * cote, y: carre.y0 + orifice.y * cote }
 
     // Arrivée du goulot en fin de bascule.
     const cible = HERO.ancres.cibleGoulot
@@ -214,14 +227,19 @@ export function lancerHero(racine: HTMLElement): void {
     }
 
     // t3 : le moteur s'ouvre, tourne, et l'huile le lubrifie pièce par pièce.
-    animerMoteur(svgMoteur, {
-      angle: mouvementReduit ? 0 : t3 * M.tours * 360,
-      coupe: local(t3, M.coupe[0], M.coupe[1]),
-      huileCames: local(t3, M.huile.cames[0], M.huile.cames[1]),
-      huilePistons: local(t3, M.huile.pistons[0], M.huile.pistons[1]),
-      huileVilebrequin: local(t3, M.huile.vilebrequin[0], M.huile.vilebrequin[1]),
-    })
-    const c = mouvementReduit ? M.cadrages[0] : cadrageA(t3, M.cadrages)
+    if (modeIA) {
+      imagesIA[1].style.opacity = String(doux(local(t3, IA.fondus.e2[0], IA.fondus.e2[1])))
+      imagesIA[2].style.opacity = String(doux(local(t3, IA.fondus.e3[0], IA.fondus.e3[1])))
+    } else {
+      animerMoteur(svgMoteur, {
+        angle: mouvementReduit ? 0 : t3 * M.tours * 360,
+        coupe: local(t3, M.coupe[0], M.coupe[1]),
+        huileCames: local(t3, M.huile.cames[0], M.huile.cames[1]),
+        huilePistons: local(t3, M.huile.pistons[0], M.huile.pistons[1]),
+        huileVilebrequin: local(t3, M.huile.vilebrequin[0], M.huile.vilebrequin[1]),
+      })
+    }
+    const c = mouvementReduit ? cadrages[0] : cadrageA(t3, cadrages)
     const { tx, ty, s } = transformCadrage(c, carre, centreMoteur)
     moteur.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${s})`
     // Écran de fin : le moteur s'efface derrière les produits.

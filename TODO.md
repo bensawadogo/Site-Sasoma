@@ -29,6 +29,15 @@ Légende : `[x]` fait (avec preuve) · `[~]` en cours · `[ ]` à faire · 🧑 
 - [ ] Mesurer la fluidité sur un vrai Android d'entrée de gamme (Chrome headless rend en logiciel : ses fps ne sont pas représentatifs)
 - [x] Phase 9 : [docs/hero.md](docs/hero.md)
 
+### Version IA du moteur (guide de Ben, 2026-09-28)
+- [x] MCP branchés : playwright, chrome-devtools, hf-mcp-server (compte Hugging Face de Ben)
+- [x] Bloc 1 — E1 : Z-Image-Turbo (Apache-2.0), 3 graines ; **E1-z1 validée par Ben** → `assets/ai/E1.png`
+- [x] Bloc 2 — E2 et E3 : édition de E1 par FLUX.1 Kontext [dev] (sorties utilisables commercialement, §2(d) de la licence). E2 = E2-b (bon). E3 = E3-c, **provisoire** : pas une vraie coupe, et pas aligné sur E1
+- [ ] Bloc 3 — vidéos V1 (E1 → E2) et V2 (E2 → E3) avec Wan 2.2 (Space `mcp-tools/wan-2-2-first-last-frame`, Apache-2.0) : **BLOQUÉ, quota ZeroGPU du compte gratuit épuisé pour la journée**. En attendant : animatiques `assets/ai/V1-animatique.mp4` et `V2-animatique.mp4` (`ops/scripts/animatique.py`, poussée de caméra et fondu, pas de l'IA)
+- [x] Bloc 4 — aperçu dans le vrai hero : `/?moteur=ia` (E1 → E2 → E3 en fondu, poussée vers l'orifice puis recul, filet qui tombe dans l'orifice). Le site reste sur le SVG sans ce paramètre (aucune image IA chargée : vérifié). Captures `ops/captures/hero-*-moteur-ia.jpg` et via le navigateur MCP `ops/captures/mcp-navigateur/`
+- [ ] 🧑 Choisir : moteur SVG ou moteur IA (après les vraies vidéos)
+- [ ] Refaire E3 (vraie coupe alignée sur E1) et lancer V1/V2 quand le quota revient, puis séquences d'images (paliers 540 / 1080) à la place des fondus
+
 ## Site
 
 - [x] Polices auto-hébergées, zéro 404 (Bebas Neue 13 Ko + Inter Variable 47 Ko, OFL) *(sous-agent « polices »)*
@@ -47,3 +56,4 @@ Légende : `[x]` fait (avec preuve) · `[~]` en cours · `[ ]` à faire · 🧑 
 - 2026-09-27 — P1 intégrée (bouchon découpé, huile masquée), polices en place ; ajout de vitest.config.ts (alias `@/`).
 - 2026-09-27 — moteur SVG intégré (sous-agent), phase 9 écrite ; audit et relecture lancés en parallèle (sous-agents).
 - 2026-09-28 — rapports d'audit et de relecture traités ; build, 40 tests, `astro check` 0 erreur ; captures refaites en 3 formats.
+- 2026-09-28 — version IA du moteur : E1 validée, E2/E3 générées, vidéos bloquées par le quota HF ; aperçu `?moteur=ia` dans le hero.

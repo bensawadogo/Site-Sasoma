@@ -47,6 +47,16 @@ describe('hero.config', () => {
     expect(coupe[0]).toBeLessThan(coupe[1])
   })
 
+  it('aperçu moteur IA : orifice dans le carré, fondus et cadrages dans l’ordre', () => {
+    const { filler, fondus, cadrages } = HERO.moteurIA
+    expect(dansCadre(filler)).toBe(true)
+    expect(fondus.e2[0]).toBeLessThan(fondus.e2[1])
+    expect(fondus.e2[1]).toBeLessThanOrEqual(fondus.e3[0])
+    expect(fondus.e3[0]).toBeLessThan(fondus.e3[1])
+    cadrages.slice(1).forEach((c, i) => expect(c.t).toBeGreaterThanOrEqual(cadrages[i].t))
+    expect([cadrages[0].t, cadrages.at(-1)?.t]).toEqual([0, 1])
+  })
+
   it('produits présents dans le catalogue de recherche', () => {
     const ids = new Set(catalogue.categories.flatMap((c) => c.produits.map((p) => p.id)))
     expect(ids.has(HERO.produitVerse)).toBe(true)

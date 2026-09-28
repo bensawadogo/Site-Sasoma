@@ -23,7 +23,8 @@
     "bidon:mobile": "python scripts/mobile-check.py",
     "bidon:all": "npm run bidon:build && npm run bidon:decoders",
     "deploy": "wrangler pages deploy dist",
-    "hero:bidon": "node scripts/build-bidon-hero.mjs"
+    "hero:bidon": "node scripts/build-bidon-hero.mjs",
+    "hero:moteur-ia": "node scripts/build-moteur-ia.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.0.0",
