@@ -1,6 +1,6 @@
 # Plans du hero : prompts, négatifs, ratios, ancres
 
-> **En attente (décision D3, [TODO.md](../TODO.md))** : le moteur du hero est pour l'instant une illustration SVG animée. Ce scénario sert si l'on passe un jour à une vraie vidéo IA (outils du brief à brancher).
+> **Version 3 en place sur `/apercu-hero`** (voir la fin de ce fichier) : moteur en coupe, image fixe K1 + éditions K2 à K4 + plans caméra fixe C1 à C3. Les plans E1 à E3 / V1 et V2 ci-dessous sont l'ancienne approche (le moteur se déformait entre images différentes).
 
 Phase 2 du [brief](../BRIEF-MAITRE.md). **Rien n'a été généré.** Les valeurs techniques (temps, ancres, zones) viennent de [petrovoll-astro/src/hero.config.ts](../petrovoll-astro/src/hero.config.ts) : ce fichier fait foi en cas d'écart.
 
@@ -140,3 +140,19 @@ RÉGLAGES : durée 5 s, ratio 9:16, mouvement de caméra lent
 CE QUE JE DOIS REGARDER : le métal reste rigide ; l'huile coule vers le bas ; on entre bien par l'ouverture de remplissage ; pas de coupe
 RÉSULTAT : OK / pas OK + remarques
 ```
+
+---
+
+## Version 3 : moteur en coupe, caméra fixe (prompts utilisés)
+
+Principe : **une seule géométrie**. K1 est l'image fixe ; K2, K3, K4 en sont des éditions alignées (seule l'huile change) ; chaque plan vidéo va d'une image clé à la suivante, caméra fixe ; la composition recolle le métal de K1 et ne garde de la vidéo que l'huile. Fichiers : `assets/ai/v3/`.
+
+| Fichier | Contenu |
+|---|---|
+| `prompt-coupe-2.txt` | K1 : 4 cylindres vu de côté, paroi coupée sur la longueur (arbre à cames, 4 pistons et bielles, vilebrequin), goulot ouvert en haut à gauche, fond noir, lampe chaude à gauche |
+| `edit-K2b.txt` | K2 : film d'huile translucide sur l'arbre à cames seulement |
+| `edit-K3b.txt` | K3 : cames + parois des cylindres, pistons et bielles |
+| `edit-K4b.txt` | K4 : tout, jusqu'au vilebrequin et au carter |
+| `clip-C1.txt`, `clip-C2.txt`, `clip-C3.txt` | Plans : « Static locked-off tripod shot… Only the oil moves; every metal part stays rigid… » |
+
+Leçons : ne pas demander « display model » ni « diagram » (faux texte) ; Klein garde la géométrie, Qwen-Image-Edit (NF4) l'a perdue ; demander un film « thin, clear, translucent » sinon le métal devient doré.

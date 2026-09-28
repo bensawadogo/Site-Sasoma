@@ -1,12 +1,13 @@
 /**
  * build-hero-video.mjs — séquences d'images du hero vidéo (guide §9), une par format.
  *
- *   ../assets/ai/videos/V1-desktop.mp4, V2-desktop.mp4   (2688×1536, agrandies ×2)
- *     → public/hero-video/desktop/000.webp …   1920×1080, V1 puis V2
- *     → public/hero-video/mobile/000.webp …    720×720 : carré centré sur le moteur,
- *       découpé dans les MÊMES vidéos (générées en portrait, elles sortaient avec des
- *       bandes noires dures) : même plan, net, sur les deux formats
- *     → src/assets/hero/video/manifest.json    nombre d'images, tailles, version (cache)
+ *   ../assets/ai/videos/moteur-v3.mp4   (1344×768, 3 plans enchaînés de 121 images :
+ *     C1 l'huile nappe l'arbre à cames, C2 les pistons, C3 le vilebrequin ; moteur en
+ *     coupe rigide, caméra fixe ; composée par ops/scripts/composer_huile.py)
+ *     → public/hero-video/desktop/000.webp …   1920×1080 (agrandie : lanczos + netteté)
+ *     → public/hero-video/mobile/000.webp …    880×614 : moteur entier, découpé dans la
+ *       MÊME vidéo, décalé pour laisser l'orifice loin du bord gauche (place du bidon)
+ *     → src/assets/hero/video/manifest.json    nombre d'images, tailles, recadrage, version
  *
  * Les vidéos brutes ne sont pas commitées (journal : ops/credits.md) ; les images le sont.
  * Nombre d'images choisi pour la course de scroll de chaque format (docs/hero.md).
@@ -27,12 +28,17 @@ const VIDEOS = join(ICI, '..', '..', 'assets', 'ai', 'videos')
 const PUBLIC = join(ICI, '..', 'public', 'hero-video')
 const MANIFESTE = join(ICI, '..', 'src', 'assets', 'hero', 'video', 'manifest.json')
 
+const VIDEO = join(VIDEOS, 'moteur-v3.mp4')
+const SOURCE = { largeur: 1344, hauteur: 768 }
+/** Plans enchaînés dans la vidéo (images par plan ; 1re image des plans 2 et 3 déjà retirée). */
+const PLANS = [121, 120, 120]
+
 const FORMATS = {
-  // Ordinateur : grandes images (1080p), 48 images par vidéo.
-  desktop: { largeur: 1920, hauteur: 1080, parVideo: 48, qualite: 55 },
-  // Téléphone : carré 720 px (net en DPR 2 sur toute la largeur), 32 images par vidéo.
-  // Recadrage : carré 1536×1536 à x = 952 dans l'image 2688×1536 (moteur et orifice dedans).
-  mobile: { largeur: 720, hauteur: 720, parVideo: 32, qualite: 60, source: 'desktop', recadrage: '1536:1536:952:0' },
+  // Ordinateur : grandes images (1080p), 40 images par plan.
+  desktop: { largeur: 1920, hauteur: 1080, parPlan: 40, qualite: 55, recadrage: { x: 0, y: 0, l: 1344, h: 768 }, nettete: true },
+  // Téléphone : 24 images par plan (poids ≈ 2 Mo). Recadrage 1100×768 à x = 33 : moteur entier, orifice
+  // à 37 % de la largeur (le bidon basculé tient à sa gauche).
+  mobile: { largeur: 880, hauteur: 614, parPlan: 24, qualite: 58, recadrage: { x: 33, y: 0, l: 1100, h: 768 } },
 }
 
 function nbImages(video) {
@@ -41,42 +47,57 @@ function nbImages(video) {
   return Number(sortie)
 }
 
+const total = nbImages(VIDEO)
+if (total !== PLANS.reduce((a, b) => a + b)) throw new Error(`${VIDEO} : ${total} images, ${PLANS.join(' + ')} attendues`)
+
+// Toutes les images de la vidéo, une fois ; chaque format y pioche, recadre et redimensionne.
+const brut = mkdtempSync(join(tmpdir(), 'hero-video-'))
+execFileSync('ffmpeg', ['-v', 'error', '-i', VIDEO, join(brut, '%03d.png')])
+const pngs = readdirSync(brut).sort()
+
 const manifeste = {}
 for (const [nom, f] of Object.entries(FORMATS)) {
   const dossier = join(PUBLIC, nom)
   rmSync(dossier, { recursive: true, force: true })
   mkdirSync(dossier, { recursive: true })
   const hash = createHash('sha1')
-  let index = 0
-  for (const v of ['V1', 'V2']) {
-    const video = join(VIDEOS, `${v}-${f.source ?? nom}.mp4`)
-    const total = nbImages(video)
-    // Images réparties régulièrement, première et dernière comprises.
-    const choix = Array.from({ length: f.parVideo }, (_, i) => Math.round((i * (total - 1)) / (f.parVideo - 1)))
-    const tmp = mkdtempSync(join(tmpdir(), 'hero-video-'))
-    const recadre = f.recadrage ? `crop=${f.recadrage},` : ''
-    const filtre = `select='${choix.map((n) => `eq(n\\,${n})`).join('+')}',${recadre}scale=${f.largeur}:${f.hauteur}:flags=lanczos`
-    execFileSync('ffmpeg', ['-v', 'error', '-i', video, '-vf', filtre, '-fps_mode', 'passthrough', join(tmp, '%03d.png')])
-    for (const png of readdirSync(tmp).sort()) {
-      const sortie = join(dossier, `${String(index).padStart(3, '0')}.webp`)
-      await sharp(join(tmp, png)).webp({ quality: f.qualite, effort: 6 }).toFile(sortie)
-      hash.update(readFileSync(sortie))
-      index++
-    }
-    rmSync(tmp, { recursive: true, force: true })
-    console.log(`${nom} ${v} : ${f.parVideo} images sur ${total}`)
+  // Dans chaque plan, images réparties régulièrement, première et dernière comprises.
+  const choix = []
+  let decalage = 0
+  for (const n of PLANS) {
+    for (let i = 0; i < f.parPlan; i++) choix.push(decalage + Math.round((i * (n - 1)) / (f.parPlan - 1)))
+    decalage += n
   }
+  const r = f.recadrage
+  for (const [index, n] of choix.entries()) {
+    const sortie = join(dossier, `${String(index).padStart(3, '0')}.webp`)
+    let image = sharp(join(brut, pngs[n]))
+      .extract({ left: r.x, top: r.y, width: r.l, height: r.h })
+      .resize(f.largeur, f.hauteur, { kernel: 'lanczos3' })
+    if (f.nettete) image = image.sharpen({ sigma: 0.8 })
+    await image.webp({ quality: f.qualite, effort: 6 }).toFile(sortie)
+    hash.update(readFileSync(sortie))
+  }
+  const index = choix.length
   const octets = readdirSync(dossier).reduce((s, n) => s + statSync(join(dossier, n)).size, 0)
   manifeste[nom] = {
     images: index,
-    parVideo: f.parVideo,
+    parPlan: f.parPlan,
     largeur: f.largeur,
     hauteur: f.hauteur,
+    // Partie de la vidéo gardée, en fractions : les points du moteur (config) s'y ramènent.
+    recadrage: {
+      x: +(r.x / SOURCE.largeur).toFixed(4),
+      y: +(r.y / SOURCE.hauteur).toFixed(4),
+      l: +(r.l / SOURCE.largeur).toFixed(4),
+      h: +(r.h / SOURCE.hauteur).toFixed(4),
+    },
     version: hash.digest('hex').slice(0, 10),
     octets,
   }
   console.log(`${nom} : ${index} images, ${(octets / 1024 / 1024).toFixed(2)} Mo`)
 }
+rmSync(brut, { recursive: true, force: true })
 mkdirSync(dirname(MANIFESTE), { recursive: true })
 writeFileSync(MANIFESTE, `${JSON.stringify(manifeste, null, 2)}\n`)
 console.log('manifeste :', MANIFESTE)

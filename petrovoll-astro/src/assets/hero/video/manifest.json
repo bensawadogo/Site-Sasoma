@@ -1,18 +1,30 @@
 {
   "desktop": {
-    "images": 96,
-    "parVideo": 48,
+    "images": 120,
+    "parPlan": 40,
     "largeur": 1920,
     "hauteur": 1080,
-    "version": "87e45a5fd2",
-    "octets": 7658930
+    "recadrage": {
+      "x": 0,
+      "y": 0,
+      "l": 1,
+      "h": 1
+    },
+    "version": "923c95aca0",
+    "octets": 8821400
   },
   "mobile": {
-    "images": 64,
-    "parVideo": 32,
-    "largeur": 720,
-    "hauteur": 720,
-    "version": "61820451d0",
-    "octets": 2027686
+    "images": 72,
+    "parPlan": 24,
+    "largeur": 880,
+    "hauteur": 614,
+    "recadrage": {
+      "x": 0.0246,
+      "y": 0,
+      "l": 0.8185,
+      "h": 1
+    },
+    "version": "639347c2a3",
+    "octets": 2345632
   }
 }

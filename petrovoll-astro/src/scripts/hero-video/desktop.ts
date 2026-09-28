@@ -1,6 +1,6 @@
 /**
- * desktop.ts — hero vidéo pour ordinateur (≥ 900 px) : séquence 1920×1080 plein
- * écran, bidon à gauche, filet en arc vers l'orifice. Réglages : HERO_DESKTOP.
+ * desktop.ts — hero vidéo pour ordinateur (≥ 900 px) : séquence 1920×1080, moteur en
+ * coupe au centre, bidon à gauche qui verse, étiquettes à droite. Réglages : HERO_DESKTOP.
  */
 import { HERO_DESKTOP, RUPTURE_DESKTOP } from '@/hero-video.config'
 import { lancerHeroVideo } from '@/scripts/hero-video/noyau'

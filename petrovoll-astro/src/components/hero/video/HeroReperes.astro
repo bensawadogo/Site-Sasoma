@@ -1,0 +1,117 @@
+---
+/**
+ * HeroReperes.astro — étiquettes des pièces du moteur (arbre à cames, pistons,
+ * vilebrequin), une par texte de HERO.textes.t3. Un point doré sur la pièce, un trait,
+ * l'étiquette. Le script (hero-video/noyau.ts) les place sur l'image et les fait
+ * apparaître quand l'huile atteint la pièce. Mode 'colonne' (desktop) : titre et texte
+ * à droite du moteur ; 'pastille' (mobile) : titre seul, le texte reste en bas.
+ */
+import { HERO } from '@/hero.config'
+
+interface Props {
+  mode: 'colonne' | 'pastille'
+}
+const { mode } = Astro.props
+---
+
+<div class:list={['reperes', `reperes--${mode}`]} aria-hidden={mode === 'pastille' ? 'true' : undefined}>
+  {
+    HERO.textes.t3.map((t, i) => (
+      <div class="repere" data-repere>
+        <span class="point" data-point />
+        <span class="trait" data-trait />
+        <div class="etiquette" data-etiquette>
+          <span class="index">{String(i + 1).padStart(2, '0')}</span>
+          <h2 class="titre">{t.titre}</h2>
+          {mode === 'colonne' && <p class="texte">{t.texte}</p>}
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .reperes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .repere {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    will-change: opacity;
+  }
+  .point {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 50%;
+    background: #f0cc30;
+    box-shadow:
+      0 0 0 4px rgb(240 204 48 / 0.25),
+      0 0 14px 2px rgb(240 204 48 / 0.6);
+    will-change: transform;
+  }
+  .trait {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(to right, rgb(240 204 48 / 0.9), rgb(240 204 48 / 0.5));
+    transform-origin: 0 50%;
+    will-change: transform;
+  }
+  .etiquette {
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: transform, opacity;
+  }
+  .index {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    color: #f0cc30;
+  }
+  .titre {
+    font-size: clamp(1.25rem, 1.7vw, 1.75rem);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .texte {
+    margin-top: 0.35rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: var(--color-attenue);
+  }
+  /* Colonne (desktop) : l'étiquette est centrée verticalement sur le trait. */
+  .reperes--colonne .etiquette {
+    width: min(17rem, 22vw);
+    margin-top: -1.1rem;
+    padding-left: 0.75rem;
+    border-left: 1px solid rgb(240 204 48 / 0.6);
+  }
+  /* Pastille (mobile) : titre seul, sur fond sombre, à gauche du point. */
+  .reperes--pastille .etiquette {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    margin-top: -0.8rem;
+    padding: 0.3rem 0.55rem;
+    border: 1px solid rgb(240 204 48 / 0.7);
+    border-radius: 999px;
+    background: rgb(0 0 0 / 0.72);
+    white-space: nowrap;
+  }
+  .reperes--pastille .index {
+    font-size: 0.65rem;
+  }
+  .reperes--pastille .titre {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+</style>

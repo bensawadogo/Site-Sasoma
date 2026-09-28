@@ -9,6 +9,7 @@ import { Image } from 'astro:assets'
 import vignetteStark from '@/assets/hero/bidon/vignette.webp'
 import photoMotpro from '@/assets/hero/fin/motpro-4t.jpg'
 import { HERO } from '@/hero.config'
+import { PLANS_T3, RETARD_REPERE } from '@/hero-video.config'
 import { getParametres } from '@/lib/contenu'
 
 interface Props {
@@ -28,11 +29,19 @@ const VIGNETTES = [
 
 const plage = (id: string) => HERO.temps.find((t) => t.id === id)!
 const t3 = plage('t3')
-const tiers = (t3.fin - t3.debut) / 3
+const dansT3 = (f: number) => t3.debut + f * (t3.fin - t3.debut)
+// Étapes du moteur : chacune arrive avec l'étiquette de sa pièce, quand l'huile l'atteint
+// (la dernière jusqu'à la fin de t3). Sur desktop, les étiquettes (HeroReperes) les remplacent.
+const arrivee = (i: number) => dansT3(PLANS_T3[i][0] + RETARD_REPERE)
 const blocs = [
-  { ...plage('t1'), ...textes.t1 },
-  { ...plage('t2'), ...textes.t2 },
-  ...textes.t3.map((t, i) => ({ debut: t3.debut + i * tiers, fin: t3.debut + (i + 1) * tiers, ...t })),
+  { ...plage('t1'), ...textes.t1, etape: false },
+  { ...plage('t2'), ...textes.t2, etape: false },
+  ...textes.t3.map((t, i) => ({
+    debut: arrivee(i),
+    fin: i === textes.t3.length - 1 ? t3.fin : arrivee(i + 1),
+    ...t,
+    etape: true,
+  })),
 ]
 ---
 
@@ -44,7 +53,7 @@ const blocs = [
 
 {
   blocs.map((b) => (
-    <div class="bloc textes" data-bloc data-debut={b.debut} data-fin={b.fin} inert>
+    <div class="bloc textes" data-bloc data-etape={b.etape || undefined} data-debut={b.debut} data-fin={b.fin} inert>
       <h2 class="etape">{b.titre}</h2>
       <p class="texte">{b.texte}</p>
     </div>

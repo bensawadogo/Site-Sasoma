@@ -9,6 +9,7 @@ Chaque génération est à noter dans ops/credits.md (prix réel renvoyé par l'
   python ops/scripts/deapi.py video MODELE L H IMAGES FPS GRAINE DEBUT FIN PROMPT_FICHIER SORTIE [PAS]
   python ops/scripts/deapi.py agrandir MODELE ENTREE SORTIE [ECHELLE]
   python ops/scripts/deapi.py image MODELE L H GRAINE PROMPT_FICHIER SORTIE [PAS]
+  python ops/scripts/deapi.py editer MODELE ENTREE GRAINE PROMPT_FICHIER SORTIE [PAS [L H]]
 """
 import json
 import os
@@ -102,6 +103,23 @@ def main(a):
             corps['steps'] = int(a[7])
         for essai in range(6):
             r = CLIENT.post(f'{API}/images/generations', json=corps)
+            if r.status_code != 429:
+                break
+            print(f'  429, nouvel essai dans 65 s ({essai + 1}/6)', flush=True)
+            time.sleep(65)
+        d = verifier(r)
+        attendre(d['data']['request_id'], sortie)
+    elif a[0] == 'editer':
+        modele, entree, graine, fichier_prompt, sortie = a[1:6]
+        champs = {'model': modele, 'seed': graine, 'prompt': open(fichier_prompt, encoding='utf-8').read().strip()}
+        if len(a) > 6:
+            champs['steps'] = a[6]
+        if len(a) > 8:
+            champs['width'], champs['height'] = a[7], a[8]
+        if modele.startswith('Qwen'):
+            champs['negative_prompt'] = NEGATIF
+        for essai in range(6):
+            r = CLIENT.post(f'{API}/images/edits', data=champs, files={'image': open(entree, 'rb')})
             if r.status_code != 429:
                 break
             print(f'  429, nouvel essai dans 65 s ({essai + 1}/6)', flush=True)

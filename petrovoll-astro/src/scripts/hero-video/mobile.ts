@@ -1,6 +1,7 @@
 /**
- * mobile.ts — hero vidéo pour téléphone (< 900 px) : séquence 720×1260, bidon en
- * haut, filet vertical, textes en bas. Réglages : HERO_MOBILE (hero-video.config.ts).
+ * mobile.ts — hero vidéo pour téléphone (< 900 px) : séquence 880×614, bidon en haut
+ * à gauche qui verse, pastilles sur les pièces, textes en bas. Réglages : HERO_MOBILE
+ * (hero-video.config.ts).
  */
 import { HERO_MOBILE, RUPTURE_DESKTOP } from '@/hero-video.config'
 import { lancerHeroVideo } from '@/scripts/hero-video/noyau'

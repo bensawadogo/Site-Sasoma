@@ -49,6 +49,15 @@ Le hero pèse le même poids partout : quelques dizaines de Ko d'images du bidon
 
 ## Hero vidéo (aperçu `/apercu-hero`)
 
+Version 3 : bidon réel à gauche, moteur en coupe au centre (on voit l'arbre à cames, les pistons et bielles, le vilebrequin).
+
+| Scroll | À l'écran |
+|---|---|
+| t1 | Bidon debout, l'huile monte dedans |
+| t2 | Le bouchon saute ; le bidon se penche au-dessus du goulot du moteur, la surface de l'huile reste horizontale ; le filet tombe en chute libre dans le goulot (anneau et gouttelettes à l'arrivée) |
+| t3 | La séquence montre l'huile qui descend dans le moteur : cames (plan C1), pistons (C2), vilebrequin (C3). Le filet se tarit, le bidon se redresse. Chaque pièce reçoit son étiquette quand l'huile l'atteint (textes `HERO.textes.t3`) |
+| fin | Produits et bouton |
+
 Deux heros séparés, un par format ; un seul est affiché (media query à 900 px) et lui seul lance son script et charge ses images.
 
 | | Mobile (< 900 px) | Desktop (≥ 900 px) |
@@ -56,12 +65,17 @@ Deux heros séparés, un par format ; un seul est affiché (media query à 900 p
 | Composant | `components/hero/video/HeroMobile.astro` | `components/hero/video/HeroDesktop.astro` |
 | Script | `scripts/hero-video/mobile.ts` | `scripts/hero-video/desktop.ts` |
 | Réglages | `HERO_MOBILE` (`hero-video.config.ts`) | `HERO_DESKTOP` |
-| Séquence | 64 images 720×1260 (1,2 Mo) | 96 images 1920×1080 (4,7 Mo) |
-| Mise en page | bidon en haut, filet vertical, textes en bas | moteur à droite (zoom 0,8), bidon à gauche, filet en arc |
+| Séquence | 72 images 880×614 (2,2 Mo) | 120 images 1920×1080 (8,4 Mo) |
+| Étiquettes | pastilles sur les pièces, texte en bas | titre et texte à droite du moteur, reliés par un trait |
 
-Communs : `noyau.ts` (textes, bidon, filet, chargement de la séquence), `BidonHero.astro`, `HeroTextes.astro`, `lib/sequence-images.ts` (testé). Palier lite (économie de données, 2G/3G, mouvement réduit, ≤ 2 Go sur mobile) : deux images en fondu au lieu de la séquence.
+Communs : `noyau.ts` (textes, bidon, filet, étiquettes, séquence), `BidonHero.astro`, `HeroTextes.astro`, `HeroReperes.astro`, `lib/sequence-images.ts` et `lib/versement.ts` (testés). Points du moteur (goulot, pièces) et plans : `MOTEUR` et `PLANS_T3` dans `hero-video.config.ts`. Palier lite : deux images (moteur sec, moteur huilé) en fondu.
 
-**Refaire les vidéos** : images E1 à E3 dans `assets/ai/`, puis `python ops/scripts/images_cles.py` (images clés aux formats du hero), puis `python ops/scripts/deapi.py video …` (clé `DEAPI_API_KEY` dans `.env`, jamais commitée), agrandissement desktop avec `deapi.py agrandir FlashVSR_Tiny …`, copie des vidéos retenues en `assets/ai/videos/V1-desktop.mp4`, `V2-desktop.mp4`, `V1-mobile.mp4`, `V2-mobile.mp4`, puis `npm run hero:video`. Si l'orifice change de place, régler `sequence.orifice` dans `hero-video.config.ts`. Noter chaque génération dans `ops/credits.md`.
+**Refaire les vidéos** (journal : `ops/credits.md`, clé `DEAPI_API_KEY` dans `.env`, jamais commitée) :
+1. Image fixe du moteur en coupe : `python ops/scripts/deapi.py image ZImageTurbo_INT8 1344 768 GRAINE assets/ai/v3/prompt-coupe-2.txt K1.png 8`.
+2. Éditions alignées (même graine pour les trois) : `deapi.py editer Flux_2_Klein_4B_BF16 K1.png 3303 edit-K2b.txt K2.png 4 1344 768`, idem K3 et K4.
+3. Plans caméra fixe : `deapi.py video Ltx2_5_22B_Dist_INT8 1344 768 121 24 1101 K1.png K2.png clip-C1.txt C1.mp4`, puis K2 → K3 (C2) et K3 → K4 (C3).
+4. Composition (métal de K1, huile de la vidéo, fond noir) : `python ops/scripts/composer_huile.py K1.png 0.175 0.93 assets/ai/videos/moteur-v3.mp4 C1.mp4 C2.mp4 C3.mp4`. Sans vidéo pour un plan, `K3.png@0.27-0.66` fait couler l'huile de l'image clé.
+5. `npm run hero:video`. Si le moteur change, repérer à nouveau `MOTEUR` (goulot, pièces, bord droit).
 
 **Mettre en ligne** : dans `src/pages/index.astro`, remplacer `HeroScroll` par `HeroVideo`.
 

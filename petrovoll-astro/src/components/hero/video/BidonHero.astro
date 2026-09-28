@@ -2,7 +2,8 @@
 /**
  * BidonHero.astro — le bidon du hero vidéo (photo P1 découpée : corps + bouchon),
  * commun aux heros mobile et desktop. Le script (hero-video/noyau.ts) le place,
- * fait monter l'huile, sauter le bouchon et le fait basculer.
+ * fait monter l'huile, sauter le bouchon et le fait basculer. La surface de l'huile
+ * reste horizontale quand le bidon penche (contre-rotation autour du pivot).
  */
 import bouchon from '@/assets/hero/bidon/bouchon.webp'
 import corps from '@/assets/hero/bidon/corps.webp'
@@ -17,7 +18,7 @@ const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
   data-bidon-hero
   data-aspect={g.cadre.l / g.cadre.h}
   aria-hidden="true"
-  style={`--aspect:${g.cadre.l / g.cadre.h};--masque:url(${corps.src});--goulot-x:${pc(g.spout.x)};--goulot-y:${pc(g.spout.y)};--ouverture:${pc(g.ouverture.l)}`}
+  style={`--aspect:${g.cadre.l / g.cadre.h};--masque:url(${corps.src});--goulot-x:${pc(g.spout.x)};--goulot-y:${pc(g.spout.y)};--pivot-x:${pc(g.bottlePivot.x)};--pivot-y:${pc(g.bottlePivot.y)};--ouverture:${pc(g.ouverture.l)}`}
 >
   <img class="corps" src={corps.src} width={corps.width} height={corps.height} alt="" decoding="async" />
   <div class="huile"><div class="niveau" data-niveau></div></div>
@@ -60,11 +61,19 @@ const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
     mix-blend-mode: overlay;
     opacity: 0.65;
   }
+  /* Grand rectangle dont le bord haut est la surface de l'huile. Son origine est le
+     pivot du bidon : le script le contre-tourne (surface horizontale) et le descend
+     (niveau), en px, dans le repère de l'écran. Sans script : bidon vide. */
   .niveau {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, #fff4c2 0, #f0cc30 2%, #cc9c0c 100%);
-    transform: translate3d(0, 100%, 0);
+    left: var(--pivot-x);
+    top: var(--pivot-y);
+    width: 400%;
+    height: 400%;
+    margin-left: -200%;
+    background: linear-gradient(to bottom, #fff4c2 0, #f0cc30 4px, #cc9c0c 40%);
+    transform-origin: 50% 0;
+    transform: translate3d(0, 100vh, 0);
     will-change: transform;
   }
   .ouverture {

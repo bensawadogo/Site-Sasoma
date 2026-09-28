@@ -53,3 +53,21 @@ Une ligne par génération, remplie **avant** l'appel (coût estimé) et **aprè
 | 2026-09-28 | agrandissement ×2 | deAPI | FlashVSR Tiny | V1 et V2 desktop → 2688×1536 | 2 × 0,060 $ | 2 × 0,060 $ | FINAL | assets/ai/videos/V1-desktop.mp4, V2-desktop.mp4 (non commité) |
 
 **Version 2 (vrai moteur rigide) : environ 0,73 $. Solde deAPI : environ 3,4 $.** Higgsfield (10 crédits gratuits) non utilisé : voir TODO.
+
+## Version 3 : moteur en coupe au centre, bidon à gauche (2026-09-28)
+
+Demande de Ben : bidon à gauche qui se penche et verse sur le moteur au centre, voir l'intérieur du moteur, l'huile qui descend sur les pièces, étiquettes des pièces. Recherches (sous-agents) : pipeline retenu = image fixe + éditions alignées + plans caméra fixe + composition sur l'image fixe (métal rigide par construction).
+
+| date | élément | outil | modèle | paramètres | coût estimé | coût réel | statut | chemin |
+|---|---|---|---|---|---|---|---|---|
+| 2026-09-28 | moteur en coupe ×4 | deAPI | Z-Image-Turbo (Apache-2.0) | prompt-coupe.txt, 1344×768, 8 étapes, seeds 1101-4404 | 4 × 0,0095 $ | 4 × 0,0095 $ | REJET : lampes du studio visibles, goulot en entonnoir, cylindres vus de face | assets/ai/v3/coupe-*.png (non commité) |
+| 2026-09-28 | moteur en coupe ×6 | deAPI | Z-Image-Turbo | prompt-coupe-2.txt (coupe longitudinale, fond noir), seeds 1101-6606 | 6 × 0,0095 $ | 6 × 0,0095 $ | FINAL : seed 2202 → K1 (arbre à cames, 4 pistons et bielles, vilebrequin, goulot en haut à gauche, aucun texte) | assets/ai/v3/K1.png (non commité) |
+| 2026-09-28 | K4 huilé ×2 | deAPI | FLUX.2 Klein 4B / Qwen-Image-Edit Plus | edit-K4.txt, entrée K1 | 0,0066 $ + 0,0264 $ | idem | REJET : Klein = métal peint en or ; Qwen = moteur noyé, géométrie perdue | assets/ai/v3/K4-*.png (non commité) |
+| 2026-09-28 | K4 huilé ×3 | deAPI | FLUX.2 Klein 4B | edit-K4b.txt (film d'huile translucide), 1344×768, 4 étapes, seeds 1101/2202/3303 | 3 × 0,0066 $ | idem | FINAL : 3303 → K4 (géométrie alignée sur K1) | assets/ai/v3/K4.png (non commité) |
+| 2026-09-28 | K2, K3 ×4 | deAPI | FLUX.2 Klein 4B | edit-K2b.txt (cames seules), edit-K3b.txt (cames + pistons), seeds 3303/1101 | 4 × 0,0066 $ | idem | FINAL : seed 3303 → K2, K3 (même rendu d'huile que K4) | assets/ai/v3/K2.png, K3.png (non commité) |
+| 2026-09-28 | C1 | deAPI | LTX-2.5 22B | K1 → K2, caméra fixe (clip-C1.txt), 1344×768, 121 images, seed 1101 | 0,066 $ | 0,0655 $ | FINAL : l'huile entre par le goulot et nappe l'arbre à cames, moteur immobile ; le filet ajouté par l'IA au-dessus du moteur est retiré à la composition | assets/ai/v3/C1-1101.mp4 (non commité) |
+| 2026-09-28 | C2, C3 | deAPI | LTX-2.5 22B | K2 → K3, K3 → K4 | 2 × 0,066 $ | 0 $ | BLOQUÉ : limite du compte Basic, 15 requêtes par jour (retour 04:51 le 29/09) ; HF ZeroGPU anonyme aussi épuisé | — |
+| 2026-09-28 | C2, C3 (secours) | ops/scripts/composer_huile.py | — | l'huile de K3 puis de K4 descend en 120 images (front irrégulier, coulures) | 0 $ | 0 $ | PROVISOIRE : à remplacer par les vrais plans LTX-2.5 dès le retour du quota | assets/ai/videos/moteur-v3.mp4 (non commité) |
+| 2026-09-28 | composition | ops/scripts/composer_huile.py | — | K1 + huile de chaque image (pixels devenus dorés), fond ramené au noir pur | 0 $ | 0 $ | FINAL | assets/ai/videos/moteur-v3.mp4, moteur-v3-1080p.mp4 (non commité) |
+
+**Version 3 : 0,24 $ (solde deAPI 3,18 $).** Agrandissement FlashVSR non fait (même limite journalière) : le desktop est agrandi par lanczos + netteté (1344 → 1920). Higgsfield non utilisé : plan gratuit avec filigrane et sans usage commercial (règles 7 et 8 du brief).
