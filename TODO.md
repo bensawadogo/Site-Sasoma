@@ -33,9 +33,10 @@ Légende : `[x]` fait (avec preuve) · `[~]` en cours · `[ ]` à faire · 🧑 
 - [x] MCP branchés : playwright, chrome-devtools, hf-mcp-server (compte Hugging Face de Ben)
 - [x] Bloc 1 — E1 : Z-Image-Turbo (Apache-2.0), 3 graines ; **E1-z1 validée par Ben** → `assets/ai/E1.png`
 - [x] Bloc 2 — E2 et E3 : édition de E1 par FLUX.1 Kontext [dev] (sorties utilisables commercialement, §2(d) de la licence). E2 = E2-b (bon). E3 = E3-c, **provisoire** : pas une vraie coupe, et pas aligné sur E1
-- [ ] Bloc 3 — vidéos V1 (E1 → E2) et V2 (E2 → E3) avec Wan 2.2 (Space `mcp-tools/wan-2-2-first-last-frame`, Apache-2.0) : **BLOQUÉ, quota ZeroGPU du compte gratuit épuisé pour la journée**. En attendant : animatiques `assets/ai/V1-animatique.mp4` et `V2-animatique.mp4` (`ops/scripts/animatique.py`, poussée de caméra et fondu, pas de l'IA)
+- [x] Bloc 3 — vidéos V1 (E1 → E2) et V2 (E2 → E3) sur **deAPI** (clé de Ben dans `.env`, 5 $ offerts) avec **LTX-2.5** (licence LTX-2 : usage commercial gratuit sous 10 M$ de CA). Images clés aux formats du hero (`ops/scripts/images_cles.py`) : desktop 1344×768 agrandi ×2 (FlashVSR) → séquence **1920×1080**, mobile 768×1344 → séquence **720×1260**. MiniMax H3 essayé : plus spectaculaire mais faux texte gravé, rejeté. Coût total ≈ 0,86 $ (`ops/credits.md`). Hugging Face (quota) et Kaggle (connexion non aboutie) écartés ; notebook Kaggle prêt en secours (`ops/kaggle/`)
 - [x] Bloc 4 — aperçu dans le vrai hero : `/?moteur=ia` (E1 → E2 → E3 en fondu, poussée vers l'orifice puis recul, filet qui tombe dans l'orifice). Le site reste sur le SVG sans ce paramètre (aucune image IA chargée : vérifié). Captures `ops/captures/hero-*-moteur-ia.jpg` et via le navigateur MCP `ops/captures/mcp-navigateur/`
-- [ ] 🧑 Choisir : moteur SVG ou moteur IA (après les vraies vidéos)
+- [x] **Deux heros vidéo séparés** (demande de Ben) : `HeroMobile.astro` + `hero-video/mobile.ts` et `HeroDesktop.astro` + `hero-video/desktop.ts`, réglages séparés `HERO_MOBILE` / `HERO_DESKTOP` (`hero-video.config.ts`), noyau commun (`hero-video/noyau.ts`). Seul le hero visible se lance et charge sa séquence (vérifié : 0 image de l'autre format). Mobile : 64 images, 1,2 Mo ; palier lite = 2 images en fondu. Desktop : 96 images 1080p, 4,7 Mo. Aperçu : **`/apercu-hero`** (non indexé). Captures `ops/captures/hero-video-*.jpg`, navigateur MCP `ops/captures/mcp-navigateur/hero-video-*.png`
+- [ ] 🧑 Valider la version vidéo sur ton téléphone et ton ordinateur, puis je remplace `HeroScroll` par `HeroVideo` dans `index.astro`
 - [ ] Refaire E3 (vraie coupe alignée sur E1) et lancer V1/V2 quand le quota revient, puis séquences d'images (paliers 540 / 1080) à la place des fondus
 
 ## Site
@@ -57,3 +58,4 @@ Légende : `[x]` fait (avec preuve) · `[~]` en cours · `[ ]` à faire · 🧑 
 - 2026-09-27 — moteur SVG intégré (sous-agent), phase 9 écrite ; audit et relecture lancés en parallèle (sous-agents).
 - 2026-09-28 — rapports d'audit et de relecture traités ; build, 40 tests, `astro check` 0 erreur ; captures refaites en 3 formats.
 - 2026-09-28 — version IA du moteur : E1 validée, E2/E3 générées, vidéos bloquées par le quota HF ; aperçu `?moteur=ia` dans le hero.
+- 2026-09-28 — vidéos V1/V2 générées sur deAPI (LTX-2.5), séquences 1080p desktop et 720p mobile, deux heros séparés, aperçu `/apercu-hero`.

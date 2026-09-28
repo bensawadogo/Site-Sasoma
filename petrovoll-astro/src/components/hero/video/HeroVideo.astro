@@ -1,0 +1,12 @@
+---
+/**
+ * HeroVideo.astro — hero vidéo : deux heros séparés, un seul affiché selon la
+ * largeur (media query à 900 px). Seul celui qui est visible lance son script et
+ * charge sa séquence d'images.
+ */
+import HeroDesktop from '@/components/hero/video/HeroDesktop.astro'
+import HeroMobile from '@/components/hero/video/HeroMobile.astro'
+---
+
+<HeroMobile />
+<HeroDesktop />

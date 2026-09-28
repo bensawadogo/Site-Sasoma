@@ -1,0 +1,82 @@
+---
+/**
+ * HeroDesktop.astro — hero vidéo pour ordinateur (≥ 900 px).
+ * Séquence 1920×1080 plein écran (moteur à droite), bidon à gauche, filet en arc,
+ * textes en bas à gauche. Réglages : HERO_DESKTOP (src/hero-video.config.ts) ; animation :
+ * src/scripts/hero-video/desktop.ts.
+ */
+import BidonHero from '@/components/hero/video/BidonHero.astro'
+import HeroTextes from '@/components/hero/video/HeroTextes.astro'
+import { HERO_DESKTOP as R } from '@/hero-video.config'
+
+const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
+const affiche = `${R.sequence.dossier}/000.webp?v=${R.sequence.version}`
+const variables = [
+  `--hauteur:${R.hauteur}`,
+  `--affiche:url(${affiche})`,
+  ...Object.entries(R.zones).flatMap(([nom, z]) => [
+    `--${nom}-x:${pc(z.x)}`,
+    `--${nom}-y:${pc(z.y)}`,
+    `--${nom}-l:${pc(z.l)}`,
+    `--${nom}-h:${pc(z.h)}`,
+  ]),
+].join(';')
+---
+
+<section class="hero-desktop zone-sombre relative -mt-16 lg:-mt-20" style={variables} data-hero-desktop aria-labelledby="hero-titre-desktop">
+  <div class="scene" data-scene>
+    <canvas class="couche" data-sequence aria-hidden="true"></canvas>
+    <div class="couche voile" aria-hidden="true"></div>
+    <canvas class="couche" data-filet aria-hidden="true"></canvas>
+    <BidonHero />
+    <HeroTextes idTitre="hero-titre-desktop" />
+  </div>
+</section>
+
+<style>
+  .hero-desktop {
+    height: 100svh; /* sans JS : un seul écran, l'affiche du moteur */
+    background: #000;
+    --taille-titre: clamp(3rem, 5.2vw, 5.5rem);
+    --taille-etape: clamp(2.25rem, 3.6vw, 3.75rem);
+    --actions-direction: row;
+  }
+  .hero-desktop[data-pret] {
+    height: var(--hauteur);
+  }
+  /* En dessous de 900 px (RUPTURE_DESKTOP), c'est le hero mobile. */
+  @media (max-width: 899px) {
+    .hero-desktop {
+      display: none;
+    }
+  }
+  .scene {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    contain: layout paint;
+    /* Affiche (1re image de la séquence) : visible avant le script et sans JS. Une
+       image de fond d'un élément masqué n'est pas téléchargée. */
+    background: #000 var(--affiche) 70% 55% / auto 80% no-repeat; /* ≈ focale et zoom de HERO_DESKTOP */
+  }
+  .couche {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .voile {
+    /* Gauche et bas assombris : lisibilité des textes, le moteur reste net à droite. */
+    background:
+      linear-gradient(to right, rgb(0 0 0 / 0.7) 0, rgb(0 0 0 / 0.25) 38%, transparent 55%),
+      linear-gradient(to bottom, rgb(0 0 0 / 0.35) 0, transparent 20%, transparent 70%, rgb(0 0 0 / 0.8) 100%);
+  }
+</style>
+
+<script>
+  import { demarrerHeroDesktop } from '@/scripts/hero-video/desktop'
+
+  document.querySelectorAll<HTMLElement>('[data-hero-desktop]').forEach(demarrerHeroDesktop)
+</script>

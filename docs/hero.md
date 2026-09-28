@@ -47,6 +47,24 @@ Le hero pèse le même poids partout : quelques dizaines de Ko d'images du bidon
 - **Garde-fou** : si l'intervalle moyen entre deux images dépasse 24 ms pendant 2 s (moins de 42 images/s), le hero descend d'un palier. Un téléphone en économie d'énergie bridé à 30 Hz descend donc aussi, sans gravité.
 - **Forcer un palier** : `?tier=lite`, `?tier=standard` ou `?tier=full` dans l'adresse (le garde-fou est alors désactivé).
 
+## Hero vidéo (aperçu `/apercu-hero`)
+
+Deux heros séparés, un par format ; un seul est affiché (media query à 900 px) et lui seul lance son script et charge ses images.
+
+| | Mobile (< 900 px) | Desktop (≥ 900 px) |
+|---|---|---|
+| Composant | `components/hero/video/HeroMobile.astro` | `components/hero/video/HeroDesktop.astro` |
+| Script | `scripts/hero-video/mobile.ts` | `scripts/hero-video/desktop.ts` |
+| Réglages | `HERO_MOBILE` (`hero-video.config.ts`) | `HERO_DESKTOP` |
+| Séquence | 64 images 720×1260 (1,2 Mo) | 96 images 1920×1080 (4,7 Mo) |
+| Mise en page | bidon en haut, filet vertical, textes en bas | moteur à droite (zoom 0,8), bidon à gauche, filet en arc |
+
+Communs : `noyau.ts` (textes, bidon, filet, chargement de la séquence), `BidonHero.astro`, `HeroTextes.astro`, `lib/sequence-images.ts` (testé). Palier lite (économie de données, 2G/3G, mouvement réduit, ≤ 2 Go sur mobile) : deux images en fondu au lieu de la séquence.
+
+**Refaire les vidéos** : images E1 à E3 dans `assets/ai/`, puis `python ops/scripts/images_cles.py` (images clés aux formats du hero), puis `python ops/scripts/deapi.py video …` (clé `DEAPI_API_KEY` dans `.env`, jamais commitée), agrandissement desktop avec `deapi.py agrandir FlashVSR_Tiny …`, copie des vidéos retenues en `assets/ai/videos/V1-desktop.mp4`, `V2-desktop.mp4`, `V1-mobile.mp4`, `V2-mobile.mp4`, puis `npm run hero:video`. Si l'orifice change de place, régler `sequence.orifice` dans `hero-video.config.ts`. Noter chaque génération dans `ops/credits.md`.
+
+**Mettre en ligne** : dans `src/pages/index.astro`, remplacer `HeroScroll` par `HeroVideo`.
+
 ## Aperçu du moteur en images IA (`?moteur=ia`)
 
 Ajoute `?moteur=ia` à l'adresse (par exemple `/?moteur=ia`) : le dessin SVG est remplacé par les images IA E1 → E3, dans le même carré. Le script fait un fondu vers E2 puis E3, avec une poussée de caméra vers l'orifice suivie d'un recul, et le filet d'huile vise l'orifice de E1. Réglages : `moteurIA` dans `hero.config.ts`. Sans ce paramètre, aucune image IA n'est téléchargée.

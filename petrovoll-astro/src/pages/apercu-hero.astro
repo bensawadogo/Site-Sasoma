@@ -1,0 +1,33 @@
+---
+/**
+ * Aperçu du hero VIDÉO (séquences IA, un hero mobile et un hero desktop séparés).
+ * Même page que l'accueil, avec HeroVideo à la place de HeroScroll (moteur SVG).
+ * Non indexée et absente du sitemap tant que Ben n'a pas validé la version vidéo ;
+ * pour la mettre en ligne, remplacer HeroScroll par HeroVideo dans index.astro.
+ */
+import ContactCTA from '@/components/home/ContactCTA.astro'
+import ProduitPhare from '@/components/home/ProduitPhare.astro'
+import SecteursGrid from '@/components/home/SecteursGrid.astro'
+import StatsSection from '@/components/home/StatsSection.astro'
+import HeroVideo from '@/components/hero/video/HeroVideo.astro'
+import PageLayout from '@/layouts/PageLayout.astro'
+import { getParametres, getProduitVedette } from '@/lib/contenu'
+
+export const prerender = true
+
+const [parametres, produitVedette] = await Promise.all([getParametres(), getProduitVedette()])
+---
+
+<PageLayout
+  titre={`${parametres.nomSociete} — aperçu du hero vidéo`}
+  titreComplet
+  description="Aperçu interne du hero vidéo."
+  canonicalChemin="/"
+  noindex
+>
+  <HeroVideo />
+  {produitVedette && <ProduitPhare produit={produitVedette} />}
+  <SecteursGrid />
+  <StatsSection />
+  <ContactCTA />
+</PageLayout>

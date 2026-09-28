@@ -24,7 +24,8 @@
     "bidon:all": "npm run bidon:build && npm run bidon:decoders",
     "deploy": "wrangler pages deploy dist",
     "hero:bidon": "node scripts/build-bidon-hero.mjs",
-    "hero:moteur-ia": "node scripts/build-moteur-ia.mjs"
+    "hero:moteur-ia": "node scripts/build-moteur-ia.mjs",
+    "hero:video": "node scripts/build-hero-video.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.0.0",

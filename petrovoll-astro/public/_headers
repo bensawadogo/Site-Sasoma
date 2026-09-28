@@ -26,3 +26,7 @@
 
 /images/*
   Cache-Control: public, max-age=2592000
+
+# Séquences du hero vidéo : noms fixes, version dans l'adresse (?v=), cache 30 jours.
+/hero-video/*
+  Cache-Control: public, max-age=2592000

@@ -10,3 +10,4 @@ Thumbs.db
 
 # Journaux du navigateur MCP (Playwright)
 .playwright-mcp/
+__pycache__/

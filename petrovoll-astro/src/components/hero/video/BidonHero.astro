@@ -1,0 +1,85 @@
+---
+/**
+ * BidonHero.astro — le bidon du hero vidéo (photo P1 découpée : corps + bouchon),
+ * commun aux heros mobile et desktop. Le script (hero-video/noyau.ts) le place,
+ * fait monter l'huile, sauter le bouchon et le fait basculer.
+ */
+import bouchon from '@/assets/hero/bidon/bouchon.webp'
+import corps from '@/assets/hero/bidon/corps.webp'
+import geometrie from '@/assets/hero/bidon/geometrie.json'
+
+const g = geometrie
+const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
+---
+
+<div
+  class="bidon"
+  data-bidon-hero
+  data-aspect={g.cadre.l / g.cadre.h}
+  aria-hidden="true"
+  style={`--aspect:${g.cadre.l / g.cadre.h};--masque:url(${corps.src});--goulot-x:${pc(g.spout.x)};--goulot-y:${pc(g.spout.y)};--ouverture:${pc(g.ouverture.l)}`}
+>
+  <img class="corps" src={corps.src} width={corps.width} height={corps.height} alt="" decoding="async" />
+  <div class="huile"><div class="niveau" data-niveau></div></div>
+  <span class="ouverture"></span>
+  <img
+    class="bouchon"
+    data-bouchon
+    src={bouchon.src}
+    width={bouchon.width}
+    height={bouchon.height}
+    alt=""
+    decoding="async"
+    style={`left:${pc(g.bouchon.x)};top:${pc(g.bouchon.y)};width:${pc(g.bouchon.l)}`}
+  />
+</div>
+
+<style>
+  /* Position sans JS : variables --bidon-* du hero parent ; le script la remplace. */
+  .bidon {
+    position: absolute;
+    left: var(--bidon-x);
+    top: var(--bidon-y);
+    height: var(--bidon-h);
+    aspect-ratio: var(--aspect);
+    will-change: transform, opacity;
+  }
+  .corps {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  /* L'huile monte dans la silhouette exacte du bidon (effet rayons X), en overlay
+     pour garder l'étiquette lisible. */
+  .huile {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    -webkit-mask: var(--masque) center / 100% 100% no-repeat;
+    mask: var(--masque) center / 100% 100% no-repeat;
+    mix-blend-mode: overlay;
+    opacity: 0.65;
+  }
+  .niveau {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, #fff4c2 0, #f0cc30 2%, #cc9c0c 100%);
+    transform: translate3d(0, 100%, 0);
+    will-change: transform;
+  }
+  .ouverture {
+    position: absolute;
+    left: var(--goulot-x);
+    top: var(--goulot-y);
+    width: var(--ouverture);
+    aspect-ratio: 3;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(closest-side, #000 55%, #3a3a3a 85%, #8a8a8a);
+  }
+  .bouchon {
+    position: absolute;
+    height: auto;
+    will-change: transform, opacity;
+  }
+</style>
