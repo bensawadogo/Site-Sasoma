@@ -118,7 +118,7 @@ ${adresse ? `- Adresse : ${adresse.replace(/\n/g, ', ')}` : '- Adresse : à comp
 
 ## Politique d’usage par les modèles de langage
 - Les bots de RECHERCHE IA (OAI-SearchBot, ChatGPT-User, Claude-SearchBot,
-  Claude-User, PerplexityBot, YouBot, Applebot-Extended) sont autorisés à
+  Claude-User, PerplexityBot, YouBot, Applebot) sont autorisés à
   indexer ce site et à CITER cette page comme source.
 - Les crawlers d’ENTRAÎNEMENT (GPTBot, ClaudeBot, anthropic-ai,
   Google-Extended, CCBot, Meta-ExternalAgent, Bytespider, Amazonbot,
@@ -130,7 +130,6 @@ ${adresse ? `- Adresse : ${adresse.replace(/\n/g, ', ')}` : '- Adresse : à comp
   return new Response(contenu, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600, s-maxage=86400',
     },
   })
 }

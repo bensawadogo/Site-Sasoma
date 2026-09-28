@@ -24,7 +24,9 @@ const texteRecherche = [nom, conditionnement, marque].filter(Boolean).join(' ').
     <div class="relative aspect-[4/3] overflow-hidden bg-fond">
       <PhotoProduit
         photo={photos[0]}
-        alt={nom}
+        alt=""
+        {secteur}
+        {marque}
         largeurs={[320, 480, 640]}
         sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
         class="h-full w-full transition-transform duration-300 group-hover:scale-105"

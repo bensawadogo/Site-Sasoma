@@ -20,6 +20,8 @@ interface Props {
   description: string
   /** URL absolue de l'image (1200×630). Fallback sur /images/og-default.png */
   image?: string
+  /** Dimensions réelles de l'image (px). Défaut : celles de og-default.png. */
+  imageTaille?: { l: number; h: number }
   /** URL canonique absolue de la page */
   url: string
   siteName: string
@@ -31,6 +33,7 @@ const {
   title,
   description,
   image = '/images/og-default.png',
+  imageTaille = { l: 1200, h: 630 },
   url,
   siteName,
   locale = 'fr_FR',
@@ -53,8 +56,8 @@ const imageAbsolue = image.startsWith('http')
 <meta property="og:url" content={url} />
 <meta property="og:image" content={imageAbsolue} />
 <meta property="og:image:secure_url" content={imageAbsolue} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
+<meta property="og:image:width" content={String(imageTaille.l)} />
+<meta property="og:image:height" content={String(imageTaille.h)} />
 <meta property="og:image:alt" content={title} />
 
 <!-- Twitter / X -->

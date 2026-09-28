@@ -31,6 +31,8 @@ interface Props {
   description: string
   /** Visuel de partage (1200×630). Défaut : /images/og-default.png */
   ogImage?: string
+  /** Dimensions réelles de `ogImage` (px), si ce n'est pas 1200×630. */
+  ogImageTaille?: { l: number; h: number }
   ogType?: 'website' | 'article' | 'product'
   /** Chemin canonique (par défaut : l'URL courante) */
   canonicalChemin?: string
@@ -47,6 +49,7 @@ const {
   titreComplet = false,
   description,
   ogImage = '/images/og-default.png',
+  ogImageTaille,
   ogType = 'website',
   canonicalChemin,
   noindex = false,
@@ -160,6 +163,7 @@ const descriptionFinale =
       title={titre}
       description={descriptionFinale}
       image={ogImage}
+      imageTaille={ogImageTaille}
       url={urlCanonical}
       siteName={nomSociete}
       type={ogType}

@@ -55,23 +55,12 @@
   --text-base: 1rem;
   --text-base--line-height: 1.6;
 
-  /* ── Animations (micro-interactions sobres) ───────────────────────────── */
-  --animate-marquee: marquee 32s linear infinite;
-
   /* NOTE BREAKPOINTS : ceux de Tailwind v4 sont déjà mobile-first
      (sm 40rem, md 48rem, lg 64rem, xl 80rem, 2xl 96rem).
      Règle projet : TOUJOURS écrire la version mobile sans préfixe, puis
      surcharger avec sm: / md: / lg: — jamais l'inverse. */
 }
 
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
 
 /* ─────────────────────────────────────────────────────────────────────────────
    2. POLICES AUTO-HÉBERGÉES (public/fonts)
@@ -137,7 +126,7 @@
     /* PAS de scroll-behavior: smooth par défaut : cela dégrade l'INP sur
        mobile. TODO [ux] : ne l'activer que si le client l'exige. */
     -webkit-tap-highlight-color: transparent;
-    overflow-x: hidden; /* évite le débordement causé par la scène 3D */
+    overflow-x: hidden; /* filet de sécurité contre tout débordement horizontal */
   }
 
   body {
@@ -298,6 +287,7 @@
   html.js-reveal-ready .reveal.is-visible {
     opacity: 1;
     transform: none;
+    will-change: auto; /* plus de calque permanent une fois apparu */
     transition:
       opacity 500ms ease-out,
       transform 500ms ease-out;

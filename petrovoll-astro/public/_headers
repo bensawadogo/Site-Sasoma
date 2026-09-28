@@ -18,3 +18,11 @@
 # ci-dessus. Décodeurs Draco : nom fixe, cache 30 jours.
 /draco/*
   Cache-Control: public, max-age=2592000
+
+# Polices et logo : noms fixes, rarement modifiés. Cache 30 jours (sans
+# revalidation à chaque page, un aller-retour de moins en 3G).
+/fonts/*
+  Cache-Control: public, max-age=2592000
+
+/images/*
+  Cache-Control: public, max-age=2592000

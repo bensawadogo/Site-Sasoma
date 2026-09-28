@@ -30,8 +30,11 @@ const urlPage = new URL(`/produits/${produit.id}`, urlSite(Astro.site)).toString
 const description = extraitTexte(produit.body) || `${nom} — prix et disponibilité.`
 // Aperçu de partage (WhatsApp, Facebook) : JPEG 1200 px, format lu partout,
 // plutôt que la photo d'origine du téléphone (plusieurs Mo).
-const imagePartage = photos[0]
-  ? new URL((await getImage({ src: photos[0], width: 1200, format: 'jpeg', quality: 80 })).src, urlSite(Astro.site)).toString()
+const partage = photos[0] ? await getImage({ src: photos[0], width: 1200, format: 'jpeg', quality: 80 }) : undefined
+const imagePartage = partage ? new URL(partage.src, urlSite(Astro.site)).toString() : undefined
+// Dimensions réelles (1200 px de large, hauteur selon la photo) pour og:image.
+const taillePartage = partage
+  ? { l: Number(partage.attributes.width), h: Number(partage.attributes.height) }
   : undefined
 
 const schema: Array<Record<string, unknown>> = [
@@ -49,7 +52,7 @@ const schema: Array<Record<string, unknown>> = [
             '@type': 'Offer',
             price: prix,
             priceCurrency: 'XOF',
-            availability: disponible ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+            availability: disponible ? 'https://schema.org/InStock' : 'https://schema.org/BackOrder',
             url: urlPage,
           },
         }
@@ -63,6 +66,7 @@ const schema: Array<Record<string, unknown>> = [
   description={description}
   ogType="product"
   ogImage={imagePartage}
+  ogImageTaille={taillePartage}
   canonicalChemin={`/produits/${produit.id}`}
   schema={schema}
 >

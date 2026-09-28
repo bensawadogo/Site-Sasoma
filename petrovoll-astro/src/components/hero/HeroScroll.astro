@@ -16,7 +16,6 @@
 import { Image } from 'astro:assets'
 
 import bouchon from '@/assets/hero/bidon/bouchon.webp'
-import corpsAvif from '@/assets/hero/bidon/corps.avif'
 import corps from '@/assets/hero/bidon/corps.webp'
 import geometrie from '@/assets/hero/bidon/geometrie.json'
 import vignetteStark from '@/assets/hero/bidon/vignette.webp'
@@ -81,10 +80,8 @@ const variables = [
       aria-hidden="true"
       style={`--aspect:${g.cadre.l / g.cadre.h};--masque:url(${corps.src});--goulot-x:${pc(g.spout.x)};--goulot-y:${pc(g.spout.y)};--ouverture:${pc(g.ouverture.l)}`}
     >
-      <picture>
-        <source type="image/avif" srcset={corpsAvif.src} />
-        <img class="hero-bidon-corps" src={corps.src} width={corps.width} height={corps.height} alt="" decoding="async" />
-      </picture>
+      {/* WebP seul : le masque de l'huile utilise le même fichier, déjà en cache. */}
+      <img class="hero-bidon-corps" src={corps.src} width={corps.width} height={corps.height} alt="" decoding="async" />
       <div class="hero-bidon-huile"><div class="hero-bidon-niveau" data-niveau></div></div>
       <span class="hero-bidon-ouverture"></span>
       <img
@@ -114,7 +111,7 @@ const variables = [
       ))
     }
 
-    <div class="hero-bloc hero-fin" data-debut={plage('fin').debut} data-fin="1" data-fin-bloc>
+    <div class="hero-bloc hero-fin" data-debut={plage('fin').debut} data-fin="1" data-fin-bloc inert>
       <h2 class="hero-titre-etape">{textes.fin.titre}</h2>
       <p class="hero-texte">{avecSociete(textes.fin.texte)}</p>
       <ul class="hero-produits">
@@ -122,7 +119,7 @@ const variables = [
           HERO.produitsFin.map((p, i) => (
             <li class="hero-produit">
               <span class:list={['hero-produit-visuel', `hero-produit-visuel--${VIGNETTES[i].fond}`]}>
-                <Image src={VIGNETTES[i].src} alt={p.nom} height={176} format="webp" quality={80} loading="lazy" />
+                <Image src={VIGNETTES[i].src} alt="" height={176} format="webp" quality={80} loading="lazy" />
               </span>
               <span class="hero-produit-libelle">{p.libelle}</span>
               <span class="hero-produit-nom">{p.nom}</span>
@@ -135,6 +132,10 @@ const variables = [
           lienWhatsApp ? (
             <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="btn-primary hero-cta">
               {textes.fin.cta}
+            </a>
+          ) : parametres.lienTelephone ? (
+            <a href={parametres.lienTelephone} class="btn-primary hero-cta">
+              Appeler {parametres.telephone}
             </a>
           ) : (
             <a href="/contact" class="btn-primary hero-cta">

@@ -109,7 +109,7 @@ export async function monterBidon(
   const cle = new DirectionalLight(0xffffff, 1.6)
   cle.position.set(2.5, 4, 4)
   scene.add(cle)
-  // Contre-jour chaud : détache le bidon du fond sombre du hero.
+  // Contre-jour chaud : détache le bidon du fond de la section.
   const contour = new DirectionalLight(0xffb060, 1.6)
   contour.position.set(-3, 2.5, -3.5)
   scene.add(contour)
@@ -127,6 +127,13 @@ export async function monterBidon(
     gltf = await loader.loadAsync(MODELES[qualite], (e) => {
       if (e.total) surProgression?.(e.loaded / e.total)
     })
+  } catch (erreur) {
+    // Réseau coupé (3G instable) : rendre le contexte GPU, sinon il fuit sur
+    // les téléphones de 1 à 2 Go. L'appelant garde l'image.
+    scene.environment?.dispose()
+    renderer.dispose()
+    renderer.forceContextLoss()
+    throw erreur
   } finally {
     draco.dispose() // libère le worker de décodage dès que le modèle est prêt
   }
@@ -150,7 +157,7 @@ export async function monterBidon(
     neutraliserDosEtiquette(objet.material)
   })
 
-  /* ── Taille : suit la boîte du hero ─────────────────────────────────── */
+  /* ── Taille : suit la boîte du visuel ─────────────────────────────────── */
   const redimensionner = () => {
     const l = hote.clientWidth
     const h = hote.clientHeight

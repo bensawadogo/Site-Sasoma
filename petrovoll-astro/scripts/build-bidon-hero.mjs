@@ -2,7 +2,7 @@
  * build-bidon-hero.mjs — prépare la photo du bidon pour le hero (phase 4 du brief).
  *
  *   ../assets/photos/stark/P1.png (photo détourée, fond transparent)
- *     → src/assets/hero/bidon/corps.webp|avif   le bidon SANS bouchon (sert aussi de
+ *     → src/assets/hero/bidon/corps.webp        le bidon SANS bouchon (sert aussi de
  *                                              masque pour l'huile qui monte, en t1)
  *     → src/assets/hero/bidon/bouchon.webp      le bouchon seul (il saute en t2)
  *     → src/assets/hero/bidon/vignette.webp     le bidon entier, pour l'écran de fin
@@ -56,7 +56,13 @@ for (let y = cadre.y0; y < cadre.y0 + (cadre.y1 - cadre.y0) / 4; y++) {
 if (rouge.x1 === 0) throw new Error('Bouchon rouge introuvable dans P1.png')
 
 // 2. Bouchon = pixels opaques dans la boîte rouge (élargie de 3 px, jusqu'au bas du rouge).
-const b = { x0: rouge.x0 - 3, y0: rouge.y0 - 3, x1: rouge.x1 + 3, y1: rouge.y1 + 1 }
+// Bornée à l'image : une photo détourée au ras du bouchon ne doit pas déborder.
+const b = {
+  x0: Math.max(0, rouge.x0 - 3),
+  y0: Math.max(0, rouge.y0 - 3),
+  x1: Math.min(L - 1, rouge.x1 + 3),
+  y1: Math.min(H - 2, rouge.y1 + 1),
+}
 const corps = Buffer.from(data)
 const bouchon = Buffer.alloc(data.length) // transparent
 for (let y = b.y0; y <= b.y1; y++) {
@@ -78,6 +84,8 @@ for (let x = b.x0; x <= b.x1; x++) {
   }
 }
 
+if (gx1 < gx0) throw new Error(`Goulot introuvable sous le bouchon (ligne y = ${yGoulot}) : vérifier P1.png`)
+
 // 4. Export dans un cadre commun (bidon + marge) : corps et bouchon se superposent au pixel.
 const c = { left: Math.max(0, cadre.x0 - MARGE), top: Math.max(0, cadre.y0 - MARGE) }
 c.width = Math.min(L, cadre.x1 + MARGE + 1) - c.left
@@ -85,7 +93,6 @@ c.height = Math.min(H, cadre.y1 + MARGE + 1) - c.top
 const brut = (buf) => sharp(buf, { raw: { width: L, height: H, channels: 4 } }).extract(c)
 mkdirSync(SORTIE, { recursive: true })
 await brut(corps).webp({ quality: 90, alphaQuality: 100, effort: 6 }).toFile(join(SORTIE, 'corps.webp'))
-await brut(corps).avif({ quality: 70, effort: 6 }).toFile(join(SORTIE, 'corps.avif'))
 const bc = { left: b.x0 - c.left, top: b.y0 - c.top, width: b.x1 - b.x0 + 1, height: b.y1 - b.y0 + 1 }
 await sharp(await brut(bouchon).png().toBuffer()).extract(bc).webp({ quality: 90, alphaQuality: 100 }).toFile(join(SORTIE, 'bouchon.webp'))
 

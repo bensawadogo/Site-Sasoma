@@ -44,7 +44,7 @@ Le hero pèse le même poids partout : quelques dizaines de Ko d'images du bidon
 | standard | Téléphones par défaut | Définition 1,5, reflet animé |
 | full | ≥ 6 Go en 4G, ou ordinateur | Définition 2 |
 
-- **Garde-fou** : si le rendu dépasse 24 ms par image pendant 2 s, le hero descend d'un palier.
+- **Garde-fou** : si l'intervalle moyen entre deux images dépasse 24 ms pendant 2 s (moins de 42 images/s), le hero descend d'un palier. Un téléphone en économie d'énergie bridé à 30 Hz descend donc aussi, sans gravité.
 - **Forcer un palier** : `?tier=lite`, `?tier=standard` ou `?tier=full` dans l'adresse (le garde-fou est alors désactivé).
 
 ## Plus tard : une vraie vidéo du moteur

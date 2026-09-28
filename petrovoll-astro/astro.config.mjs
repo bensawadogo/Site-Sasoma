@@ -84,16 +84,16 @@ export default defineConfig({
     // Inline les petits CSS dans le HTML : un aller-retour réseau en moins
     // sur mobile (objectif LCP < 2,5 s).
     inlineStylesheets: 'auto',
+    // contact.html plutôt que contact/index.html : Cloudflare sert /contact
+    // sans redirection, ce qui colle aux canoniques et au sitemap (sans « / »).
+    format: 'file',
   },
+  trailingSlash: 'never',
   // Compresse le HTML produit (gain de quelques Ko par page)
   compressHTML: true,
 
-  /* ── Prefetch : navigation instantanée entre pages ───────────────────── */
-  prefetch: {
-    prefetchAll: false,
-    // 'viewport' = prefetch uniquement les liens visibles → économe en data
-    defaultStrategy: 'viewport',
-  },
+  /* ── Pas de prefetch : aucun lien ne le demandait, et précharger les liens
+     visibles coûterait des données en 3G. ─────────────────────────────── */
 
   /* ── Images ────────────────────────────────────────────────────────────
      Le service par défaut (sharp) optimise les images AU BUILD : idéal pour

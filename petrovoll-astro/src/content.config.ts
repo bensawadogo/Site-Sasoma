@@ -55,7 +55,10 @@ const secteurs = defineCollection({
 /** Pages éditoriales simples (À propos, Mentions légales). */
 const pages = defineCollection({
   loader: glob({ pattern: '*.mdoc', base: './src/content/pages' }),
-  schema: z.object({ titre: z.string().min(1) }),
+  // Titre facultatif : un champ vidé dans l'admin disparaît du fichier, et la
+  // page retombe sur son titre par défaut (PageEditoriale.astro) au lieu de
+  // faire échouer le build.
+  schema: z.object({ titre: texte }),
 })
 
 const accueil = defineCollection({

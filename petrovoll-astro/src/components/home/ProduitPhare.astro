@@ -3,8 +3,9 @@
  * ProduitPhare.astro — le produit « mis en avant » (case cochée dans l'admin),
  * juste sous le hero : visuel, prix, extrait, liens.
  *
- * Visuel : le bidon 3D pour un produit Petrovöll (marque saisie dans l'admin),
- * sinon la première photo du produit.
+ * Visuel : le bidon 3D quand le produit est celui du modèle (un STÄRK
+ * Petrovöll) ; sinon la première photo du produit, ou son visuel de repli.
+ * Le modèle 3D représente un STÄRK : on ne le montre pas pour un autre produit.
  */
 import BidonScene from '@/components/3d/BidonScene.astro'
 import PhotoProduit from '@/components/produits/PhotoProduit.astro'
@@ -15,9 +16,9 @@ interface Props {
   produit: Produit
 }
 const { produit } = Astro.props
-const { nom, photos, prix, conditionnement, marque } = produit.data
+const { nom, photos, prix, conditionnement, marque, secteur } = produit.data
 const extrait = extraitTexte(produit.body, 180)
-const bidon3d = /petrov/i.test(marque ?? '')
+const bidon3d = /petrov/i.test(marque ?? '') && /st[äa]rk/i.test(nom)
 ---
 
 <section class="relative overflow-hidden bg-surface" aria-labelledby="produit-phare-titre">
@@ -32,11 +33,13 @@ const bidon3d = /petrov/i.test(marque ?? '')
     <div class="reveal mx-auto aspect-square w-full max-w-[520px] overflow-hidden rounded-md">
       {
         bidon3d ? (
-          <BidonScene sizes="(min-width: 1024px) 520px, 100vw" />
+          <BidonScene alt={nom} sizes="(min-width: 1024px) 520px, 100vw" />
         ) : (
           <PhotoProduit
             photo={photos[0]}
             alt={nom}
+            {secteur}
+            {marque}
             largeurs={[400, 800]}
             sizes="(min-width: 1024px) 520px, 100vw"
             class="h-full w-full"
@@ -46,7 +49,7 @@ const bidon3d = /petrov/i.test(marque ?? '')
     </div>
 
     <div class="reveal">
-      <p class="inline-flex items-center gap-2 rounded border border-vif/40 bg-vif/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-widest text-vif">
+      <p class="inline-flex items-center gap-2 rounded border border-vif/40 bg-vif/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-widest text-vif-fort">
         Produit phare{marque ? ` · ${marque}` : ''}
       </p>
 

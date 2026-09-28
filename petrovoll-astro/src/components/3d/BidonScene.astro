@@ -8,9 +8,9 @@
  *  1. L'image WebP (19-34 Ko) s'affiche d'abord. Elle est rendue depuis la
  *     scène 3D elle-même (même cadrage). Placée sous le hero, elle se charge
  *     en différé (loading="lazy") pour ne pas concurrencer le hero.
- *  2. Quand le bidon approche de l'écran (et après le chargement de la page),
+ *  2. Quand le bidon entre à l'écran (après le chargement, au premier moment calme),
  *     on choisit un niveau :
- *       • image — économie de données / 2G / ≤ 1 Go de RAM / pas de WebGL :
+ *       • image — économie de données / 2G-3G / ≤ 1 Go de RAM / pas de WebGL :
  *                 rien n'est téléchargé ; un bouton propose la 3D.
  *       • lite  — smartphone ou petit processeur : modèle 161k triangles (1 Mo).
  *       • full  — ordinateur : modèle 269k triangles (1,5 Mo).
@@ -21,10 +21,15 @@
 import { IMAGE_BIDON } from '@/lib/image-bidon'
 
 interface Props {
+  /** Texte alternatif : le nom du produit affiché. */
+  alt?: string
   /** `sizes` de l'image : largeur affichée selon l'écran. */
   sizes?: string
 }
-const { sizes = '(min-width: 1024px) 620px, (min-width: 640px) 560px, 100vw' } = Astro.props
+const {
+  alt = 'Bidon d’huile moteur Petrovöll',
+  sizes = '(min-width: 1024px) 620px, (min-width: 640px) 560px, 100vw',
+} = Astro.props
 ---
 
 <div class="bidon-scene relative h-full w-full" data-bidon data-etat="image">
@@ -35,7 +40,7 @@ const { sizes = '(min-width: 1024px) 620px, (min-width: 640px) 560px, 100vw' } =
     {sizes}
     width="800"
     height="800"
-    alt="Bidon d'huile moteur Petrovöll STÄRK 5W-30"
+    {alt}
     loading="lazy"
     decoding="async"
   />
@@ -45,7 +50,9 @@ const { sizes = '(min-width: 1024px) 620px, (min-width: 640px) 560px, 100vw' } =
     <span aria-hidden="true">⟲</span> Voir en 3D <span class="opacity-70">(≈ 1,3 Mo)</span>
   </button>
   <p class="bidon-aide" aria-hidden="true">Glissez pour faire pivoter</p>
-  <p class="bidon-progression" aria-live="polite" data-bidon-progression>Chargement de la 3D…</p>
+  <p class="bidon-progression" aria-hidden="true" data-bidon-progression>Chargement de la 3D…</p>
+  <!-- Annonce seulement le début et la fin (pas chaque pourcentage). -->
+  <p class="sr-only" aria-live="polite" data-bidon-annonce></p>
 </div>
 
 <style>
@@ -152,7 +159,8 @@ const { sizes = '(min-width: 1024px) 620px, (min-width: 640px) 560px, 100vw' } =
     const connexion = nav.connection
     // L'utilisateur a demandé à économiser ses données : on respecte.
     if (connexion?.saveData) return 'image'
-    if (connexion?.effectiveType && /2g$/.test(connexion.effectiveType)) return 'image'
+    // En 3G, comme le hero (palier lite) : la 3D (≈ 1,6 Mo) seulement sur demande.
+    if (connexion?.effectiveType && /(2g|3g)$/.test(connexion.effectiveType)) return 'image'
     if ((nav.deviceMemory ?? 4) <= 1) return 'image'
     if (!webglDisponible()) return 'image'
 
@@ -165,8 +173,16 @@ const { sizes = '(min-width: 1024px) 620px, (min-width: 640px) 560px, 100vw' } =
   document.querySelectorAll<HTMLElement>('[data-bidon]').forEach((hote) => {
     const bouton = hote.querySelector<HTMLButtonElement>('[data-bidon-bouton]')
 
+    const annonce = hote.querySelector<HTMLElement>('[data-bidon-annonce]')
+    const annoncer = (texte: string) => {
+      if (annonce) annonce.textContent = texte
+    }
+
     const lancer = async (qualite: Qualite) => {
       hote.dataset.etat = 'chargement'
+      // Le bouton et la pastille de progression occupent la même place.
+      if (bouton) bouton.hidden = true
+      annoncer('Chargement du modèle 3D…')
       try {
         const progression = hote.querySelector<HTMLElement>('[data-bidon-progression]')
         const { monterBidon } = await import('@/scripts/bidon-3d')
@@ -174,12 +190,12 @@ const { sizes = '(min-width: 1024px) 620px, (min-width: 640px) 560px, 100vw' } =
           if (progression) progression.textContent = `Chargement de la 3D… ${Math.round(fraction * 100)} %`
         })
         hote.dataset.etat = '3d'
-        if (bouton) bouton.hidden = true
+        annoncer('Modèle 3D prêt : glissez pour le faire pivoter.')
       } catch (erreur) {
         // L'image reste affichée : le visiteur ne voit jamais d'écran vide.
         console.warn('[bidon-3d] 3D indisponible, image conservée', erreur)
         hote.dataset.etat = 'image'
-        if (bouton) bouton.hidden = true
+        annoncer('')
       }
     }
 
@@ -196,17 +212,20 @@ const { sizes = '(min-width: 1024px) 620px, (min-width: 640px) 560px, 100vw' } =
       lancer(niveau)
     }
 
-    // Quand le bidon est à moins d'un écran de distance : la 3D (1 à 1,5 Mo)
-    // ne concurrence pas le hero, et un visiteur qui ne descend pas ne la
-    // télécharge pas.
+    // Seulement quand le bidon entre à l'écran, puis au premier moment calme :
+    // la 3D (1 à 1,5 Mo, décodage lourd) ne doit pas saccader l'animation du
+    // hero juste au-dessus (audit : images de plus d'1 s si elle démarre
+    // pendant le hero). Un visiteur qui ne descend pas ne la télécharge pas.
+    const auCalme = (action: () => void) =>
+      'requestIdleCallback' in window ? requestIdleCallback(action, { timeout: 2000 }) : setTimeout(action, 200)
     const approcher = () => {
       const obs = new IntersectionObserver(
         (entrees) => {
           if (!entrees.some((e) => e.isIntersecting)) return
           obs.disconnect()
-          demarrer()
+          auCalme(demarrer)
         },
-        { rootMargin: '100% 0px' },
+        { threshold: 0.15 },
       )
       obs.observe(hote)
     }

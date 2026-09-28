@@ -20,13 +20,15 @@ interface Props {
   titreComplet?: boolean
   description: string
   ogImage?: string
+  ogImageTaille?: { l: number; h: number }
   ogType?: 'website' | 'article' | 'product'
   canonicalChemin?: string
   noindex?: boolean
   schema?: Array<Record<string, unknown>>
 }
 
-const { titre, titreComplet, description, ogImage, ogType, canonicalChemin, noindex, schema } = Astro.props
+const { titre, titreComplet, description, ogImage, ogImageTaille, ogType, canonicalChemin, noindex, schema } =
+  Astro.props
 ---
 
 <BaseLayout
@@ -34,6 +36,7 @@ const { titre, titreComplet, description, ogImage, ogType, canonicalChemin, noin
   titreComplet={titreComplet}
   description={description}
   ogImage={ogImage}
+  ogImageTaille={ogImageTaille}
   ogType={ogType}
   canonicalChemin={canonicalChemin}
   noindex={noindex}

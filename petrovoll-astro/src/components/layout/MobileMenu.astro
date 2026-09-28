@@ -26,7 +26,7 @@ const lienWhatsApp = whatsapp()
      simple menu déroulant (l'annoncer comme modal tromperait les lecteurs d'écran). -->
 <div
   id="menu-mobile"
-  class="border-t border-bordure bg-fond lg:hidden"
+  class="max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-bordure bg-fond lg:hidden"
   hidden
   aria-label="Menu de navigation"
 >
@@ -77,15 +77,17 @@ const lienWhatsApp = whatsapp()
       panneau.hidden = false
       bouton.setAttribute('aria-expanded', 'true')
       bouton.setAttribute('aria-label', 'Fermer le menu')
-      // Empêche le défilement de l'arrière-plan pendant la navigation du menu
-      document.body.style.overflow = 'hidden'
+      // Empêche le défilement de l'arrière-plan pendant la navigation du menu.
+      // Sur <html> et non <body> : un body en overflow hidden deviendrait le
+      // conteneur de défilement et décrocherait la scène collée du hero.
+      document.documentElement.style.overflow = 'hidden'
     }
 
     const fermer = (rendreFocus = true) => {
       panneau.hidden = true
       bouton.setAttribute('aria-expanded', 'false')
       bouton.setAttribute('aria-label', 'Ouvrir le menu')
-      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
       if (rendreFocus) bouton.focus()
     }
 

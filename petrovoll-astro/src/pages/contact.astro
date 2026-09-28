@@ -18,6 +18,13 @@ export const prerender = true
 const parametres = await getParametres()
 const cleWeb3Forms = import.meta.env.PUBLIC_WEB3FORMS_KEY
 const lienWhatsApp = parametres.whatsapp()
+const aucunCanal = !lienWhatsApp && !parametres.lienTelephone && !parametres.email && !cleWeb3Forms
+const canaux = [lienWhatsApp && 'par WhatsApp', parametres.lienTelephone && 'par téléphone', parametres.email && 'par e-mail']
+  .filter(Boolean)
+  .join(' ou ')
+if (aucunCanal) {
+  console.warn('[contact] aucun canal de contact : renseigner téléphone, WhatsApp ou e-mail dans l’admin (Coordonnées).')
+}
 
 const schema: Array<Record<string, unknown>> = [
   {
@@ -119,12 +126,16 @@ const schema: Array<Record<string, unknown>> = [
             <textarea required name="message" rows="5" maxlength="3000" class="champ py-3" placeholder="Besoin, quantités, ville de livraison…" />
           </label>
 
-          <button type="submit" class="btn-primary w-full" data-bouton-envoi>Envoyer la demande</button>
+          <button type="submit" class="btn-primary w-full" data-bouton-envoi data-whatsapp={lienWhatsApp ? '' : undefined}>Envoyer la demande</button>
           <p class="text-sm" role="status" aria-live="polite" data-message-envoi hidden />
         </form>
+      ) : aucunCanal ? (
+        <p class="rounded-md border border-dashed border-bordure p-6 text-sm text-attenue">
+          {parametres.nomSociete} : nos coordonnées seront bientôt disponibles sur cette page.
+        </p>
       ) : (
         <p class="rounded-md border border-dashed border-bordure p-6 text-sm text-attenue">
-          Contactez-nous directement par WhatsApp ou par téléphone : nous vous répondons rapidement.
+          Contactez-nous directement {canaux} : nous vous répondons rapidement.
         </p>
       )
     }
@@ -176,10 +187,9 @@ const schema: Array<Record<string, unknown>> = [
         afficher('Merci ! Votre demande est bien envoyée, nous vous recontactons rapidement.', true)
       } catch (erreur) {
         console.warn('[contact] envoi échoué', erreur)
-        afficher(
-          'L’envoi n’a pas abouti (connexion instable ?). Réessayez, ou écrivez-nous directement sur WhatsApp.',
-          false,
-        )
+        // Ne proposer WhatsApp que si un numéro est saisi dans l'admin.
+        const repli = bouton.hasAttribute('data-whatsapp') ? ', ou écrivez-nous directement sur WhatsApp' : ''
+        afficher(`L’envoi n’a pas abouti (connexion instable ?). Réessayez${repli}.`, false)
       } finally {
         bouton.disabled = false
         bouton.textContent = 'Envoyer la demande'

@@ -18,9 +18,15 @@ export function chiffresSeuls(numero: string | null | undefined): string {
   return (numero ?? '').replace(/\D/g, '')
 }
 
+/** Indicatif du Burkina Faso, ajouté aux numéros locaux (8 chiffres). */
+const INDICATIF_BF = '226'
+
 /** Lien WhatsApp avec message pré-rempli ; null si aucun numéro. */
 export function lienWhatsApp(numero: string | null | undefined, message?: string): string | null {
-  const chiffres = chiffresSeuls(numero)
+  // wa.me veut le format international sans « + » ni « 00 » ; un numéro local
+  // saisi sans indicatif (« 70 12 34 56 ») serait lu comme un autre pays.
+  let chiffres = chiffresSeuls(numero).replace(/^00/, '')
+  if (chiffres.length === 8) chiffres = INDICATIF_BF + chiffres
   if (!chiffres) return null
   return message
     ? `https://wa.me/${chiffres}?text=${encodeURIComponent(message)}`

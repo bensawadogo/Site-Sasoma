@@ -16,7 +16,7 @@ interface Props {
   urlPage: string
 }
 const { produit, nomSecteur, urlPage } = Astro.props
-const { nom, photos, prix, conditionnement, disponible, marque, reference } = produit.data
+const { nom, photos, prix, conditionnement, disponible, marque, reference, secteur } = produit.data
 const parametres = await getParametres()
 const lienWhatsApp = parametres.whatsapp(`Bonjour, je suis intéressé par : ${nom}\n${urlPage}`)
 const lienDevis = `/contact?produit=${encodeURIComponent(nom)}`
@@ -40,7 +40,14 @@ const lienDevis = `/contact?produit=${encodeURIComponent(nom)}`
           ))
         ) : (
           <div class="aspect-square w-full overflow-hidden rounded-md border border-bordure bg-fond">
-            <PhotoProduit alt={nom} sizes="(min-width: 1024px) 50vw, 100vw" prioritaire class="h-full w-full" />
+            <PhotoProduit
+              alt={nom}
+              {secteur}
+              {marque}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              prioritaire
+              class="h-full w-full"
+            />
           </div>
         )
       }

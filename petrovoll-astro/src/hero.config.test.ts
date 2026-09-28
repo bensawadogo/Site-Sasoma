@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import catalogue from '../../research/catalogue.json'
 
 import { HERO, type Point, type Zone } from './hero.config'
+import { GEOMETRIE } from './scripts/moteur-svg'
 
 const dansCadre = (p: Point) => p.x >= 0 && p.x <= 1 && p.y >= 0 && p.y <= 1
 const seChevauchent = (a: Zone, b: Zone) =>
@@ -30,6 +31,10 @@ describe('hero.config', () => {
       expect(seChevauchent(z.bidon, z.textes)).toBe(false)
       expect(z.textes.y).toBeGreaterThanOrEqual(0.7) // §6.2
     }
+  })
+
+  it('orifice du moteur : même point que le dessin SVG (repère 1000×1000)', () => {
+    expect(HERO.moteur.filler).toEqual({ x: GEOMETRIE.remplissage.x / 1000, y: GEOMETRIE.remplissage.y / 1000 })
   })
 
   it('moteur : cadrages dans l’ordre, huile pièce par pièce', () => {

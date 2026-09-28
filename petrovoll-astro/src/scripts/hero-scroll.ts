@@ -51,6 +51,7 @@ export function lancerHero(racine: HTMLElement): void {
     el,
     debut: Number(el.dataset.debut),
     fin: Number(el.dataset.fin),
+    actif: false,
   }))
   const ctxFilet = canvasFilet.getContext('2d')
   const mouvementReduit = matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -83,8 +84,12 @@ export function lancerHero(racine: HTMLElement): void {
     format = innerWidth >= HERO.pointDeRupture ? 'desktop' : 'mobile'
     ecran = { l: scene.clientWidth, h: scene.clientHeight }
     dpr = Math.min(devicePixelRatio || 1, HERO.paliers[palier].dprMax)
-    canvasFilet.width = Math.round(ecran.l * dpr)
-    canvasFilet.height = Math.round(ecran.h * dpr)
+    // Réallouer le canvas seulement si sa taille change (la barre d'adresse
+    // Android déclenche resize sans changer la largeur).
+    const lc = Math.round(ecran.l * dpr)
+    const hc = Math.round(ecran.h * dpr)
+    if (canvasFilet.width !== lc) canvasFilet.width = lc
+    if (canvasFilet.height !== hc) canvasFilet.height = hc
 
     // Bidon : hauteur de sa zone, centré dedans.
     const zb = HERO.zones[format].bidon
@@ -172,7 +177,13 @@ export function lancerHero(racine: HTMLElement): void {
       const o = opaciteBloc(p, b.debut, b.fin)
       b.el.style.opacity = String(o)
       b.el.style.transform = `translate3d(0, ${(1 - o) * 12}px, 0)`
-      b.el.toggleAttribute('data-actif', o > 0.5)
+      const actif = o > 0.5
+      if (actif !== b.actif) {
+        // Bloc caché = hors du parcours clavier (liens de la fin invisibles sinon focusables).
+        b.actif = actif
+        b.el.toggleAttribute('data-actif', actif)
+        b.el.inert = !actif
+      }
     }
 
     // t1 : l'huile monte dans le bidon, jusque sous l'épaule (32 % du cadre).

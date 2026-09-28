@@ -21,6 +21,14 @@ import { ICONES_SECTEUR } from './src/lib/icones'
 
 const projetCloud = import.meta.env.PUBLIC_KEYSTATIC_PROJECT as string | undefined
 
+/** Numéro saisi avec l'indicatif (+226 ou 00226), espaces, points et tirets tolérés. */
+const NUMERO = {
+  regex: /^\s*(\+|00)?[\d\s.-]{8,}$/,
+  message: 'Numéro avec l’indicatif, ex. « +226 70 00 00 00 ».',
+}
+/** Même règle, mais le champ peut rester vide. */
+const NUMERO_FACULTATIF = { ...NUMERO, regex: /^\s*$|^\s*(\+|00)?[\d\s.-]{8,}$/ }
+
 /** Texte riche réduit à l'essentiel : moins d'options = moins d'erreurs. */
 const TEXTE_RICHE = {
   bold: true,
@@ -208,7 +216,11 @@ export default config({
       path: 'src/content/pages/a-propos',
       format: { contentField: 'contenu' },
       schema: {
-        titre: fields.text({ label: 'Titre de la page', defaultValue: 'Qui sommes-nous ?' }),
+        titre: fields.text({
+          label: 'Titre de la page',
+          defaultValue: 'Qui sommes-nous ?',
+          validation: { isRequired: true },
+        }),
         contenu: fields.markdoc({ label: 'Texte de la page', options: TEXTE_RICHE }),
       },
     }),
@@ -218,7 +230,11 @@ export default config({
       path: 'src/content/pages/mentions-legales',
       format: { contentField: 'contenu' },
       schema: {
-        titre: fields.text({ label: 'Titre de la page', defaultValue: 'Mentions légales' }),
+        titre: fields.text({
+          label: 'Titre de la page',
+          defaultValue: 'Mentions légales',
+          validation: { isRequired: true },
+        }),
         contenu: fields.markdoc({
           label: 'Texte de la page',
           description: 'Raison sociale, RCCM, IFU, responsable de publication, hébergeur, données personnelles.',
@@ -243,11 +259,13 @@ export default config({
         }),
         telephone: fields.text({
           label: 'Téléphone',
-          description: 'Avec l’indicatif. Ex. « +226 70 00 00 00 ».',
+          description: 'Avec l’indicatif. Ex. « +226 70 00 00 00 ». Obligatoire : c’est le contact de secours du site.',
+          validation: { isRequired: true, pattern: NUMERO },
         }),
         whatsapp: fields.text({
           label: 'Numéro WhatsApp',
           description: 'Avec l’indicatif. Ex. « +226 70 00 00 00 ». Laisser vide pour masquer les boutons WhatsApp.',
+          validation: { pattern: NUMERO_FACULTATIF },
         }),
         email: fields.text({ label: 'E-mail affiché sur le site' }),
         adresse: fields.text({ label: 'Adresse', multiline: true }),

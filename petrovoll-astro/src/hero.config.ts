@@ -65,7 +65,12 @@ export const HERO = {
     standard: { dprMax: 1.5, refletAnime: true },
     full: { dprMax: 2, refletAnime: true }, // ≥ 6 Go et 4g/wifi, ou ordinateur
   },
-  /** Garde-fou : on descend d'un palier si une image dépasse ce temps moyen pendant `duree`. */
+  /**
+   * Garde-fou : on descend d'un palier si l'intervalle moyen entre deux images
+   * dépasse `msParImage` pendant `dureeMs` (tout compris : script, style,
+   * dessin). Un écran bridé à 30 Hz descend donc aussi : sans gravité, les
+   * paliers ne changent que la définition du filet et son reflet.
+   */
   gardeFou: { msParImage: 24, dureeMs: 2000 },
   /** Forçage manuel du palier : ?tier=lite|standard|full */
   parametreForcage: 'tier',
@@ -130,8 +135,6 @@ export const HERO = {
   couleurs: {
     huile: ['#f0cc30', '#cc9c0c'], // or du logo Petrovöll : dégradé du filet
     refletHuile: '#fff4c2',
-    accent: '#c7161c', // rouge marque
-    fond: '#000000',
   },
 
   // ── Produits (ids de research/catalogue.json) ─────────────────────────────

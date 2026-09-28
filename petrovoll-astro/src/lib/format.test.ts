@@ -20,6 +20,12 @@ describe('lienWhatsApp', () => {
     expect(lienWhatsApp('+226 70-00 00 00')).toBe('https://wa.me/22670000000')
   })
 
+  it('normalise « 00 » et les numéros locaux sans indicatif (Burkina)', () => {
+    expect(lienWhatsApp('00226 70 12 34 56')).toBe('https://wa.me/22670123456')
+    expect(lienWhatsApp('70 12 34 56')).toBe('https://wa.me/22670123456')
+    expect(lienWhatsApp('+33 6 12 34 56 78')).toBe('https://wa.me/33612345678')
+  })
+
   it('encode le message pré-rempli', () => {
     expect(lienWhatsApp('22670000000', 'Bonjour & merci')).toBe('https://wa.me/22670000000?text=Bonjour%20%26%20merci')
   })

@@ -19,11 +19,12 @@ const { chiffres } = await getAccueil()
         <h2 id="stats-titre" class="sr-only">Chiffres clés</h2>
         <dl class="grid grid-cols-2 gap-8 text-center lg:grid-cols-4" data-compteurs>
           {chiffres.map((c) => (
-            <div class="reveal">
+            <div class="reveal flex flex-col-reverse">
+              {/* <dt> avant <dd> (ordre valide et lu correctement), chiffre affiché au-dessus. */}
+              <dt class="mt-2 text-xs uppercase tracking-wide text-attenue">{c.libelle}</dt>
               <dd class="font-display text-4xl text-vif lg:text-5xl" data-compteur>
                 {c.valeur}
               </dd>
-              <dt class="mt-2 text-xs uppercase tracking-wide text-attenue">{c.libelle}</dt>
             </div>
           ))}
         </dl>

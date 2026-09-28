@@ -7,7 +7,10 @@
  *    levée des soupapes), exportée et testée dans moteur-svg.test.ts ;
  *  - animerMoteur(), qui ne fait qu'écrire des attributs transform / opacity
  *    (aucun filtre, aucune géométrie recalculée). Une valeur identique à la
- *    précédente n'est pas réécrite.
+ *    précédente n'est pas réécrite. Les films placés dans <defs> (réutilisés
+ *    par plusieurs <use>) passent par une variable CSS posée sur la racine :
+ *    modifier l'élément source forcerait le navigateur à recloner chaque
+ *    instance <use> à chaque image.
  *
  * Convention d'angle : degrés, sens horaire à l'écran, 0 = cylindre 1 au point
  * mort haut (PMH) au début de l'admission. Ordre d'allumage 1-3-4-2.
@@ -137,6 +140,8 @@ interface Ecriture {
   el: Element
   attr: 'transform' | 'opacity'
   dernier: string
+  /** Si présent : on écrit cette variable CSS sur `el` (la racine) au lieu de l'attribut. */
+  variable?: string
 }
 interface Organe {
   x: number
@@ -182,7 +187,8 @@ const ecriture = (el: Element, attr: Ecriture['attr']): Ecriture => ({ el, attr,
 
 function ecrire(e: Ecriture, valeur: string) {
   if (e.dernier === valeur) return
-  e.el.setAttribute(e.attr, valeur)
+  if (e.variable) (e.el as SVGElement).style.setProperty(e.variable, valeur)
+  else e.el.setAttribute(e.attr, valeur)
   e.dernier = valeur
 }
 
@@ -215,9 +221,16 @@ function construireCache(racine: SVGSVGElement): Cache {
     pistons: organes('[data-piston]'),
     bielles: organes('[data-bielle]'),
     manivelles: organes('[data-manivelle]'),
-    films: tous('[data-film]').map((el) => {
+    films: tous('[data-film]').map((el, i) => {
       const mode = (el.getAttribute('data-mode') ?? 'opacite') as Mode
       const opacite = mode === 'opacite' || mode === 'extinction'
+      let ecr = ecriture(el, opacite ? 'opacity' : 'transform')
+      if (opacite && el.closest('defs')) {
+        // Film partagé par plusieurs <use> : piloté par une variable héritée.
+        const variable = `--mt-film-${i}`
+        ;(el as SVGElement).style.opacity = `var(${variable}, ${ecr.dernier || 0})`
+        ecr = { el: racine, attr: 'opacity', dernier: ecr.dernier, variable }
+      }
       return {
         phase: el.getAttribute('data-film') as Phase,
         mode,
@@ -225,7 +238,7 @@ function construireCache(racine: SVGSVGElement): Cache {
         de: nombre(el, 'de'),
         a: nombre(el, 'a', 1),
         max: nombre(el, 'max', 1),
-        ecr: ecriture(el, opacite ? 'opacity' : 'transform'),
+        ecr,
       }
     }),
     gouttes: tous('[data-goutte]').map((el) => ({

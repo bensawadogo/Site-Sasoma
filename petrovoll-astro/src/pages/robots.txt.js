@@ -43,7 +43,7 @@ const BOTS_AUTORISES = [
   'Claude-User', // Anthropic — navigation à la demande
   'PerplexityBot', // Perplexity
   'YouBot', // You.com
-  'Applebot-Extended', // Apple Intelligence / Siri
+  'Applebot', // Apple — recherche Siri / Spotlight
   'MistralAI-Index', // Mistral
   // ── Moteurs de recherche classiques (acquisition principale) ───────────
   'Googlebot',
@@ -63,6 +63,7 @@ const BOTS_ENTRAINEMENT = [
   'Amazonbot', // Amazon — index/AI
   'cohere-ai', // Cohere — entraînement
   'Diffbot', // extraction de données à grande échelle
+  'Applebot-Extended', // Apple — usage des pages pour l'entraînement de ses modèles
 ]
 
 /**
@@ -111,14 +112,12 @@ ${defaut}
 Sitemap: ${base}/sitemap.xml
 # Guide destiné aux LLM (nouveau standard 2026)
 # LLMs-Txt: ${base}/llms.txt
-Host: ${base}
 `
 
   return new Response(contenu, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
       // Cache long côté CDN : le fichier ne change qu'au déploiement
-      'Cache-Control': 'public, max-age=3600, s-maxage=86400',
     },
   })
 }

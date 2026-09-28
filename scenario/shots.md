@@ -1,5 +1,7 @@
 # Plans du hero : prompts, négatifs, ratios, ancres
 
+> **En attente (décision D3, [TODO.md](../TODO.md))** : le moteur du hero est pour l'instant une illustration SVG animée. Ce scénario sert si l'on passe un jour à une vraie vidéo IA (outils du brief à brancher).
+
 Phase 2 du [brief](../BRIEF-MAITRE.md). **Rien n'a été généré.** Les valeurs techniques (temps, ancres, zones) viennent de [petrovoll-astro/src/hero.config.ts](../petrovoll-astro/src/hero.config.ts) : ce fichier fait foi en cas d'écart.
 
 Produit qui verse : **STÄRK** (voiture). La fin présente STÄRK (voiture) et MÖTPRO 4T (moto). Le moteur est donc un **4 cylindres en ligne de voiture, essence**, générique et sans marque.
