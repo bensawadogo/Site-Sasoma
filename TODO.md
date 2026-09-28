@@ -33,7 +33,7 @@ Légende : `[x]` fait (avec preuve) · `[~]` en cours · `[ ]` à faire · 🧑 
 
 - [x] Polices auto-hébergées, zéro 404 (Bebas Neue 13 Ko + Inter Variable 47 Ko, OFL) *(sous-agent « polices »)*
 - [x] Relecture du code *(sous-agent « relecture », 32 points)* — corrigés : titre de page vidé qui cassait le build, numéro WhatsApp sans indicatif, page contact sans issue, liens de fin focusables invisibles, verrouillage du menu qui décrochait le hero, menu en paysage, 3D en 3G, double téléchargement du bidon, films d'huile dans `<defs>` (variables CSS), canonical / sitemap (`build.format: 'file'`), Applebot-Extended, visuel et alt du Produit phare, contraste du badge, `<dl>`, annonces du chargement 3D, alt en double, fuite GPU si le GLB échoue, `will-change`, prefetch inutile, cache des polices, garde-fou documenté, canvas réalloué, bornes du script bidon + `sharp` déclaré, commentaires faux, code mort, `og:image` aux vraies dimensions, `BackOrder`, `Host`, `X-Robots-Tag` sur l'admin. **Laissés volontairement** : rotation 3D permanente (demande du client), compatibilité des très vieux navigateurs (Tailwind v4 : Chrome 111+ ; à surveiller), fichiers `assets-source/video` (conservés).
-- [~] Script QA mobile `npm run bidon:mobile` réécrit pour le nouveau hero *(sous-agent « QA mobile »)*
+- [x] Script QA mobile `npm run bidon:mobile` réécrit pour le nouveau hero *(sous-agent « QA mobile »)* : 116/116 en 360×800 et 390×844 (texte des cartes secteurs et de la page contact passé à 16 px)
 - [ ] 🧑 Téléphone (désormais obligatoire), WhatsApp, e-mail et adresse dans l'admin (Coordonnées) : sans eux, la page contact affiche « coordonnées bientôt disponibles »
 - [ ] 🧑 Projet Keystatic Cloud + `PUBLIC_KEYSTATIC_PROJECT`
 - [ ] 🧑 Clé Web3Forms (`PUBLIC_WEB3FORMS_KEY`)
