@@ -25,7 +25,7 @@ const variables = [
 
 <section class="hero-mobile zone-sombre relative -mt-16" style={variables} data-hero-mobile aria-labelledby="hero-titre-mobile">
   <div class="scene" data-scene>
-    <canvas class="couche" data-sequence aria-hidden="true"></canvas>
+    <canvas class="sequence" data-sequence aria-hidden="true"></canvas>
     <div class="couche voile" aria-hidden="true"></div>
     <canvas class="couche" data-filet aria-hidden="true"></canvas>
     <BidonHero />
@@ -55,9 +55,21 @@ const variables = [
     height: 100svh;
     overflow: hidden;
     contain: layout paint;
-    /* Affiche (1re image de la séquence) : visible avant le script et sans JS. Une
-       image de fond d'un élément masqué n'est pas téléchargée. */
+    background: #000;
+  }
+  /* Carré du moteur (zone « moteur » de HERO_MOBILE), bords fondus dans le noir.
+     Affiche = 1re image, visible avant le script et sans JS ; une image de fond
+     d'un élément masqué (hero desktop sur téléphone) n'est pas téléchargée. */
+  .sequence {
+    position: absolute;
+    left: var(--moteur-x);
+    top: var(--moteur-y);
+    width: var(--moteur-l);
+    height: var(--moteur-h);
     background: #000 var(--affiche) center / cover no-repeat;
+    -webkit-mask-image: radial-gradient(ellipse 62% 58% at 50% 50%, #000 70%, transparent 100%);
+    mask-image: radial-gradient(ellipse 62% 58% at 50% 50%, #000 70%, transparent 100%);
+    pointer-events: none;
   }
   .couche {
     position: absolute;

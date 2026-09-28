@@ -45,7 +45,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     fin: Number(el.dataset.fin),
     actif: el.hasAttribute('data-actif'),
   }))
-  const ctxMoteur = canvasMoteur.getContext('2d', { alpha: false })!
+  const ctxMoteur = canvasMoteur.getContext('2d')!
   const ctxFilet = canvasFilet.getContext('2d')!
   const mouvementReduit = matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -122,6 +122,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
 
   // ── Géométrie (recalculée au redimensionnement) ────────────────────────────
   let ecran = { l: 0, h: 0 }
+  let boite = { x: 0, y: 0, l: 0, h: 0 } // canvas de la séquence, dans la scène
   let dpr = 1
   let couv: Couverture = { x: 0, y: 0, l: 0, h: 0 }
   let orifice: Pt = { x: 0, y: 0 }
@@ -130,21 +131,25 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   let deplacement: Pt = { x: 0, y: 0 }
   let hauteurBidon = 0
 
-  function dimensionner(c: HTMLCanvasElement, echelle: number) {
-    const l = Math.round(ecran.l * echelle)
-    const h = Math.round(ecran.h * echelle)
+  function dimensionner(c: HTMLCanvasElement, echelle: number, taille = ecran) {
+    const l = Math.round(taille.l * echelle)
+    const h = Math.round(taille.h * echelle)
     if (c.width !== l) c.width = l
     if (c.height !== h) c.height = h
   }
 
   function mesurer() {
     ecran = { l: scene.clientWidth, h: scene.clientHeight }
-    couv = couverture({ l: S.largeur, h: S.hauteur }, ecran, S.focale.x, S.focale.y, S.zoom)
+    const zm = R.zones.moteur
+    boite = { x: zm.x * ecran.l, y: zm.y * ecran.h, l: zm.l * ecran.l, h: zm.h * ecran.h }
+    Object.assign(canvasMoteur.style, { left: `${boite.x}px`, top: `${boite.y}px`, width: `${boite.l}px`, height: `${boite.h}px` })
+    couv = couverture({ l: S.largeur, h: S.hauteur }, boite, S.focale.x, S.focale.y, S.zoom)
     // Jamais plus défini que l'image source : inutile de peindre des pixels inventés.
     dpr = Math.min(devicePixelRatio || 1, S.dprMax, Math.max(1, S.largeur / couv.l))
-    dimensionner(canvasMoteur, dpr)
+    dimensionner(canvasMoteur, dpr, boite)
     dimensionner(canvasFilet, Math.min(devicePixelRatio || 1, 2))
-    orifice = pointCouvert(S.orifice, couv)
+    const o = pointCouvert(S.orifice, couv)
+    orifice = { x: boite.x + o.x, y: boite.y + o.y }
 
     const zb = R.zones.bidon
     const h = zb.h * ecran.h
@@ -180,7 +185,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     if (affichePresente) {
       // Le canvas a pris le relais : l'affiche CSS ne doit plus transparaître quand
       // le moteur s'assombrit à la fin.
-      scene.style.backgroundImage = 'none'
+      canvasMoteur.style.backgroundImage = 'none'
       affichePresente = false
     }
   }
@@ -188,7 +193,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   function dessinerMoteur(t3: number) {
     if (leger) {
       // Deux images : début de V1, puis fin de V2, en fondu pendant t3.
-      const f = Math.round(doux(local(t3, 0.1, 0.9)) * 100) / 100
+      const f = Math.round(doux(local(t3, Math.max(0.1, S.debut), 0.9)) * 100) / 100
       if (f === dernierFondu) return
       const debut = images[0]
       const fin = images[total - 1]
@@ -200,7 +205,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       dernierFondu = f
       return
     }
-    courante = indexImage(t3, total)
+    courante = indexImage(local(t3, S.debut, 1), total)
     garderDecodees()
     const i = plusProche(courante, (k) => bitmaps.has(k) || chargees.has(k), total)
     if (i === null || i === derniereDessinee) return
@@ -286,7 +291,8 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     bidon.style.opacity = String(1 - sortie)
 
     const tete = mouvementReduit ? 0 : local(t2, 0.7, 0.9)
-    const queue = local(t3, 0.05, 0.25)
+    // Le filet se détache avant que la caméra de la vidéo ne bouge (sequence.debut).
+    const queue = local(t3, 0.02, S.debut)
     filetVisible = tete > queue && bascule > 0
     if (filetVisible || filetPresent) {
       const g = tournerAutour(goulotRepos, pivot, HERO.angleVersement * bascule)

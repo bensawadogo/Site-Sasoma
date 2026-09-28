@@ -8,6 +8,7 @@ Chaque génération est à noter dans ops/credits.md (prix réel renvoyé par l'
   python ops/scripts/deapi.py prix  MODELE L H IMAGES FPS [PAS]
   python ops/scripts/deapi.py video MODELE L H IMAGES FPS GRAINE DEBUT FIN PROMPT_FICHIER SORTIE [PAS]
   python ops/scripts/deapi.py agrandir MODELE ENTREE SORTIE [ECHELLE]
+  python ops/scripts/deapi.py image MODELE L H GRAINE PROMPT_FICHIER SORTIE [PAS]
 """
 import json
 import os
@@ -92,6 +93,20 @@ def main(a):
             time.sleep(65)
         d = verifier(r)
         print('accepté', json.dumps(d, ensure_ascii=False)[:400])
+        attendre(d['data']['request_id'], sortie)
+    elif a[0] == 'image':
+        modele, l, h, graine, fichier_prompt, sortie = a[1:7]
+        corps = {'model': modele, 'width': int(l), 'height': int(h), 'seed': int(graine),
+                 'prompt': open(fichier_prompt, encoding='utf-8').read().strip(), 'negative_prompt': NEGATIF}
+        if len(a) > 7:
+            corps['steps'] = int(a[7])
+        for essai in range(6):
+            r = CLIENT.post(f'{API}/images/generations', json=corps)
+            if r.status_code != 429:
+                break
+            print(f'  429, nouvel essai dans 65 s ({essai + 1}/6)', flush=True)
+            time.sleep(65)
+        d = verifier(r)
         attendre(d['data']['request_id'], sortie)
     elif a[0] == 'agrandir':
         champs = {'model': a[1]}

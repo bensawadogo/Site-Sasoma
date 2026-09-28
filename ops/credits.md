@@ -46,3 +46,10 @@ Une ligne par génération, remplie **avant** l'appel (coût estimé) et **aprè
 | 2026-09-28 | E1/E2/E3 → images clés | ops/scripts/images_cles.py | — | carré du moteur replacé en 1344×768 et 768×1344, bords fondus au noir | 0 $ | 0 $ | FINAL | assets/ai/cles/ (non commité) |
 
 **Total deAPI du 2026-09-28 : environ 0,86 $ sur les 5 $ offerts.** Licences : LTX-2 (Lightricks, licence communautaire LTX-2 : usage commercial gratuit sous 10 M$ de chiffre d'affaires annuel) ; deAPI indique des modèles à licence commerciale.
+| 2026-09-28 | moteur v2 ×4 | deAPI | Z-Image-Turbo | prompt corrigé : vrai bloc 4 cylindres, orifice de remplissage ouvert SUR le cache culbuteurs (Ben : bidon mal placé), 1536², seeds 1101-4404 | 4 × 0,021 $ | 4 × 0,021 $ | FINAL : seed 1101 (orifice en haut, aucun texte) ; 2202 bouchon fermé, 3303/4404 poulies en forme de roues | assets/ai/v2/moteur-1101.png (non commité) |
+| 2026-09-28 | V1 desktop v2 | deAPI | LTX-2.5 | UNE image de départ (plus de fondu entre images : plus de déformation), 1344×768, 121 images, seed 1101, travelling avant vers l’orifice | 0,066 $ | 0,066 $ | FINAL | assets/ai/v2/test-ltx-desktop.mp4 (non commité) |
+| 2026-09-28 | V2 desktop v2 ×3 | deAPI | LTX-2.5 | départ = dernière image de V1, l’huile coule dans l’orifice, seeds 1101/2202/3303 | 3 × 0,066 $ | 3 × 0,066 $ | FINAL : 3303 (l’huile entre dans le grand orifice) ; 1101 mauvais trou, 2202 correct mais moins net | assets/ai/v2/test-huile-3303.mp4 (non commité) |
+| 2026-09-28 | V1/V2 mobile ×4 | deAPI | LTX-2.5 | 768×1344 | 4 × 0,066 $ | 4 × 0,066 $ | REJET : bandes noires dures dans l’image portrait ; le mobile utilise un carré découpé dans les vidéos desktop | assets/ai/v2/v*-mobile*.mp4 (non commité) |
+| 2026-09-28 | agrandissement ×2 | deAPI | FlashVSR Tiny | V1 et V2 desktop → 2688×1536 | 2 × 0,060 $ | 2 × 0,060 $ | FINAL | assets/ai/videos/V1-desktop.mp4, V2-desktop.mp4 (non commité) |
+
+**Version 2 (vrai moteur rigide) : environ 0,73 $. Solde deAPI : environ 3,4 $.** Higgsfield (10 crédits gratuits) non utilisé : voir TODO.

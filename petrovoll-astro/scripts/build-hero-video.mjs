@@ -2,9 +2,10 @@
  * build-hero-video.mjs — séquences d'images du hero vidéo (guide §9), une par format.
  *
  *   ../assets/ai/videos/V1-desktop.mp4, V2-desktop.mp4   (2688×1536, agrandies ×2)
- *   ../assets/ai/videos/V1-mobile.mp4,  V2-mobile.mp4    (768×1344)
  *     → public/hero-video/desktop/000.webp …   1920×1080, V1 puis V2
- *     → public/hero-video/mobile/000.webp …    720×1260, V1 puis V2
+ *     → public/hero-video/mobile/000.webp …    720×720 : carré centré sur le moteur,
+ *       découpé dans les MÊMES vidéos (générées en portrait, elles sortaient avec des
+ *       bandes noires dures) : même plan, net, sur les deux formats
  *     → src/assets/hero/video/manifest.json    nombre d'images, tailles, version (cache)
  *
  * Les vidéos brutes ne sont pas commitées (journal : ops/credits.md) ; les images le sont.
@@ -28,9 +29,10 @@ const MANIFESTE = join(ICI, '..', 'src', 'assets', 'hero', 'video', 'manifest.js
 
 const FORMATS = {
   // Ordinateur : grandes images (1080p), 48 images par vidéo.
-  desktop: { largeur: 1920, hauteur: 1080, parVideo: 48, qualite: 62 },
-  // Téléphone : 720 px de large (net jusqu'en DPR 2), 32 images par vidéo pour rester léger.
-  mobile: { largeur: 720, hauteur: 1260, parVideo: 32, qualite: 58 },
+  desktop: { largeur: 1920, hauteur: 1080, parVideo: 48, qualite: 55 },
+  // Téléphone : carré 720 px (net en DPR 2 sur toute la largeur), 32 images par vidéo.
+  // Recadrage : carré 1536×1536 à x = 952 dans l'image 2688×1536 (moteur et orifice dedans).
+  mobile: { largeur: 720, hauteur: 720, parVideo: 32, qualite: 60, source: 'desktop', recadrage: '1536:1536:952:0' },
 }
 
 function nbImages(video) {
@@ -47,12 +49,13 @@ for (const [nom, f] of Object.entries(FORMATS)) {
   const hash = createHash('sha1')
   let index = 0
   for (const v of ['V1', 'V2']) {
-    const video = join(VIDEOS, `${v}-${nom}.mp4`)
+    const video = join(VIDEOS, `${v}-${f.source ?? nom}.mp4`)
     const total = nbImages(video)
     // Images réparties régulièrement, première et dernière comprises.
     const choix = Array.from({ length: f.parVideo }, (_, i) => Math.round((i * (total - 1)) / (f.parVideo - 1)))
     const tmp = mkdtempSync(join(tmpdir(), 'hero-video-'))
-    const filtre = `select='${choix.map((n) => `eq(n\\,${n})`).join('+')}',scale=${f.largeur}:${f.hauteur}:flags=lanczos`
+    const recadre = f.recadrage ? `crop=${f.recadrage},` : ''
+    const filtre = `select='${choix.map((n) => `eq(n\\,${n})`).join('+')}',${recadre}scale=${f.largeur}:${f.hauteur}:flags=lanczos`
     execFileSync('ffmpeg', ['-v', 'error', '-i', video, '-vf', filtre, '-fps_mode', 'passthrough', join(tmp, '%03d.png')])
     for (const png of readdirSync(tmp).sort()) {
       const sortie = join(dossier, `${String(index).padStart(3, '0')}.webp`)
