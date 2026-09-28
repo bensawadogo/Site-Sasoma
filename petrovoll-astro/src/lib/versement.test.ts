@@ -22,6 +22,12 @@ describe('pointFilet', () => {
     expect(y(1) - y(0.9)).toBeGreaterThan(y(0.1) - y(0))
   })
 
+  it('part vers le bas aussi quand le bidon verse vers la gauche', () => {
+    const p = pointFilet({ x: 300, y: 100 }, { x: 100, y: 260 }, 0.2, 0.05)
+    expect(p.x).toBeLessThan(300)
+    expect(p.y).toBeGreaterThan(100)
+  })
+
   it('verticale quand le goulot est juste au-dessus de l’orifice', () => {
     const p = pointFilet({ x: 50, y: 0 }, { x: 50, y: 100 }, 0.2, 0.5)
     expect(p.x).toBe(50)
@@ -45,6 +51,7 @@ describe('placerGoulot', () => {
     goulotVersPivot: { x: -43, y: -3 },
     angle: 115,
     gauche: 8,
+    droite: 1432,
     haut: 80,
   }
 
@@ -55,6 +62,12 @@ describe('placerGoulot', () => {
   it('décale à droite si le bidon sortait à gauche, sans dépasser l’orifice', () => {
     const g = placerGoulot({ ...base, orifice: { x: 60, y: 300 } })
     expect(g.x).toBe(56)
+  })
+
+  it('bidon à droite : décalé à gauche s’il sortait à droite, sans dépasser l’orifice', () => {
+    const g = placerGoulot({ ...base, orifice: { x: 1400, y: 300 }, cible: { x: 0.5, y: -0.4 }, goulotVersPivot: { x: 43, y: -3 } })
+    expect(g.x).toBe(1404)
+    expect(placerGoulot({ ...base, cible: { x: 0.5, y: -0.4 }, goulotVersPivot: { x: 43, y: -3 } })).toEqual({ x: 550, y: 260 })
   })
 
   it('descend si le bidon passait sous l’en-tête, en restant au-dessus de l’orifice', () => {

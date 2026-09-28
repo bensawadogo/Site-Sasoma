@@ -1,0 +1,18 @@
+{
+  "source_de_verite": "C:/Users/sawad/Downloads/KORO-MATHIEUX/petrovoll_hero_storyboard_scroll.html (maquette client : phases au scroll) + décisions de Ben du 2026-09-28",
+  "decisions": {
+    "bidon": "vraie photo P1 animée en code (étiquette exacte à 100 %), jamais générée par IA",
+    "position_bidon": "droite ; moteur au centre ; le bidon se penche vers la gauche et verse dans le goulot",
+    "ia_video": "uniquement le moteur en coupe et l'huile dedans ; caméra fixe ; image de début et de fin imposées"
+  },
+  "echelle": "progression du scroll 0 → 1 (HERO.temps) ; pas de durée en secondes : le visiteur règle la vitesse",
+  "scenes": [
+    { "id": "S01", "debut": 0.00, "fin": 0.08, "action": "ouverture : titre, bidon debout avec bouchon, moteur sec", "camera": "fixe", "objets": ["bidon", "moteur"], "transition": "fondu du titre", "generation": "code + image fixe K1" },
+    { "id": "S02", "debut": 0.08, "fin": 0.35, "action": "l'huile monte dans le bidon (rayons X, surface horizontale)", "camera": "fixe", "objets": ["bidon", "moteur"], "transition": "continu", "generation": "code" },
+    { "id": "S03", "debut": 0.35, "fin": 0.55, "action": "le bouchon saute, le bidon se penche (-105°) au-dessus du goulot, filet en chute libre dans le goulot", "camera": "fixe", "objets": ["bidon", "filet", "moteur"], "transition": "continu", "generation": "code + image fixe K1" },
+    { "id": "S04a", "debut": 0.55, "fin": 0.676, "action": "l'huile entre par le goulot et nappe l'arbre à cames ; étiquette 01", "camera": "fixe", "objets": ["moteur", "huile", "bidon (se redresse)"], "transition": "continu", "generation": "IA : K1 → K2" },
+    { "id": "S04b", "debut": 0.676, "fin": 0.798, "action": "l'huile descend sur les parois, les pistons et les bielles ; étiquette 02", "camera": "fixe", "objets": ["moteur", "huile"], "transition": "raccord sur la dernière image de S04a", "generation": "IA : K2 → K3" },
+    { "id": "S04c", "debut": 0.798, "fin": 0.92, "action": "l'huile atteint le vilebrequin et le carter ; étiquette 03", "camera": "fixe", "objets": ["moteur", "huile"], "transition": "raccord sur la dernière image de S04b", "generation": "IA : K3 → K4" },
+    { "id": "S05", "debut": 0.92, "fin": 1.00, "action": "moteur assombri, produits STÄRK et MÖTPRO 4T, bouton de contact", "camera": "fixe", "objets": ["textes", "produits"], "transition": "fondu", "generation": "code (HTML)" }
+  ]
+}

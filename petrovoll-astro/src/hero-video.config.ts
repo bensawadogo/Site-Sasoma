@@ -10,23 +10,26 @@
  *   pistons ; C3 elle atteint le vilebrequin. Composés sur K1 (métal rigide par
  *   construction) par ops/scripts/composer_huile.py, découpés par npm run hero:video.
  *
+ * Bidon à DROITE (Ben) : les images du moteur sont retournées en miroir au découpage,
+ * le goulot est donc en haut à droite du moteur, côté bidon.
+ *
  * Conventions : zones en fractions de l'écran ; points du moteur en fractions de la
- * vidéo source (1344×768), ramenés au recadrage de chaque format par `dansImage`.
+ * vidéo source retournée (1344×768), ramenés au recadrage de chaque format par `dansImage`.
  */
 import manifeste from '@/assets/hero/video/manifest.json'
 import type { Point, Zone } from '@/hero.config'
 
-/** Points du moteur dans la vidéo source (repérés sur K1). */
+/** Points du moteur dans la vidéo source retournée (repérés sur K1, x → 1 − x). */
 export const MOTEUR = {
-  /** Ouverture du goulot de remplissage, en haut à gauche du moteur : arrivée du filet. */
-  orifice: { x: 0.3249, y: 0.1424 },
-  /** Bord droit du moteur (colonne des étiquettes sur desktop). */
-  bordDroit: 0.795,
+  /** Ouverture du goulot de remplissage, en haut à droite du moteur : arrivée du filet. */
+  orifice: { x: 0.6751, y: 0.1424 },
+  /** Bord gauche du moteur (colonne des étiquettes sur desktop, côté opposé au bidon). */
+  bordGauche: 0.205,
   /** Pièces commentées, dans l'ordre des textes HERO.textes.t3 (cames, pistons, vilebrequin). */
   pieces: [
-    { x: 0.655, y: 0.235 },
-    { x: 0.672, y: 0.415 },
-    { x: 0.672, y: 0.765 },
+    { x: 0.345, y: 0.235 },
+    { x: 0.328, y: 0.415 },
+    { x: 0.328, y: 0.765 },
   ],
 }
 
@@ -68,17 +71,19 @@ export interface ReglagesHeroVideo {
   }
   /** moteur : rectangle du canvas de la séquence (plein écran sur desktop). */
   zones: { entete: Zone; moteur: Zone; bidon: Zone; textes: Zone; fin: Zone }
+  /** Bascule du bidon (degrés ; < 0 = sens inverse des aiguilles, il verse vers la gauche). */
+  angleVersement: number
   /**
-   * Goulot en fin de bascule, par rapport à l'orifice, en hauteurs de bidon (x < 0 : à
-   * gauche, y < 0 : au-dessus). Le script le décale à droite si le bidon basculé
+   * Goulot en fin de bascule, par rapport à l'orifice, en hauteurs de bidon (x > 0 : à
+   * droite, y < 0 : au-dessus). Le script le rapproche de l'orifice si le bidon basculé
    * sortait de l'écran.
    */
   cibleGoulot: Point
   /** Épaisseur du filet d'huile à la sortie du goulot (px). */
   epaisseurFilet: number
   /**
-   * Étiquettes des pièces : 'colonne' = titre et texte à droite du moteur, reliés par
-   * un trait ; 'pastille' = titre seul collé au point, le texte reste en bas.
+   * Étiquettes des pièces : 'colonne' = titre et texte à gauche du moteur, reliés par
+   * un trait ; 'pastille' = titre seul, à droite du point, le texte reste en bas.
    */
   reperes: 'colonne' | 'pastille'
 }
@@ -89,9 +94,9 @@ export const HERO_MOBILE: ReglagesHeroVideo = {
   sequence: {
     dossier: '/hero-video/mobile',
     ...manifeste.mobile,
-    // Zone plus haute que l'image : elle déborde un peu à droite ; la focale garde le
-    // moteur entier et laisse l'orifice assez loin du bord gauche pour le bidon basculé.
-    focale: { x: 0.55, y: 0.5 },
+    // Zone plus haute que l'image : elle déborde un peu à gauche ; la focale garde le
+    // moteur entier et laisse l'orifice assez loin du bord droit pour le bidon basculé.
+    focale: { x: 0.45, y: 0.5 },
     zoom: 1,
     dprMax: 2,
     parallele: 4,
@@ -99,11 +104,12 @@ export const HERO_MOBILE: ReglagesHeroVideo = {
   zones: {
     entete: { x: 0, y: 0, l: 1, h: 0.12 },
     moteur: { x: 0, y: 0.3, l: 1, h: 0.4 },
-    bidon: { x: 0.03, y: 0.13, l: 0.3, h: 0.13 },
+    bidon: { x: 0.67, y: 0.13, l: 0.3, h: 0.13 },
     textes: { x: 0.06, y: 0.68, l: 0.88, h: 0.28 },
     fin: { x: 0.06, y: 0.3, l: 0.88, h: 0.66 },
   },
-  cibleGoulot: { x: -0.2, y: -0.62 },
+  angleVersement: -105,
+  cibleGoulot: { x: 0.2, y: -0.62 },
   epaisseurFilet: 5,
   reperes: 'pastille',
 }
@@ -124,11 +130,12 @@ export const HERO_DESKTOP: ReglagesHeroVideo = {
   zones: {
     entete: { x: 0, y: 0, l: 1, h: 0.12 },
     moteur: { x: 0, y: 0, l: 1, h: 1 },
-    bidon: { x: 0.05, y: 0.19, l: 0.18, h: 0.26 },
+    bidon: { x: 0.77, y: 0.19, l: 0.18, h: 0.26 },
     textes: { x: 0.04, y: 0.5, l: 0.21, h: 0.44 },
     fin: { x: 0.05, y: 0.26, l: 0.46, h: 0.66 },
   },
-  cibleGoulot: { x: -0.5, y: -0.38 },
+  angleVersement: -105,
+  cibleGoulot: { x: 0.5, y: -0.38 },
   epaisseurFilet: 9,
   reperes: 'colonne',
 }

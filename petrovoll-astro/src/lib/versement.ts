@@ -10,12 +10,13 @@ export interface Pt {
 
 /**
  * Point du filet d'huile, du goulot `a` à l'orifice `b`, pour t de 0 à 1. Parabole de
- * chute libre : l'huile quitte le goulot avec la pente `pente` (dy/dx, > 0 = vers le
- * bas), x avance régulièrement et y accélère. Courbe de Bézier quadratique dont le point
- * de contrôle est au milieu en x, sur la tangente de départ.
+ * chute libre : l'huile quitte le goulot avec la pente `pente` (> 0 = vers le bas, dans
+ * le sens du versement, vers la gauche comme vers la droite), x avance régulièrement et
+ * y accélère. Courbe de Bézier quadratique dont le point de contrôle est au milieu en x,
+ * sur la tangente de départ.
  */
 export function pointFilet(a: Pt, b: Pt, pente: number, t: number): Pt {
-  const c = { x: (a.x + b.x) / 2, y: a.y + (pente * (b.x - a.x)) / 2 }
+  const c = { x: (a.x + b.x) / 2, y: a.y + (pente * Math.abs(b.x - a.x)) / 2 }
   const u = 1 - t
   return { x: u * u * a.x + 2 * u * t * c.x + t * t * b.x, y: u * u * a.y + 2 * u * t * c.y + t * t * b.y }
 }
@@ -37,22 +38,30 @@ export interface PlacementGoulot {
   bidon: { l: number; h: number }
   goulotVersPivot: Pt
   angle: number
-  /** Limites de l'écran : bord gauche et haut (sous l'en-tête) à ne pas dépasser. */
+  /** Limites de l'écran : bords gauche et droit, haut (sous l'en-tête) à ne pas dépasser. */
   gauche: number
+  droite: number
   haut: number
 }
 
 /**
- * Goulot du bidon basculé : la cible demandée, décalée à droite ou vers le bas si le
- * bidon sortait de l'écran ou passait sous l'en-tête, sans jamais passer à droite de
- * l'orifice ni sous son niveau (l'huile doit tomber dedans).
+ * Goulot du bidon basculé : la cible demandée, rapprochée de l'orifice ou descendue si
+ * le bidon sortait de l'écran ou passait sous l'en-tête, sans jamais passer de l'autre
+ * côté de l'orifice ni sous son niveau (l'huile doit tomber dedans).
  */
 export function placerGoulot(p: PlacementGoulot): Pt {
   const g = { x: p.orifice.x + p.cible.x * p.bidon.h, y: p.orifice.y + p.cible.y * p.bidon.h }
   const demi = demiEncombrement(p.bidon.l, p.bidon.h, p.angle)
   const pivot = { x: g.x + p.goulotVersPivot.x, y: g.y + p.goulotVersPivot.y }
-  const manqueX = p.gauche - (pivot.x - demi.l)
-  if (manqueX > 0) g.x = Math.min(g.x + manqueX, p.orifice.x - 4)
+  if (p.cible.x <= 0) {
+    // Bidon à gauche de l'orifice : il ne doit pas sortir à gauche.
+    const manque = p.gauche - (pivot.x - demi.l)
+    if (manque > 0) g.x = Math.min(g.x + manque, p.orifice.x - 4)
+  } else {
+    // Bidon à droite : il ne doit pas sortir à droite.
+    const manque = pivot.x + demi.l - p.droite
+    if (manque > 0) g.x = Math.max(g.x - manque, p.orifice.x + 4)
+  }
   const manqueY = p.haut - (pivot.y - demi.h)
   if (manqueY > 0) g.y = Math.min(g.y + manqueY, p.orifice.y - 0.2 * p.bidon.h)
   return g

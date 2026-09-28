@@ -1,0 +1,34 @@
+{
+  "conventions": "fractions 0 → 1 (0 = gauche / haut). « image » = image du moteur 16:9 (1344×768, retournée en miroir au découpage) ; « ecran » = fenêtre du navigateur mesurée (1440×900 et 390×844). Un plan IA qui déplace le moteur, bouge la caméra ou ajoute un objet est REJETÉ (ops/scripts/controle_plan.py).",
+  "moteur_image": {
+    "camera": { "type": "fixe, face au flanc du moteur", "locked": true },
+    "cadre_moteur": { "x0": 0.205, "y0": 0.115, "x1": 0.80, "y1": 0.90 },
+    "goulot": { "x": 0.675, "y": 0.142 },
+    "pieces": { "arbre_a_cames": { "x": 0.345, "y": 0.235 }, "pistons": { "x": 0.328, "y": 0.415 }, "vilebrequin": { "x": 0.328, "y": 0.765 } },
+    "fond": "noir pur ; lampe chaude",
+    "interdit": ["mouvement de caméra", "zoom", "pièces qui bougent", "bidon", "texte ou logo", "objet ajouté"]
+  },
+  "S03": {
+    "desktop": {
+      "bidon_repos": { "x": 0.808, "y": 0.19, "l": 0.104, "h": 0.26, "rotation": 0 },
+      "bidon_versement": { "x": 0.693, "y": 0.085, "l": 0.184, "h": 0.228, "rotation": -105 },
+      "moteur": "centre, image réduite à 78 % et posée en bas de l'écran",
+      "huile": { "depart": "goulot du bidon basculé", "arrivee": "goulot du moteur", "trajectoire": "chute libre vers la gauche et le bas" },
+      "etiquettes": "colonne à gauche du moteur"
+    },
+    "mobile": {
+      "bidon_repos": { "x": 0.73, "y": 0.13, "l": 0.181, "h": 0.13, "rotation": 0 },
+      "bidon_versement": { "x": 0.654, "y": 0.186, "l": 0.318, "h": 0.114, "rotation": -105 },
+      "moteur": { "zone": { "x": 0, "y": 0.30, "l": 1, "h": 0.40 } },
+      "huile": { "trajectoire": "presque verticale, du goulot du bidon au goulot du moteur" },
+      "etiquettes": "pastilles à droite du point de chaque pièce ; texte en bas"
+    }
+  },
+  "S04": {
+    "images_cles": { "K1": "sec", "K2": "huile sur l'arbre à cames", "K3": "+ parois, pistons, bielles", "K4": "+ vilebrequin et carter" },
+    "plans": { "S04a": ["K1", "K2"], "S04b": ["K2", "K3"], "S04c": ["K3", "K4"] },
+    "mouvement": "seule l'huile bouge, vers le bas",
+    "immobile": ["caméra", "moteur", "fond"],
+    "interdit": ["zoom", "rotation de caméra", "pistons ou vilebrequin qui tournent", "huile qui monte", "texte", "bidon"]
+  }
+}

@@ -7,7 +7,7 @@
  * séquence.
  *
  * Déroulé (HERO.temps) : l'huile monte dans le bidon debout (t1) ; le bouchon saute,
- * le bidon, à gauche du moteur, se penche et verse un filet en chute libre dans
+ * le bidon, à droite du moteur, se penche et verse un filet en chute libre dans
  * l'orifice (t2) ; pendant t3 la séquence montre l'huile qui descend dans le moteur en
  * coupe (cames, pistons, vilebrequin), le filet se tarit, le bidon se redresse, et
  * chaque pièce reçoit son étiquette quand l'huile l'atteint.
@@ -43,10 +43,10 @@ const FIN_SEQUENCE = PLANS_T3[PLANS_T3.length - 1][1]
 const PENTE_FILET = 0.25
 /**
  * Surface de l'huile dans le bidon, en hauteurs de bidon depuis le haut du bidon debout
- * (plein, finale), ou par rapport au pivot quand il penche (versement, tari ; > 0 : sous
- * le pivot). Le goulot basculé est à +0,026 : l'huile coule tant que la surface est au-dessus.
+ * (plein, finale), ou par rapport au goulot quand il penche (versement : juste au-dessus,
+ * l'huile coule ; tari : passée dessous, le filet s'arrête).
  */
-const SURFACE = { plein: 0.32, finale: 0.62, versement: -0.01, tari: 0.06 }
+const SURFACE = { plein: 0.32, finale: 0.62, versement: -0.04, tari: 0.04 }
 
 export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void {
   const scene = racine.querySelector<HTMLElement>('[data-scene]')!
@@ -159,6 +159,8 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   let pivot: Pt = { x: 0, y: 0 }
   let deplacement: Pt = { x: 0, y: 0 }
   let hauteurBidon = 0
+  /** Hauteur du goulot basculé sous le pivot, en hauteurs de bidon. */
+  let goulotSousPivot = 0
 
   function dimensionner(c: HTMLCanvasElement, echelle: number, taille = ecran) {
     const l = Math.round(taille.l * echelle)
@@ -197,33 +199,36 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     bidon.style.transformOrigin = `${bottlePivot.x * 100}% ${bottlePivot.y * 100}%`
     goulotRepos = { x: gauche + spout.x * l, y: haut + spout.y * h }
     pivot = { x: gauche + bottlePivot.x * l, y: haut + bottlePivot.y * h }
-    const goulotBascule = tournerAutour(goulotRepos, pivot, HERO.angleVersement)
+    const goulotBascule = tournerAutour(goulotRepos, pivot, R.angleVersement)
+    goulotSousPivot = (goulotBascule.y - pivot.y) / h
     const arrivee = placerGoulot({
       orifice,
       cible: R.cibleGoulot,
       bidon: { l, h },
       goulotVersPivot: { x: pivot.x - goulotBascule.x, y: pivot.y - goulotBascule.y },
-      angle: HERO.angleVersement,
+      angle: R.angleVersement,
       gauche: 8,
+      droite: ecran.l - 8,
       haut: R.zones.entete.h * ecran.h * 0.7,
     })
     deplacement = { x: arrivee.x - goulotBascule.x, y: arrivee.y - goulotBascule.y }
 
-    // Étiquettes : point sur la pièce, trait, étiquette (à droite du moteur, ou pastille
-    // à gauche du point).
-    const bord = aLEcran({ x: MOTEUR.bordDroit, y: 0 }).x
+    // Étiquettes : point sur la pièce, trait, étiquette (colonne à gauche du moteur, ou
+    // pastille à droite du point, sur le moteur).
+    const bord = aLEcran({ x: MOTEUR.bordGauche, y: 0 }).x
     for (const [i, r] of reperes.entries()) {
       r.ancre = aLEcran(MOTEUR.pieces[i])
       const largeur = r.etiquette.offsetWidth
       if (colonne) {
-        r.etiquetteX = Math.min(bord + 28, ecran.l - largeur - 16)
-        r.traitX = r.ancre.x
-      } else {
-        r.etiquetteX = Math.max(8, r.ancre.x - 14 - largeur)
+        r.etiquetteX = Math.max(16, bord - 28 - largeur)
         r.traitX = r.etiquetteX + largeur
+      } else {
+        r.etiquetteX = Math.min(ecran.l - 8 - largeur, r.ancre.x + 14)
+        r.traitX = r.ancre.x
       }
-      r.trait.style.width = `${Math.max(0, colonne ? r.etiquetteX - r.ancre.x : r.ancre.x - r.traitX)}px`
-      r.trait.style.transformOrigin = colonne ? '0 50%' : '100% 50%'
+      r.trait.style.width = `${Math.max(0, colonne ? r.ancre.x - r.traitX : r.etiquetteX - r.ancre.x)}px`
+      // Le trait part du point vers l'étiquette.
+      r.trait.style.transformOrigin = colonne ? '100% 50%' : '0 50%'
       r.point.style.transform = `translate3d(${r.ancre.x}px, ${r.ancre.y}px, 0)`
     }
     derniereDessinee = -1
@@ -413,7 +418,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     const penche = doux(local(t2, 0.12, 0.62))
     const retour = mouvementReduit ? 0 : doux(local(t3, 0.3, 0.44))
     const bascule = mouvementReduit ? 0 : penche * (1 - retour)
-    const angle = HERO.angleVersement * bascule
+    const angle = R.angleVersement * bascule
     bidon.style.transform = `translate3d(${deplacement.x * bascule}px, ${deplacement.y * bascule}px, 0) rotate(${angle}deg)`
     bidon.style.opacity = String(1 - disparition)
 
@@ -423,9 +428,11 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       const pivotY = HERO.ancres.bidon.bottlePivot.y
       const monte = mix(1, SURFACE.plein, doux(local(p, T1.debut, T1.fin))) - pivotY
       const versee = local(p, mix(T2.debut, T2.fin, 0.6), mix(T3.debut, T3.fin, 0.26))
-      const surface = mix(mix(mix(monte, SURFACE.versement, mouvementReduit ? 0 : penche), SURFACE.tari, versee), SURFACE.finale - pivotY, retour)
+      const auGoulot = mix(goulotSousPivot + SURFACE.versement, goulotSousPivot + SURFACE.tari, versee)
+      const surface = mix(mix(monte, auGoulot, mouvementReduit ? 0 : penche), SURFACE.finale - pivotY, retour)
       // Ballottement : la surface prend un peu de retard sur les mouvements du bidon.
-      const ballottement = mouvementReduit ? 0 : 9 * Math.sin(Math.PI * bascule) * (1 - retour) - 7 * Math.sin(Math.PI * retour)
+      const sens = Math.sign(R.angleVersement)
+      const ballottement = mouvementReduit ? 0 : sens * (9 * Math.sin(Math.PI * bascule) * (1 - retour) - 7 * Math.sin(Math.PI * retour))
       niveau.style.transform = `rotate(${-angle + ballottement}deg) translate3d(0, ${surface * hauteurBidon}px, 0)`
     }
 
@@ -449,7 +456,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       r.trait.style.transform = `translate3d(${r.traitX}px, ${r.ancre.y}px, 0) scaleX(${trait})`
       const o = local(t3, r.apparition + 0.02, r.apparition + 0.06)
       r.etiquette.style.opacity = String(o)
-      r.etiquette.style.transform = `translate3d(${r.etiquetteX + (1 - o) * (colonne ? 12 : -8)}px, ${r.ancre.y}px, 0)`
+      r.etiquette.style.transform = `translate3d(${r.etiquetteX + (1 - o) * (colonne ? -12 : 8)}px, ${r.ancre.y}px, 0)`
     }
 
     dessinerMoteur(t3)

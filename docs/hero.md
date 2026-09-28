@@ -49,7 +49,7 @@ Le hero pèse le même poids partout : quelques dizaines de Ko d'images du bidon
 
 ## Hero vidéo (aperçu `/apercu-hero`)
 
-Version 3 : bidon réel à gauche, moteur en coupe au centre (on voit l'arbre à cames, les pistons et bielles, le vilebrequin).
+Version 3 : bidon réel à droite (décision de Ben), moteur en coupe au centre ; les images du moteur sont retournées en miroir au découpage pour que le goulot soit côté bidon (on voit l'arbre à cames, les pistons et bielles, le vilebrequin).
 
 | Scroll | À l'écran |
 |---|---|
@@ -66,7 +66,7 @@ Deux heros séparés, un par format ; un seul est affiché (media query à 900 p
 | Script | `scripts/hero-video/mobile.ts` | `scripts/hero-video/desktop.ts` |
 | Réglages | `HERO_MOBILE` (`hero-video.config.ts`) | `HERO_DESKTOP` |
 | Séquence | 72 images 880×614 (2,2 Mo) | 120 images 1920×1080 (8,4 Mo) |
-| Étiquettes | pastilles sur les pièces, texte en bas | titre et texte à droite du moteur, reliés par un trait |
+| Étiquettes | pastilles sur les pièces, texte en bas | titre et texte à gauche du moteur, reliés par un trait |
 
 Communs : `noyau.ts` (textes, bidon, filet, étiquettes, séquence), `BidonHero.astro`, `HeroTextes.astro`, `HeroReperes.astro`, `lib/sequence-images.ts` et `lib/versement.ts` (testés). Points du moteur (goulot, pièces) et plans : `MOTEUR` et `PLANS_T3` dans `hero-video.config.ts`. Palier lite : deux images (moteur sec, moteur huilé) en fondu.
 
