@@ -35,7 +35,8 @@ const dansT3 = (f: number) => t3.debut + f * (t3.fin - t3.debut)
 const arrivee = (i: number) => dansT3(APPARITIONS_REPERES[i])
 const blocs = [
   { ...plage('t1'), ...textes.t1, etape: false },
-  { ...plage('t2'), ...textes.t2, etape: false },
+  // Le texte du versement reste jusqu'à l'arrivée de la première pièce (pas d'écran vide).
+  { ...plage('t2'), fin: arrivee(0), ...textes.t2, etape: false },
   ...textes.t3.map((t, i) => ({
     debut: arrivee(i),
     fin: i === textes.t3.length - 1 ? t3.fin : arrivee(i + 1),

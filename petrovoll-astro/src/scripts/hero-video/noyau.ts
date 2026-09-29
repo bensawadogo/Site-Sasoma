@@ -26,6 +26,8 @@ import { caler, couverture, type Couverture, indexImage, ordreChargement, plusPr
 import {
   angleDebut,
   ballottement,
+  BEC_ARRIERE,
+  BEC_AVANT,
   directionFilet,
   type GeometrieBidon,
   placerGoulot,
@@ -55,7 +57,7 @@ const FIN_SEQUENCE = PLANS_T3[PLANS_T3.length - 1][1]
  * après le saut du bouchon à son retour, en progression globale. La physique (chute du
  * filet, ballottement) tourne en « secondes simulées » : DUREE pour toute la séquence.
  */
-const SEQUENCE_BIDON = [0.37, 0.75] as const
+const SEQUENCE_BIDON = [0.37, 0.72] as const
 const DUREE = 4
 /** Hauteur réelle du bidon de 1 L (m) : échelle pixels ↔ mètres. */
 const HAUTEUR_REELLE = 0.25
@@ -64,8 +66,6 @@ const G = 9.81
 const REMPLISSAGE = { plein: 0.68, verse: 0.4 }
 /** Poignée du bidon (fractions de la photo) : la main le lève par là. */
 const POIGNEE = { x: 0.8, y: 0.17 }
-/** État du versement (angle, remplissage, débit) pour tout u, intégré une fois. */
-const VERSEMENT = tableVersement(REMPLISSAGE.plein, REMPLISSAGE.verse)
 /** Couleurs de l'huile neuve, accordées à l'huile du moteur : corps doré, cœur clair, reflet, bord sombre (Fresnel). */
 const TEINTES = { corps: '#d9951f', coeur: '#f6c85a', reflet: '#fff1c2', bord: 'rgb(138 75 10 / 0.6)' }
 
@@ -86,6 +86,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     actif: el.hasAttribute('data-actif'),
   }))
   const colonne = R.reperes === 'colonne'
+  const aDroite = R.etiquettes === 'droite'
   const reperes = [...racine.querySelectorAll<HTMLElement>('[data-repere]')].map((el, i) => ({
     el,
     point: el.querySelector<HTMLElement>('[data-point]')!,
@@ -96,6 +97,9 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     etiquetteX: 0,
     traitX: 0,
   }))
+  // Façon de verser (goulot devant ou derrière) et état du versement pour tout u, intégré une fois.
+  const PROFIL = R.bec === 'avant' ? BEC_AVANT : BEC_ARRIERE
+  const VERSEMENT = tableVersement(REMPLISSAGE.plein, REMPLISSAGE.verse, PROFIL)
   const ctxMoteur = canvasMoteur.getContext('2d')!
   const ctxFilet = canvasFilet.getContext('2d')!
   const mouvementReduit = matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -202,18 +206,18 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     boite = { x: zm.x * ecran.l, y: zm.y * ecran.h, l: zm.l * ecran.l, h: zm.h * ecran.h }
     Object.assign(canvasMoteur.style, { left: `${boite.x}px`, top: `${boite.y}px`, width: `${boite.l}px`, height: `${boite.h}px` })
     const image = { l: S.largeur, h: S.hauteur }
-    couv =
-      S.caleDroite === undefined
-        ? couverture(image, boite, S.focale.x, S.focale.y, S.zoom)
-        : caler(image, boite, S.zoom, S.focale.y, dansImage({ x: MOTEUR.bordDroit, y: 0 }, S.recadrage).x, S.caleDroite)
+    const bordCale = S.cale?.bord === 'gauche' ? MOTEUR.bordGauche : MOTEUR.bordDroit
+    couv = S.cale
+      ? caler(image, boite, S.zoom, S.focale.y, dansImage({ x: bordCale, y: 0 }, S.recadrage).x, S.cale.x)
+      : couverture(image, boite, S.focale.x, S.focale.y, S.zoom)
     // Jamais plus défini que l'image source : inutile de peindre des pixels inventés.
     dpr = Math.min(devicePixelRatio || 1, S.dprMax, Math.max(1, S.largeur / couv.l))
     dimensionner(canvasMoteur, dpr, boite)
     dimensionner(canvasFilet, Math.min(devicePixelRatio || 1, 2))
     orifice = aLEcran(MOTEUR.orifice)
 
-    // Bidon debout, à gauche. Pendant le versement, son goulot se tient au-dessus et à
-    // gauche de l'orifice, là où le filet, à plein débit, tombe dans l'orifice.
+    // Bidon debout, sur le côté. Pendant le versement, son goulot se tient au-dessus de
+    // l'orifice, décalé de son côté, là où le filet, à plein débit, tombe dans l'orifice.
     const zb = R.zones.bidon
     const h = zb.h * ecran.h
     const l = h * aspectBidon
@@ -228,39 +232,37 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     const pivot = { x: gauche + bottlePivot.x * l, y: haut + bottlePivot.y * h }
     const goulot = { x: gauche + spout.x * l, y: haut + spout.y * h }
     const chute = R.chuteFilet * h
-    const d = directionFilet(117, 1)
+    const d = directionFilet((PROFIL.sens * (PROFIL.debutVersement + PROFIL.finVersement)) / 2, 1)
     const v0 = vitesseSortie(1) * ppm
     const t = (-d.y * v0 + Math.sqrt((d.y * v0) ** 2 + 2 * gpx * chute)) / gpx
     const voulu = { x: orifice.x - d.x * v0 * t, y: orifice.y - chute }
-    const versPivot = tourner({ x: pivot.x - goulot.x, y: pivot.y - goulot.y }, 128)
+    const angleMax = PROFIL.sens * PROFIL.finVersement
+    const versPivot = tourner({ x: pivot.x - goulot.x, y: pivot.y - goulot.y }, angleMax)
     const goulotVerse = placerGoulot({
       orifice,
       cible: { x: (voulu.x - orifice.x) / h, y: (voulu.y - orifice.y) / h },
       bidon: { l, h },
       goulotVersPivot: versPivot,
-      angle: 128,
+      angle: angleMax,
       gauche: 8,
       droite: ecran.l - 8,
       haut: R.zones.entete.h * ecran.h * 0.7,
     })
     geo = { pivot, goulot, poignee: { x: gauche + POIGNEE.x * l, y: haut + POIGNEE.y * h }, hauteur: h, goulotVerse }
 
-    // Étiquettes : point sur la pièce, trait, étiquette (colonne à gauche du moteur, ou
-    // pastille à droite du point, sur le moteur).
-    const bord = aLEcran({ x: MOTEUR.bordGauche, y: 0 }).x
+    // Étiquettes : point sur la pièce, trait, étiquette. Colonne : à côté du moteur, du
+    // côté R.etiquettes ; pastille : collée au point, de ce côté-là.
+    const bord = aLEcran({ x: aDroite ? MOTEUR.bordDroit : MOTEUR.bordGauche, y: 0 }).x
     for (const [i, r] of reperes.entries()) {
       r.ancre = aLEcran(MOTEUR.pieces[i])
       const largeur = r.etiquette.offsetWidth
-      if (colonne) {
-        r.etiquetteX = Math.max(16, bord - 28 - largeur)
-        r.traitX = r.etiquetteX + largeur
-      } else {
-        r.etiquetteX = Math.min(ecran.l - 8 - largeur, r.ancre.x + 14)
-        r.traitX = r.ancre.x
-      }
-      r.trait.style.width = `${Math.max(0, colonne ? r.ancre.x - r.traitX : r.etiquetteX - r.ancre.x)}px`
-      // Le trait part du point vers l'étiquette.
-      r.trait.style.transformOrigin = colonne ? '100% 50%' : '0 50%'
+      const x = colonne ? bord : r.ancre.x
+      const ecart = colonne ? 28 : 14
+      r.etiquetteX = aDroite ? Math.min(ecran.l - largeur - 16, x + ecart) : Math.max(16, x - ecart - largeur)
+      // Le trait va du point au bord de l'étiquette le plus proche.
+      r.traitX = aDroite ? r.ancre.x : r.etiquetteX + largeur
+      r.trait.style.width = `${Math.max(0, aDroite ? r.etiquetteX - r.ancre.x : r.ancre.x - r.traitX)}px`
+      r.trait.style.transformOrigin = aDroite ? '0 50%' : '100% 50%'
       r.point.style.transform = `translate3d(${r.ancre.x}px, ${r.ancre.y}px, 0)`
     }
     derniereDessinee = -1
@@ -338,7 +340,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     if (ue < 0 || ue > 1) return null
     const f = VERSEMENT(ue).debit
     if (f <= 0) return null
-    const pose = poseBidon(ue, geo)
+    const pose = poseBidon(ue, geo, PROFIL)
     const dir = directionFilet(pose.angle, f)
     const v0 = vitesseSortie(f) * ppm
     const vy = dir.y * v0
@@ -354,7 +356,10 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       y: pose.goulot.y + vy * age + 0.5 * gpx * age * age,
     }
     const v = Math.hypot(dir.x * v0, vy + gpx * age)
-    return { p, largeur: 0.05 * hauteurBidon * Math.sqrt(f) * Math.sqrt(v0 / v), debit: f, arrivee: age > aSol * 0.97, ue }
+    // Goulot devant : l'air rentre par à-coups (« glouglou ») et le débit pulse un peu ;
+    // la pulsation est liée à l'instant d'émission, elle descend donc le long du filet.
+    const glouglou = PROFIL.sens < 0 ? 1 + 0.1 * Math.sin(2 * Math.PI * 6 * ue * DUREE) : 1
+    return { p, largeur: 0.05 * hauteurBidon * Math.sqrt(f) * Math.sqrt(v0 / v) * glouglou, debit: f, arrivee: age > aSol * 0.97, ue }
   }
 
   function tracerRuban(points: Parcelle[], echelle: number, style: string, alpha: number, decalage = 0) {
@@ -419,7 +424,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     // Le filet naît sur la lèvre du goulot : il épouse le bord sur quelques pixels.
     const premier = runs[0][0]
     if (premier && Math.abs(premier.ue - u) < 1e-9) {
-      const pose = poseBidon(u, geo)
+      const pose = poseBidon(u, geo, PROFIL)
       const dir = directionFilet(pose.angle, premier.debit)
       runs[0].unshift({ ...premier, p: { x: premier.p.x - dir.x * 0.025 * hauteurBidon, y: premier.p.y - dir.y * 0.025 * hauteurBidon } })
     }
@@ -492,17 +497,19 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     const saut = doux(local(t2, 0, 0.15))
     if (bouchon) {
       const h = hauteurBidon
-      bouchon.style.transform = `translate3d(${-0.26 * h * saut}px, ${-0.13 * h * Math.sin(Math.PI * 0.8 * saut)}px, 0) rotate(${-20 * saut}deg)`
+      // Il part du côté opposé au moteur.
+      const s = -PROFIL.sens
+      bouchon.style.transform = `translate3d(${s * 0.26 * h * saut}px, ${-0.13 * h * Math.sin(Math.PI * 0.8 * saut)}px, 0) rotate(${s * 20 * saut}deg)`
       bouchon.style.opacity = String(1 - local(saut, 0.55, 1))
     }
 
     // Bidon : la main le lève par la poignée, l'incline au-dessus de l'orifice en gardant
-    // le goulot presque immobile, verse, coupe d'un geste, puis l'emporte en haut à gauche.
+    // le goulot presque immobile, verse, coupe d'un geste, puis l'emporte vers le haut.
     const u = mouvementReduit ? 0 : local(p, SEQUENCE_BIDON[0], SEQUENCE_BIDON[1])
-    const pose = poseBidon(u, geo)
+    const pose = poseBidon(u, geo, PROFIL)
     bidon.style.transform = `translate3d(${pose.translation.x}px, ${pose.translation.y}px, 0) rotate(${pose.angle}deg)`
-    // Il s'efface sur la fin de sa sortie (les 40 derniers pourcents).
-    const effacement = mouvementReduit ? disparition : Math.max(disparition, local(u, 0.886, 1))
+    // Il s'efface pendant sa sortie, avant de passer sous l'en-tête ou le bord de l'écran.
+    const effacement = mouvementReduit ? disparition : Math.max(disparition, local(u, 0.83, 0.95))
     bidon.style.opacity = String(1 - effacement)
 
     // Huile dans le bidon : surface horizontale (contre-rotation) qui monte en t1, rejoint
@@ -517,8 +524,8 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       const surface =
         etat.debit > 0
           ? goulotY - 0.01 - 0.03 * etat.debit
-          : mix(debout, goulotY - 0.01, doux(borner(pose.angle / angleDebut(remplissage))))
-      const phi = mouvementReduit || u <= 0 || u >= 1 ? 0 : ballottement(u, DUREE)
+          : mix(debout, goulotY - 0.01, doux(borner(Math.abs(pose.angle) / angleDebut(remplissage, PROFIL))))
+      const phi = mouvementReduit || u <= 0 || u >= 1 ? 0 : ballottement(u, DUREE, PROFIL)
       const t = `rotate(${-pose.angle + phi}deg) translate3d(0, ${surface * hauteurBidon}px, 0)`
       niveau.style.transform = t
       if (menisque) menisque.style.transform = t
@@ -542,7 +549,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       r.trait.style.transform = `translate3d(${r.traitX}px, ${r.ancre.y}px, 0) scaleX(${trait})`
       const o = local(t3, r.apparition + 0.02, r.apparition + 0.06)
       r.etiquette.style.opacity = String(o)
-      r.etiquette.style.transform = `translate3d(${r.etiquetteX + (1 - o) * (colonne ? -12 : 8)}px, ${r.ancre.y}px, 0)`
+      r.etiquette.style.transform = `translate3d(${r.etiquetteX + (1 - o) * (aDroite ? 12 : -12)}px, ${r.ancre.y}px, 0)`
     }
 
     dessinerMoteur(t3)

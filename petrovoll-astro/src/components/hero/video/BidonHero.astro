@@ -67,7 +67,7 @@ const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
   }
   .huile {
     mix-blend-mode: multiply;
-    opacity: 0.42;
+    opacity: 0.3;
   }
   /* Ligne claire de la surface (ménisque), mêmes transformations que le niveau. */
   .menisque {
@@ -104,7 +104,7 @@ const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
     width: 400%;
     height: 400%;
     margin-left: -200%;
-    background: #c8901a;
+    background: linear-gradient(to bottom, rgb(200 144 26 / 0) 0, #c8901a 7px);
     transform-origin: 50% 0;
     transform: translate3d(0, 100vh, 0);
     will-change: transform;

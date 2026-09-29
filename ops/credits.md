@@ -71,3 +71,14 @@ Demande de Ben : bidon à gauche qui se penche et verse sur le moteur au centre,
 | 2026-09-28 | composition | ops/scripts/composer_huile.py | — | K1 + huile de chaque image (pixels devenus dorés), fond ramené au noir pur | 0 $ | 0 $ | FINAL | assets/ai/videos/moteur-v3.mp4, moteur-v3-1080p.mp4 (non commité) |
 
 **Version 3 : 0,24 $ (solde deAPI 3,18 $).** Agrandissement FlashVSR non fait (même limite journalière) : le desktop est agrandi par lanczos + netteté (1344 → 1920). Higgsfield non utilisé : plan gratuit avec filigrane et sans usage commercial (règles 7 et 8 du brief).
+
+## Moteurs à comparer (2026-09-29)
+
+| date | élément | outil | modèle | paramètres | coût estimé | coût réel | statut | chemin |
+|---|---|---|---|---|---|---|---|---|
+| 2026-09-29 | moteurs candidats (HF) | MCP hf-mcp-server | Qwen-Image-2512, Z-Image, FLUX.2-klein-4B, SD 3.5 Large | prompt-P.txt | 0 $ | 0 $ | BLOQUÉ : Spaces non exposés au MCP (404) ; mcp-tools/Qwen-Image en erreur 500 | — |
+| 2026-09-29 | moteur B, C | deAPI | Z-Image-Turbo | prompt-P.txt, 1344×768, 8 étapes, seeds 2202 / 5505 | 2 × 0,0095 $ | idem | LABO : vues 3/4, coupe partielle (pistons peu visibles) | assets/ai/v4/zturbo-*.png (non commité) |
+| 2026-09-29 | moteur D, E | deAPI | FLUX.2 klein 4B | prompt-P.txt, 4 étapes, seeds 2202 / 5505 | 2 × 0,0036 $ | idem | REJET : pas de coupe (bloc fermé) | assets/ai/v4/klein-*.png (non commité) |
+| 2026-09-29 | moteur F | deAPI | FLUX.1 schnell | prompt-P.txt, 4 étapes, seed 2202 | 0,0026 $ | idem | REJET : 3 cylindres, pièces incohérentes | assets/ai/v4/schnell-2202.png (non commité) |
+
+Planche : assets/ai/v4/planche-moteurs.jpg. **Total : 0,029 $.**

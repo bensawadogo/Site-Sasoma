@@ -49,7 +49,7 @@ Le hero pèse le même poids partout : quelques dizaines de Ko d'images du bidon
 
 ## Hero vidéo (aperçu `/apercu-hero`)
 
-Version 3 : bidon réel à droite (décision de Ben), moteur en coupe au centre ; les images du moteur sont retournées en miroir au découpage pour que le goulot soit côté bidon (on voit l'arbre à cames, les pistons et bielles, le vilebrequin).
+Version 3 : bidon réel à droite, moteur en coupe à gauche (images retournées : son goulot est côté bidon). Avec la photo du bidon (goulot en haut à gauche), c'est le seul sens où le goulot passe devant : l'huile arrive au bec vers 60° et l'étiquette reste lisible ; à gauche du moteur, le bidon devait presque se retourner. Le versement est une petite simulation, fonction pure du scroll (`lib/versement.ts`, testé) : levée par la poignée, goulot tenu au-dessus de l'orifice, débit lié à l'angle et au remplissage, filet en chute libre, coupure, sortie vers le haut.
 
 | Scroll | À l'écran |
 |---|---|

@@ -10,28 +10,31 @@
  *   pistons ; C3 elle atteint le vilebrequin. Composés sur K1 (métal rigide par
  *   construction) par ops/scripts/composer_huile.py, découpés par npm run hero:video.
  *
- * Composition de la Méthode V2 (Ben) : bidon à GAUCHE, moteur à DROITE ; le goulot est
- * en haut à gauche du moteur, côté bidon. Après le versement, le bidon se redresse et
- * s'efface (maquette client) : la colonne de gauche passe aux étiquettes des pièces.
+ * Bidon à DROITE, moteur à GAUCHE (Ben, 29/09 : « le bidon est au mauvais sens »). La
+ * photo du bidon a son goulot en haut à gauche : penché vers la gauche, le goulot passe
+ * devant et l'étiquette reste lisible (versement naturel, l'huile arrive au bec vers 60°).
+ * À gauche du moteur, il aurait dû presque se retourner. Les images du moteur sont donc
+ * retournées au découpage : son goulot passe en haut à droite, côté bidon. Après le
+ * versement, la main emporte le bidon vers le haut ; les étiquettes prennent sa place.
  *
  * Conventions : zones en fractions de l'écran ; points du moteur en fractions de la
- * vidéo source (1344×768), ramenés au recadrage de chaque format par `dansImage`.
+ * vidéo source retournée (1344×768), ramenés au recadrage de chaque format par `dansImage`.
  */
 import manifeste from '@/assets/hero/video/manifest.json'
 import type { Point, Zone } from '@/hero.config'
 
-/** Points du moteur dans la vidéo source (repérés sur K1). */
+/** Points du moteur dans la vidéo source retournée (repérés sur K1, x → 1 − x). */
 export const MOTEUR = {
-  /** Ouverture du goulot de remplissage, en haut à gauche du moteur : arrivée du filet. */
-  orifice: { x: 0.3249, y: 0.1424 },
-  /** Bords du moteur : gauche (colonne des étiquettes sur desktop), droit (calage à l'écran). */
-  bordGauche: 0.2,
-  bordDroit: 0.795,
-  /** Pièces commentées (côté gauche du moteur), dans l'ordre des textes HERO.textes.t3. */
+  /** Ouverture du goulot de remplissage, en haut à droite du moteur : arrivée du filet. */
+  orifice: { x: 0.6751, y: 0.1424 },
+  /** Bords du moteur (calage à l'écran, colonne des étiquettes). */
+  bordGauche: 0.205,
+  bordDroit: 0.8,
+  /** Pièces commentées (côté droit du moteur), dans l'ordre des textes HERO.textes.t3. */
   pieces: [
-    { x: 0.4, y: 0.235 },
-    { x: 0.352, y: 0.415 },
-    { x: 0.352, y: 0.765 },
+    { x: 0.6, y: 0.235 },
+    { x: 0.648, y: 0.415 },
+    { x: 0.648, y: 0.765 },
   ],
 }
 
@@ -46,7 +49,7 @@ export const PLANS_T3: [number, number][] = [
  * Arrivée de l'étiquette (et du texte) de chaque pièce, en fraction de t3 : quand l'huile
  * l'a nappée. Celle des cames attend la fin du versement, pour ne pas croiser le bidon.
  */
-export const APPARITIONS_REPERES = [0.34, 0.47, 0.74]
+export const APPARITIONS_REPERES = [0.45, 0.55, 0.76]
 
 /** Point de la vidéo source → point de l'image d'un format (recadrée). */
 export function dansImage(p: Point, r: Zone): Point {
@@ -67,8 +70,8 @@ export interface ReglagesHeroVideo {
     recadrage: Zone
     /** Partie gardée quand l'image est rognée, ou place de l'image réduite (0,5 = centre). */
     focale: { x: number; y: number }
-    /** Si présent : le bord droit du moteur est calé à cette abscisse de l'écran (remplace focale.x). */
-    caleDroite?: number
+    /** Si présent : ce bord du moteur est calé à cette abscisse de l'écran (remplace focale.x). */
+    cale?: { bord: 'gauche' | 'droite'; x: number }
     /** 1 = couvre la zone ; < 1 = image réduite dans la scène noire. */
     zoom: number
     /** Définition maximale du canvas (pixels par pixel CSS). */
@@ -83,9 +86,13 @@ export interface ReglagesHeroVideo {
    * déduit où la main tient le goulot pour que l'huile, à plein débit, tombe dans l'orifice.
    */
   chuteFilet: number
+  /** Goulot devant (bidon à droite, penché vers la gauche) ou derrière (bidon à gauche). */
+  bec: 'avant' | 'arriere'
+  /** Côté des étiquettes : par rapport au moteur (colonne) ou au point (pastille). */
+  etiquettes: 'gauche' | 'droite'
   /**
-   * Étiquettes des pièces : 'colonne' = titre et texte à gauche du moteur, reliés par
-   * un trait ; 'pastille' = titre seul, à droite du point, le texte reste en bas.
+   * Étiquettes des pièces : 'colonne' = titre et texte à côté du moteur, reliés par
+   * un trait ; 'pastille' = titre seul, collé au point, le texte reste en bas.
    */
   reperes: 'colonne' | 'pastille'
 }
@@ -96,22 +103,23 @@ export const HERO_MOBILE: ReglagesHeroVideo = {
   sequence: {
     dossier: '/hero-video/mobile',
     ...manifeste.mobile,
-    // Zone plus haute que l'image : le moteur est calé à droite, le goulot reste assez
-    // loin du bord gauche pour le bidon basculé.
+    // Moteur calé à gauche, en bas ; le bidon verse depuis la droite.
     focale: { x: 0.5, y: 0.5 },
-    caleDroite: 0.99,
+    cale: { bord: 'gauche', x: 0.04 },
     zoom: 1,
     dprMax: 2,
     parallele: 4,
   },
   zones: {
     entete: { x: 0, y: 0, l: 1, h: 0.12 },
-    moteur: { x: 0, y: 0.38, l: 1, h: 0.3 }, // moteur en bas à droite (Méthode V2)
-    bidon: { x: 0.03, y: 0.13, l: 0.3, h: 0.14 },
+    moteur: { x: 0, y: 0.38, l: 1, h: 0.3 },
+    bidon: { x: 0.67, y: 0.13, l: 0.3, h: 0.14 },
     textes: { x: 0.06, y: 0.68, l: 0.88, h: 0.28 },
     fin: { x: 0.06, y: 0.3, l: 0.88, h: 0.66 },
   },
   chuteFilet: 0.45,
+  bec: 'avant',
+  etiquettes: 'gauche',
   reperes: 'pastille',
 }
 
@@ -121,11 +129,11 @@ export const HERO_DESKTOP: ReglagesHeroVideo = {
   sequence: {
     dossier: '/hero-video/desktop',
     ...manifeste.desktop,
-    // Image réduite, posée en bas et calée à droite : le moteur occupe la droite de
-    // l'écran, l'orifice descend à un tiers de la hauteur, le bidon basculé au-dessus
+    // Image réduite, posée en bas et calée à gauche : le moteur occupe la gauche de
+    // l'écran, l'orifice descend à un tiers de la hauteur, le bidon penché au-dessus
     // reste sous l'en-tête.
     focale: { x: 0.5, y: 1 },
-    caleDroite: 0.95,
+    cale: { bord: 'gauche', x: 0.05 },
     zoom: 0.72,
     dprMax: 2,
     parallele: 6,
@@ -133,11 +141,13 @@ export const HERO_DESKTOP: ReglagesHeroVideo = {
   zones: {
     entete: { x: 0, y: 0, l: 1, h: 0.12 },
     moteur: { x: 0, y: 0, l: 1, h: 1 },
-    bidon: { x: 0.06, y: 0.2, l: 0.2, h: 0.26 },
-    textes: { x: 0.04, y: 0.5, l: 0.21, h: 0.44 },
-    fin: { x: 0.05, y: 0.26, l: 0.46, h: 0.66 },
+    bidon: { x: 0.74, y: 0.2, l: 0.2, h: 0.26 },
+    textes: { x: 0.66, y: 0.55, l: 0.3, h: 0.4 },
+    fin: { x: 0.5, y: 0.26, l: 0.46, h: 0.66 },
   },
   chuteFilet: 0.32,
+  bec: 'avant',
+  etiquettes: 'droite',
   reperes: 'colonne',
 }
 

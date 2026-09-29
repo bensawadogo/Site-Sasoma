@@ -69,7 +69,7 @@ export function placerGoulot(p: PlacementGoulot): Pt {
 
 // ── Chorégraphie naturelle du versement (spec « versement naturel », 29/09) ──────────
 // Tout est une fonction pure de u (0 → 1 sur la séquence du bidon) : le scroll arrière
-// rembobine. Angles en degrés, sens horaire (bidon à gauche qui verse vers la droite).
+// rembobine. Angles en degrés ; positif = sens horaire à l'écran.
 
 /** Courbe d'accélération façon CSS cubic-bezier(x1, y1, x2, y2). */
 export function courbe(x1: number, y1: number, x2: number, y2: number): (x: number) => number {
@@ -110,45 +110,93 @@ const E_COUPURE = courbe(0.5, 0, 0.2, 1)
 const E_SORTIE = courbe(0.55, 0, 0.9, 0.6)
 
 /**
- * Angle du bidon : petit recul (anticipation), levée jusqu'à 80°, approche prudente
- * jusqu'à 106° (l'huile atteint le bec), versement en inclinant peu à peu jusqu'à 128°
- * (il se vide), coupure sèche à 88°, puis la main l'emporte en le redressant à moitié.
+ * Façon de verser, selon le côté du goulot. La photo du bidon a son goulot en haut à
+ * GAUCHE : penché vers la gauche, le goulot passe devant (versement naturel, l'huile
+ * arrive au bec vers 60°, l'étiquette reste lisible) ; penché vers la droite, il reste
+ * derrière (le bidon doit presque se retourner, de 97° à 128°). Angles en valeur
+ * absolue ; `sens` : +1 = horaire. Seuils : angle où l'huile atteint le bec selon le
+ * remplissage (simulation de la silhouette du bidon : volume conservé, surface horizontale).
  */
-export function angleBidon(u: number): number {
-  const P = PHASES
-  if (u < P.levee[0]) return -3 * dans(u, ...P.anticipation)
-  if (u < P.approche[0]) return lin(-3, 80, E_LEVEE(dans(u, ...P.levee)))
-  if (u < P.versement[0]) return lin(80, 106, E_APPROCHE(dans(u, ...P.approche)))
-  if (u < P.coupure[0]) {
-    const v = dans(u, ...P.versement)
-    // Dérive de la main : ±0,6°, deux cycles ; le débit « respire » avec elle.
-    return lin(106, 128, E_VERSEMENT(v)) + 0.6 * Math.sin(2 * Math.PI * 2 * v) * Math.sin(Math.PI * v)
-  }
-  if (u < P.sortie[0]) return lin(128, 88, E_COUPURE(dans(u, ...P.coupure)))
-  return lin(88, 40, E_SORTIE(dans(u, ...P.sortie)))
+export interface Profil {
+  sens: 1 | -1
+  levee: number
+  debutVersement: number
+  finVersement: number
+  coupure: number
+  sortie: number
+  seuils: [number, number][]
 }
 
-/** Angle où l'huile atteint le bec, selon le remplissage (simulation de la silhouette du bidon). */
-const SEUILS: [number, number][] = [
-  [0.1, 147],
-  [1 / 3, 121],
-  [0.5, 109],
-  [2 / 3, 97],
-  [0.9, 79],
-]
-export function angleDebut(remplissage: number): number {
-  const r = borne(remplissage, SEUILS[0][0], SEUILS[SEUILS.length - 1][0])
-  for (let k = 1; k < SEUILS.length; k++) {
-    const [r1, a1] = SEUILS[k]
-    const [r0, a0] = SEUILS[k - 1]
+/** Bidon à droite du moteur, penché vers la gauche : le goulot passe devant. */
+export const BEC_AVANT: Profil = {
+  sens: -1,
+  levee: 40,
+  debutVersement: 64,
+  finVersement: 92,
+  coupure: 52,
+  sortie: 20,
+  seuils: [
+    [0.1, 102],
+    [1 / 3, 84],
+    [0.5, 71],
+    [2 / 3, 60],
+    [0.9, 34],
+  ],
+}
+
+/** Bidon à gauche du moteur, penché vers la droite : le goulot reste derrière. */
+export const BEC_ARRIERE: Profil = {
+  sens: 1,
+  levee: 80,
+  debutVersement: 106,
+  finVersement: 128,
+  coupure: 88,
+  sortie: 40,
+  seuils: [
+    [0.1, 147],
+    [1 / 3, 121],
+    [0.5, 109],
+    [2 / 3, 97],
+    [0.9, 79],
+  ],
+}
+
+/**
+ * Angle du bidon : petit recul (anticipation), levée, approche prudente jusqu'à ce que
+ * l'huile atteigne le bec, versement en inclinant peu à peu (il se vide), coupure sèche,
+ * puis la main l'emporte en le redressant à moitié. Signé selon `profil.sens`.
+ */
+export function angleBidon(u: number, profil: Profil = BEC_ARRIERE): number {
+  const P = PHASES
+  const { levee, debutVersement: d, finVersement: f, coupure: c, sortie: s } = profil
+  let a: number
+  if (u < P.levee[0]) a = -3 * dans(u, ...P.anticipation)
+  else if (u < P.approche[0]) a = lin(-3, levee, E_LEVEE(dans(u, ...P.levee)))
+  else if (u < P.versement[0]) a = lin(levee, d, E_APPROCHE(dans(u, ...P.approche)))
+  else if (u < P.coupure[0]) {
+    const v = dans(u, ...P.versement)
+    // Dérive de la main : ±0,6°, deux cycles ; le débit « respire » avec elle.
+    a = lin(d, f, E_VERSEMENT(v)) + 0.6 * Math.sin(2 * Math.PI * 2 * v) * Math.sin(Math.PI * v)
+  } else if (u < P.sortie[0]) a = lin(f, c, E_COUPURE(dans(u, ...P.coupure)))
+  else a = lin(c, s, E_SORTIE(dans(u, ...P.sortie)))
+  return profil.sens * a
+}
+
+/** Angle (valeur absolue) où l'huile atteint le bec, selon le remplissage. */
+export function angleDebut(remplissage: number, profil: Profil = BEC_ARRIERE): number {
+  const S = profil.seuils
+  const r = borne(remplissage, S[0][0], S[S.length - 1][0])
+  for (let k = 1; k < S.length; k++) {
+    const [r1, a1] = S[k]
+    const [r0, a0] = S[k - 1]
     if (r <= r1) return lin(a0, a1, (r - r0) / (r1 - r0))
   }
-  return SEUILS[SEUILS.length - 1][1]
+  return S[S.length - 1][1]
 }
 
 /** Débit (0 → 1) : nul tant que l'huile n'atteint pas le bec, plein 12° plus loin. */
-export function debit(angle: number, remplissage: number): number {
-  return borne((angle - angleDebut(remplissage)) / 12) ** 1.5
+export function debit(angle: number, remplissage: number, profil: Profil = BEC_ARRIERE): number {
+  return borne((Math.abs(angle) - angleDebut(remplissage, profil)) / 12) ** 1.5
 }
 
 export interface EtatVersement {
@@ -161,13 +209,13 @@ export interface EtatVersement {
  * Table du versement : le remplissage baisse de `depart` à `arrivee` au rythme du débit
  * (intégré une fois, sur `n` pas). Renvoie l'état pour tout u, par interpolation.
  */
-export function tableVersement(depart: number, arrivee: number, n = 256): (u: number) => EtatVersement {
+export function tableVersement(depart: number, arrivee: number, profil: Profil = BEC_ARRIERE, n = 256): (u: number) => EtatVersement {
   const simuler = (k: number) => {
     const r = new Float64Array(n + 1)
     const d = new Float64Array(n + 1)
     r[0] = depart
     for (let i = 0; i <= n; i++) {
-      d[i] = debit(angleBidon(i / n), r[i])
+      d[i] = debit(angleBidon(i / n, profil), r[i], profil)
       if (i < n) r[i + 1] = Math.max(0.05, r[i] - (k * d[i]) / n)
     }
     return { r, d }
@@ -184,7 +232,7 @@ export function tableVersement(depart: number, arrivee: number, n = 256): (u: nu
     const x = borne(u) * n
     const i = Math.min(n - 1, Math.floor(x))
     const f = x - i
-    return { angle: angleBidon(borne(u)), remplissage: lin(r[i], r[i + 1], f), debit: lin(d[i], d[i + 1], f) }
+    return { angle: angleBidon(borne(u), profil), remplissage: lin(r[i], r[i + 1], f), debit: lin(d[i], d[i + 1], f) }
   }
 }
 
@@ -193,17 +241,17 @@ export function tableVersement(depart: number, arrivee: number, n = 256): (u: nu
  * puis oscillations amorties après chaque arrêt (2 Hz, amortissement 0,15). `duree` :
  * durée simulée de la séquence, en secondes.
  */
-export function ballottement(u: number, duree: number): number {
+export function ballottement(u: number, duree: number, profil: Profil = BEC_ARRIERE): number {
   const pas = 0.004
   // Vitesse de rotation en degrés par seconde simulée.
-  const vitesse = (angleBidon(borne(u + pas)) - angleBidon(borne(u - pas))) / (2 * pas) / duree
+  const vitesse = (angleBidon(borne(u + pas), profil) - angleBidon(borne(u - pas), profil)) / (2 * pas) / duree
   let phi = borne(-0.08 * vitesse, -6, 6)
   const w = 2 * Math.PI * 2
   const zeta = 0.15
   const wd = w * Math.sqrt(1 - zeta * zeta)
   for (const uk of [PHASES.approche[0], PHASES.versement[0], PHASES.sortie[0]]) {
     const s = (u - uk) * duree
-    if (s > 0) phi += 5 * Math.exp(-zeta * w * s) * Math.sin(wd * s)
+    if (s > 0) phi += profil.sens * 5 * Math.exp(-zeta * w * s) * Math.sin(wd * s)
   }
   return phi
 }
@@ -235,22 +283,20 @@ export interface PoseBidon {
 /**
  * Pose du bidon pour u : la main le tient par la poignée pour le lever (arc vers le
  * haut), garde le goulot presque immobile au-dessus de l'orifice pendant qu'elle
- * l'incline, puis l'emporte en haut à gauche (il sort de l'image en s'effaçant). Les
- * passages d'un point d'appui à l'autre tombent juste (même position).
+ * l'incline, puis l'emporte vers le haut, du côté d'où il vient (il sort de l'image en
+ * s'effaçant). Les passages d'un point d'appui à l'autre tombent juste (même position).
  */
-export function poseBidon(u: number, g: GeometrieBidon): PoseBidon {
+export function poseBidon(u: number, g: GeometrieBidon, profil: Profil = BEC_ARRIERE): PoseBidon {
   const P = PHASES
-  const angle = angleBidon(u)
+  const angle = angleBidon(u, profil)
   const h = g.hauteur
+  // Côté d'où vient le bidon : -1 = à gauche de l'orifice, +1 = à droite.
+  const cote = -profil.sens
   const goulotLocal = { x: g.goulot.x - g.pivot.x, y: g.goulot.y - g.pivot.y }
   const poigneeLocal = { x: g.poignee.x - g.pivot.x, y: g.poignee.y - g.pivot.y }
-  // Poignée → goulot pour un angle donné.
-  const poigneeVersGoulot = (a: number) => {
-    const v = tourner({ x: goulotLocal.x - poigneeLocal.x, y: goulotLocal.y - poigneeLocal.y }, a)
-    return v
-  }
-  // Fin de levée : goulot un peu en retrait (en haut à gauche) de sa place de versement.
-  const approche = { x: g.goulotVerse.x - 0.08 * h, y: g.goulotVerse.y - 0.06 * h }
+  const poigneeVersGoulot = (a: number) => tourner({ x: goulotLocal.x - poigneeLocal.x, y: goulotLocal.y - poigneeLocal.y }, a)
+  // Fin de levée : goulot un peu en retrait (plus haut, côté bidon) de sa place de versement.
+  const approche = { x: g.goulotVerse.x + cote * 0.08 * h, y: g.goulotVerse.y - 0.06 * h }
   const bas = { x: g.poignee.x, y: g.poignee.y + 0.015 * h } // anticipation : il s'enfonce un peu
 
   let appui: 'poignee' | 'goulot'
@@ -261,7 +307,7 @@ export function poseBidon(u: number, g: GeometrieBidon): PoseBidon {
   } else if (u < P.approche[0]) {
     appui = 'poignee'
     const e = E_LEVEE(dans(u, ...P.levee))
-    const v = poigneeVersGoulot(80)
+    const v = poigneeVersGoulot(profil.sens * profil.levee)
     const fin = { x: approche.x - v.x, y: approche.y - v.y }
     cible = { x: lin(bas.x, fin.x, e), y: lin(bas.y, fin.y, e) - 0.15 * h * Math.sin(Math.PI * e) }
   } else if (u < P.sortie[0]) {
@@ -277,11 +323,12 @@ export function poseBidon(u: number, g: GeometrieBidon): PoseBidon {
     } else cible = g.goulotVerse
   } else {
     appui = 'poignee'
-    // Sortie : la main l'emporte vers le haut (un peu à gauche), en accélérant : il passe au-dessus des étiquettes.
+    // Sortie : la main l'emporte vers le haut, un peu vers son côté, en accélérant ; il
+    // passe au-dessus des étiquettes.
     const e = E_SORTIE(dans(u, ...P.sortie))
-    const v = poigneeVersGoulot(88)
+    const v = poigneeVersGoulot(profil.sens * profil.coupure)
     const debut = { x: g.goulotVerse.x - v.x, y: g.goulotVerse.y - v.y }
-    cible = { x: debut.x - 0.45 * h * e, y: debut.y - 1.1 * h * e }
+    cible = { x: debut.x + cote * 0.35 * h * e, y: debut.y - 0.8 * h * e }
   }
   const local = appui === 'poignee' ? poigneeLocal : goulotLocal
   const r = tourner(local, angle)
@@ -290,10 +337,14 @@ export function poseBidon(u: number, g: GeometrieBidon): PoseBidon {
   return { angle, translation, goulot: { x: g.pivot.x + translation.x + rg.x, y: g.pivot.y + translation.y + rg.y } }
 }
 
-/** Direction de sortie de l'huile : le long du col, rabattue vers le bas à faible débit (effet théière). */
+/**
+ * Direction de sortie de l'huile : le long du col, jamais vers le haut (sous 90°, le col
+ * pointe vers le ciel et l'huile passe par-dessus la lèvre), rabattue vers le bas à
+ * faible débit (effet théière).
+ */
 export function directionFilet(angle: number, debitCourant: number): Pt {
   const a = (angle * Math.PI) / 180
-  const col = { x: Math.sin(a), y: -Math.cos(a) }
+  const col = { x: Math.sin(a), y: Math.max(0.15, -Math.cos(a)) }
   const k = 1 - 0.7 * debitCourant
   const d = { x: lin(col.x, 0, k), y: lin(col.y, 1, k) }
   const n = Math.hypot(d.x, d.y) || 1

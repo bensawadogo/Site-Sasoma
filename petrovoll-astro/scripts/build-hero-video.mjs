@@ -4,6 +4,8 @@
  *   ../assets/ai/videos/moteur-v3.mp4   (1344×768, 3 plans enchaînés de 121 images :
  *     C1 l'huile nappe l'arbre à cames, C2 les pistons, C3 le vilebrequin ; moteur en
  *     coupe rigide, caméra fixe ; composée par ops/scripts/composer_huile.py)
+ *   Images retournées (miroir) : le goulot du moteur passe en haut à DROITE, côté bidon
+ *   (le bidon verse depuis la droite, goulot devant). Aucun texte dans l'image.
  *     → public/hero-video/desktop/000.webp …   1920×1080 (agrandie : lanczos + netteté)
  *     → public/hero-video/mobile/000.webp …    880×614 : moteur entier, découpé dans la
  *       MÊME vidéo, décalé pour laisser l'orifice loin du bord gauche (place du bidon)
@@ -36,9 +38,9 @@ const PLANS = [121, 120, 120]
 const FORMATS = {
   // Ordinateur : grandes images (1080p), 40 images par plan.
   desktop: { largeur: 1920, hauteur: 1080, parPlan: 40, qualite: 55, recadrage: { x: 0, y: 0, l: 1344, h: 768 }, nettete: true },
-  // Téléphone : 24 images par plan (poids ≈ 2 Mo). Recadrage 1100×768 à x = 60 : moteur
-  // entier, décalé à droite ; le goulot, en haut à gauche du moteur, reste côté bidon.
-  mobile: { largeur: 880, hauteur: 614, parPlan: 24, qualite: 58, recadrage: { x: 60, y: 0, l: 1100, h: 768 } },
+  // Téléphone : 24 images par plan (poids ≈ 2 Mo). Recadrage 1100×768 à x = 184 dans
+  // l'image retournée : moteur entier ; son goulot, en haut à droite, reste côté bidon.
+  mobile: { largeur: 880, hauteur: 614, parPlan: 24, qualite: 58, recadrage: { x: 184, y: 0, l: 1100, h: 768 } },
 }
 
 function nbImages(video) {
@@ -71,7 +73,9 @@ for (const [nom, f] of Object.entries(FORMATS)) {
   const r = f.recadrage
   for (const [index, n] of choix.entries()) {
     const sortie = join(dossier, `${String(index).padStart(3, '0')}.webp`)
-    let image = sharp(join(brut, pngs[n]))
+    // Retourner d'abord (tampon), puis recadrer dans l'image retournée.
+    const retournee = await sharp(join(brut, pngs[n])).flop().toBuffer()
+    let image = sharp(retournee)
       .extract({ left: r.x, top: r.y, width: r.l, height: r.h })
       .resize(f.largeur, f.hauteur, { kernel: 'lanczos3' })
     if (f.nettete) image = image.sharpen({ sigma: 0.8 })

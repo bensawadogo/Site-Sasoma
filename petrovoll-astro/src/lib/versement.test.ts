@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   angleBidon,
+  BEC_AVANT,
   angleDebut,
   ballottement,
   courbe,
@@ -168,5 +169,37 @@ describe('pose du bidon', () => {
     const faible = directionFilet(115, 0.1)
     expect(plein.x).toBeGreaterThan(faible.x)
     expect(faible.y).toBeGreaterThan(plein.y)
+  })
+})
+
+describe('bidon à droite, goulot devant (BEC_AVANT)', () => {
+  const g = { pivot: { x: 400, y: 200 }, goulot: { x: 375, y: 140 }, poignee: { x: 430, y: 150 }, hauteur: 200, goulotVerse: { x: 250, y: 150 } }
+
+  it('penche vers la gauche ; l’huile arrive au bec vers 60° (bidon aux deux tiers)', () => {
+    expect(angleBidon(PHASES.coupure[0], BEC_AVANT)).toBeCloseTo(-92, 0)
+    expect(angleDebut(2 / 3, BEC_AVANT)).toBeCloseTo(60)
+    expect(debit(-50, 2 / 3, BEC_AVANT)).toBe(0)
+    expect(debit(-75, 2 / 3, BEC_AVANT)).toBe(1)
+  })
+
+  it('le bidon verse vraiment et se vide', () => {
+    const etat = tableVersement(0.67, 0.4, BEC_AVANT)
+    expect(etat(0.6).debit).toBeGreaterThan(0.5)
+    expect(etat(1).remplissage).toBeCloseTo(0.4, 2)
+    expect(etat(0.95).debit).toBe(0)
+  })
+
+  it('goulot tenu au-dessus de sa place, puis sortie vers le haut et la droite', () => {
+    const p = poseBidon(0.6, g, BEC_AVANT)
+    expect(Math.abs(p.goulot.x - 250)).toBeLessThan(4)
+    expect(Math.abs(p.goulot.y - 150)).toBeLessThan(4)
+    const fin = poseBidon(1, g, BEC_AVANT).goulot
+    expect(fin.y).toBeLessThan(150 - 100)
+    expect(fin.x).toBeGreaterThan(poseBidon(PHASES.sortie[0], g, BEC_AVANT).goulot.x)
+  })
+
+  it('le filet ne part jamais vers le haut, et part vers le moteur (à gauche)', () => {
+    for (const a of [-40, -64, -80, -92]) expect(directionFilet(a, 1).y).toBeGreaterThan(0)
+    expect(directionFilet(-70, 1).x).toBeLessThan(0)
   })
 })
