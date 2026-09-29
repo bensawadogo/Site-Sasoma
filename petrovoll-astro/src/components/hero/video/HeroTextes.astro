@@ -9,7 +9,7 @@ import { Image } from 'astro:assets'
 import vignetteStark from '@/assets/hero/bidon/vignette.webp'
 import photoMotpro from '@/assets/hero/fin/motpro-4t.jpg'
 import { HERO } from '@/hero.config'
-import { PLANS_T3, RETARD_REPERE } from '@/hero-video.config'
+import { APPARITIONS_REPERES } from '@/hero-video.config'
 import { getParametres } from '@/lib/contenu'
 
 interface Props {
@@ -32,7 +32,7 @@ const t3 = plage('t3')
 const dansT3 = (f: number) => t3.debut + f * (t3.fin - t3.debut)
 // Étapes du moteur : chacune arrive avec l'étiquette de sa pièce, quand l'huile l'atteint
 // (la dernière jusqu'à la fin de t3). Sur desktop, les étiquettes (HeroReperes) les remplacent.
-const arrivee = (i: number) => dansT3(PLANS_T3[i][0] + RETARD_REPERE)
+const arrivee = (i: number) => dansT3(APPARITIONS_REPERES[i])
 const blocs = [
   { ...plage('t1'), ...textes.t1, etape: false },
   { ...plage('t2'), ...textes.t2, etape: false },

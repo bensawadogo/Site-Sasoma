@@ -10,8 +10,8 @@
       "l": 1,
       "h": 1
     },
-    "version": "9822097858",
-    "octets": 8821152
+    "version": "923c95aca0",
+    "octets": 8821400
   },
   "mobile": {
     "images": 72,
@@ -19,12 +19,12 @@
     "largeur": 880,
     "hauteur": 614,
     "recadrage": {
-      "x": 0.157,
+      "x": 0.0446,
       "y": 0,
       "l": 0.8185,
       "h": 1
     },
-    "version": "ffee079158",
-    "octets": 2354454
+    "version": "8c4c13138a",
+    "octets": 2342342
   }
 }

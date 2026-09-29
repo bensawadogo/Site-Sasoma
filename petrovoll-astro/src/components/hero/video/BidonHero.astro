@@ -22,6 +22,10 @@ const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
 >
   <img class="corps" src={corps.src} width={corps.width} height={corps.height} alt="" decoding="async" />
   <div class="huile"><div class="niveau" data-niveau></div></div>
+  <div class="reflets">
+    <div class="menisque" data-menisque></div>
+    <div class="lumiere" data-lumiere></div>
+  </div>
   <span class="ouverture"></span>
   <img
     class="bouchon"
@@ -50,16 +54,45 @@ const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
     width: 100%;
     height: 100%;
   }
-  /* L'huile monte dans la silhouette exacte du bidon (effet rayons X), en overlay
-     pour garder l'étiquette lisible. */
-  .huile {
+  /* L'huile monte dans la silhouette exacte du bidon (effet rayons X) : teinte ambre en
+     « multiply », comme de l'huile vue à travers le plastique ; l'étiquette reste lisible. */
+  .huile,
+  .reflets {
     position: absolute;
     inset: 0;
     overflow: hidden;
     -webkit-mask: var(--masque) center / 100% 100% no-repeat;
     mask: var(--masque) center / 100% 100% no-repeat;
-    mix-blend-mode: overlay;
-    opacity: 0.65;
+    pointer-events: none;
+  }
+  .huile {
+    mix-blend-mode: multiply;
+    opacity: 0.42;
+  }
+  /* Ligne claire de la surface (ménisque), mêmes transformations que le niveau. */
+  .menisque {
+    position: absolute;
+    left: var(--pivot-x);
+    top: var(--pivot-y);
+    width: 400%;
+    height: 2px;
+    margin: -1px 0 0 -200%;
+    background: rgb(246 210 122 / 0.7);
+    transform-origin: 50% 1px;
+    transform: translate3d(0, 100vh, 0);
+    will-change: transform;
+  }
+  /* Lumière du studio, fixée au monde (contre-rotation) : haut éclairé, bas dans l'ombre. */
+  .lumiere {
+    position: absolute;
+    left: var(--pivot-x);
+    top: var(--pivot-y);
+    width: 300%;
+    height: 300%;
+    margin: -150% 0 0 -150%;
+    background: linear-gradient(to bottom, rgb(255 250 235 / 0.1) 30%, transparent 48%, transparent 52%, rgb(0 0 0 / 0.18) 70%);
+    transform-origin: 50% 50%;
+    will-change: transform;
   }
   /* Grand rectangle dont le bord haut est la surface de l'huile. Son origine est le
      pivot du bidon : le script le contre-tourne (surface horizontale) et le descend
@@ -71,7 +104,7 @@ const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
     width: 400%;
     height: 400%;
     margin-left: -200%;
-    background: linear-gradient(to bottom, #fff4c2 0, #f0cc30 4px, #cc9c0c 40%);
+    background: #c8901a;
     transform-origin: 50% 0;
     transform: translate3d(0, 100vh, 0);
     will-change: transform;

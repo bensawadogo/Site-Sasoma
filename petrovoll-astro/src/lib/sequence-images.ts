@@ -58,3 +58,13 @@ export function couverture(image: Taille, ecran: Taille, focaleX = 0.5, focaleY 
 export function pointCouvert(p: { x: number; y: number }, c: Couverture): { x: number; y: number } {
   return { x: c.x + p.x * c.l, y: c.y + p.y * c.h }
 }
+
+/**
+ * Comme `couverture`, mais l'image est placée pour que son point d'abscisse `pointX`
+ * (fraction de l'image) tombe à `cibleX` (fraction de l'écran) : sert à caler le bord
+ * du moteur à droite de l'écran, quelle que soit la largeur.
+ */
+export function caler(image: Taille, ecran: Taille, zoom: number, focaleY: number, pointX: number, cibleX: number): Couverture {
+  const c = couverture(image, ecran, 0.5, focaleY, zoom)
+  return { ...c, x: cibleX * ecran.l - pointX * c.l }
+}

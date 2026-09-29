@@ -1,8 +1,8 @@
 ---
 /**
  * HeroDesktop.astro — hero vidéo pour ordinateur (≥ 900 px).
- * Séquence 1920×1080 (moteur en coupe au centre), bidon à gauche qui se penche et verse
- * dans l'orifice, étiquettes des pièces à droite du moteur, textes à gauche. Réglages : HERO_DESKTOP (src/hero-video.config.ts) ; animation :
+ * Séquence 1920×1080 (moteur en coupe calé à droite), bidon à gauche qui se penche et
+ * verse dans l'orifice puis s'efface ; étiquettes des pièces à gauche du moteur. Réglages : HERO_DESKTOP (src/hero-video.config.ts) ; animation :
  * src/scripts/hero-video/desktop.ts.
  */
 import BidonHero from '@/components/hero/video/BidonHero.astro'
@@ -60,7 +60,7 @@ const variables = [
     contain: layout paint;
     background: #000;
   }
-  /* Séquence plein écran, image réduite (zoom 0,78) posée en bas. Affiche = 1re image,
+  /* Séquence plein écran, image réduite (zoom 0,8) posée en bas à droite. Affiche = 1re image,
      visible avant le script et sans JS ; une image de fond d'un élément masqué (hero
      mobile sur ordinateur) n'est pas téléchargée. */
   .sequence {
@@ -68,7 +68,7 @@ const variables = [
     inset: 0;
     width: 100%;
     height: 100%;
-    background: #000 var(--affiche) 50% 100% / auto 78% no-repeat; /* même cadrage que HERO_DESKTOP */
+    background: #000 var(--affiche) 100% 100% / auto 80% no-repeat; /* proche du cadrage de HERO_DESKTOP */
     pointer-events: none;
   }
   .couche {

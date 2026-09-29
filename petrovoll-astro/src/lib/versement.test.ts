@@ -1,6 +1,19 @@
 import { describe, expect, it } from 'vitest'
 
-import { demiEncombrement, placerGoulot, pointFilet } from '@/lib/versement'
+import {
+  angleBidon,
+  angleDebut,
+  ballottement,
+  courbe,
+  debit,
+  demiEncombrement,
+  directionFilet,
+  PHASES,
+  placerGoulot,
+  poseBidon,
+  pointFilet,
+  tableVersement,
+} from '@/lib/versement'
 
 describe('pointFilet', () => {
   const a = { x: 100, y: 100 }
@@ -74,5 +87,86 @@ describe('placerGoulot', () => {
     const g = placerGoulot({ ...base, orifice: { x: 500, y: 150 }, haut: 120 })
     expect(g.y).toBeGreaterThan(110)
     expect(g.y).toBeLessThanOrEqual(150 - 20)
+  })
+})
+
+describe('chorégraphie naturelle', () => {
+  it('courbe : bornes et monotonie', () => {
+    const e = courbe(0.45, 0, 0.25, 1)
+    expect(e(0)).toBe(0)
+    expect(e(1)).toBe(1)
+    expect(e(0.3)).toBeLessThan(e(0.6))
+    expect(courbe(0, 0, 1, 1)(0.5)).toBeCloseTo(0.5, 3)
+  })
+
+  it('angleBidon : debout, 80° en fin de levée, 128° en fin de versement, 40° en sortant', () => {
+    expect(angleBidon(PHASES.approche[0])).toBeCloseTo(80, 0)
+    expect(angleBidon(PHASES.coupure[0])).toBeCloseTo(128, 0)
+    expect(angleBidon(1)).toBeCloseTo(40, 5)
+    expect(Math.abs(angleBidon(0))).toBe(0)
+    expect(angleBidon(0.03)).toBeLessThan(0) // anticipation
+  })
+
+  it('debit : nul avant que l’huile atteigne le bec, plein ensuite', () => {
+    expect(angleDebut(2 / 3)).toBeCloseTo(97)
+    expect(debit(90, 2 / 3)).toBe(0)
+    expect(debit(115, 2 / 3)).toBe(1)
+    expect(debit(103, 2 / 3)).toBeGreaterThan(0)
+  })
+
+  it('tableVersement : le bidon se vide de 0,67 à 0,40 et le débit s’arrête au retour', () => {
+    const etat = tableVersement(0.67, 0.4)
+    expect(etat(0).remplissage).toBeCloseTo(0.67)
+    expect(etat(1).remplissage).toBeCloseTo(0.4, 2)
+    expect(etat(0.2).debit).toBe(0)
+    expect(etat(0.6).debit).toBeGreaterThan(0.5)
+    expect(etat(0.95).debit).toBe(0)
+  })
+
+  it('ballottement : borné, et amorti longtemps après les arrêts', () => {
+    for (let u = 0; u <= 1; u += 0.01) expect(Math.abs(ballottement(u, 4))).toBeLessThan(12)
+    // Pendant le versement, rotation lente : la surface est presque calme.
+    expect(Math.abs(ballottement(0.74, 4))).toBeLessThan(2.5)
+  })
+})
+
+describe('pose du bidon', () => {
+  const g = { pivot: { x: 100, y: 200 }, goulot: { x: 75, y: 140 }, poignee: { x: 130, y: 150 }, hauteur: 200, goulotVerse: { x: 300, y: 120 } }
+
+  it('au repos : aucune translation', () => {
+    const p = poseBidon(0, g)
+    expect(p.translation.x).toBeCloseTo(0)
+    expect(p.translation.y).toBeCloseTo(0)
+    expect(p.goulot.x).toBeCloseTo(75)
+  })
+
+  it('pendant le versement, le goulot reste au-dessus de sa place (à 2 px près)', () => {
+    for (const u of [0.5, 0.6, 0.7, 0.78]) {
+      const p = poseBidon(u, g)
+      expect(Math.abs(p.goulot.x - 300)).toBeLessThan(2)
+      expect(Math.abs(p.goulot.y - 120)).toBeLessThan(2)
+    }
+  })
+
+  it('aucun saut entre deux phases', () => {
+    for (let u = 0.001; u < 1; u += 0.002) {
+      const a = poseBidon(u, g).goulot
+      const b = poseBidon(u + 0.002, g).goulot
+      expect(Math.hypot(b.x - a.x, b.y - a.y)).toBeLessThan(12)
+    }
+  })
+
+  it('sort vers le haut et la gauche', () => {
+    const coupe = poseBidon(PHASES.sortie[0], g).goulot
+    const fin = poseBidon(1, g).goulot
+    expect(fin.x).toBeLessThan(coupe.x - 100)
+    expect(fin.y).toBeLessThan(coupe.y - 100)
+  })
+
+  it('directionFilet : le long du col à plein débit, vers le bas quand il faiblit', () => {
+    const plein = directionFilet(115, 1)
+    const faible = directionFilet(115, 0.1)
+    expect(plein.x).toBeGreaterThan(faible.x)
+    expect(faible.y).toBeGreaterThan(plein.y)
   })
 })

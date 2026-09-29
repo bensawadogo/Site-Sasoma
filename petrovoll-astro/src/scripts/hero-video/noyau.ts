@@ -7,10 +7,10 @@
  * séquence.
  *
  * Déroulé (HERO.temps) : l'huile monte dans le bidon debout (t1) ; le bouchon saute,
- * le bidon, à droite du moteur, se penche et verse un filet en chute libre dans
+ * le bidon, à gauche du moteur, se penche et verse un filet en chute libre dans
  * l'orifice (t2) ; pendant t3 la séquence montre l'huile qui descend dans le moteur en
- * coupe (cames, pistons, vilebrequin), le filet se tarit, le bidon se redresse, et
- * chaque pièce reçoit son étiquette quand l'huile l'atteint.
+ * coupe (cames, pistons, vilebrequin), le filet se tarit, le bidon se redresse et
+ * s'efface, et chaque pièce reçoit son étiquette quand l'huile l'atteint.
  *
  *  - un seul écouteur de scroll passif, rendu dans requestAnimationFrame ;
  *  - DOM : on n'écrit que opacity et transform (tailles et positions au redimensionnement) ;
@@ -19,11 +19,22 @@
  *  - palier lite (économie de données, 2G/3G, ≤ 2 Go, mouvement réduit) : deux images
  *    seulement (moteur sec, moteur huilé), en fondu.
  */
-import { dansImage, MOTEUR, PLANS_T3, type ReglagesHeroVideo, RETARD_REPERE } from '@/hero-video.config'
+import { APPARITIONS_REPERES, dansImage, MOTEUR, PLANS_T3, type ReglagesHeroVideo } from '@/hero-video.config'
 import { HERO } from '@/hero.config'
-import { borner, doux, local, mix, opaciteBloc, tournerAutour } from '@/lib/hero-timeline'
-import { couverture, type Couverture, indexImage, ordreChargement, plusProche, pointCouvert } from '@/lib/sequence-images'
-import { placerGoulot, pointFilet, type Pt } from '@/lib/versement'
+import { borner, doux, local, mix, opaciteBloc } from '@/lib/hero-timeline'
+import { caler, couverture, type Couverture, indexImage, ordreChargement, plusProche, pointCouvert } from '@/lib/sequence-images'
+import {
+  angleDebut,
+  ballottement,
+  directionFilet,
+  type GeometrieBidon,
+  placerGoulot,
+  poseBidon,
+  type Pt,
+  tableVersement,
+  tourner,
+  vitesseSortie,
+} from '@/lib/versement'
 
 type NavigatorEtendu = Navigator & {
   connection?: { saveData?: boolean; effectiveType?: string }
@@ -39,14 +50,24 @@ const FIN = plage('fin')
 const FENETRE = { avant: 4, apres: 8 }
 /** Fin de la séquence dans t3 (ensuite : dernière image, tout est huilé). */
 const FIN_SEQUENCE = PLANS_T3[PLANS_T3.length - 1][1]
-/** Pente du filet à la sortie du goulot (dy/dx) : le goulot du bidon basculé pointe un peu vers le bas. */
-const PENTE_FILET = 0.25
 /**
- * Surface de l'huile dans le bidon, en hauteurs de bidon depuis le haut du bidon debout
- * (plein, finale), ou par rapport au goulot quand il penche (versement : juste au-dessus,
- * l'huile coule ; tari : passée dessous, le filet s'arrête).
+ * Versement naturel (spec du 29/09, lib/versement.ts) : la séquence du bidon va de juste
+ * après le saut du bouchon à son retour, en progression globale. La physique (chute du
+ * filet, ballottement) tourne en « secondes simulées » : DUREE pour toute la séquence.
  */
-const SURFACE = { plein: 0.32, finale: 0.62, versement: -0.04, tari: 0.04 }
+const SEQUENCE_BIDON = [0.37, 0.75] as const
+const DUREE = 4
+/** Hauteur réelle du bidon de 1 L (m) : échelle pixels ↔ mètres. */
+const HAUTEUR_REELLE = 0.25
+const G = 9.81
+/** Remplissage du bidon : après la montée (t1), puis quand il a versé. */
+const REMPLISSAGE = { plein: 0.68, verse: 0.4 }
+/** Poignée du bidon (fractions de la photo) : la main le lève par là. */
+const POIGNEE = { x: 0.8, y: 0.17 }
+/** État du versement (angle, remplissage, débit) pour tout u, intégré une fois. */
+const VERSEMENT = tableVersement(REMPLISSAGE.plein, REMPLISSAGE.verse)
+/** Couleurs de l'huile neuve, accordées à l'huile du moteur : corps doré, cœur clair, reflet, bord sombre (Fresnel). */
+const TEINTES = { corps: '#d9951f', coeur: '#f6c85a', reflet: '#fff1c2', bord: 'rgb(138 75 10 / 0.6)' }
 
 export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void {
   const scene = racine.querySelector<HTMLElement>('[data-scene]')!
@@ -54,6 +75,8 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   const canvasFilet = racine.querySelector<HTMLCanvasElement>('[data-filet]')!
   const bidon = racine.querySelector<HTMLElement>('[data-bidon-hero]')!
   const niveau = bidon.querySelector<HTMLElement>('[data-niveau]')
+  const menisque = bidon.querySelector<HTMLElement>('[data-menisque]')
+  const lumiere = bidon.querySelector<HTMLElement>('[data-lumiere]')
   const bouchon = bidon.querySelector<HTMLElement>('[data-bouchon]')
   const aspectBidon = Number(bidon.dataset.aspect ?? 0.64)
   const blocs = [...racine.querySelectorAll<HTMLElement>('[data-bloc]')].map((el) => ({
@@ -68,8 +91,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     point: el.querySelector<HTMLElement>('[data-point]')!,
     trait: el.querySelector<HTMLElement>('[data-trait]')!,
     etiquette: el.querySelector<HTMLElement>('[data-etiquette]')!,
-    // L'étiquette arrive peu après le début du plan où l'huile atteint la pièce.
-    apparition: PLANS_T3[i][0] + RETARD_REPERE,
+    apparition: APPARITIONS_REPERES[i],
     ancre: { x: 0, y: 0 },
     etiquetteX: 0,
     traitX: 0,
@@ -155,12 +177,11 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   let dpr = 1
   let couv: Couverture = { x: 0, y: 0, l: 0, h: 0 }
   let orifice: Pt = { x: 0, y: 0 }
-  let goulotRepos: Pt = { x: 0, y: 0 }
-  let pivot: Pt = { x: 0, y: 0 }
-  let deplacement: Pt = { x: 0, y: 0 }
+  let geo: GeometrieBidon = { pivot: { x: 0, y: 0 }, goulot: { x: 0, y: 0 }, poignee: { x: 0, y: 0 }, hauteur: 1, goulotVerse: { x: 0, y: 0 } }
   let hauteurBidon = 0
-  /** Hauteur du goulot basculé sous le pivot, en hauteurs de bidon. */
-  let goulotSousPivot = 0
+  /** Pixels par mètre, gravité en px/s² (le bidon mesure 25 cm). */
+  let ppm = 1
+  let gpx = G
 
   function dimensionner(c: HTMLCanvasElement, echelle: number, taille = ecran) {
     const l = Math.round(taille.l * echelle)
@@ -180,38 +201,49 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     const zm = R.zones.moteur
     boite = { x: zm.x * ecran.l, y: zm.y * ecran.h, l: zm.l * ecran.l, h: zm.h * ecran.h }
     Object.assign(canvasMoteur.style, { left: `${boite.x}px`, top: `${boite.y}px`, width: `${boite.l}px`, height: `${boite.h}px` })
-    couv = couverture({ l: S.largeur, h: S.hauteur }, boite, S.focale.x, S.focale.y, S.zoom)
+    const image = { l: S.largeur, h: S.hauteur }
+    couv =
+      S.caleDroite === undefined
+        ? couverture(image, boite, S.focale.x, S.focale.y, S.zoom)
+        : caler(image, boite, S.zoom, S.focale.y, dansImage({ x: MOTEUR.bordDroit, y: 0 }, S.recadrage).x, S.caleDroite)
     // Jamais plus défini que l'image source : inutile de peindre des pixels inventés.
     dpr = Math.min(devicePixelRatio || 1, S.dprMax, Math.max(1, S.largeur / couv.l))
     dimensionner(canvasMoteur, dpr, boite)
     dimensionner(canvasFilet, Math.min(devicePixelRatio || 1, 2))
     orifice = aLEcran(MOTEUR.orifice)
 
-    // Bidon debout, à gauche ; basculé, son goulot vient au-dessus et à gauche de l'orifice.
+    // Bidon debout, à gauche. Pendant le versement, son goulot se tient au-dessus et à
+    // gauche de l'orifice, là où le filet, à plein débit, tombe dans l'orifice.
     const zb = R.zones.bidon
     const h = zb.h * ecran.h
     const l = h * aspectBidon
     hauteurBidon = h
+    ppm = h / HAUTEUR_REELLE
+    gpx = G * ppm
     const gauche = zb.x * ecran.l + (zb.l * ecran.l - l) / 2
     const haut = zb.y * ecran.h
     Object.assign(bidon.style, { left: `${gauche}px`, top: `${haut}px`, width: `${l}px`, height: `${h}px` })
     const { spout, bottlePivot } = HERO.ancres.bidon
     bidon.style.transformOrigin = `${bottlePivot.x * 100}% ${bottlePivot.y * 100}%`
-    goulotRepos = { x: gauche + spout.x * l, y: haut + spout.y * h }
-    pivot = { x: gauche + bottlePivot.x * l, y: haut + bottlePivot.y * h }
-    const goulotBascule = tournerAutour(goulotRepos, pivot, R.angleVersement)
-    goulotSousPivot = (goulotBascule.y - pivot.y) / h
-    const arrivee = placerGoulot({
+    const pivot = { x: gauche + bottlePivot.x * l, y: haut + bottlePivot.y * h }
+    const goulot = { x: gauche + spout.x * l, y: haut + spout.y * h }
+    const chute = R.chuteFilet * h
+    const d = directionFilet(117, 1)
+    const v0 = vitesseSortie(1) * ppm
+    const t = (-d.y * v0 + Math.sqrt((d.y * v0) ** 2 + 2 * gpx * chute)) / gpx
+    const voulu = { x: orifice.x - d.x * v0 * t, y: orifice.y - chute }
+    const versPivot = tourner({ x: pivot.x - goulot.x, y: pivot.y - goulot.y }, 128)
+    const goulotVerse = placerGoulot({
       orifice,
-      cible: R.cibleGoulot,
+      cible: { x: (voulu.x - orifice.x) / h, y: (voulu.y - orifice.y) / h },
       bidon: { l, h },
-      goulotVersPivot: { x: pivot.x - goulotBascule.x, y: pivot.y - goulotBascule.y },
-      angle: R.angleVersement,
+      goulotVersPivot: versPivot,
+      angle: 128,
       gauche: 8,
       droite: ecran.l - 8,
       haut: R.zones.entete.h * ecran.h * 0.7,
     })
-    deplacement = { x: arrivee.x - goulotBascule.x, y: arrivee.y - goulotBascule.y }
+    geo = { pivot, goulot, poignee: { x: gauche + POIGNEE.x * l, y: haut + POIGNEE.y * h }, hauteur: h, goulotVerse }
 
     // Étiquettes : point sur la pièce, trait, étiquette (colonne à gauche du moteur, ou
     // pastille à droite du point, sur le moteur).
@@ -270,7 +302,8 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       dernierFondu = f
       return
     }
-    courante = indexImage(local(t3, 0, FIN_SEQUENCE), total)
+    // Petit décalage : l'huile apparaît sur les cames juste après que le filet est entré.
+    courante = indexImage(local(t3, 0.05, FIN_SEQUENCE), total)
     garderDecodees()
     const i = plusProche(courante, (k) => bitmaps.has(k) || chargees.has(k), total)
     if (i === null || i === derniereDessinee) return
@@ -280,101 +313,150 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     derniereDessinee = i
   }
 
-  // ── Filet d'huile : chute libre du goulot à l'orifice ──────────────────────
+  // ── Filet d'huile : chaque parcelle suit sa propre chute libre ──────────────
+  // Une parcelle émise à l'instant te part du goulot tel qu'il était à te, dans la
+  // direction du col (rabattue vers le bas quand le débit faiblit), puis tombe. Tout est
+  // calculé depuis u : la tête tombe en premier, le filet s'affine en accélérant, la queue
+  // se détache quand le débit s'arrête, et le scroll arrière rembobine.
   const echelleFilet = () => canvasFilet.width / Math.max(1, ecran.l)
+  /** Âge maximal d'une parcelle (s) et nombre d'échantillons le long du filet. */
+  const AGE_MAX = 0.4
+  const ECHANTILLONS = 44
 
-  function dessinerFilet(goulot: Pt, debut: number, fin: number, temps: number) {
+  interface Parcelle {
+    p: Pt
+    largeur: number
+    debit: number
+    arrivee: boolean
+    /** Instant d'émission (u). */
+    ue: number
+  }
+
+  /** Parcelle émise il y a `age` secondes, vue à l'instant u (null : pas d'huile, ou déjà entrée). */
+  function parcelle(u: number, age: number): Parcelle | null {
+    const ue = u - age / DUREE
+    if (ue < 0 || ue > 1) return null
+    const f = VERSEMENT(ue).debit
+    if (f <= 0) return null
+    const pose = poseBidon(ue, geo)
+    const dir = directionFilet(pose.angle, f)
+    const v0 = vitesseSortie(f) * ppm
+    const vy = dir.y * v0
+    // Instant où elle atteint le fond visible du goulot (un peu sous son centre) ; au-delà, elle est entrée.
+    const fond = orifice.y + 0.012 * hauteurBidon
+    const aSol = (-vy + Math.sqrt(vy * vy + 2 * gpx * Math.max(0, fond - pose.goulot.y))) / gpx
+    if (age > aSol) return null
+    const x0 = pose.goulot.x + dir.x * v0 * aSol
+    // Petite correction d'entonnoir sur la fin de la chute : l'huile entre toujours pile.
+    const k = (age / aSol) ** 2
+    const p = {
+      x: pose.goulot.x + dir.x * v0 * age + (orifice.x - x0) * k,
+      y: pose.goulot.y + vy * age + 0.5 * gpx * age * age,
+    }
+    const v = Math.hypot(dir.x * v0, vy + gpx * age)
+    return { p, largeur: 0.05 * hauteurBidon * Math.sqrt(f) * Math.sqrt(v0 / v), debit: f, arrivee: age > aSol * 0.97, ue }
+  }
+
+  function tracerRuban(points: Parcelle[], echelle: number, style: string, alpha: number, decalage = 0) {
+    if (points.length < 2) return
+    const g: Pt[] = []
+    const d: Pt[] = []
+    for (let k = 0; k < points.length; k++) {
+      const a = points[Math.max(0, k - 1)].p
+      const b = points[Math.min(points.length - 1, k + 1)].p
+      const n = Math.hypot(b.x - a.x, b.y - a.y) || 1
+      // Normale tournée vers la gauche (côté lampe).
+      let nx = -(b.y - a.y) / n
+      let ny = (b.x - a.x) / n
+      if (nx > 0) {
+        nx = -nx
+        ny = -ny
+      }
+      const c = points[k].p
+      const demi = (points[k].largeur * echelle) / 2
+      const cx = c.x + nx * decalage * points[k].largeur
+      const cy = c.y + ny * decalage * points[k].largeur
+      g.push({ x: cx + nx * demi, y: cy + ny * demi })
+      d.push({ x: cx - nx * demi, y: cy - ny * demi })
+    }
+    ctxFilet.beginPath()
+    g.forEach((p, k) => (k === 0 ? ctxFilet.moveTo(p.x, p.y) : ctxFilet.lineTo(p.x, p.y)))
+    for (let k = d.length - 1; k >= 0; k--) ctxFilet.lineTo(d[k].x, d[k].y)
+    ctxFilet.closePath()
+    ctxFilet.globalAlpha = alpha
+    ctxFilet.fillStyle = style
+    ctxFilet.fill()
+  }
+
+  /** Dessine le filet et les gouttes ; renvoie true s'il y avait quelque chose à dessiner. */
+  function dessinerFilet(u: number, temps: number): boolean {
     ctxFilet.clearRect(0, 0, canvasFilet.width, canvasFilet.height)
-    if (fin - debut <= 0.001) return
-    const e = R.epaisseurFilet
-    const anime = !leger
     ctxFilet.save()
     ctxFilet.scale(echelleFilet(), echelleFilet())
+    let dessine = false
 
-    // Ruban : épais au goulot, il s'affine en tombant (il accélère) ; léger « glouglou ».
-    const n = 28
-    const bordG: Pt[] = []
-    const bordD: Pt[] = []
-    const centre: Pt[] = []
-    for (let k = 0; k <= n; k++) {
-      const t = mix(debut, fin, k / n)
-      const p = pointFilet(goulot, orifice, PENTE_FILET, t)
-      const q = pointFilet(goulot, orifice, PENTE_FILET, Math.min(1, t + 0.01))
-      const norme = Math.hypot(q.x - p.x, q.y - p.y) || 1
-      const nx = -(q.y - p.y) / norme
-      const ny = (q.x - p.x) / norme
-      const ondulation = anime ? 1 + 0.12 * Math.sin(temps * 0.012 - t * 14) : 1
-      const demi = (e / 2) * (1 - 0.45 * t) * ondulation
-      centre.push(p)
-      bordG.push({ x: p.x + nx * demi, y: p.y + ny * demi })
-      bordD.push({ x: p.x - nx * demi, y: p.y - ny * demi })
+    // Ruban (débit suffisant) ; en dessous, perles sur un fil.
+    const runs: Parcelle[][] = [[]]
+    const perles: Parcelle[] = []
+    let arrivee: Parcelle | null = null
+    for (let i = 0; i <= ECHANTILLONS; i++) {
+      const q = parcelle(u, (i / ECHANTILLONS) * AGE_MAX)
+      if (!q) {
+        if (runs[runs.length - 1].length) runs.push([])
+        continue
+      }
+      if (q.arrivee && (!arrivee || q.debit > arrivee.debit)) arrivee = q
+      if (q.debit < 0.08) {
+        // Perles seulement quand le débit s'éteint (coupure) ; au démarrage, le filet naît fin mais continu.
+        if (q.ue > 0.7 && i % 2 === 0) perles.push(q)
+        if (runs[runs.length - 1].length) runs.push([])
+        continue
+      }
+      // Ondulation discrète, seulement dans le bas du filet (2 à 3 %).
+      if (!leger && i > ECHANTILLONS * 0.35) q.largeur *= 1 + 0.025 * Math.sin(temps * 0.011 - i * 0.9)
+      runs[runs.length - 1].push(q)
     }
-    const degrade = ctxFilet.createLinearGradient(goulot.x, goulot.y, orifice.x, orifice.y)
-    degrade.addColorStop(0, HERO.couleurs.huile[0])
-    degrade.addColorStop(1, HERO.couleurs.huile[1])
-    ctxFilet.beginPath()
-    bordG.forEach((p, k) => (k === 0 ? ctxFilet.moveTo(p.x, p.y) : ctxFilet.lineTo(p.x, p.y)))
-    for (let k = bordD.length - 1; k >= 0; k--) ctxFilet.lineTo(bordD[k].x, bordD[k].y)
-    ctxFilet.closePath()
-    ctxFilet.fillStyle = degrade
-    ctxFilet.shadowColor = 'rgb(240 204 48 / 0.45)'
-    ctxFilet.shadowBlur = e * 1.5
-    ctxFilet.fill()
-    ctxFilet.shadowBlur = 0
-    // Tête arrondie tant que le filet n'a pas atteint l'orifice.
-    if (fin < 1) {
-      const tete = centre[centre.length - 1]
+    // Le filet naît sur la lèvre du goulot : il épouse le bord sur quelques pixels.
+    const premier = runs[0][0]
+    if (premier && Math.abs(premier.ue - u) < 1e-9) {
+      const pose = poseBidon(u, geo)
+      const dir = directionFilet(pose.angle, premier.debit)
+      runs[0].unshift({ ...premier, p: { x: premier.p.x - dir.x * 0.025 * hauteurBidon, y: premier.p.y - dir.y * 0.025 * hauteurBidon } })
+    }
+    for (const run of runs) {
+      if (run.length < 2) continue
+      dessine = true
+      // Profil d'un cylindre d'huile éclairé : bord sombre, corps ambre, cœur clair, reflet fixe.
+      tracerRuban(run, 1.12, TEINTES.bord, 1)
+      tracerRuban(run, 1, TEINTES.corps, 0.92)
+      tracerRuban(run, 0.55, TEINTES.coeur, 0.9)
+      tracerRuban(run, 0.12, TEINTES.reflet, 0.8 + (leger ? 0 : 0.015 * Math.sin(temps * 0.004)), -0.2)
+    }
+    ctxFilet.globalAlpha = 0.9
+    ctxFilet.fillStyle = TEINTES.coeur
+    for (const q of perles) {
+      dessine = true
       ctxFilet.beginPath()
-      ctxFilet.arc(tete.x, tete.y, (e / 2) * (1 - 0.45 * fin) * 1.15, 0, Math.PI * 2)
+      ctxFilet.arc(q.p.x, q.p.y, Math.max(0.8, 0.045 * hauteurBidon * Math.sqrt(q.debit)), 0, Math.PI * 2)
       ctxFilet.fill()
     }
-    // Reflet de la lampe (à gauche) qui descend le long du filet.
-    ctxFilet.beginPath()
-    bordG.forEach((p, k) => {
-      const x = mix(centre[k].x, p.x, 0.45)
-      const y = mix(centre[k].y, p.y, 0.45)
-      if (k === 0) ctxFilet.moveTo(x, y)
-      else ctxFilet.lineTo(x, y)
-    })
-    ctxFilet.lineWidth = Math.max(1, e * 0.18)
-    ctxFilet.strokeStyle = HERO.couleurs.refletHuile
-    ctxFilet.globalAlpha = 0.8
-    ctxFilet.setLineDash([e * 2.5, e * 3.5])
-    ctxFilet.lineDashOffset = anime ? -temps * 0.12 : 0
-    ctxFilet.lineCap = 'round'
-    ctxFilet.stroke()
-    ctxFilet.setLineDash([])
-    ctxFilet.globalAlpha = 1
-
-    // Arrivée dans l'orifice : petit anneau d'huile et gouttelettes qui rejaillissent.
-    if (fin >= 1) {
-      const r = e * 1.3
+    // Pied brillant là où l'huile entre dans l'orifice.
+    if (arrivee && arrivee.debit >= 0.08) {
+      const w = arrivee.largeur
+      ctxFilet.globalAlpha = 0.85
+      ctxFilet.fillStyle = TEINTES.coeur
       ctxFilet.beginPath()
-      ctxFilet.ellipse(orifice.x, orifice.y, r, r * 0.35, 0, 0, Math.PI * 2)
-      ctxFilet.strokeStyle = HERO.couleurs.huile[0]
-      ctxFilet.globalAlpha = 0.75
-      ctxFilet.lineWidth = Math.max(1, e * 0.25)
-      ctxFilet.stroke()
-      if (anime) {
-        ctxFilet.fillStyle = HERO.couleurs.huile[0]
-        for (let k = 0; k < 4; k++) {
-          const phase = (temps * 0.0016 + k / 4) % 1
-          const sens = k % 2 ? 1 : -1
-          ctxFilet.globalAlpha = 0.8 * (1 - phase)
-          ctxFilet.beginPath()
-          ctxFilet.arc(
-            orifice.x + sens * (r * 0.6 + phase * e * 1.8),
-            orifice.y - Math.sin(phase * Math.PI) * e * 1.6,
-            Math.max(0.8, e * 0.22 * (1 - phase)),
-            0,
-            Math.PI * 2,
-          )
-          ctxFilet.fill()
-        }
-      }
-      ctxFilet.globalAlpha = 1
+      ctxFilet.ellipse(orifice.x, orifice.y + 0.012 * hauteurBidon, 0.8 * w, Math.max(1.5, 0.012 * hauteurBidon), 0, 0, Math.PI * 2)
+      ctxFilet.fill()
+      ctxFilet.fillStyle = TEINTES.reflet
+      ctxFilet.globalAlpha = 0.7
+      ctxFilet.beginPath()
+      ctxFilet.ellipse(orifice.x - 0.25 * w, orifice.y + 0.012 * hauteurBidon - 0.3, 0.3 * w, 0.7, 0, 0, Math.PI * 2)
+      ctxFilet.fill()
     }
+
     ctxFilet.restore()
+    return dessine
   }
 
   // ── Rendu ──────────────────────────────────────────────────────────────────
@@ -406,45 +488,49 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     const t3 = local(p, T3.debut, T3.fin)
     const disparition = local(p, FIN.debut - 0.02, FIN.debut + 0.005)
 
-    // Bouchon : saute et sort.
+    // Bouchon : il saute, monte un peu en tournant, repart sur la gauche et s'efface.
     const saut = doux(local(t2, 0, 0.15))
     if (bouchon) {
-      const d = hauteurBidon * saut
-      bouchon.style.transform = `translate3d(${d * 0.12}px, ${-d * 0.35}px, 0) rotate(${saut * 35}deg)`
-      bouchon.style.opacity = String(1 - saut)
+      const h = hauteurBidon
+      bouchon.style.transform = `translate3d(${-0.26 * h * saut}px, ${-0.13 * h * Math.sin(Math.PI * 0.8 * saut)}px, 0) rotate(${-20 * saut}deg)`
+      bouchon.style.opacity = String(1 - local(saut, 0.55, 1))
     }
 
-    // Bidon : se penche au-dessus de l'orifice, verse, puis se redresse à sa place.
-    const penche = doux(local(t2, 0.12, 0.62))
-    const retour = mouvementReduit ? 0 : doux(local(t3, 0.3, 0.44))
-    const bascule = mouvementReduit ? 0 : penche * (1 - retour)
-    const angle = R.angleVersement * bascule
-    bidon.style.transform = `translate3d(${deplacement.x * bascule}px, ${deplacement.y * bascule}px, 0) rotate(${angle}deg)`
-    bidon.style.opacity = String(1 - disparition)
+    // Bidon : la main le lève par la poignée, l'incline au-dessus de l'orifice en gardant
+    // le goulot presque immobile, verse, coupe d'un geste, puis l'emporte en haut à gauche.
+    const u = mouvementReduit ? 0 : local(p, SEQUENCE_BIDON[0], SEQUENCE_BIDON[1])
+    const pose = poseBidon(u, geo)
+    bidon.style.transform = `translate3d(${pose.translation.x}px, ${pose.translation.y}px, 0) rotate(${pose.angle}deg)`
+    // Il s'efface sur la fin de sa sortie (les 40 derniers pourcents).
+    const effacement = mouvementReduit ? disparition : Math.max(disparition, local(u, 0.886, 1))
+    bidon.style.opacity = String(1 - effacement)
 
-    // Huile dans le bidon : surface horizontale (contre-rotation), qui monte (t1), passe
-    // au-dessus du goulot quand il penche, baisse pendant le versement.
+    // Huile dans le bidon : surface horizontale (contre-rotation) qui monte en t1, rejoint
+    // le goulot quand il penche, reste juste au-dessus tant que l'huile coule, puis
+    // retombe au niveau de ce qui reste ; elle ballotte après chaque arrêt du geste.
     if (niveau) {
       const pivotY = HERO.ancres.bidon.bottlePivot.y
-      const monte = mix(1, SURFACE.plein, doux(local(p, T1.debut, T1.fin))) - pivotY
-      const versee = local(p, mix(T2.debut, T2.fin, 0.6), mix(T3.debut, T3.fin, 0.26))
-      const auGoulot = mix(goulotSousPivot + SURFACE.versement, goulotSousPivot + SURFACE.tari, versee)
-      const surface = mix(mix(monte, auGoulot, mouvementReduit ? 0 : penche), SURFACE.finale - pivotY, retour)
-      // Ballottement : la surface prend un peu de retard sur les mouvements du bidon.
-      const sens = Math.sign(R.angleVersement)
-      const ballottement = mouvementReduit ? 0 : sens * (9 * Math.sin(Math.PI * bascule) * (1 - retour) - 7 * Math.sin(Math.PI * retour))
-      niveau.style.transform = `rotate(${-angle + ballottement}deg) translate3d(0, ${surface * hauteurBidon}px, 0)`
+      const etat = VERSEMENT(u)
+      const remplissage = u > 0 ? etat.remplissage : mix(0, REMPLISSAGE.plein, doux(local(p, T1.debut, T1.fin)))
+      const debout = 1 - remplissage - pivotY
+      const goulotY = tourner({ x: geo.goulot.x - geo.pivot.x, y: geo.goulot.y - geo.pivot.y }, pose.angle).y / hauteurBidon
+      const surface =
+        etat.debit > 0
+          ? goulotY - 0.01 - 0.03 * etat.debit
+          : mix(debout, goulotY - 0.01, doux(borner(pose.angle / angleDebut(remplissage))))
+      const phi = mouvementReduit || u <= 0 || u >= 1 ? 0 : ballottement(u, DUREE)
+      const t = `rotate(${-pose.angle + phi}deg) translate3d(0, ${surface * hauteurBidon}px, 0)`
+      niveau.style.transform = t
+      if (menisque) menisque.style.transform = t
     }
+    // Lumière du studio fixée au monde : le haut du bidon reste éclairé quoi qu'il fasse.
+    if (lumiere) lumiere.style.transform = `rotate(${-pose.angle}deg)`
 
-    // Filet : sa tête tombe du goulot à l'orifice, sa queue suit quand le bidon est tari.
-    const tete = mouvementReduit ? 0 : local(t2, 0.55, 0.78)
-    const queue = local(t3, 0.22, 0.3)
-    filetVisible = tete > queue && bascule > 0
-    if (filetVisible || filetPresent) {
-      const g = tournerAutour(goulotRepos, pivot, angle)
-      dessinerFilet({ x: g.x + deplacement.x * bascule, y: g.y + deplacement.y * bascule }, queue, tete, temps)
-      filetPresent = filetVisible
-    }
+    // Filet et gouttes.
+    const actif = !mouvementReduit && u > 0.3 && u < 1
+    filetVisible = actif && dessinerFilet(u, temps)
+    if (!filetVisible && filetPresent) ctxFilet.clearRect(0, 0, canvasFilet.width, canvasFilet.height)
+    filetPresent = filetVisible
 
     // Étiquettes : chaque pièce s'allume quand l'huile l'atteint ; la précédente s'efface à moitié.
     for (const [i, r] of reperes.entries()) {

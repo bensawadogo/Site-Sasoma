@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { couverture, indexImage, ordreChargement, plusProche, pointCouvert } from './sequence-images'
+import { caler, couverture, indexImage, ordreChargement, plusProche, pointCouvert } from './sequence-images'
 
 describe('séquences d’images du hero vidéo', () => {
   it('indexImage : bornes et arrondi', () => {
@@ -45,5 +45,12 @@ describe('séquences d’images du hero vidéo', () => {
   it('pointCouvert : un point de l’image suit la couverture', () => {
     const c = { x: -80, y: 0, l: 1600, h: 900 }
     expect(pointCouvert({ x: 0.5, y: 0.5 }, c)).toEqual({ x: 720, y: 450 })
+  })
+
+  it('caler : le point choisi de l’image tombe à l’abscisse voulue', () => {
+    const c = caler({ l: 1920, h: 1080 }, { l: 1440, h: 900 }, 0.8, 1, 0.795, 0.95)
+    expect(c.l).toBeCloseTo(1280)
+    expect(c.y).toBeCloseTo(180)
+    expect(c.x + 0.795 * c.l).toBeCloseTo(0.95 * 1440)
   })
 })
