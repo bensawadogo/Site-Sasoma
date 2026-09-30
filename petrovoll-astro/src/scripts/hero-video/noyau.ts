@@ -7,7 +7,7 @@
  * séquence.
  *
  * Déroulé (HERO.temps) : l'huile monte dans le bidon debout (t1) ; le bouchon saute,
- * le bidon, à gauche du moteur, se penche et verse un filet en chute libre dans
+ * le bidon, à droite du moteur, se penche et verse un filet en chute libre dans
  * l'orifice (t2) ; pendant t3 la séquence montre l'huile qui descend dans le moteur en
  * coupe (cames, pistons, vilebrequin), le filet se tarit, le bidon se redresse et
  * s'efface, et chaque pièce reçoit son étiquette quand l'huile l'atteint.
@@ -16,7 +16,7 @@
  *  - DOM : on n'écrit que opacity et transform (tailles et positions au redimensionnement) ;
  *  - séquence : chargée après l'événement load, une image sur 4 d'abord, puis le reste ;
  *    seules les images proches de l'image courante restent décodées (ImageBitmap) ;
- *  - palier lite (économie de données, 2G/3G, ≤ 2 Go, mouvement réduit) : deux images
+ *  - palier lite (économie de données, 2G/3G, ≤ 2 Go) : deux images
  *    seulement (moteur sec, moteur huilé), en fondu.
  */
 import { APPARITIONS_REPERES, dansImage, MOTEUR, PLANS_T3, type ReglagesHeroVideo } from '@/hero-video.config'
@@ -110,8 +110,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   const leger =
     forcage === 'lite' ||
     (!forcage &&
-      (mouvementReduit ||
-        !!nav.connection?.saveData ||
+      (!!nav.connection?.saveData ||
         /(^|-)(2g|3g)$/.test(nav.connection?.effectiveType ?? '') ||
         (R.nom === 'mobile' && (nav.deviceMemory ?? 4) <= 2)))
   racine.dataset.palier = leger ? 'lite' : 'sequence'
@@ -418,7 +417,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
         continue
       }
       // Ondulation discrète, seulement dans le bas du filet (2 à 3 %).
-      if (!leger && i > ECHANTILLONS * 0.35) q.largeur *= 1 + 0.025 * Math.sin(temps * 0.011 - i * 0.9)
+      if (!leger && !mouvementReduit && i > ECHANTILLONS * 0.35) q.largeur *= 1 + 0.025 * Math.sin(temps * 0.011 - i * 0.9)
       runs[runs.length - 1].push(q)
     }
     // Le filet naît sur la lèvre du goulot : il épouse le bord sur quelques pixels.
@@ -435,7 +434,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       tracerRuban(run, 1.12, TEINTES.bord, 1)
       tracerRuban(run, 1, TEINTES.corps, 0.92)
       tracerRuban(run, 0.55, TEINTES.coeur, 0.9)
-      tracerRuban(run, 0.12, TEINTES.reflet, 0.8 + (leger ? 0 : 0.015 * Math.sin(temps * 0.004)), -0.2)
+      tracerRuban(run, 0.12, TEINTES.reflet, 0.8 + (leger || mouvementReduit ? 0 : 0.015 * Math.sin(temps * 0.004)), -0.2)
     }
     ctxFilet.globalAlpha = 0.9
     ctxFilet.fillStyle = TEINTES.coeur
@@ -505,11 +504,13 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
 
     // Bidon : la main le lève par la poignée, l'incline au-dessus de l'orifice en gardant
     // le goulot presque immobile, verse, coupe d'un geste, puis l'emporte vers le haut.
-    const u = mouvementReduit ? 0 : local(p, SEQUENCE_BIDON[0], SEQUENCE_BIDON[1])
+    // Piloté par le défilement (le visiteur le commande) : joué aussi en « mouvement réduit »,
+    // seules les petites animations continues (ondulation, reflet) y sont coupées.
+    const u = local(p, SEQUENCE_BIDON[0], SEQUENCE_BIDON[1])
     const pose = poseBidon(u, geo, PROFIL)
     bidon.style.transform = `translate3d(${pose.translation.x}px, ${pose.translation.y}px, 0) rotate(${pose.angle}deg)`
     // Il s'efface pendant sa sortie, avant de passer sous l'en-tête ou le bord de l'écran.
-    const effacement = mouvementReduit ? disparition : Math.max(disparition, local(u, 0.83, 0.95))
+    const effacement = Math.max(disparition, local(u, 0.83, 0.95))
     bidon.style.opacity = String(1 - effacement)
 
     // Huile dans le bidon : surface horizontale (contre-rotation) qui monte en t1, rejoint
@@ -525,7 +526,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
         etat.debit > 0
           ? goulotY - 0.01 - 0.03 * etat.debit
           : mix(debout, goulotY - 0.01, doux(borner(Math.abs(pose.angle) / angleDebut(remplissage, PROFIL))))
-      const phi = mouvementReduit || u <= 0 || u >= 1 ? 0 : ballottement(u, DUREE, PROFIL)
+      const phi = u <= 0 || u >= 1 ? 0 : ballottement(u, DUREE, PROFIL)
       const t = `rotate(${-pose.angle + phi}deg) translate3d(0, ${surface * hauteurBidon}px, 0)`
       niveau.style.transform = t
       if (menisque) menisque.style.transform = t
@@ -534,7 +535,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     if (lumiere) lumiere.style.transform = `rotate(${-pose.angle}deg)`
 
     // Filet et gouttes.
-    const actif = !mouvementReduit && u > 0.3 && u < 1
+    const actif = u > 0.3 && u < 1
     filetVisible = actif && dessinerFilet(u, temps)
     if (!filetVisible && filetPresent) ctxFilet.clearRect(0, 0, canvasFilet.width, canvasFilet.height)
     filetPresent = filetVisible
@@ -565,7 +566,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       rafEnAttente = false
       lireProgression()
       rendre(temps)
-      if (filetVisible && !leger) demanderRendu() // le filet ondule, le reflet défile
+      if (filetVisible && !leger && !mouvementReduit) demanderRendu() // le filet ondule, le reflet défile
     })
   }
 
