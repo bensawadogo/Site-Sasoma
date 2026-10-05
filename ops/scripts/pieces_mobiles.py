@@ -142,14 +142,39 @@ for idx, (nom, rgba, sx, sy) in enumerate(sprites):
         rgba[..., :3] = noir_pur(rgba[..., :3])
         sprites[idx] = (nom, rgba, sx, sy)
 
-# Rendu « studio argent » (ops/scripts/etalonnage.py, comme la séquence) : avant le grain et
+# Rendu « photo produit » (etalonnage.studio_photo, comme la séquence) : avant le grain et
 # avant l'atlas huilé, pour que l'huile se pose sur le métal étalonné.
-from etalonnage import studio_argent  # noqa: E402
+from etalonnage import studio_photo  # noqa: E402
 for idx, (nom, rgba, sx, sy) in enumerate(sprites):
     if nom.startswith(('piston', 'fut', 'tete', 'avant', 'cache', 'poulie', 'volant', 'cames', 'poussoir', 'ressort', 'vilebrequin')):
         rgba = rgba.copy()
-        rgba[..., :3] = studio_argent(rgba[..., :3], rgba[..., 3], fondu=False)
+        rgba[..., :3] = studio_photo(rgba[..., :3], rgba[..., 3], fondu=False)
         sprites[idx] = (nom, rgba, sx, sy)
+
+# Chapeaux de paliers de l'arbre à cames : gris uni dans le rendu Blender (aspect « image de
+# synthèse »). On leur donne le modelé de l'aluminium de K1 : lumière du haut, métal brossé,
+# arêtes biseautées (05/10). Colonnes des chapeaux = alpha opaque sur plus de 65 % de la hauteur (cames : 60 % au plus).
+rng_b = np.random.default_rng(5)
+for idx, (nom, rgba, sx, sy) in enumerate(sprites):
+    if not nom.startswith('cames'):
+        continue
+    a = rgba[..., 3]
+    col = (a > 0.5).mean(0) > 0.65
+    if not col.any():
+        continue
+    rgba = rgba.copy()
+    h, w = a.shape
+    yy = np.linspace(0, 1, h, dtype=np.float32)[:, None]
+    degrade = (1.05 - 0.55 * yy ** 1.4) * 0.9                                   # lumière du haut
+    brosse = cv2.GaussianBlur(rng_b.standard_normal((h, w)).astype(np.float32), (0, 0), sigmaX=9, sigmaY=0.6) * 0.16
+    # Arêtes : distance au bord du chapeau (biseau sombre sur les côtés, liseré clair en haut).
+    m = (col[None, :] & (a > 0.5)).astype(np.uint8)
+    d = cv2.distanceTransform(m, cv2.DIST_L2, 3)
+    biseau = np.clip(d / 3.0, 0, 1) * 0.35 + 0.65
+    lisere = np.exp(-((yy * h - 2.0) ** 2) / 4.0) * 0.25 + np.exp(-((yy - 0.22) ** 2) / 0.004) * 0.10
+    g = (rgba[..., :3] * (degrade * biseau + brosse)[..., None] + lisere[..., None]) * np.array([1.03, 1.0, 0.94], np.float32)
+    rgba[..., :3] = np.where(m[..., None] > 0, np.clip(g, 0, 1), rgba[..., :3])
+    sprites[idx] = (nom, rgba, sx, sy)
 
 # Les rendus Blender sont trop « propres » à côté de la photo : on leur donne son grain.
 rng = np.random.default_rng(9)

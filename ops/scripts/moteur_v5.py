@@ -150,19 +150,19 @@ def main(a):
         # Pas de vignette ici : le site pose le même décor, en plus large, tout autour de l'image
         # (decor.py CHAMP = 2) ; la vignette est faite en CSS sur toute la scène.
         # Le moteur, photographié en lumière neutre, prend un soupçon de la chaleur du garage.
-        chaleur = np.array([1.04, 1.0, 0.93], np.float32)
+        chaleur = np.array([1.015, 1.0, 0.98], np.float32)
 
         def poser_decor(moteur, k):
             d = decor[0] * (1 - k) + decor[1] * k
             return np.clip(moteur * chaleur * detour + d * (1 - detour), 0, 1)
 
-        # Rendu « studio argent » du moteur (etalonnage.py), appliqué AVANT l'huile : celle-ci
-        # garde sa couleur. Le noir pur du studio n'a plus lieu d'être sur le garage.
-        from etalonnage import studio_argent
-        fond_site = studio_argent(noir_pur(fond_site), detour[..., 0])
+        # Rendu « photo produit » du moteur (etalonnage.studio_photo, 05/10), appliqué AVANT
+        # l'huile : celle-ci garde sa couleur.
+        from etalonnage import studio_photo
+        fond_site = studio_photo(noir_pur(fond_site), detour[..., 0])
         # Affiche (avant le canvas) : K1 complet dans le garage en pénombre.
         k1_brut = cv2.cvtColor(cv2.imread(a[0]), cv2.COLOR_BGR2RGB).astype(np.float32) / 255
-        k1_brut = studio_argent(noir_pur(k1_brut), detour[..., 0])
+        k1_brut = studio_photo(noir_pur(k1_brut), detour[..., 0])
         cv2.imwrite('assets/ai/v5/affiche-decor.png', cv2.cvtColor((poser_decor(k1_brut, 0.0) * 255).astype(np.uint8), cv2.COLOR_RGB2BGR))
 
     def rendre(n, theta=None):
@@ -173,7 +173,8 @@ def main(a):
             # la séquence couvre t3 de 0,05 à 0,95).
             from huile_v5 import film, tau_fond
             t3 = 0.05 + 0.9 * n / (N - 1)
-            tau = tau_fond(t3)
+            # Film discret (05/10) : plus épais, il teintait les parois en brun (« rouillé »).
+            tau = tau_fond(t3) * 0.45
             img = film(fond_site, tau) if tau.max() > 0 else fond_site
         else:
             img = poser(fond, k1, pistons, bielles, devant, th)

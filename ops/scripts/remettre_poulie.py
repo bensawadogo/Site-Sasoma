@@ -7,7 +7,7 @@ image, avec le même retournement/cadrage que scripts/build-hero-video.mjs, et l
 reprend le détourage complet (assets/ai/v5/masque-moteur.png).
   python ops/scripts/remettre_poulie.py
 """
-import hashlib, json
+import hashlib, sys, json
 from pathlib import Path
 import numpy as np
 from PIL import Image, ImageFilter, ImageOps
@@ -17,6 +17,12 @@ PUB = R / 'petrovoll-astro/public/hero-video'
 MAN = R / 'petrovoll-astro/src/assets/hero/video/manifest.json'
 k1 = ImageOps.mirror(Image.open(R / 'assets/ai/v3/K1.png').convert('RGB'))
 plein = ImageOps.mirror(Image.open(R / 'assets/ai/v5/masque-moteur.png').convert('L'))
+# Même étalonnage que la séquence (etalonnage.studio_photo).
+sys.path.insert(0, str(R / 'ops/scripts'))
+from animer_moteur import noir_pur  # noqa: E402
+from etalonnage import studio_photo  # noqa: E402
+_k = studio_photo(noir_pur(np.asarray(k1, np.float32) / 255), np.asarray(plein, np.float32) / 255)
+k1 = Image.fromarray((_k * 255).clip(0, 255).astype(np.uint8))
 zones = Image.new('L', k1.size, 0)
 for x0, x1 in ((320, 392), (960, 1030)):  # poulie avant, volant (repère K1, non retourné)
     zones.paste(255, (1344 - x1 - 6, 424, 1344 - x0 + 6, 621))

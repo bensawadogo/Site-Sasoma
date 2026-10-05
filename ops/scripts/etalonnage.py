@@ -33,3 +33,24 @@ def studio_argent(rgb, masque, fondu=True):
         return g
     mi = cv2.GaussianBlur(cv2.erode(m, np.ones((5, 5), np.uint8)), (0, 0), 2.0)[..., None]
     return f * (1 - mi) + g * mi
+
+
+def studio_photo(rgb, masque, fondu=True):
+    """Rendu « photo produit » (05/10, remplace studio_argent) : la lumière de studio de K1
+    est gardée telle quelle, sans clarté ni micro-contraste (ils brûlaient l'aluminium et
+    donnaient l'aspect « retouché »). Seulement : noirs profonds à peine décollés (le métal
+    ne devient pas un trou sur le garage), hautes lumières adoucies (aucun blanc brûlé),
+    couleurs un peu calmées, modelé d'ensemble (contraste à grande échelle) dans le masque."""
+    f = rgb.astype(np.float32)
+    m = (masque > 0.5).astype(np.float32)
+    g = f + 0.05 * np.clip(1 - f / 0.3, 0, 1) ** 2                       # pied : noirs lisibles
+    g = np.where(g > 0.72, 0.72 + 0.28 * np.tanh((g - 0.72) / 0.28), g)  # épaule : pas de blanc brûlé
+    lum = g.mean(2, keepdims=True)
+    g = lum + (g - lum) * 0.85
+    g = g * np.array([0.985, 1.0, 1.02], np.float32)
+    g = g + (g - _flou_dans(g, m, 40)) * 0.12                            # modelé
+    g = np.clip(g, 0, 1)
+    if not fondu:
+        return g
+    mi = cv2.GaussianBlur(cv2.erode(m, np.ones((5, 5), np.uint8)), (0, 0), 2.0)[..., None]
+    return f * (1 - mi) + g * mi
