@@ -1,0 +1,86 @@
+{
+  "pneu-double-road-dr802": {
+    "source": "https://image.made-in-china.com/202f0j00yBvlRQZHnCGe/Double-Road-9-00r20-16pr-Chinese-Tyre-Pneu-Dr802-Truck-Tires-Pneus-9-00-20-Good-Quality.webp",
+    "note": 9,
+    "fond_uni": true,
+    "candidate": 9
+  },
+  "pneu-double-road-dr638": {
+    "source": "https://image.made-in-china.com/2f0j00nZSEQsbJlWpo/Truck-and-Bus-Tyre-Radial-Big-Tubless-Double-Road-Tyre.jpg",
+    "note": 8,
+    "fond_uni": true,
+    "candidate": 0
+  },
+  "pneu-longmarch-lm526": {
+    "source": "https://www.virtualllantas.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/l/l/llanta_longmarch_lm526_banda_1_1.jpg",
+    "note": 7,
+    "fond_uni": true,
+    "candidate": 3
+  },
+  "filtre-huile-cat-1r-1807": {
+    "source": "https://i5.walmartimages.com/asr/ffb54dd8-655c-442a-87f7-f55c141ae981.af6e5ace9cbdd1f0fd5605fdc1daa9cc.jpeg",
+    "note": 9,
+    "fond_uni": true,
+    "candidate": 0
+  },
+  "filtre-carburant-cat-1r-0750": {
+    "source": "https://cdn11.bigcommerce.com/s-x3ki4mm/images/stencil/1280x1280/products/1365/2056/CAT_FUEL_FILTER_1R-0750_CAT_SPARE_PARTS_1__32333.1547484150.jpg?c=2?imbypass=on",
+    "note": 9,
+    "fond_uni": true,
+    "candidate": 8
+  },
+  "filtre-carburant-perkins": {
+    "source": "https://img.drz.lazcdn.com/static/pk/p/4a926b055e9a980ac965ca775d236fbe.png_720x720q80.png",
+    "note": 9,
+    "fond_uni": true,
+    "candidate": 2
+  },
+  "filtre-separateur-pl420": {
+    "source": "https://sc04.alicdn.com/kf/Haa19fc4e51bd4d07b3bb19c7a3342b97X.png",
+    "note": 8,
+    "fond_uni": true,
+    "candidate": 1
+  },
+  "filtres-daf": {
+    "source": "https://experttrucks.ie/wp-content/uploads/2024/09/2234788.jpg",
+    "note": 9,
+    "fond_uni": true,
+    "candidate": 2
+  },
+  "filtres-air-poids-lourds": {
+    "source": "https://www.parkerfilter.net/imagepass/images/image/20251202/20251202114157_33343.jpg",
+    "note": 9,
+    "fond_uni": true,
+    "candidate": 8
+  },
+  "pneu-double-road-dr636": {
+    "source": "https://image.made-in-china.com/2f0j00mFDTlORnEGuB/Double-Road-Truck-and-Bus-315-80r22-5-Truck-Tyre.jpg",
+    "note": 9,
+    "fond_uni": true,
+    "candidate": 2
+  },
+  "filtre-scania-1397764": {
+    "source": "http://www.mymromarts.com/cdn/shop/files/oil_filter_1397764_5021188231.webp?v=1744944289",
+    "note": 8,
+    "fond_uni": true,
+    "candidate": 3
+  },
+  "filtre-scania-1928868": {
+    "source": "https://75025d40dd58ab042ef4-3509ef0b9210fbf84c18b36ced24de7a.ssl.cf3.rackcdn.com/imagelibrary_lrg/109678_pic2.jpg",
+    "note": 6,
+    "fond_uni": true,
+    "candidate": 7
+  },
+  "filtre-scania-1699168": {
+    "source": "https://pims-assets.s3.ap-southeast-2.amazonaws.com/ppe_379574_PP_P1699168_4.jpg",
+    "note": 9,
+    "fond_uni": true,
+    "candidate": 6
+  },
+  "filtre-scania-1852005": {
+    "source": "https://ae01.alicdn.com/kf/Sd4d9f83cb8034453a03925fb844532c1U.jpg",
+    "note": 9,
+    "fond_uni": true,
+    "candidate": 8
+  }
+}

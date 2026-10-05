@@ -168,6 +168,12 @@ export default config({
           description: 'Une ou deux phrases, affichées sur la carte du secteur en page d’accueil.',
           multiline: true,
         }),
+        image: fields.image({
+          label: 'Photo de couverture',
+          description: 'Affichée sur la carte du secteur (accueil) et en haut de sa page. Une photo de téléphone convient.',
+          directory: 'src/assets/secteurs',
+          publicPath: '../../assets/secteurs/',
+        }),
         description: fields.markdoc({
           label: 'Présentation complète',
           description: 'Texte de la page du secteur.',

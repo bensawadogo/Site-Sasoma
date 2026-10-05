@@ -11,10 +11,12 @@ import HeroTextes from '@/components/hero/video/HeroTextes.astro'
 import { HERO_MOBILE as R } from '@/hero-video.config'
 
 const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
-const affiche = `${R.sequence.dossier}/000.webp?v=${R.sequence.version}`
+const affiche = `${R.sequence.dossier}/affiche.webp?v=${R.sequence.version}`
 const variables = [
   `--hauteur:${R.hauteur}`,
   `--affiche:url(${affiche})`,
+  `--decor-penombre:url(${R.sequence.dossier}/decor-penombre.webp?v=${R.sequence.version})`,
+  `--decor-allume:url(${R.sequence.dossier}/decor-allume.webp?v=${R.sequence.version})`,
   ...Object.entries(R.zones).flatMap(([nom, z]) => [
     `--${nom}-x:${pc(z.x)}`,
     `--${nom}-y:${pc(z.y)}`,
@@ -26,6 +28,13 @@ const variables = [
 
 <section class="hero-mobile zone-sombre relative -mt-16" style={variables} data-hero-mobile aria-labelledby="hero-titre-mobile">
   <div class="scene" data-scene>
+    {
+      R.sequence.decor && (
+        <div class="decor" data-decor aria-hidden="true">
+          <div class="decor-allume" data-decor-allume />
+        </div>
+      )
+    }
     <canvas class="sequence" data-sequence aria-hidden="true"></canvas>
     <div class="couche voile" aria-hidden="true"></div>
     <canvas class="couche" data-filet aria-hidden="true"></canvas>
@@ -59,7 +68,7 @@ const variables = [
     contain: layout paint;
     background: #000;
   }
-  /* Moteur (zone « moteur » de HERO_MOBILE) ; le fond de l'image est déjà noir pur.
+  /* Moteur (zone « moteur » de HERO_MOBILE), dans le garage.
      Affiche = 1re image, visible avant le script et sans JS ; une image de fond
      d'un élément masqué (hero desktop sur téléphone) n'est pas téléchargée. */
   .sequence {
@@ -68,8 +77,29 @@ const variables = [
     top: var(--moteur-y);
     width: var(--moteur-l);
     height: var(--moteur-h);
-    background: #000 var(--affiche) center / cover no-repeat;
+    background: var(--affiche) center / cover no-repeat;
     pointer-events: none;
+  }
+  /* Garage : même échelle que la séquence, champ double, centré sur elle (placé exactement
+     par le script ; sans JS, calé comme l'affiche). Le garage s'éclaire pendant le versement. */
+  .decor {
+    position: absolute;
+    /* zone moteur agrandie de moitié de chaque côté : « cover » y tombe à la même échelle */
+    left: calc(var(--moteur-x) - var(--moteur-l) / 2);
+    top: calc(var(--moteur-y) - var(--moteur-h) / 2);
+    width: calc(var(--moteur-l) * 2);
+    height: calc(var(--moteur-h) * 2);
+    background: var(--decor-penombre) center / 100% 100% no-repeat;
+    /* bords fondus dans le noir de la scène (écran très large, haut du téléphone) */
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent), linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+    mask-composite: intersect;
+    pointer-events: none;
+  }
+  .decor-allume {
+    position: absolute;
+    inset: 0;
+    background: var(--decor-allume) center / 100% 100% no-repeat;
+    opacity: 0;
   }
   .couche {
     position: absolute;
@@ -79,7 +109,9 @@ const variables = [
     pointer-events: none;
   }
   .voile {
-    background: linear-gradient(to bottom, transparent 62%, rgb(0 0 0 / 0.85) 80%, #000 100%);
+    background:
+      linear-gradient(to bottom, rgb(0 0 0 / 0.55) 0%, transparent 30%, transparent 62%, rgb(0 0 0 / 0.85) 80%, #000 100%),
+      radial-gradient(ellipse 90% 60% at 50% 53%, transparent 50%, rgb(0 0 0 / 0.4) 100%);
   }
 </style>
 

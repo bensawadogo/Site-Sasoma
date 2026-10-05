@@ -137,7 +137,7 @@ const {
 
   type Niveau = 'image' | Qualite
   type NavigatorEtendu = Navigator & {
-    connection?: { saveData?: boolean; effectiveType?: string }
+    connection?: { saveData?: boolean; effectiveType?: string; downlink?: number }
     deviceMemory?: number
   }
 
@@ -167,7 +167,15 @@ const {
     const petitEcran = window.matchMedia('(max-width: 63.99rem)').matches
     const tactile = window.matchMedia('(pointer: coarse)').matches
     const faible = (nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4
-    return petitEcran || tactile || faible ? 'lite' : 'full'
+    // Téléphone d'entrée ou de milieu de gamme (Android ≤ 4 Go, ≤ 4 cœurs) ou connexion
+    // lente (< 5 Mb/s) : three.js + 1 Mo de modèle + le rendu WebGL en continu feraient
+    // saccader la page. L'image reste, la 3D est sur demande (bouton). Safari et Firefox
+    // ne donnent ni mémoire ni débit : ils gardent la 3D allégée.
+    const mobile = petitEcran || tactile
+    const debitLent = (connexion?.downlink ?? 10) < 5
+    const memoireConnue = nav.deviceMemory !== undefined
+    if (mobile && (debitLent || (memoireConnue && faible))) return 'image'
+    return mobile || faible ? 'lite' : 'full'
   }
 
   document.querySelectorAll<HTMLElement>('[data-bidon]').forEach((hote) => {

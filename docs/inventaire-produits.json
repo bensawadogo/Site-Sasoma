@@ -1,0 +1,1412 @@
+{
+ "date_releve": "2026-10-03",
+ "sources": [
+  "https://petrovoll.com/",
+  "https://petrovoll.com/Products",
+  "https://petrovoll.com/GasolineEngineOils",
+  "https://petrovoll.com/DieselEngineOils",
+  "https://petrovoll.com/MotorCycleOils",
+  "https://petrovoll.com/MarineOils",
+  "https://petrovoll.com/IndustrialOils",
+  "https://petrovoll.com/AutomaticTransmissionFluids",
+  "https://petrovoll.com/AutomotiveManualGearOils",
+  "https://petrovoll.com/BrakeFluids",
+  "https://petrovoll.com/CoolantsAndAntiFreeze",
+  "https://petrovoll.com/Greases",
+  "https://petrovoll.com/AdditivesAndCarCare",
+  "https://petrovoll.com/Distribution",
+  "https://petrovoll.com/News",
+  "https://petrovoll.com/AboutUs",
+  "https://www.gconoil.com/",
+  "https://www.gconoil.com/products.html",
+  "https://petrovoll.com/dev/grease.html",
+  "https://www.facebook.com/Petrovoll/ (connexion requise, non consulté)"
+ ],
+ "nb_produits": 45,
+ "nb_variantes": 121,
+ "nb_produits_avec_photo_propre": 32,
+ "remarque_conditionnements": "Le site affiche 1 L, 4 L, 5 L, 20 L, 208 L sur 100 % des fiches (gabarit) ; les photos montrent d'autres formats (voir apparence et photo_note).",
+ "produits": [
+  {
+   "id": "stark-fully-synthetic",
+   "nom": "STÄRK Fully Synthetic",
+   "gamme": "Huiles moteur essence",
+   "url_categorie": "https://petrovoll.com/GasolineEngineOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/gasoline/stark.jpg",
+   "variantes": [
+    "5W-20",
+    "5W-30",
+    "0W-30",
+    "5W-40",
+    "0W-40"
+   ],
+   "nb_variantes": 5,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 5 grades ; elle montre SAE 0W40 (1 L et 5 L), API SN",
+   "apparence": {
+    "contenant": "Bidon gris argenté métallisé (poignée rainurée), bouchon rouge, 1 L + 5 L",
+    "etiquette": "Étiquette dégradé bleu clair à motif alvéolaire, bandeau rouge en bas (API + volume) ; texte « Voll Synthetisch », SAE 0W40, API SN"
+   },
+   "grade_visible_sur_photo": "0W-40",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "stark-semi-synthetic",
+   "nom": "STÄRK Semi Synthetic",
+   "gamme": "Huiles moteur essence",
+   "url_categorie": "https://petrovoll.com/GasolineEngineOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/gasoline/stark_ss.jpg",
+   "variantes": [
+    "5W-30",
+    "10W-30",
+    "10W-40",
+    "15W-40",
+    "20W-50"
+   ],
+   "nb_variantes": 5,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 5 grades ; elle montre SAE 10W40, API SM",
+   "apparence": {
+    "contenant": "Bidon gris argenté métallisé (poignée rainurée), bouchon rouge, 1 L + 5 L",
+    "etiquette": "Étiquette dégradé bleu clair à motif alvéolaire, bandeau rouge en bas (API + volume) ; texte « Teil Synthetisches », SAE 10W40, API SM"
+   },
+   "grade_visible_sur_photo": "10W-40",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "volex-multigrade-mineral",
+   "nom": "VÖLEX Multi Grade Mineral",
+   "gamme": "Huiles moteur essence",
+   "url_categorie": "https://petrovoll.com/GasolineEngineOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/gasoline/volex.jpg",
+   "variantes": [
+    "15W-40",
+    "20W-50"
+   ],
+   "nb_variantes": 2,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 2 grades ; elle montre SAE 20W50 « Premium », API SL",
+   "apparence": {
+    "contenant": "Bidon gris argenté métallisé (poignée rainurée), bouchon rouge, 1 L + 5 L",
+    "etiquette": "Étiquette dégradé bleu clair à motif alvéolaire, bandeau rouge en bas (API + volume) ; « Mineralöl Leistung », SAE 20W50, dessin de moteur"
+   },
+   "grade_visible_sur_photo": "20W-50",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "vono-mineral",
+   "nom": "VÖNO Mineral",
+   "gamme": "Huiles moteur essence",
+   "url_categorie": "https://petrovoll.com/GasolineEngineOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/gasoline/vono.jpg",
+   "variantes": [
+    "10W",
+    "SAE 30",
+    "SAE 40",
+    "SAE 50",
+    "15W-40",
+    "20W-50"
+   ],
+   "nb_variantes": 6,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 6 grades ; elle montre SAE 40 « Premium », API SL",
+   "apparence": {
+    "contenant": "Bidon gris argenté métallisé (poignée rainurée), bouchon rouge, 1 L + 5 L",
+    "etiquette": "Étiquette dégradé bleu clair à motif alvéolaire, bandeau rouge en bas (API + volume) ; « Mineralöl Leistung », SAE 40, dessin de moteur (quasi identique à VÖLEX)"
+   },
+   "grade_visible_sur_photo": "SAE 40",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "viro-tec-fully-synthetic",
+   "nom": "VIRÖ-TEC Fully Synthetic",
+   "gamme": "Huiles moteur diesel",
+   "url_categorie": "https://petrovoll.com/DieselEngineOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/diesel/viro_fs.jpg",
+   "variantes": [
+    "5W-20",
+    "5W-30",
+    "10W-30",
+    "5W-40",
+    "0W-40"
+   ],
+   "nb_variantes": 5,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 5 grades ; elle montre 5W40 (5 L) et 10W30 (1 L), API CK-4",
+   "apparence": {
+    "contenant": "Bidon vert-bleu (teal), bouchon rouge/orange, 1 L + 5 L",
+    "etiquette": "Étiquette gris clair à motif alvéolaire, camion, bandeau rouge (API + volume) ; logo VIRÖ-TEC, SAE 5W40, CK-4"
+   },
+   "grade_visible_sur_photo": "5W-40 / 10W-30",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "viro-tec-semi-synthetic",
+   "nom": "VIRÖ-TEC Semi Synthetic",
+   "gamme": "Huiles moteur diesel",
+   "url_categorie": "https://petrovoll.com/DieselEngineOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/diesel/viro_ss.jpg",
+   "variantes": [
+    "10W-40",
+    "15W-40",
+    "20W-50"
+   ],
+   "nb_variantes": 3,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 3 grades ; elle montre SAE 15W40, API CI-4/SL",
+   "apparence": {
+    "contenant": "Bidon vert-bleu (teal), bouchon rouge/orange, 1 L + 5 L",
+    "etiquette": "Étiquette gris clair à motif alvéolaire, camion, bandeau rouge (API + volume) ; identique à VIRÖ-TEC FS, seuls le grade et l'API changent (CI-4/SL)"
+   },
+   "grade_visible_sur_photo": "15W-40",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "d-tec-mineral",
+   "nom": "D-TEC Mineral",
+   "gamme": "Huiles moteur diesel",
+   "url_categorie": "https://petrovoll.com/DieselEngineOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/diesel/dtec_mineral.jpg",
+   "variantes": [
+    "SAE 30",
+    "SAE 40",
+    "SAE 50",
+    "15W-40",
+    "20W-50"
+   ],
+   "nb_variantes": 5,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 5 grades ; elle montre SAE 50 (5 L) et 15W40 (1 L), API CF",
+   "apparence": {
+    "contenant": "Bidon vert-bleu (teal), bouchon rouge/orange, 1 L + 5 L",
+    "etiquette": "Étiquette gris clair à motif alvéolaire, camion, bandeau rouge (API + volume) ; logo D-TEC, pistons dessinés"
+   },
+   "grade_visible_sur_photo": "SAE 50 / 15W-40",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "cng-tec",
+   "nom": "CNG-TEC",
+   "gamme": "Huiles moteur diesel",
+   "url_categorie": "https://petrovoll.com/DieselEngineOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/diesel/cngtec.jpg",
+   "variantes": [
+    "15W-40"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul grade, photo correspondante (15W40, API CG-4)",
+   "apparence": {
+    "contenant": "Bidon vert-bleu (teal), bouchon rouge/orange, 1 L + 5 L",
+    "etiquette": "Étiquette gris clair à motif alvéolaire, camion, bandeau rouge (API + volume) ; logo CNG-TEC, mention « CNG »"
+   },
+   "grade_visible_sur_photo": "15W-40",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "motpro-4t",
+   "nom": "MÖTPRO 4T (moteur 4 temps)",
+   "gamme": "Huiles moto",
+   "url_categorie": "https://petrovoll.com/MotorCycleOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/motorcycle/motpro_4t.jpg",
+   "variantes": [
+    "20W-40",
+    "20W-50"
+   ],
+   "nb_variantes": 2,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 2 grades ; elle montre SAE 20W50, JASO MA-2, API SN",
+   "apparence": {
+    "contenant": "Bidon noir/gris 1 L, bouchon rouge + boîte métallique jaune 800 ml",
+    "etiquette": "Étiquette jaune-orangé, moto cross dessinée, bandeau rouge ; « 4T » rouge"
+   },
+   "grade_visible_sur_photo": "20W-50",
+   "notes": "Le texte descriptif du site reprend celui de STÄRK Fully Synthetic (copie).",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "motpro-2t",
+   "nom": "MÖTPRO 2T (moteur 2 temps)",
+   "gamme": "Huiles moto",
+   "url_categorie": "https://petrovoll.com/MotorCycleOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/motorcycle/motpro_2t.jpg",
+   "variantes": [
+    "(pas de grade SAE ; huile de couleur bleue)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul produit, photo correspondante (2T, TC, JASO FC-FD)",
+   "apparence": {
+    "contenant": "Bidon noir/gris 1 L, bouchon rouge + boîte métallique jaune 800 ml",
+    "etiquette": "Étiquette jaune-orangé, « 2T » ; même habillage que MÖTPRO 4T, seul le texte 2T / 4T change"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "marineol-synthetic-cylinder",
+   "nom": "MARINEÖL Synthetic Marine Cylinder Oil",
+   "gamme": "Huiles marine",
+   "url_categorie": "https://petrovoll.com/MarineOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/marine/marineol_1.jpg",
+   "variantes": [
+    "SAE 15W-40 / TBN 15",
+    "SAE 15W-40 / TBN 20",
+    "SAE 15W-40 / TBN 40",
+    "SAE 15W-40 / TBN 50"
+   ],
+   "nb_variantes": 4,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 4 TBN ; elle montre SAE 15W40, TBN 50 (bidon noir 5 L + jerrycan argenté 20 L)",
+   "apparence": {
+    "contenant": "Bidon noir 5 L, bouchon rouge + jerrycan argenté 20 L",
+    "etiquette": "Étiquette bleu turquoise à motif alvéolaire, bateau dessiné, bandeau rouge (TBN) ; « Synthetisches Meeresöl »"
+   },
+   "grade_visible_sur_photo": "15W-40 / TBN 50",
+   "notes": "La description du site décrit plutôt une huile moteur bateau (in/hors-bord).",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "marineol-mineral",
+   "nom": "MARINEÖL Mineral Marine Oil",
+   "gamme": "Huiles marine",
+   "url_categorie": "https://petrovoll.com/MarineOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/marine/marineol_2.jpg",
+   "variantes": [
+    "SAE 40 / TBN 55",
+    "SAE 40 / TBN 70",
+    "SAE 40 / TBN 85",
+    "SAE 40 / TBN 100",
+    "SAE 50 / TBN 55",
+    "SAE 50 / TBN 70",
+    "SAE 50 / TBN 85",
+    "SAE 50 / TBN 100"
+   ],
+   "nb_variantes": 8,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 8 combinaisons ; elle montre SAE 50, TBN 85",
+   "apparence": {
+    "contenant": "Bidon noir 1 L + 5 L, bouchon rouge",
+    "etiquette": "Étiquette bleu turquoise à motif alvéolaire, bateau dessiné, bandeau rouge (TBN) ; « Mineral Meeresöl », SAE 50"
+   },
+   "grade_visible_sur_photo": "SAE 50 / TBN 85",
+   "notes": "La description du site est celle d'une huile de cylindre pour moteurs lents à crosshead.",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "marineol-trunk-piston",
+   "nom": "MARINEÖL Trunk Piston Marine Oil",
+   "gamme": "Huiles marine",
+   "url_categorie": "https://petrovoll.com/MarineOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/marine/marineol_3.jpg",
+   "variantes": [
+    "SAE 40 / TBN 15",
+    "SAE 40 / TBN 20",
+    "SAE 40 / TBN 40",
+    "SAE 40 / TBN 50",
+    "SAE 40 / TBN 55",
+    "SAE 50 / TBN 15",
+    "SAE 50 / TBN 20",
+    "SAE 50 / TBN 40",
+    "SAE 50 / TBN 50",
+    "SAE 50 / TBN 55"
+   ],
+   "nb_variantes": 10,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 10 combinaisons ; elle montre SAE 50, TBN 55 (1 L + 5 L + 20 L)",
+   "apparence": {
+    "contenant": "Bidon noir 1 L et 5 L, bouchon rouge + jerrycan argenté 20 L",
+    "etiquette": "Étiquette bleu turquoise à motif alvéolaire, bateau dessiné, bandeau rouge (TBN) ; « Tauchkolben-Schiffsöl », SAE 50"
+   },
+   "grade_visible_sur_photo": "SAE 50 / TBN 55",
+   "notes": "Tableau d'essais du site quasi identique à celui du Mineral Marine Oil (valeurs recopiées).",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "marineol-2t-outboard",
+   "nom": "MARINEÖL 2T Outboard Oil (refroidi par eau)",
+   "gamme": "Huiles marine",
+   "url_categorie": "https://petrovoll.com/MarineOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/marine/marineol_4.jpg",
+   "variantes": [
+    "(pas de grade SAE ; huile de couleur bleue)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul produit, photo correspondante (2 CYCLE, API TC-W3)",
+   "apparence": {
+    "contenant": "Bidon noir 1 L + 5 L, bouchon rouge",
+    "etiquette": "Étiquette bleu turquoise à motif alvéolaire, bateau dessiné, bandeau rouge (TBN) ; moteur hors-bord dessiné, « 2 CYCLE »"
+   },
+   "grade_visible_sur_photo": "API TC-W3",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "hydkon-hydraulic",
+   "nom": "HYDKÖN Hydraulic Oil",
+   "gamme": "Huiles industrielles",
+   "url_categorie": "https://petrovoll.com/IndustrialOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/industrial/hydkon.jpg",
+   "variantes": [
+    "ISO VG 10",
+    "ISO VG 15",
+    "ISO VG 22",
+    "ISO VG 32",
+    "ISO VG 37",
+    "ISO VG 46",
+    "ISO VG 68",
+    "ISO VG 100",
+    "ISO VG 150",
+    "ISO VG 220"
+   ],
+   "nb_variantes": 10,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 10 grades ; elle montre ISO VG 68, 20 L",
+   "apparence": {
+    "contenant": "Jerrycan jaune vif 20 L (bouchon rouge) + tambour noir/chromé",
+    "etiquette": "Étiquette crème/jaune, logo HYDKÖN, « Hydraulic 68 », ISO VG 68"
+   },
+   "grade_visible_sur_photo": "ISO VG 68",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "lub-tec-grob-gear",
+   "nom": "LUB-TEC GRÖB Industrial Gear Oils",
+   "gamme": "Huiles industrielles",
+   "url_categorie": "https://petrovoll.com/IndustrialOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/industrial/lube_tec_grob.jpg",
+   "variantes": [
+    "ISO VG 68",
+    "ISO VG 100",
+    "ISO VG 150",
+    "ISO VG 220",
+    "ISO VG 320",
+    "ISO VG 460",
+    "ISO VG 680",
+    "ISO VG 1000"
+   ],
+   "nb_variantes": 8,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Pas de photo propre : La photo du site est un tambour chromé/noir générique « Petrovöll Motor Oil » sans étiquette produit, réutilisé à l'identique par 9 produits",
+   "apparence": {
+    "contenant": "Tambour métal chromé/noir",
+    "etiquette": "Sans étiquette produit (marque Petrovöll Motor Oil seulement)"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": true,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  },
+  {
+   "id": "turbine-oil",
+   "nom": "TURBINE Oil",
+   "gamme": "Huiles industrielles",
+   "url_categorie": "https://petrovoll.com/IndustrialOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/industrial/lube_tec_grob.jpg",
+   "variantes": [
+    "(aucun grade publié)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Pas de photo propre : La photo du site est un tambour chromé/noir générique « Petrovöll Motor Oil » sans étiquette produit, réutilisé à l'identique par 9 produits",
+   "apparence": {
+    "contenant": "Tambour métal chromé/noir",
+    "etiquette": "Sans étiquette produit"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": true,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  },
+  {
+   "id": "scom-compressor",
+   "nom": "SCÖM Compressor Oil",
+   "gamme": "Huiles industrielles",
+   "url_categorie": "https://petrovoll.com/IndustrialOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/industrial/lube_tec_grob.jpg",
+   "variantes": [
+    "(aucun grade publié)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Pas de photo propre : La photo du site est un tambour chromé/noir générique « Petrovöll Motor Oil » sans étiquette produit, réutilisé à l'identique par 9 produits",
+   "apparence": {
+    "contenant": "Tambour métal chromé/noir",
+    "etiquette": "Sans étiquette produit"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": true,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  },
+  {
+   "id": "schneidol-cutting",
+   "nom": "SCHNEIDÖL Cutting Oil",
+   "gamme": "Huiles industrielles",
+   "url_categorie": "https://petrovoll.com/IndustrialOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/industrial/lube_tec_grob.jpg",
+   "variantes": [
+    "(aucun grade publié (huile soluble, dilution 4-8 %))"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Pas de photo propre : La photo du site est un tambour chromé/noir générique « Petrovöll Motor Oil » sans étiquette produit, réutilisé à l'identique par 9 produits",
+   "apparence": {
+    "contenant": "Tambour métal chromé/noir",
+    "etiquette": "Sans étiquette produit"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": true,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  },
+  {
+   "id": "transformer-oil",
+   "nom": "TRANSFORMER Oil",
+   "gamme": "Huiles industrielles",
+   "url_categorie": "https://petrovoll.com/IndustrialOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/industrial/lube_tec_grob.jpg",
+   "variantes": [
+    "(aucun grade publié)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Pas de photo propre : La photo du site est un tambour chromé/noir générique « Petrovöll Motor Oil » sans étiquette produit, réutilisé à l'identique par 9 produits",
+   "apparence": {
+    "contenant": "Tambour métal chromé/noir",
+    "etiquette": "Sans étiquette produit"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": true,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  },
+  {
+   "id": "refrigeration-oil",
+   "nom": "REFRIGERATION Oil",
+   "gamme": "Huiles industrielles",
+   "url_categorie": "https://petrovoll.com/IndustrialOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/industrial/lube_tec_grob.jpg",
+   "variantes": [
+    "(aucun grade publié)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Pas de photo propre : La photo du site est un tambour chromé/noir générique « Petrovöll Motor Oil » sans étiquette produit, réutilisé à l'identique par 9 produits",
+   "apparence": {
+    "contenant": "Tambour métal chromé/noir",
+    "etiquette": "Sans étiquette produit"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": true,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  },
+  {
+   "id": "heat-transfer-oil",
+   "nom": "HEAT TRANSFER Oil",
+   "gamme": "Huiles industrielles",
+   "url_categorie": "https://petrovoll.com/IndustrialOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/industrial/lube_tec_grob.jpg",
+   "variantes": [
+    "(aucun grade publié)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Pas de photo propre : La photo du site est un tambour chromé/noir générique « Petrovöll Motor Oil » sans étiquette produit, réutilisé à l'identique par 9 produits",
+   "apparence": {
+    "contenant": "Tambour métal chromé/noir",
+    "etiquette": "Sans étiquette produit"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": true,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  },
+  {
+   "id": "circulation-oil",
+   "nom": "CIRCULATION Oil",
+   "gamme": "Huiles industrielles",
+   "url_categorie": "https://petrovoll.com/IndustrialOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/industrial/lube_tec_grob.jpg",
+   "variantes": [
+    "(aucun grade publié)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Pas de photo propre : La photo du site est un tambour chromé/noir générique « Petrovöll Motor Oil » sans étiquette produit, réutilisé à l'identique par 9 produits",
+   "apparence": {
+    "contenant": "Tambour métal chromé/noir",
+    "etiquette": "Sans étiquette produit"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": true,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  },
+  {
+   "id": "trans-tech",
+   "nom": "TRANS-TECH Industrial Transmission Oil",
+   "gamme": "Huiles industrielles",
+   "url_categorie": "https://petrovoll.com/IndustrialOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/industrial/lube_tec_grob.jpg",
+   "variantes": [
+    "SAE 10W",
+    "SAE 30",
+    "SAE 40",
+    "SAE 50"
+   ],
+   "nb_variantes": 4,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Pas de photo propre : La photo du site est un tambour chromé/noir générique « Petrovöll Motor Oil » sans étiquette produit, réutilisé à l'identique par 9 produits",
+   "apparence": {
+    "contenant": "Tambour métal chromé/noir",
+    "etiquette": "Sans étiquette produit"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": true,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  },
+  {
+   "id": "dexo-atf-cvt",
+   "nom": "DEXÖ ATF CVT",
+   "gamme": "Fluides de transmission automatique (ATF)",
+   "url_categorie": "https://petrovoll.com/AutomaticTransmissionFluids",
+   "url_photo": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_cvt.jpg",
+   "variantes": [
+    "(fluide CVT, pas de grade)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul grade ; photo propre à ce produit",
+   "apparence": {
+    "contenant": "Bidon noir/anthracite, bouchon rouge, 1 L + 4/5 L",
+    "etiquette": "Étiquette dégradé bleu, logo DEXÖ bleu foncé, bandeau rouge ; seuls la couleur et le texte du grade changent : « ATF CVT » orange, bandeau « DEXRON CVT » (4 L)"
+   },
+   "grade_visible_sur_photo": "DEXRON CVT",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "dexo-atf-dexron-vi",
+   "nom": "DEXÖ ATF DEXRON VI",
+   "gamme": "Fluides de transmission automatique (ATF)",
+   "url_categorie": "https://petrovoll.com/AutomaticTransmissionFluids",
+   "url_photo": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_vi.jpg",
+   "variantes": [
+    "(DEXRON VI)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul grade ; photo propre à ce produit",
+   "apparence": {
+    "contenant": "Bidon noir/anthracite, bouchon rouge, 1 L + 4/5 L",
+    "etiquette": "Étiquette dégradé bleu, logo DEXÖ bleu foncé, bandeau rouge ; seuls la couleur et le texte du grade changent : « ATF VI » blanc/rosé, bandeau « DEXRON VI » (4 L)"
+   },
+   "grade_visible_sur_photo": "DEXRON VI",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "dexo-atf-dexron-iii",
+   "nom": "DEXÖ ATF DEXRON III",
+   "gamme": "Fluides de transmission automatique (ATF)",
+   "url_categorie": "https://petrovoll.com/AutomaticTransmissionFluids",
+   "url_photo": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_iii.jpg",
+   "variantes": [
+    "(DEXRON III)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul grade ; photo propre à ce produit",
+   "apparence": {
+    "contenant": "Bidon noir/anthracite, bouchon rouge, 1 L + 4/5 L",
+    "etiquette": "Étiquette dégradé bleu, logo DEXÖ bleu foncé, bandeau rouge ; seuls la couleur et le texte du grade changent : « ATF III » rouge-rosé, bandeau « DEXRON III » (4 L)"
+   },
+   "grade_visible_sur_photo": "DEXRON III",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "dexo-atf-dexron-ii",
+   "nom": "DEXÖ ATF DEXRON II",
+   "gamme": "Fluides de transmission automatique (ATF)",
+   "url_categorie": "https://petrovoll.com/AutomaticTransmissionFluids",
+   "url_photo": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_ii.jpg",
+   "variantes": [
+    "(DEXRON II)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul grade ; photo propre à ce produit",
+   "apparence": {
+    "contenant": "Bidon noir/anthracite, bouchon rouge, 1 L + 4/5 L",
+    "etiquette": "Étiquette dégradé bleu, logo DEXÖ bleu foncé, bandeau rouge ; seuls la couleur et le texte du grade changent : « ATF II » jaune, bandeau « DEXRON II » (5 L)"
+   },
+   "grade_visible_sur_photo": "DEXRON II",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "dexo-atf-type-a",
+   "nom": "DEXÖ ATF Type A, Suffix A",
+   "gamme": "Fluides de transmission automatique (ATF)",
+   "url_categorie": "https://petrovoll.com/AutomaticTransmissionFluids",
+   "url_photo": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_typea.jpg",
+   "variantes": [
+    "(Type A, Suffix A)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul grade ; photo propre à ce produit",
+   "apparence": {
+    "contenant": "Bidon noir/anthracite, bouchon rouge, 1 L + 4/5 L",
+    "etiquette": "Étiquette dégradé bleu, logo DEXÖ bleu foncé, bandeau rouge ; seuls la couleur et le texte du grade changent : « ATF TYPE A » jaune-orangé, bandeau « TYPE A SUFFIX A » (5 L)"
+   },
+   "grade_visible_sur_photo": "Type A Suffix A",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "max-grob-synthetic",
+   "nom": "MAX-GRÖB Synthetic Gear Oil",
+   "gamme": "Huiles de boîte manuelle et pont",
+   "url_categorie": "https://petrovoll.com/AutomotiveManualGearOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/automatic_manual_gear/max_grob.jpg",
+   "variantes": [
+    "75W-90",
+    "80W-140"
+   ],
+   "nb_variantes": 2,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 2 grades ; elle montre SAE 75W90 (1 L + 5 L), API GL-5",
+   "apparence": {
+    "contenant": "Bidon noir 1 L + 5 L, bouchon rouge",
+    "etiquette": "Étiquette rouge dégradé à motif alvéolaire, bandeau rouge sombre, pictogramme levier de vitesse ; « Synthetic Premium », SAE 75W90"
+   },
+   "grade_visible_sur_photo": "75W-90",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "max-grob-gear",
+   "nom": "MAX-GRÖB Gear Oil",
+   "gamme": "Huiles de boîte manuelle et pont",
+   "url_categorie": "https://petrovoll.com/AutomotiveManualGearOils",
+   "url_photo": "https://petrovoll.com/assets/images/products/automatic_manual_gear/max_grob_gear_oil.jpg",
+   "variantes": [
+    "SAE 90",
+    "SAE 140",
+    "80W-90",
+    "85W-140"
+   ],
+   "nb_variantes": 4,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 4 grades ; elle montre deux bidons 5 L : SAE 80W90 et 85W140 (pas 90/140), GL-5",
+   "apparence": {
+    "contenant": "Deux bidons noirs 5 L, bouchon rouge",
+    "etiquette": "Étiquette rouge dégradé à motif alvéolaire, bandeau rouge sombre, pictogramme levier de vitesse ; identique au Synthetic, « Automotive », 80W90 / 85W140"
+   },
+   "grade_visible_sur_photo": "80W-90 / 85W-140",
+   "notes": "Le site indique aussi « also available » : 80W90 GL-4, 85W140 GL-4, 90 GL-1, 140 GL-1.",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "dot-5-1",
+   "nom": "DOT 5.1 Brake Fluid",
+   "gamme": "Liquides de frein",
+   "url_categorie": "https://petrovoll.com/BrakeFluids",
+   "url_photo": "https://petrovoll.com/assets/images/products/brake/dot_brakefluid.jpg",
+   "variantes": [
+    "DOT 5.1"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Photo unique partagée avec l'autre liquide de frein : deux flacons jaunes, « DOT 4 » (250 ml) et « DOT 5 » (500 ml)",
+   "apparence": {
+    "contenant": "Flacons jaunes 250 ml et 500 ml (pas de bidon)",
+    "etiquette": "Étiquette blanc-bleu clair, « BRAKE FLUID DOT 4 / DOT 5 »"
+   },
+   "grade_visible_sur_photo": "DOT 4 et DOT 5 (pas 5.1, pas 3)",
+   "notes": "Photo identique (même fichier) à celle de DOT 4 & DOT 3.",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  },
+  {
+   "id": "dot-4-3",
+   "nom": "DOT 4 & DOT 3 Brake Fluid",
+   "gamme": "Liquides de frein",
+   "url_categorie": "https://petrovoll.com/BrakeFluids",
+   "url_photo": "https://petrovoll.com/assets/images/products/brake/dot_brakefluid.jpg",
+   "variantes": [
+    "DOT 4",
+    "DOT 3"
+   ],
+   "nb_variantes": 2,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Photo unique partagée avec l'autre liquide de frein : deux flacons jaunes, « DOT 4 » (250 ml) et « DOT 5 » (500 ml)",
+   "apparence": {
+    "contenant": "Flacons jaunes 250 ml et 500 ml (pas de bidon)",
+    "etiquette": "Étiquette blanc-bleu clair, « BRAKE FLUID DOT 4 / DOT 5 »"
+   },
+   "grade_visible_sur_photo": "DOT 4 et DOT 5",
+   "notes": "Le site traite DOT 4 et DOT 3 en une seule fiche.",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  },
+  {
+   "id": "kuhler",
+   "nom": "KÜHLER Coolant & Anti-Freeze",
+   "gamme": "Liquides de refroidissement",
+   "url_categorie": "https://petrovoll.com/CoolantsAndAntiFreeze",
+   "url_photo": "https://petrovoll.com/assets/images/products/coolants/kuhler.jpg",
+   "variantes": [
+    "Concentration 30 %",
+    "Concentration 33 %",
+    "Concentration 40 %",
+    "Concentration 50 %",
+    "Concentration 100 %"
+   ],
+   "nb_variantes": 5,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 5 concentrations ; elle montre le 100 % concentré, 5 L",
+   "apparence": {
+    "contenant": "Bidon noir 5 L, bouchon rouge",
+    "etiquette": "Étiquette bleu-vert très clair, « COOLANT ANTIFREEZE », « 100 % concentrate »"
+   },
+   "grade_visible_sur_photo": "100 % concentré",
+   "notes": "Le site précise « Available in Green, Red and Blue colours » (couleur du liquide) ; tableau d'essais : tous « Flu.Green ».",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "glat-ep0-ep1-ep2",
+   "nom": "GLÄT EP0 / EP1 / EP2 (lithium extrême pression)",
+   "gamme": "Graisses",
+   "url_categorie": "https://petrovoll.com/Greases",
+   "url_photo": "https://petrovoll.com/assets/images/products/greases/glat_ep0.jpg",
+   "variantes": [
+    "NLGI 0",
+    "NLGI 1",
+    "NLGI 2"
+   ],
+   "nb_variantes": 3,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 3 grades ; elle montre « GLÄT-EP 1 », seau 20 L",
+   "apparence": {
+    "contenant": "Seau noir 20 L",
+    "etiquette": "Étiquette gris argenté alvéolaire, titre rouge « GLÄT-EP 1 », bandeau rouge"
+   },
+   "grade_visible_sur_photo": "NLGI EP1",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "glat-ep2-ep3",
+   "nom": "GLÄT EP2 / EP3 (lithium complexe)",
+   "gamme": "Graisses",
+   "url_categorie": "https://petrovoll.com/Greases",
+   "url_photo": "https://petrovoll.com/assets/images/products/greases/glat_ep3.jpg",
+   "variantes": [
+    "NLGI 2",
+    "NLGI 3"
+   ],
+   "nb_variantes": 2,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 2 grades ; elle montre « GLÄT-EP 2 » (pots 500 g et 1 kg, pas de EP3)",
+   "apparence": {
+    "contenant": "Pots à couvercle vert-olive 500 g et 1 kg",
+    "etiquette": "Étiquette gris argenté alvéolaire, « GLÄT-EP 2 », « NLGI-EP2 Lithium Grease »"
+   },
+   "grade_visible_sur_photo": "NLGI EP2",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "glat-multi-purpose",
+   "nom": "GLÄT Multi-Purpose Grease (base calcium)",
+   "gamme": "Graisses",
+   "url_categorie": "https://petrovoll.com/Greases",
+   "url_photo": "https://petrovoll.com/assets/images/products/greases/glat_mp.jpg",
+   "variantes": [
+    "NLGI 2",
+    "NLGI 3"
+   ],
+   "nb_variantes": 2,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "1 photo pour les 2 grades ; elle montre « GLÄT-EP 2 NLGI-EP2 Multi-Purpose Grease », seau 20 L",
+   "apparence": {
+    "contenant": "Seau noir 20 L",
+    "etiquette": "Même habillage que GLÄT EP0/1/2 (seau noir, étiquette grise) ; seul le texte change"
+   },
+   "grade_visible_sur_photo": "NLGI EP2",
+   "notes": "Le texte du site parle d'une graisse au calcium (marron) alors que la photo ressemble à la graisse lithium EP.",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "fuel-injector-cleaner",
+   "nom": "Petrovöll Fuel Injector Cleaner",
+   "gamme": "Additifs et entretien",
+   "url_categorie": "https://petrovoll.com/AdditivesAndCarCare",
+   "url_photo": "https://petrovoll.com/assets/images/products/additives/fuel_injector_cleaner.jpg",
+   "variantes": [
+    "(pas de grade)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul produit, photo propre (250 ml)",
+   "apparence": {
+    "contenant": "Flacon fuselé noir-violet 250 ml, bouchon noir",
+    "etiquette": "Étiquette noire/rouge à motif alvéolaire, mention « Made in Netherlands » ; titre « FUEL INJECTOR CLEANER » jaune"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "diesel-injector-cleaner",
+   "nom": "Petrovöll Diesel Injector Cleaner",
+   "gamme": "Additifs et entretien",
+   "url_categorie": "https://petrovoll.com/AdditivesAndCarCare",
+   "url_photo": "https://petrovoll.com/assets/images/products/additives/diesel_injector_cleaner.jpg",
+   "variantes": [
+    "(pas de grade)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul produit, photo propre (250 ml)",
+   "apparence": {
+    "contenant": "Flacon fuselé noir-violet 250 ml, bouchon noir",
+    "etiquette": "Étiquette noire/rouge à motif alvéolaire, mention « Made in Netherlands » ; titre « DIESEL INJECTOR CLEANER » orange"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "complete-fuel-system-cleaner",
+   "nom": "Petrovöll Complete Fuel System Cleaner",
+   "gamme": "Additifs et entretien",
+   "url_categorie": "https://petrovoll.com/AdditivesAndCarCare",
+   "url_photo": "https://petrovoll.com/assets/images/products/additives/complete_fuel_system_scanner.jpg",
+   "variantes": [
+    "(pas de grade)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul produit, photo propre (250 ml)",
+   "apparence": {
+    "contenant": "Flacon fuselé noir-violet 250 ml, bouchon noir",
+    "etiquette": "Étiquette noire/rouge à motif alvéolaire, mention « Made in Netherlands » ; titre « COMPLETE FUEL SYSTEM CLEANER » bleu"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "octane-booster",
+   "nom": "Petrovöll Octane Booster",
+   "gamme": "Additifs et entretien",
+   "url_categorie": "https://petrovoll.com/AdditivesAndCarCare",
+   "url_photo": "https://petrovoll.com/assets/images/products/additives/octane_booster.jpg",
+   "variantes": [
+    "(pas de grade)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul produit, photo propre (250 ml)",
+   "apparence": {
+    "contenant": "Flacon fuselé noir-violet 250 ml, bouchon noir",
+    "etiquette": "Étiquette noire/rouge à motif alvéolaire, mention « Made in Netherlands » ; titre « OCTANE BOOSTER » bleu/jaune"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "oil-treatment",
+   "nom": "Petrovöll Engine Oil Treatment",
+   "gamme": "Additifs et entretien",
+   "url_categorie": "https://petrovoll.com/AdditivesAndCarCare",
+   "url_photo": "https://petrovoll.com/assets/images/products/additives/oil_treatment.jpg",
+   "variantes": [
+    "(pas de grade)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul produit, photo propre (boîte 444 ml)",
+   "apparence": {
+    "contenant": "Boîte métallique noire 444 ml",
+    "etiquette": "Étiquette noire/rouge à motif alvéolaire, mention « Made in Netherlands » ; titre « OIL TREATMENT » jaune, piston"
+   },
+   "grade_visible_sur_photo": "444 ml",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "oil-stop-leak",
+   "nom": "Petrovöll Oil Stop Leak",
+   "gamme": "Additifs et entretien",
+   "url_categorie": "https://petrovoll.com/AdditivesAndCarCare",
+   "url_photo": "https://petrovoll.com/assets/images/products/additives/oil_stop_leak.jpg",
+   "variantes": [
+    "(pas de grade)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Un seul produit, photo propre (boîte 444 ml)",
+   "apparence": {
+    "contenant": "Boîte métallique noire 444 ml",
+    "etiquette": "Étiquette noire/rouge à motif alvéolaire, mention « Made in Netherlands » ; titre « OIL STOP LEAK » rouge/jaune"
+   },
+   "grade_visible_sur_photo": "444 ml",
+   "notes": "",
+   "photo_vide_ou_generique": false,
+   "photo_fichier_partage": false,
+   "photo_propre_au_produit": true
+  },
+  {
+   "id": "carburetor-choke-cleaner",
+   "nom": "Petrovöll Carburetor and Choke Cleaner",
+   "gamme": "Additifs et entretien",
+   "url_categorie": "https://petrovoll.com/AdditivesAndCarCare",
+   "url_photo": "https://petrovoll.com/assets/images/products/additives/plain.jpg",
+   "variantes": [
+    "(pas de grade)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Pas de photo : image blanche vide 800x500 (la page « Products » affiche à la place la photo de Oil Stop Leak)",
+   "apparence": {
+    "contenant": "Inconnu (aérosol d'après le texte)",
+    "etiquette": "Inconnue"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": true,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  },
+  {
+   "id": "engine-flush",
+   "nom": "Petrovöll Engine Flush",
+   "gamme": "Additifs et entretien",
+   "url_categorie": "https://petrovoll.com/AdditivesAndCarCare",
+   "url_photo": "https://petrovoll.com/assets/images/products/additives/plain.jpg",
+   "variantes": [
+    "(pas de grade)"
+   ],
+   "nb_variantes": 1,
+   "conditionnements_site": [
+    "1 L",
+    "4 L",
+    "5 L",
+    "20 L",
+    "208 L (fût)"
+   ],
+   "photo_par_variante": false,
+   "photo_note": "Pas de photo : image blanche vide 800x500 (la page « Products » affiche à la place la photo de Oil Stop Leak)",
+   "apparence": {
+    "contenant": "Inconnu",
+    "etiquette": "Inconnue"
+   },
+   "grade_visible_sur_photo": null,
+   "notes": "",
+   "photo_vide_ou_generique": true,
+   "photo_fichier_partage": true,
+   "photo_propre_au_produit": false
+  }
+ ]
+}

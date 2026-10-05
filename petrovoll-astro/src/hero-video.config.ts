@@ -3,12 +3,12 @@
  * code séparé mobile / desktop). La timeline, les textes, le bidon et les couleurs
  * restent ceux de hero.config.ts (HERO), communs aux deux.
  *
- * Moteur (v3) : un vrai 4 cylindres en COUPE, rigide, au centre ; on voit l'intérieur
- * (arbre à cames, pistons et bielles, vilebrequin). Image fixe assets/ai/v3/K1.png,
- * trois plans caméra fixe enchaînés (journal ops/credits.md) :
- *   C1 l'huile entre par l'orifice et nappe l'arbre à cames ; C2 elle descend sur les
- *   pistons ; C3 elle atteint le vilebrequin. Composés sur K1 (métal rigide par
- *   construction) par ops/scripts/composer_huile.py, découpés par npm run hero:video.
+ * Moteur (v4) : un vrai 4 cylindres en COUPE, rigide, au centre ; on voit l'intérieur
+ * (arbre à cames, pistons et bielles, vilebrequin). Tout est calculé depuis l'image fixe
+ * assets/ai/v3/K1.png par ops/scripts/animer_moteur.py (aucune vidéo IA), trois plans :
+ *   C1 l'huile entre par l'orifice et nappe l'arbre à cames ; C2 elle coule dans les
+ *   cylindres, le moteur démarre (pistons et bielles en mouvement) ; C3 elle descend
+ *   jusqu'au vilebrequin et remplit le fond du carter. Découpés par npm run hero:video.
  *
  * Bidon à DROITE, moteur à GAUCHE (Ben, 29/09 : « le bidon est au mauvais sens »). La
  * photo du bidon a son goulot en haut à gauche : penché vers la gauche, le goulot passe
@@ -30,11 +30,14 @@ export const MOTEUR = {
   /** Bords du moteur (calage à l'écran, colonne des étiquettes). */
   bordGauche: 0.205,
   bordDroit: 0.8,
+  /** Haut (goulot) et bas (carter) du moteur : ils doivent rester visibles. */
+  haut: 0.1,
+  bas: 0.9,
   /** Pièces commentées (côté droit du moteur), dans l'ordre des textes HERO.textes.t3. */
   pieces: [
-    { x: 0.6, y: 0.235 },
-    { x: 0.648, y: 0.415 },
     { x: 0.648, y: 0.765 },
+    { x: 0.648, y: 0.415 },
+    { x: 0.6, y: 0.235 },
   ],
 }
 
@@ -47,9 +50,9 @@ export const PLANS_T3: [number, number][] = [
 
 /**
  * Arrivée de l'étiquette (et du texte) de chaque pièce, en fraction de t3 : quand l'huile
- * l'a nappée. Celle des cames attend la fin du versement, pour ne pas croiser le bidon.
+ * l'a nappée, dans l'ordre du circuit : vilebrequin (pompe), pistons (projections), cames.
  */
-export const APPARITIONS_REPERES = [0.45, 0.55, 0.76]
+export const APPARITIONS_REPERES = [0.45, 0.62, 0.82]
 
 /** Point de la vidéo source → point de l'image d'un format (recadrée). */
 export function dansImage(p: Point, r: Zone): Point {
@@ -66,6 +69,11 @@ export interface ReglagesHeroVideo {
     largeur: number
     hauteur: number
     version: string
+    /**
+     * Garage plein écran (decor-penombre.webp, decor-allume.webp : champ double de la vidéo,
+     * même échelle) et masque du moteur (masque.webp) : le canvas ne garde que le moteur.
+     */
+    decor?: boolean
     /** Partie de la vidéo source gardée pour ce format (fractions). */
     recadrage: Zone
     /** Partie gardée quand l'image est rognée, ou place de l'image réduite (0,5 = centre). */

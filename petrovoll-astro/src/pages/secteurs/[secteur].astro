@@ -3,6 +3,7 @@
  * Page secteur — une page prérendue par secteur de l'admin :
  * présentation (texte riche) + produits du secteur.
  */
+import { Image } from 'astro:assets'
 import { render } from 'astro:content'
 
 import ProduitGrid from '@/components/produits/ProduitGrid.astro'
@@ -35,6 +36,22 @@ const description =
     </span>
     <h1 class="mt-4 text-3xl sm:text-4xl lg:text-5xl">{secteur.data.nom}</h1>
     <span class="section-line" aria-hidden="true" />
+
+    {
+      // En bandeau large, une photo trop petite (ex. image tirée d'une vidéo de téléphone) serait floue.
+      secteur.data.image && secteur.data.image.width >= 900 && (
+        <Image
+          src={secteur.data.image}
+          alt=""
+          widths={[640, 960, 1280]}
+          sizes="(min-width: 1280px) 1200px, 100vw"
+          format="webp"
+          quality={75}
+          loading="eager"
+          class="mt-6 aspect-[21/9] w-full rounded-md object-cover"
+        />
+      )
+    }
 
     <div class="rich-text mt-6 max-w-3xl">
       <Content />

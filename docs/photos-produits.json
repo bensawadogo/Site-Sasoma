@@ -1,0 +1,319 @@
+{
+  "stark-fully-synthetic": {
+    "photo": "stark-fully-synthetic.webp",
+    "variantes": {
+      "0W-40": "stark-fully-synthetic.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/gasoline/stark.jpg",
+    "etiquette_lue": "STÄRK Voll Synthetisch, SAE 0W40, API SN, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "variante",
+    "remarque": "La photo montre 0W40 et non 5W-30 (valeur par défaut de la fiche)."
+  },
+  "stark-semi-synthetic": {
+    "photo": "stark-semi-synthetic.webp",
+    "variantes": {
+      "10W-40": "stark-semi-synthetic.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/gasoline/stark_ss.jpg",
+    "etiquette_lue": "STÄRK Teil Synthetisches, SAE 10W40, API SM, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "variante"
+  },
+  "volex-multigrade-mineral": {
+    "photo": "volex-multigrade-mineral.webp",
+    "variantes": {
+      "20W-50": "volex-multigrade-mineral.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/gasoline/volex.jpg",
+    "etiquette_lue": "VÖLEX Mineralöl Leistung, SAE 20W50, API SL, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "variante"
+  },
+  "vono-mineral": {
+    "photo": "vono-mineral.webp",
+    "variantes": {
+      "SAE 40": "vono-mineral.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/gasoline/vono.jpg",
+    "etiquette_lue": "VÖNO Mineralöl Leistung, SAE 40, API SL, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "variante"
+  },
+  "viro-tec-fully-synthetic": {
+    "photo": "viro-tec-fully-synthetic.webp",
+    "variantes": {
+      "10W-30": "viro-tec-fully-synthetic.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/diesel/viro_fs.jpg",
+    "etiquette_lue": "VIRÖ-TEC Schwerlast-Motoröl, SAE 10W30, API CK-4, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "variante"
+  },
+  "viro-tec-semi-synthetic": {
+    "photo": "viro-tec-semi-synthetic.webp",
+    "variantes": {
+      "15W-40": "viro-tec-semi-synthetic.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/diesel/viro_ss.jpg",
+    "etiquette_lue": "VIRÖ-TEC Schwerlast-Motoröl, SAE 15W40, API CI-4/SL, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "variante"
+  },
+  "d-tec-mineral": {
+    "photo": "d-tec-mineral.webp",
+    "variantes": {
+      "15W-40": "d-tec-mineral.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/diesel/dtec_mineral.jpg",
+    "etiquette_lue": "D-TEC Schwerlast-Motoröl, SAE 15W40, API CF, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "variante"
+  },
+  "cng-tec": {
+    "photo": "cng-tec.webp",
+    "variantes": {
+      "15W-40": "cng-tec.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/diesel/cngtec.jpg",
+    "etiquette_lue": "CNG-TEC Schwerlast-Motoröl, CNG SAE 15W40, API CG-4, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "variante"
+  },
+  "motpro-4t": {
+    "photo": "motpro-4t.webp",
+    "variantes": {
+      "20W-50": "motpro-4t.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/motorcycle/motpro_4t.jpg",
+    "etiquette_lue": "MÖTPRO 4T-Stroke Oil, SAE 20W50, JASO MA-2, API SN, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "variante"
+  },
+  "motpro-2t": {
+    "photo": "motpro-2t.webp",
+    "variantes": {
+      "2T": "motpro-2t.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/motorcycle/motpro_2t.jpg",
+    "etiquette_lue": "MÖTPRO 2T-Stroke Oil, TC JASO FC-FD, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "exacte"
+  },
+  "marineol-synthetic-cylinder": {
+    "photo": "marineol-synthetic-cylinder.webp",
+    "variantes": {
+      "15W-40": "marineol-synthetic-cylinder.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/marine/marineol_1.jpg",
+    "etiquette_lue": "MARINEÖL Synthetisches Meeresöl, SAE 15W40, TBN 50, 5 Ltr",
+    "contenance_montree": "5 L",
+    "correspondance": "variante"
+  },
+  "marineol-mineral": {
+    "photo": "marineol-mineral.webp",
+    "variantes": {
+      "SAE 50": "marineol-mineral.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/marine/marineol_2.jpg",
+    "etiquette_lue": "MARINEÖL Mineral Meeresöl, SAE 50, TBN 85, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "variante"
+  },
+  "marineol-trunk-piston": {
+    "photo": "marineol-trunk-piston.webp",
+    "variantes": {
+      "SAE 50": "marineol-trunk-piston.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/marine/marineol_3.jpg",
+    "etiquette_lue": "MARINEÖL Tauchkolben-Schiffsöl, SAE 50, TBN 55, 5 Ltr",
+    "contenance_montree": "5 L",
+    "correspondance": "variante"
+  },
+  "marineol-2t-outboard": {
+    "photo": "marineol-2t-outboard.webp",
+    "variantes": {
+      "2T": "marineol-2t-outboard.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/marine/marineol_4.jpg",
+    "etiquette_lue": "MARINEÖL Mineral Meeresöl, 2 CYCLE OUTBOARD OIL, API TC-W3, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "exacte"
+  },
+  "hydkon-hydraulic": {
+    "photo": "hydkon-hydraulic.webp",
+    "variantes": {
+      "ISO VG 68": "hydkon-hydraulic.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/industrial/hydkon.jpg",
+    "etiquette_lue": "HYDKÖN Hydraulik Öl, HYDRAULIC 68, ISO VG 68, 20 Ltr",
+    "contenance_montree": "20 L",
+    "correspondance": "variante"
+  },
+  "dexo-atf-cvt": {
+    "photo": "dexo-atf-cvt.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_cvt.jpg",
+    "etiquette_lue": "DEXÖ ATF CVT, DEXRON CVT, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "exacte"
+  },
+  "dexo-atf-dexron-vi": {
+    "photo": "dexo-atf-dexron-vi.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_vi.jpg",
+    "etiquette_lue": "DEXÖ ATF VI, DEXRON VI, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "exacte"
+  },
+  "dexo-atf-dexron-iii": {
+    "photo": "dexo-atf-dexron-iii.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_iii.jpg",
+    "etiquette_lue": "DEXÖ ATF III, DEXRON III, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "exacte"
+  },
+  "dexo-atf-dexron-ii": {
+    "photo": "dexo-atf-dexron-ii.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_ii.jpg",
+    "etiquette_lue": "DEXÖ ATF II, DEXRON II, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "exacte"
+  },
+  "dexo-atf-type-a": {
+    "photo": "dexo-atf-type-a.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/automatic_transmission/dexo_atf_typea.jpg",
+    "etiquette_lue": "DEXÖ ATF TYPE A, TYPE A SUFFIX A, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "exacte"
+  },
+  "max-grob-synthetic": {
+    "photo": "max-grob-synthetic.webp",
+    "variantes": {
+      "75W-90": "max-grob-synthetic.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/automatic_manual_gear/max_grob.jpg",
+    "etiquette_lue": "MAXGRÖB Manuelles Getriebeöl, SAE 75W90 Synthetic Premium, API GL-5, 1 Ltr",
+    "contenance_montree": "1 L",
+    "correspondance": "variante"
+  },
+  "max-grob-gear": {
+    "photo": "max-grob-gear.webp",
+    "variantes": {
+      "80W-90": "max-grob-gear.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/automatic_manual_gear/max_grob_gear_oil.jpg",
+    "etiquette_lue": "MAXGRÖB Manuelles Getriebeöl, SAE 80W90 Automotive Gear Oil, API GL-5, 5 Ltr",
+    "contenance_montree": "5 L",
+    "correspondance": "a_verifier",
+    "remarque": "Seule l'étiquette 80W90 (bidon de devant) est montrée."
+  },
+  "dot-5-1": {
+    "photo": "dot-5-1.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/brake/dot_brakefluid.jpg",
+    "etiquette_lue": "BRAKE FLUID DOT 4 (250 ml) et BRAKE FLUID DOT 5 (500 ml) : photo officielle complète, deux flacons",
+    "contenance_montree": "250 ml + 500 ml",
+    "correspondance": "inexacte",
+    "objets": "deux flacons (photo officielle complète)",
+    "remarque": "L'étiquette DOT 5 est celle du grand flacon (500 ml) ; son bord gauche est caché par le flacon DOT 4 : on garde donc la photo officielle complète, sans rien reconstruire. L'étiquette porte DOT 5, pas DOT 5.1 : photo la plus proche, non exacte."
+  },
+  "dot-4-3": {
+    "photo": "dot-4-3.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/brake/dot_brakefluid.jpg",
+    "etiquette_lue": "BRAKE FLUID DOT 4, 250 ml",
+    "contenance_montree": "250 ml",
+    "correspondance": "exacte"
+  },
+  "kuhler": {
+    "photo": "kuhler.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/coolants/kuhler.jpg",
+    "etiquette_lue": "KÜHLER Coolant Antifreeze, 100% concentrate, anti-rust formula, 5 Ltr",
+    "contenance_montree": "5 L",
+    "correspondance": "exacte"
+  },
+  "glat-ep0-ep1-ep2": {
+    "photo": "glat-ep0-ep1-ep2.webp",
+    "variantes": {
+      "EP1": "glat-ep0-ep1-ep2.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/greases/glat_ep0.jpg",
+    "etiquette_lue": "GLÄT-EP1 NLGI-EP1 Lithium Grease, 20 Ltr",
+    "contenance_montree": "20 L",
+    "correspondance": "variante",
+    "remarque": "Étiquette EP1 : correspond à l'un des trois grades EP0/EP1/EP2 de la fiche."
+  },
+  "glat-ep2-ep3": {
+    "photo": "glat-ep2-ep3.webp",
+    "variantes": {
+      "EP2": "glat-ep2-ep3.webp"
+    },
+    "source": "https://petrovoll.com/assets/images/products/greases/glat_ep3.jpg",
+    "etiquette_lue": "GLÄT-EP2 NLGI-EP2 Lithium Grease, 500 g",
+    "contenance_montree": "500 g",
+    "correspondance": "inexacte",
+    "remarque": "Le fichier officiel s'appelle glat_ep3 mais l'étiquette porte EP2 ; aucune photo EP3 n'existe."
+  },
+  "glat-multi-purpose": {
+    "photo": "glat-multi-purpose.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/greases/glat_mp.jpg",
+    "etiquette_lue": "GLÄT-EP2 NLGI-EP2 Multi-Purpose Grease, 20 Ltr",
+    "contenance_montree": "20 L",
+    "correspondance": "inexacte",
+    "remarque": "L'étiquette porte EP2 (graisse lithium), alors que la fiche décrit une graisse multi-usage au calcium."
+  },
+  "fuel-injector-cleaner": {
+    "photo": "fuel-injector-cleaner.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/additives/fuel_injector_cleaner.jpg",
+    "etiquette_lue": "Fuel Injector Cleaner, 250 ml",
+    "contenance_montree": "250 ml",
+    "correspondance": "exacte"
+  },
+  "diesel-injector-cleaner": {
+    "photo": "diesel-injector-cleaner.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/additives/diesel_injector_cleaner.jpg",
+    "etiquette_lue": "Diesel Injector Cleaner, 250 ml",
+    "contenance_montree": "250 ml",
+    "correspondance": "exacte"
+  },
+  "complete-fuel-system-cleaner": {
+    "photo": "complete-fuel-system-cleaner.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/additives/complete_fuel_system_scanner.jpg",
+    "etiquette_lue": "Complete Fuel System Cleaner, 250 ml",
+    "contenance_montree": "250 ml",
+    "correspondance": "exacte"
+  },
+  "octane-booster": {
+    "photo": "octane-booster.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/additives/octane_booster.jpg",
+    "etiquette_lue": "Octane Booster, 250 ml",
+    "contenance_montree": "250 ml",
+    "correspondance": "exacte"
+  },
+  "oil-treatment": {
+    "photo": "oil-treatment.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/additives/oil_treatment.jpg",
+    "etiquette_lue": "Oil Treatment, 444 ml",
+    "contenance_montree": "444 ml",
+    "correspondance": "exacte"
+  },
+  "oil-stop-leak": {
+    "photo": "oil-stop-leak.webp",
+    "variantes": {},
+    "source": "https://petrovoll.com/assets/images/products/additives/oil_stop_leak.jpg",
+    "etiquette_lue": "Oil Stop Leak, 444 ml",
+    "contenance_montree": "444 ml",
+    "correspondance": "exacte"
+  }
+}

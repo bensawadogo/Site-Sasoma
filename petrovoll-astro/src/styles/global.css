@@ -329,3 +329,185 @@
   }
 }
 
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   CATALOGUE — fond studio, ombre de contact, aperçu rapide
+   ──────────────────────────────────────────────────────────────────────────── */
+.studio {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(70% 60% at 50% 44%, #ffffff 0%, #f1f5f9 62%, #e6edf4 100%);
+}
+.studio > img,
+.studio > picture {
+  position: relative;
+  z-index: 1;
+}
+.studio > picture > img {
+  display: block;
+}
+/* Ombre de contact sous le bidon */
+.studio::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 9%;
+  width: 52%;
+  height: 7%;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 36, 74, 0.3), rgba(0, 36, 74, 0));
+  filter: blur(3px);
+}
+.studio-vide {
+  color: #aebccd;
+}
+.studio .photo-bidon {
+  transition: transform 220ms ease-out;
+  transform-origin: 50% 90%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .carte-produit:hover .photo-bidon,
+  .carte-produit:focus-within .photo-bidon {
+    transform: scale(1.03);
+  }
+  .carte-produit:hover {
+    transform: translateY(-3px);
+  }
+}
+.carte-produit {
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out,
+    border-color 150ms ease-out;
+}
+.carte-produit:hover,
+.carte-produit:focus-within {
+  border-color: #9fb0c4;
+  box-shadow: 0 14px 30px -14px rgba(0, 36, 74, 0.28);
+}
+
+dialog.apercu {
+  padding: 0;
+  border: 0;
+  margin: 0;
+  background: var(--color-fond);
+  color: var(--color-texte);
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  overflow: hidden;
+}
+dialog.apercu[open] {
+  display: flex;
+  flex-direction: column;
+}
+dialog.apercu::backdrop {
+  background: rgba(0, 24, 50, 0.55);
+}
+@media (min-width: 64rem) {
+  dialog.apercu {
+    margin-left: auto;
+    width: min(32.5rem, 92vw);
+    border-left: 1px solid var(--color-bordure);
+    box-shadow: -24px 0 48px -24px rgba(0, 24, 50, 0.4);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  dialog.apercu[open] {
+    animation: apercu-entree 220ms ease-out;
+  }
+  dialog.apercu[open]::backdrop {
+    animation: apercu-fond 220ms ease-out;
+  }
+  @keyframes apercu-entree {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+  @media (min-width: 64rem) {
+    @keyframes apercu-entree {
+      from {
+        opacity: 0;
+        transform: translateX(32px);
+      }
+    }
+  }
+  @keyframes apercu-fond {
+    from {
+      opacity: 0;
+    }
+  }
+}
+html.apercu-ouvert {
+  overflow: hidden;
+}
+
+/* Pastilles de choix (viscosité, conditionnement) : zone tactile de 44 px */
+.pastille {
+  min-height: 44px;
+  min-width: 56px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid #74869d;
+  background: var(--color-fond);
+  color: var(--color-marine);
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    color 150ms;
+}
+.pastille[aria-pressed='true'] {
+  background: var(--color-marine);
+  border-color: var(--color-marine);
+  color: #fff;
+}
+.pastille:not([aria-pressed='true']):hover {
+  border-color: var(--color-marine);
+}
+
+/* Repère de BASE (synthèse, semi-synthèse, minérale) : pastille sur la photo (sans liseré en tête
+   de carte, retiré à la demande de Ben). La couleur n'est jamais seule : la pastille porte le nom. */
+.base-synthese {
+  --base: #2563c9;
+}
+.base-semi {
+  --base: #0f8a80;
+}
+.base-minerale {
+  --base: #a8721a;
+}
+.pastille-base {
+  position: absolute;
+  left: 8px;
+  top: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: calc(100% - 16px);
+  padding: 3px 8px 3px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #dce4ee;
+  color: #00244a;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.pastille-base-point {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--base, #74869d);
+}

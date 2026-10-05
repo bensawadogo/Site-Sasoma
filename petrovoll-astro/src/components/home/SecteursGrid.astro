@@ -5,6 +5,8 @@
  * Mobile : 1 colonne → 2 dès sm: → 3 dès lg:.
  */
 import IconeSecteur from '@/components/ui/IconeSecteur.astro'
+import { Image } from 'astro:assets'
+
 import { getSecteurs } from '@/lib/contenu'
 
 const secteurs = await getSecteurs()
@@ -26,8 +28,22 @@ const secteurs = await getSecteurs()
           <li class="reveal">
             <a
               href={`/secteurs/${secteur.id}`}
-              class="group flex h-full min-h-[132px] flex-col gap-4 rounded-md border border-bordure bg-surface p-5 transition-colors hover:border-accent/50"
+              class="group flex h-full min-h-[132px] flex-col gap-4 overflow-hidden rounded-md border border-bordure bg-surface p-5 transition-colors hover:border-accent/50"
             >
+              {secteur.data.image && (
+                <div class="-mx-5 -mt-5 aspect-[16/9] overflow-hidden bg-fond">
+                  <Image
+                    src={secteur.data.image}
+                    alt=""
+                    widths={[400, 640, 800]}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    format="webp"
+                    quality={72}
+                    loading="lazy"
+                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              )}
               <span class="inline-flex h-11 w-11 items-center justify-center rounded bg-fond text-vif">
                 <IconeSecteur icone={secteur.data.icone} />
               </span>

@@ -14,14 +14,20 @@
  *
  *  - un seul écouteur de scroll passif, rendu dans requestAnimationFrame ;
  *  - DOM : on n'écrit que opacity et transform (tailles et positions au redimensionnement) ;
- *  - séquence : chargée après l'événement load, une image sur 4 d'abord, puis le reste ;
- *    seules les images proches de l'image courante restent décodées (ImageBitmap) ;
- *  - palier lite (économie de données, 2G/3G, ≤ 2 Go) : deux images
- *    seulement (moteur sec, moteur huilé), en fondu.
+ *  - séquence : chargée après l'événement load (priorité basse), une image sur 4 d'abord,
+ *    puis le reste ; téléchargée en Blob et décodée HORS du fil principal
+ *    (createImageBitmap(blob)) ; seules les images proches de la courante restent décodées ;
+ *  - une image chargée ne relance le rendu que si elle rapproche de l'image voulue ;
+ *  - hors écran (après le hero), plus aucun rendu au scroll ; styles écrits seulement
+ *    quand leur valeur change ;
+ *  - paliers : « lite » (économie de données, 2G/3G, ≤ 2 Go) : deux images seulement
+ *    (moteur sec, moteur huilé), en fondu ; « partiel » (connexion lente, ≤ 3 Go de
+ *    mémoire) : une image sur deux ; « sequence » : toutes.
  */
 import { APPARITIONS_REPERES, dansImage, MOTEUR, PLANS_T3, type ReglagesHeroVideo } from '@/hero-video.config'
 import { HERO } from '@/hero.config'
 import { borner, doux, local, mix, opaciteBloc } from '@/lib/hero-timeline'
+import { creerMoteurVivant, type Repere } from '@/scripts/hero-video/moteur-vivant'
 import { caler, couverture, type Couverture, indexImage, ordreChargement, plusProche, pointCouvert } from '@/lib/sequence-images'
 import {
   angleDebut,
@@ -39,8 +45,18 @@ import {
 } from '@/lib/versement'
 
 type NavigatorEtendu = Navigator & {
-  connection?: { saveData?: boolean; effectiveType?: string }
+  connection?: { saveData?: boolean; effectiveType?: string; downlink?: number }
   deviceMemory?: number
+}
+
+/** Écrit un style seulement s'il a changé (pas d'invalidation inutile à chaque image). */
+const ecrits = new WeakMap<HTMLElement, Map<string, string>>()
+function style(el: HTMLElement, prop: 'opacity' | 'transform', valeur: string) {
+  let m = ecrits.get(el)
+  if (!m) ecrits.set(el, (m = new Map()))
+  if (m.get(prop) === valeur) return
+  m.set(prop, valeur)
+  el.style[prop] = valeur
 }
 
 const plage = (id: string) => HERO.temps.find((t) => t.id === id)!
@@ -67,12 +83,16 @@ const REMPLISSAGE = { plein: 0.68, verse: 0.4 }
 /** Poignée du bidon (fractions de la photo) : la main le lève par là. */
 const POIGNEE = { x: 0.8, y: 0.17 }
 /** Couleurs de l'huile neuve, accordées à l'huile du moteur : corps doré, cœur clair, reflet, bord sombre (Fresnel). */
-const TEINTES = { corps: '#d9951f', coeur: '#f6c85a', reflet: '#fff1c2', bord: 'rgb(138 75 10 / 0.6)' }
+// « A doux » : or lumineux, cœur clair, halo chaud discret.
+const TEINTES = { corps: '#f0a62a', coeur: '#ffd76e', reflet: '#fff6d2', bord: 'rgb(150 82 12 / 0.5)', halo: 'rgb(255 170 60 / 0.55)' }
 
 export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void {
   const scene = racine.querySelector<HTMLElement>('[data-scene]')!
   const canvasMoteur = racine.querySelector<HTMLCanvasElement>('[data-sequence]')!
   const canvasFilet = racine.querySelector<HTMLCanvasElement>('[data-filet]')!
+  /** Garage plein écran (absent si le manifeste n'a pas de décor) ; s'éclaire pendant le versement. */
+  const decor = racine.querySelector<HTMLElement>('[data-decor]')
+  const decorAllume = racine.querySelector<HTMLElement>('[data-decor-allume]')
   const bidon = racine.querySelector<HTMLElement>('[data-bidon-hero]')!
   const niveau = bidon.querySelector<HTMLElement>('[data-niveau]')
   const menisque = bidon.querySelector<HTMLElement>('[data-menisque]')
@@ -95,12 +115,23 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     apparition: APPARITIONS_REPERES[i],
     ancre: { x: 0, y: 0 },
     etiquetteX: 0,
+    etiquetteY: 0,
     traitX: 0,
+    traitY: 0,
+    traitAngle: 0,
   }))
   // Façon de verser (goulot devant ou derrière) et état du versement pour tout u, intégré une fois.
   const PROFIL = R.bec === 'avant' ? BEC_AVANT : BEC_ARRIERE
   const VERSEMENT = tableVersement(REMPLISSAGE.plein, REMPLISSAGE.verse, PROFIL)
   const ctxMoteur = canvasMoteur.getContext('2d')!
+  // Pièces mobiles : un second canvas, transparent, posé sur celui du moteur. Le fond n'est
+  // repeint que quand l'image du scroll change ; seules les pièces sont redessinées à chaque tour.
+  const canvasPieces = document.createElement('canvas')
+  canvasPieces.setAttribute('aria-hidden', 'true')
+  canvasPieces.style.position = 'absolute'
+  canvasPieces.style.pointerEvents = 'none'
+  canvasMoteur.after(canvasPieces)
+  const ctxPieces = canvasPieces.getContext('2d')!
   const ctxFilet = canvasFilet.getContext('2d')!
   const mouvementReduit = matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -113,32 +144,53 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       (!!nav.connection?.saveData ||
         /(^|-)(2g|3g)$/.test(nav.connection?.effectiveType ?? '') ||
         (R.nom === 'mobile' && (nav.deviceMemory ?? 4) <= 2)))
-  racine.dataset.palier = leger ? 'lite' : 'sequence'
+  const partiel =
+    !leger &&
+    forcage !== 'sequence' &&
+    (forcage === 'partiel' || (nav.connection?.downlink ?? 10) < 1.5 || (nav.deviceMemory ?? 8) <= 3)
+  racine.dataset.palier = leger ? 'lite' : partiel ? 'partiel' : 'sequence'
 
   // ── Séquence d'images ──────────────────────────────────────────────────────
   const S = R.sequence
   const total = S.images
   const url = (i: number) => `${S.dossier}/${String(i).padStart(3, '0')}.webp?v=${S.version}`
-  const images: (HTMLImageElement | null)[] = Array(total).fill(null)
-  const chargees = new Set<number>()
+  /** Images téléchargées, encore compressées (≈ 30 Ko chacune). */
+  const blobs: (Blob | null)[] = Array(total).fill(null)
   const bitmaps = new Map<number, ImageBitmap>()
   const decodage = new Set<number>()
   let courante = 0
 
+  /** L'image i est-elle plus proche de la voulue que celle à l'écran ? */
+  const meilleure = (i: number) => derniereDessinee < 0 || Math.abs(i - courante) < Math.abs(derniereDessinee - courante)
+
+  /** Décodage hors du fil principal (depuis le Blob) ; `garder` : jamais libérée (palier lite). */
+  function decoder(i: number, garder = false) {
+    const b = blobs[i]
+    if (!b || bitmaps.has(i) || decodage.has(i)) return
+    decodage.add(i)
+    createImageBitmap(b)
+      .then((bm) => {
+        decodage.delete(i)
+        if (!garder && (i < courante - FENETRE.avant || i > courante + FENETRE.apres)) return bm.close()
+        bitmaps.set(i, bm)
+        if (garder) dernierFondu = -1 // le fondu du palier lite doit être repeint
+        if (garder || meilleure(i)) demanderRendu()
+      })
+      .catch(() => decodage.delete(i))
+  }
+
   function charger(i: number): Promise<void> {
-    return new Promise((resolu) => {
-      const img = new Image()
-      img.decoding = 'async'
-      img.onload = () => {
-        images[i] = img
-        chargees.add(i)
-        if (Math.abs(i - courante) <= FENETRE.apres) garderDecodees()
-        demanderRendu()
-        resolu()
-      }
-      img.onerror = () => resolu() // image manquante : on dessine la plus proche
-      img.src = url(i)
-    })
+    // Priorité basse sauf l'affiche : le reste de la page passe avant la séquence.
+    const options = { priority: i === 0 ? 'high' : 'low' } as RequestInit
+    return fetch(url(i), options)
+      .then((r) => (r.ok ? r.blob() : null))
+      .then((b) => {
+        if (!b) return // image manquante : on dessine la plus proche
+        blobs[i] = b
+        if (leger) decoder(i, true)
+        else if (i >= courante - FENETRE.avant && i <= courante + FENETRE.apres) decoder(i)
+      })
+      .catch(() => {})
   }
 
   async function chargerTout(ordre: number[]) {
@@ -154,24 +206,13 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     const min = courante - FENETRE.avant
     const max = courante + FENETRE.apres
     for (const [i, b] of bitmaps) {
-      if (i < min || i > max) {
+      // L'image à l'écran reste décodée : le moteur la repeint à chaque tour.
+      if ((i < min || i > max) && i !== derniereDessinee) {
         b.close()
         bitmaps.delete(i)
       }
     }
-    for (let i = Math.max(0, min); i <= Math.min(total - 1, max); i++) {
-      const img = images[i]
-      if (!img || bitmaps.has(i) || decodage.has(i)) continue
-      decodage.add(i)
-      createImageBitmap(img)
-        .then((b) => {
-          decodage.delete(i)
-          if (i < courante - FENETRE.avant || i > courante + FENETRE.apres) return b.close()
-          bitmaps.set(i, b)
-          if (i === courante) demanderRendu()
-        })
-        .catch(() => decodage.delete(i))
-    }
+    for (let i = Math.max(0, min); i <= Math.min(total - 1, max); i++) decoder(i)
   }
 
   // ── Géométrie (recalculée au redimensionnement) ────────────────────────────
@@ -204,16 +245,32 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     const zm = R.zones.moteur
     boite = { x: zm.x * ecran.l, y: zm.y * ecran.h, l: zm.l * ecran.l, h: zm.h * ecran.h }
     Object.assign(canvasMoteur.style, { left: `${boite.x}px`, top: `${boite.y}px`, width: `${boite.l}px`, height: `${boite.h}px` })
+    Object.assign(canvasPieces.style, { left: `${boite.x}px`, top: `${boite.y}px`, width: `${boite.l}px`, height: `${boite.h}px` })
     const image = { l: S.largeur, h: S.hauteur }
     const bordCale = S.cale?.bord === 'gauche' ? MOTEUR.bordGauche : MOTEUR.bordDroit
+    // Écran large et peu haut (tablette, téléphone en paysage) : « couvrir » rognait le haut
+    // (cames) et le bas (carter). On réduit alors l'image pour garder tout le moteur.
+    const couvrir = Math.max(boite.l / image.l, boite.h / image.h)
+    const hauteurMoteur = (MOTEUR.bas - MOTEUR.haut) / S.recadrage.h
+    const zoom = Math.min(S.zoom, boite.h / (hauteurMoteur * image.h) / couvrir)
     couv = S.cale
-      ? caler(image, boite, S.zoom, S.focale.y, dansImage({ x: bordCale, y: 0 }, S.recadrage).x, S.cale.x)
-      : couverture(image, boite, S.focale.x, S.focale.y, S.zoom)
+      ? caler(image, boite, zoom, S.focale.y, dansImage({ x: bordCale, y: 0 }, S.recadrage).x, S.cale.x)
+      : couverture(image, boite, S.focale.x, S.focale.y, zoom)
     // Jamais plus défini que l'image source : inutile de peindre des pixels inventés.
     dpr = Math.min(devicePixelRatio || 1, S.dprMax, Math.max(1, S.largeur / couv.l))
     dimensionner(canvasMoteur, dpr, boite)
+    dimensionner(canvasPieces, dpr, boite)
     dimensionner(canvasFilet, Math.min(devicePixelRatio || 1, 2))
     orifice = aLEcran(MOTEUR.orifice)
+    // Affiche calée exactement comme le canvas la dessinera ; garage autour, à la même échelle
+    // (champ double de la vidéo source, centré sur elle).
+    canvasMoteur.style.backgroundSize = `${couv.l}px ${couv.h}px`
+    canvasMoteur.style.backgroundPosition = `${couv.x}px ${couv.y}px`
+    if (decor) {
+      const a = aLEcran({ x: -0.5, y: -0.5 })
+      const b = aLEcran({ x: 1.5, y: 1.5 })
+      Object.assign(decor.style, { left: `${a.x}px`, top: `${a.y}px`, width: `${b.x - a.x}px`, height: `${b.y - a.y}px` })
+    }
 
     // Bidon debout, sur le côté. Pendant le versement, son goulot se tient au-dessus de
     // l'orifice, décalé de son côté, là où le filet, à plein débit, tombe dans l'orifice.
@@ -252,14 +309,33 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     // Étiquettes : point sur la pièce, trait, étiquette. Colonne : à côté du moteur, du
     // côté R.etiquettes ; pastille : collée au point, de ce côté-là.
     const bord = aLEcran({ x: aDroite ? MOTEUR.bordDroit : MOTEUR.bordGauche, y: 0 }).x
+    // Pastille (téléphone) : les étiquettes ne doivent pas cacher la distribution ni les
+    // pistons qui bougent ; elles s'empilent au-dessus du moteur, à gauche (le bidon est à
+    // droite), reliées à leur pièce par un trait oblique.
+    const hautMoteur = aLEcran({ x: 0, y: MOTEUR.haut }).y
     for (const [i, r] of reperes.entries()) {
       r.ancre = aLEcran(MOTEUR.pieces[i])
       const largeur = r.etiquette.offsetWidth
-      const x = colonne ? bord : r.ancre.x
-      const ecart = colonne ? 28 : 14
+      if (!colonne) {
+        r.etiquetteX = 16
+        r.etiquetteY = hautMoteur - 14 - (reperes.length - 1 - i) * 30
+        const x0 = r.etiquetteX + largeur
+        r.traitX = x0
+        r.traitY = r.etiquetteY
+        r.traitAngle = Math.atan2(r.ancre.y - r.traitY, r.ancre.x - x0)
+        r.trait.style.width = `${Math.max(0, Math.hypot(r.ancre.x - x0, r.ancre.y - r.traitY))}px`
+        r.trait.style.transformOrigin = '0 50%'
+        r.point.style.transform = `translate3d(${r.ancre.x}px, ${r.ancre.y}px, 0)`
+        continue
+      }
+      const x = bord
+      const ecart = 28
       r.etiquetteX = aDroite ? Math.min(ecran.l - largeur - 16, x + ecart) : Math.max(16, x - ecart - largeur)
+      r.etiquetteY = r.ancre.y
       // Le trait va du point au bord de l'étiquette le plus proche.
       r.traitX = aDroite ? r.ancre.x : r.etiquetteX + largeur
+      r.traitY = r.ancre.y
+      r.traitAngle = 0
       r.trait.style.width = `${Math.max(0, aDroite ? r.etiquetteX - r.ancre.x : r.ancre.x - r.traitX)}px`
       r.trait.style.transformOrigin = aDroite ? '0 50%' : '100% 50%'
       r.point.style.transform = `translate3d(${r.ancre.x}px, ${r.ancre.y}px, 0)`
@@ -271,47 +347,142 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   let derniereDessinee = -1
   let dernierFondu = -1
   let affichePresente = true
+  /** Le hero est-il à l'écran ? (IntersectionObserver, plus bas) */
+  let visible = true
 
-  function peindre(source: CanvasImageSource, alpha = 1) {
-    if (alpha === 1 && S.zoom < 1) {
+  // ── Pièces mobiles : le moteur tourne en temps réel (moteur-vivant.ts) ──────
+  const vivant = creerMoteurVivant('/hero-video/pieces/atlas.webp', mouvementReduit, leger || partiel ? 3 : 6, !leger, !leger && !partiel)
+  /** Le moteur démarre quand le bidon a fini de verser (fraction de t3). */
+  const DEMARRAGE_T3 = 0.3
+  /** Images de fond à l'écran (une, ou deux en fondu pour le palier lite). */
+  let fonds: { source: CanvasImageSource; alpha: number }[] = []
+  /**
+   * Masque du moteur : avec le garage, le canvas ne garde que le moteur (il vibre quand le
+   * moteur tourne ; le garage, en dessous, reste immobile). Avant son arrivée, image entière.
+   */
+  let masque: ImageBitmap | null = null
+  if (S.decor)
+    fetch(`${S.dossier}/masque.webp?v=${S.version}`)
+      .then((r) => (r.ok ? r.blob() : Promise.reject()))
+      .then((b) => createImageBitmap(b))
+      .then((m) => {
+        masque = m
+        peindreFond()
+      })
+      .catch(() => {})
+
+  function repere(): Repere {
+    const r = S.recadrage
+    const echelle = (couv.l / (r.l * 1344)) * dpr
+    return {
+      x: (sx) => (couv.x + (sx / 1344 - r.x) / r.l * couv.l) * dpr,
+      y: (sy) => (couv.y + (sy / 768 - r.y) / r.h * couv.h) * dpr,
+      echelle,
+    }
+  }
+
+  /** Fond : l'image du scroll (ou deux en fondu), seulement quand elle change. */
+  function peindreFond() {
+    if (!fonds.length) return
+    ctxMoteur.clearRect(0, 0, canvasMoteur.width, canvasMoteur.height)
+    if (!decor) {
       ctxMoteur.fillStyle = '#000'
       ctxMoteur.fillRect(0, 0, canvasMoteur.width, canvasMoteur.height)
     }
-    ctxMoteur.globalAlpha = alpha
-    ctxMoteur.drawImage(source, couv.x * dpr, couv.y * dpr, couv.l * dpr, couv.h * dpr)
+    for (const f of fonds) {
+      ctxMoteur.globalAlpha = f.alpha
+      try {
+        ctxMoteur.drawImage(f.source, couv.x * dpr, couv.y * dpr, couv.l * dpr, couv.h * dpr)
+      } catch {
+        // Image libérée entre-temps : la prochaine image du scroll la remplace.
+      }
+    }
     ctxMoteur.globalAlpha = 1
-    if (affichePresente) {
-      // Le canvas a pris le relais : l'affiche CSS ne doit plus transparaître quand
-      // le moteur s'assombrit à la fin.
+    if (masque) {
+      ctxMoteur.globalCompositeOperation = 'destination-in'
+      ctxMoteur.drawImage(masque, couv.x * dpr, couv.y * dpr, couv.l * dpr, couv.h * dpr)
+      ctxMoteur.globalCompositeOperation = 'source-over'
+    }
+    if (affichePresente && vivant.charge) {
+      // Le canvas a pris le relais (fond + pièces) : l'affiche CSS ne doit plus transparaître.
       canvasMoteur.style.backgroundImage = 'none'
       affichePresente = false
     }
   }
 
+  /** Pièces mobiles, sur leur propre canvas ; le bloc vibre (les deux canvas, en CSS). */
+  function peindrePieces(dtImage = 0) {
+    ctxPieces.clearRect(0, 0, canvasPieces.width, canvasPieces.height)
+    // Tant que l'affiche (moteur complet, pistons compris) est visible, pas de pièces par-dessus.
+    if (affichePresente) peindreFond()
+    if (affichePresente) return
+    const rep = repere()
+    if (!vivant.dessiner(ctxPieces, rep, dtImage)) return
+    const t = `translate3d(0, ${(vivant.secousse() * rep.echelle) / dpr}px, 0)`
+    style(canvasMoteur, 'transform', t)
+    style(canvasPieces, 'transform', t)
+  }
+
+  function peindreTout() {
+    peindreFond()
+    peindrePieces()
+  }
+
+  // Boucle du moteur : seulement quand il tourne, que le hero est visible et l'onglet actif.
+  // Sur un appareil lent (dessin des pièces > 8 ms), une image d'écran sur deux.
+  let boucle = 0
+  let dernierTemps = 0
+  let coutPieces = 0
+  let saute = false
+  function lancerBoucle() {
+    if (boucle || !visible || document.hidden) return
+    dernierTemps = performance.now()
+    let bouge = true
+    const tick = (maintenant: number) => {
+      saute = coutPieces > 8 && !saute
+      if (!saute) {
+        const dt = Math.min(0.08, (maintenant - dernierTemps) / 1000)
+        dernierTemps = maintenant
+        bouge = vivant.avancer(dt)
+        const debut = performance.now()
+        peindrePieces(dt)
+        coutPieces = coutPieces * 0.9 + (performance.now() - debut) * 0.1
+      }
+      boucle = (bouge || vivant.huileActive) && visible && !document.hidden ? requestAnimationFrame(tick) : 0
+    }
+    boucle = requestAnimationFrame(tick)
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) lancerBoucle()
+  })
+  vivant.pret.then(() => peindreTout())
+
   function dessinerMoteur(t3: number) {
+    vivant.regler(visible && t3 >= DEMARRAGE_T3)
+    if (vivant.tourne || vivant.huileActive || (visible && t3 >= DEMARRAGE_T3)) lancerBoucle()
     if (leger) {
       // Deux images : moteur sec, puis moteur huilé, en fondu pendant t3.
       const f = Math.round(doux(local(t3, 0.1, 0.9)) * 100) / 100
       if (f === dernierFondu) return
-      const debut = images[0]
-      const fin = images[total - 1]
+      const debut = bitmaps.get(0)
+      const fin = bitmaps.get(total - 1)
       if (!debut) return
-      ctxMoteur.fillStyle = '#000'
-      ctxMoteur.fillRect(0, 0, canvasMoteur.width, canvasMoteur.height)
-      peindre(debut)
-      if (fin && f > 0) peindre(fin, f)
+      fonds = [{ source: debut, alpha: 1 }]
+      if (fin && f > 0) fonds.push({ source: fin, alpha: f })
       dernierFondu = f
+      peindreFond()
+      if (!boucle) peindrePieces()
       return
     }
     // Petit décalage : l'huile apparaît sur les cames juste après que le filet est entré.
     courante = indexImage(local(t3, 0.05, FIN_SEQUENCE), total)
     garderDecodees()
-    const i = plusProche(courante, (k) => bitmaps.has(k) || chargees.has(k), total)
+    const i = plusProche(courante, (k) => bitmaps.has(k), total)
     if (i === null || i === derniereDessinee) return
-    const source = bitmaps.get(i) ?? images[i]
-    if (!source) return
-    peindre(source)
+    fonds = [{ source: bitmaps.get(i)!, alpha: 1 }]
     derniereDessinee = i
+    peindreFond()
+    if (!boucle) peindrePieces()
   }
 
   // ── Filet d'huile : chaque parcelle suit sa propre chute libre ──────────────
@@ -432,8 +603,15 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       dessine = true
       // Profil d'un cylindre d'huile éclairé : bord sombre, corps ambre, cœur clair, reflet fixe.
       tracerRuban(run, 1.12, TEINTES.bord, 1)
+      // Halo chaud : un seul passage avec shadowBlur sur le seul filet (pas de flou plein écran).
+      if (!leger) {
+        ctxFilet.shadowColor = TEINTES.halo
+        ctxFilet.shadowBlur = 7 * echelleFilet()
+      }
       tracerRuban(run, 1, TEINTES.corps, 0.92)
-      tracerRuban(run, 0.55, TEINTES.coeur, 0.9)
+      ctxFilet.shadowBlur = 0
+      ctxFilet.shadowColor = 'transparent'
+      tracerRuban(run, 0.55, TEINTES.coeur, 0.95)
       tracerRuban(run, 0.12, TEINTES.reflet, 0.8 + (leger || mouvementReduit ? 0 : 0.015 * Math.sin(temps * 0.004)), -0.2)
     }
     ctxFilet.globalAlpha = 0.9
@@ -457,6 +635,20 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       ctxFilet.beginPath()
       ctxFilet.ellipse(orifice.x - 0.25 * w, orifice.y + 0.012 * hauteurBidon - 0.3, 0.3 * w, 0.7, 0, 0, Math.PI * 2)
       ctxFilet.fill()
+      // Quelques éclats à l'impact (positions déterministes qui tournent doucement).
+      if (!leger) {
+        ctxFilet.fillStyle = TEINTES.reflet
+        const n = mouvementReduit ? 4 : 7
+        for (let k = 0; k < n; k++) {
+          const ph = mouvementReduit ? k / n : (temps * 0.0021 + k / n) % 1
+          const a = -Math.PI * (0.1 + 0.8 * ((k * 0.37) % 1))
+          const d = (0.012 + 0.03 * ph) * hauteurBidon * (0.6 + 0.4 * ((k * 0.61) % 1))
+          ctxFilet.globalAlpha = 0.85 * (1 - ph)
+          ctxFilet.beginPath()
+          ctxFilet.arc(orifice.x + Math.cos(a) * d * 1.3, orifice.y + Math.sin(a) * d, k % 3 === 0 ? 1.4 : 0.9, 0, Math.PI * 2)
+          ctxFilet.fill()
+        }
+      }
     }
 
     ctxFilet.restore()
@@ -478,8 +670,8 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     const p = progression
     for (const b of blocs) {
       const o = opaciteBloc(p, b.debut, b.fin)
-      b.el.style.opacity = String(o)
-      b.el.style.transform = `translate3d(0, ${(1 - o) * 12}px, 0)`
+      style(b.el, 'opacity', String(o))
+      style(b.el, 'transform', `translate3d(0, ${(1 - o) * 12}px, 0)`)
       const actif = o > 0.5
       if (actif !== b.actif) {
         b.actif = actif
@@ -498,8 +690,8 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       const h = hauteurBidon
       // Il part du côté opposé au moteur.
       const s = -PROFIL.sens
-      bouchon.style.transform = `translate3d(${s * 0.26 * h * saut}px, ${-0.13 * h * Math.sin(Math.PI * 0.8 * saut)}px, 0) rotate(${s * 20 * saut}deg)`
-      bouchon.style.opacity = String(1 - local(saut, 0.55, 1))
+      style(bouchon, 'transform', `translate3d(${s * 0.26 * h * saut}px, ${-0.13 * h * Math.sin(Math.PI * 0.8 * saut)}px, 0) rotate(${s * 20 * saut}deg)`)
+      style(bouchon, 'opacity', String(1 - local(saut, 0.55, 1)))
     }
 
     // Bidon : la main le lève par la poignée, l'incline au-dessus de l'orifice en gardant
@@ -508,10 +700,22 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     // seules les petites animations continues (ondulation, reflet) y sont coupées.
     const u = local(p, SEQUENCE_BIDON[0], SEQUENCE_BIDON[1])
     const pose = poseBidon(u, geo, PROFIL)
-    bidon.style.transform = `translate3d(${pose.translation.x}px, ${pose.translation.y}px, 0) rotate(${pose.angle}deg)`
+    // Huile dans le moteur (vrai circuit) : ce que le bidon a versé tombe dans la culasse et
+    // descend au carter (moteur arrêté) ; moteur lancé, la pompe l'envoie aux paliers, puis
+    // aux cylindres, puis aux cames (mêmes heures que ops/scripts/huile_v5.py).
+    const versee = u <= 0 ? 0 : borner((REMPLISSAGE.plein - VERSEMENT(Math.max(0, u - 0.05)).remplissage) / (REMPLISSAGE.plein - REMPLISSAGE.verse))
+    const t3h = local(p, T3.debut, T3.fin)
+    vivant.reglerHuile({
+      verse: u > 0 && u < 1 ? VERSEMENT(u).debit : 0,
+      carter: Math.max(versee, t3h > 0 ? 1 : 0),
+      bas: doux(local(t3h, 0.32, 0.5)),
+      pistons: doux(local(t3h, 0.5, 0.68)),
+      cames: doux(local(t3h, 0.68, 0.86)),
+    })
+    style(bidon, 'transform', `translate3d(${pose.translation.x}px, ${pose.translation.y}px, 0) rotate(${pose.angle}deg)`)
     // Il s'efface pendant sa sortie, avant de passer sous l'en-tête ou le bord de l'écran.
     const effacement = Math.max(disparition, local(u, 0.83, 0.95))
-    bidon.style.opacity = String(1 - effacement)
+    style(bidon, 'opacity', String(1 - effacement))
 
     // Huile dans le bidon : surface horizontale (contre-rotation) qui monte en t1, rejoint
     // le goulot quand il penche, reste juste au-dessus tant que l'huile coule, puis
@@ -528,11 +732,11 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
           : mix(debout, goulotY - 0.01, doux(borner(Math.abs(pose.angle) / angleDebut(remplissage, PROFIL))))
       const phi = u <= 0 || u >= 1 ? 0 : ballottement(u, DUREE, PROFIL)
       const t = `rotate(${-pose.angle + phi}deg) translate3d(0, ${surface * hauteurBidon}px, 0)`
-      niveau.style.transform = t
-      if (menisque) menisque.style.transform = t
+      style(niveau, 'transform', t)
+      if (menisque) style(menisque, 'transform', t)
     }
     // Lumière du studio fixée au monde : le haut du bidon reste éclairé quoi qu'il fasse.
-    if (lumiere) lumiere.style.transform = `rotate(${-pose.angle}deg)`
+    if (lumiere) style(lumiere, 'transform', `rotate(${-pose.angle}deg)`)
 
     // Filet et gouttes.
     const actif = u > 0.3 && u < 1
@@ -545,17 +749,24 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       const suivante = reperes[i + 1]
       const arrivee = local(t3, r.apparition, r.apparition + 0.02)
       const estompe = suivante ? local(t3, suivante.apparition, suivante.apparition + 0.04) : 0
-      r.el.style.opacity = String(arrivee * (1 - 0.5 * estompe) * (1 - disparition))
+      style(r.el, 'opacity', String(arrivee * (1 - 0.5 * estompe) * (1 - disparition)))
       const trait = doux(local(t3, r.apparition, r.apparition + 0.035))
-      r.trait.style.transform = `translate3d(${r.traitX}px, ${r.ancre.y}px, 0) scaleX(${trait})`
+      style(r.trait, 'transform', `translate3d(${r.traitX}px, ${r.traitY}px, 0) rotate(${r.traitAngle}rad) scaleX(${trait})`)
       const o = local(t3, r.apparition + 0.02, r.apparition + 0.06)
-      r.etiquette.style.opacity = String(o)
-      r.etiquette.style.transform = `translate3d(${r.etiquetteX + (1 - o) * (aDroite ? 12 : -12)}px, ${r.ancre.y}px, 0)`
+      style(r.etiquette, 'opacity', String(o))
+      style(r.etiquette, 'transform', `translate3d(${r.etiquetteX + (1 - o) * (aDroite ? 12 : -12)}px, ${r.etiquetteY}px, 0)`)
     }
 
     dessinerMoteur(t3)
     // Écran de fin : le moteur s'assombrit derrière les produits.
-    canvasMoteur.style.opacity = String(1 - 0.7 * local(p, FIN.debut - 0.02, FIN.debut + 0.02))
+    const sombre = String(1 - 0.7 * local(p, FIN.debut - 0.02, FIN.debut + 0.02))
+    style(canvasMoteur, 'opacity', sombre)
+    style(canvasPieces, 'opacity', sombre)
+    if (decor && decorAllume) {
+      style(decor, 'opacity', sombre)
+      // Même lumière que la séquence (moteur_v5.py : lisser(t3, 0,05, 0,3)).
+      style(decorAllume, 'opacity', String(Math.round(doux(local(t3, 0.05, 0.3)) * 100) / 100))
+    }
   }
 
   let rafEnAttente = false
@@ -575,7 +786,12 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   mesurer()
   lireProgression()
   rendre(0)
-  addEventListener('scroll', demanderRendu, { passive: true })
+  // Hors du hero, le scroll ne coûte plus rien ; un dernier rendu fige l'état en sortant.
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting
+    demanderRendu()
+  }).observe(racine)
+  addEventListener('scroll', () => visible && demanderRendu(), { passive: true })
   let minuterie = 0
   addEventListener('resize', () => {
     clearTimeout(minuterie)
@@ -588,7 +804,9 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
 
   // Première image tout de suite (elle est l'affiche du hero), le reste après load.
   charger(0).then(() => {
-    const suite = () => (leger ? charger(total - 1) : chargerTout(ordreChargement(total).filter((i) => i !== 0)))
+    // Palier partiel : une image sur deux (la dernière comprise).
+    const ordre = ordreChargement(total).filter((i) => i !== 0 && (!partiel || i % 2 === 0 || i === total - 1))
+    const suite = () => (leger ? charger(total - 1) : chargerTout(ordre))
     if (document.readyState === 'complete') suite()
     else addEventListener('load', suite, { once: true })
   })

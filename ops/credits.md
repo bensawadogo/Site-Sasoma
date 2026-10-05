@@ -82,3 +82,33 @@ Demande de Ben : bidon à gauche qui se penche et verse sur le moteur au centre,
 | 2026-09-29 | moteur F | deAPI | FLUX.1 schnell | prompt-P.txt, 4 étapes, seed 2202 | 0,0026 $ | idem | REJET : 3 cylindres, pièces incohérentes | assets/ai/v4/schnell-2202.png (non commité) |
 
 Planche : assets/ai/v4/planche-moteurs.jpg. **Total : 0,029 $.**
+
+## Version 4 : huile réaliste, carter, pistons en mouvement (2026-10-01)
+
+| date | élément | outil | modèle | paramètres | coût estimé | coût réel | statut | chemin |
+|---|---|---|---|---|---|---|---|---|
+| 2026-10-01 | moteur v4 | ops/scripts/animer_moteur.py | — (calcul, aucune IA) | K1.png ; film d'huile, coulures, gouttes, nappe du carter, pistons/bielles en bielle-manivelle ; 361 images | 0 $ | 0 $ | FINAL (à valider par Ben) | assets/ai/videos/moteur-v3.mp4 (non commité ; l'ancienne : moteur-v3-avant-v4.mp4) |
+| 2026-10-02 | plaque propre K1 (sans pistons ni bielles) | simple-lama-inpainting (local, CPU) | LaMa big-lama (Apache-2.0) | masque pistons + bielles + têtes de bielle, 1344×768 | 0 $ | 0 $ (80 s CPU) | FINAL : cylindres et carter vides, nets ; cloisons entre cylindres effacées (recouvertes par les pistons) | assets/ai/v5/K1-propre.png |
+| 2026-10-02 | plaque propre : arbre à cames retiré | simple-lama-inpainting (local, CPU) | LaMa big-lama (Apache-2.0) | bande x 466-955, y 146-228 de K1-propre | 0 $ | 0 $ | LABO | assets/ai/v5/K1-propre-cames.png |
+| 2026-10-02 | plaque propre : poulie avant retirée (recentrée sur l'axe du vilebrequin) | simple-lama-inpainting (local, CPU) | LaMa big-lama (Apache-2.0) | x 334-380, y 440-592 de K1-propre-cames | 0 $ | 0 $ | LABO | assets/ai/v5/K1-propre-poulie.png |
+| 2026-10-02 | vilebrequin, arbre à cames, soupapes (3D) | Blender 5.2 (local, Cycles CPU) | — (modélisation par script, aucune IA) | ops/blender/vilebrequin.py, distribution.py ; 36 angles chacun | 0 $ | 0 $ | FINAL (à valider par Ben) | assets/ai/v5/vilebrequin, distribution → public/hero-video/pieces/atlas.webp |
+| 2026-10-02 | plaque propre : flasque arrière retirée (recentrée sur l'axe du vilebrequin) | simple-lama-inpainting (local, CPU) | LaMa big-lama (Apache-2.0) | x 972-1016, y 458-602 de K1-propre-poulie | 0 $ | 0 $ | LABO | assets/ai/v5/K1-propre-volant.png |
+| 2026-10-02 | huile v5 (temps réel + atlas huilé) | ops/scripts/huile_v5.py + moteur-vivant.ts (calcul, aucune IA) | — | film d'huile, coulures, perles, nappe, gouttes, front par pièce | 0 $ | 0 $ | FINAL (à valider par Ben) | public/hero-video/pieces/atlas-huile.webp |
+| 2026-10-02 | garage plein écran (champ double, pénombre + éclairé) | Blender 5.2 (local, Cycles CPU) | — (scène par script, ressources CC0 Poly Haven) | ops/blender/decor.py CHAMP = 2, 48 échantillons, 75 % | 0 $ | 0 $ | FINAL (à valider par Ben) | assets/ai/decor/rendu/champ-*.png → public/hero-video/*/decor-*.webp |
+| 2026-10-02 | masque du moteur pour le site | ops/scripts/masque_site.py (calcul, aucune IA) | — | détourage rembg sans le noir de la poulie et du volant effacés | 0 $ | 0 $ | FINAL | assets/ai/v5/masque-moteur-site.png → public/hero-video/*/masque.webp |
+
+## Photos des produits sans photo fabricant (2026-10-04)
+
+Gemini (clé « Gemini API Key 3 ») : quota image gratuit = 0 (HTTP 429, limit 0) sur gemini-2.5-flash-image, 3.1-flash-image, 3.1-flash-lite-image ; Gemini 2.5 Flash sert seulement au contrôle (lecture de l'étiquette, gratuit). Groq (clé « Console Grok Api Key ») : texte seulement, aucun modèle image.
+
+| date | élément | outil | modèle | paramètres | coût estimé | coût réel | statut | chemin |
+|---|---|---|---|---|---|---|---|---|
+| 2026-10-04 | TURBINE (2 essais) | ops/scripts/photos_ia.py | deAPI QwenImageEdit_Plus_NF4 | entrée HYDKÖN 768 px, 30 étapes, seed 1101 | 2 × 0,0264 $ | 0,0528 $ | FINAL (2e essai) | ops/captures/photos-ia/turbine-oil.png |
+| 2026-10-04 | HYDKÖN + capuchon | photos_ia.py | QwenImageEdit_Plus_NF4 | idem | 0,0264 $ | 0,0264 $ | FINAL | hydkon-hydraulic.png |
+| 2026-10-04 | LUB-TEC, SCHNEIDÖL, Engine Flush | photos_ia.py | QwenImageEdit_Plus_NF4 | idem | 3 × 0,0264 $ | 0,0792 $ | REJET : nom écorché (« GRCB », « SCHIEIDÖL ») ou inchangé | — |
+| 2026-10-04 | Carb & Choke Cleaner | photos_ia.py | QwenImageEdit_Plus_NF4 | entrée Oil Treatment | 0,0264 $ | 0,0264 $ | FINAL (petits rubans repris de l'Oil Treatment) | carburetor-choke-cleaner.png |
+| 2026-10-04 | SCÖM (coupure réseau), TRANSFORMER (arrêté en cours) | photos_ia.py | QwenImageEdit_Plus_NF4 | idem | ≤ 2 × 0,0264 $ | inconnu | ABANDON | — |
+| 2026-10-04 | 8 huiles industrielles | ops/scripts/etiquette_bidon.py | — (calcul, aucune IA) | bidon TURBINE validé, textes réécrits | 0 $ | 0 $ | FINAL | ops/captures/photos-ia/*.png |
+| 2026-10-04 | Engine Flush | ops/scripts/etiquette_flacon.py | — (calcul, aucune IA) | flacon Fuel Injector Cleaner, titre + rubans réécrits | 0 $ | 0 $ | FINAL | engine-flush.png |
+
+**Total : ≈ 0,18 à 0,24 $.** Toutes ces photos sont marquées « Photo non contractuelle » (correspondance `ia` dans photos-produits.json).

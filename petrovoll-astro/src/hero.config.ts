@@ -178,9 +178,11 @@ export const HERO = {
     t1: { titre: 'Qualité allemande', texte: 'Des huiles formulées en Allemagne depuis 1999.' },
     t2: { titre: 'La bonne huile, au bon endroit', texte: 'Une vidange régulière, c’est un moteur qui dure.' },
     t3: [
-      { titre: 'Arbre à cames', texte: 'L’huile réduit le frottement sur les cames.' },
-      { titre: 'Pistons', texte: 'Elle protège les pistons et les parois des cylindres.' },
+      // Dans l'ordre du vrai circuit : la pompe envoie l'huile du carter aux paliers du
+      // vilebrequin, elle est projetée sur les cylindres, puis monte jusqu'aux cames.
       { titre: 'Vilebrequin', texte: 'Elle protège les paliers qui tournent à plein régime.' },
+      { titre: 'Pistons', texte: 'Elle protège les pistons et les parois des cylindres.' },
+      { titre: 'Arbre à cames', texte: 'L’huile réduit le frottement sur les cames.' },
     ],
     fin: {
       titre: 'Voiture ou moto, protégez votre moteur',

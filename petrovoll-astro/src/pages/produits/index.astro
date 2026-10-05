@@ -1,35 +1,564 @@
 ---
 /**
- * Catalogue — page prérendue. Produits et secteurs édités dans l'admin.
- * Filtre en JS natif (FiltreCatalogue) ; sans JS, tout le catalogue s'affiche.
+ * Catalogue — page prérendue. Les produits viennent de l'admin (Keystatic),
+ * les caractéristiques du fichier fabricant (src/data/produits-petrovoll.json).
+ * Filtres, regroupement par gamme et aperçu rapide en JS natif : sans JS, tout
+ * reste visible et chaque carte mène à sa fiche.
  */
-import FiltreCatalogue from '@/components/produits/FiltreCatalogue.astro'
-import ProduitGrid from '@/components/produits/ProduitGrid.astro'
+import { getImage } from 'astro:assets'
+import { getEntry } from 'astro:content'
+
+import CarteProduit from '@/components/catalogue/CarteProduit.astro'
+import IconeUsage from '@/components/catalogue/IconeUsage.astro'
 import PageLayout from '@/layouts/PageLayout.astro'
-import { getProduits, getSecteurs } from '@/lib/contenu'
+import { BASES, USAGES, construireProduit } from '@/lib/catalogue'
+import { getProduits } from '@/lib/contenu'
 
 export const prerender = true
 
-const [produits, secteurs] = await Promise.all([getProduits(), getSecteurs()])
-// Seuls les secteurs qui contiennent au moins un produit ont un bouton filtre.
-const secteursAvecProduits = secteurs.filter((s) => produits.some((p) => p.data.secteur === s.id))
+const entrees = await getProduits()
+const secteurs = new Map<string, string>()
+for (const e of entrees) {
+  const id = e.data.secteur
+  if (id && !secteurs.has(id)) secteurs.set(id, (await getEntry('secteurs', id))?.data.nom ?? '')
+}
+const produits = entrees
+  .map((e) => construireProduit(e, e.data.secteur ? secteurs.get(e.data.secteur) : undefined))
+  .sort((a, b) => a.ordre - b.ordre || a.nom.localeCompare(b.nom, 'fr'))
+
+// Regroupement par gamme, dans l'ordre du fabricant.
+const gammes: Array<{ nom: string; produits: typeof produits }> = []
+for (const p of produits) {
+  let g = gammes.find((x) => x.nom === p.gamme)
+  if (!g) gammes.push((g = { nom: p.gamme, produits: [] }))
+  g.produits.push(p)
+}
+const compte = (liste: readonly string[] | null) =>
+  liste ? produits.filter((p) => liste.includes(p.gamme)).length : produits.length
+
+// Données de l'aperçu rapide (une seule fois, lues par le script).
+const apercus: Record<string, unknown> = {}
+for (const p of produits) {
+  const img = p.photo ? await getImage({ src: p.photo, width: 720, format: 'webp', quality: 80 }) : undefined
+  apercus[p.slug] = {
+    nom: p.nom,
+    gamme: p.gamme,
+    base: p.libelleBase,
+    photo: img?.src ?? null,
+    viscosites: p.viscosites,
+    defaut: p.defaut,
+    accroche: p.accroche,
+    pointsForts: p.pointsForts,
+    distinction: p.distinction,
+    gradePhoto: p.gradePhoto ?? '',
+    nonContractuelle: p.photoNonContractuelle,
+    codeBase: p.base,
+    variantes: p.variantes.map((v) => ({ l: v.libelle, c: v.cles })),
+    normes: p.normes,
+    constructeurs: p.constructeurs,
+    cond: p.conditionnements,
+  }
+}
+let compteur = 0
 ---
 
 <PageLayout
-  titre="Catalogue et prix"
-  description="Catalogue et prix : lubrifiants Petrovöll, pneumatiques, fournitures et plus. Filtrez par secteur."
+  titre="Catalogue Petrovöll"
+  description={`Toute la gamme Petrovöll : ${produits.length} lubrifiants (huiles moteur, transmission, industrie, marine, graisses, entretien). Trouvez la bonne huile par usage, puis demandez un devis.`}
   canonicalChemin="/produits"
 >
-  <div class="container-page py-10 lg:py-14">
-    <p class="text-xs font-semibold uppercase tracking-widest text-vif">Catalogue</p>
-    <h1 class="mt-2 text-3xl sm:text-4xl lg:text-5xl">Nos produits</h1>
-    <span class="section-line" aria-hidden="true" />
+  <div class="bg-surface">
+    <!-- En-tête éditorial -->
+    <header class="border-b border-bordure bg-fond">
+      <div class="container-page grid gap-6 py-10 sm:py-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:items-end lg:gap-16 lg:py-14">
+        <div class="flex flex-col gap-4">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-vif">Catalogue · Lubrifiants allemands</p>
+          <h1 class="text-[56px] leading-[0.92] text-marine sm:text-7xl lg:text-[84px]">Toute la gamme Petrovöll</h1>
+        </div>
+        <div class="flex flex-col gap-5">
+          <p class="max-w-[520px] text-base leading-relaxed text-attenue sm:text-lg">
+            Huiles moteur, transmission, industrie, marine, graisses et entretien. Choisissez un produit pour
+            voir ses caractéristiques, puis demandez un devis.
+          </p>
+          <dl class="flex gap-10 border-t border-bordure pt-5">
+            <div class="flex flex-col-reverse gap-1">
+              <dt class="text-xs uppercase tracking-[0.12em] text-attenue">Produits</dt>
+              <dd class="font-display text-[44px] leading-none tabular-nums text-marine">{produits.length}</dd>
+            </div>
+            <div class="flex flex-col-reverse gap-1">
+              <dt class="text-xs uppercase tracking-[0.12em] text-attenue">Gammes</dt>
+              <dd class="font-display text-[44px] leading-none tabular-nums text-marine">{gammes.length}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </header>
 
-    <div class="mt-8">
-      {secteursAvecProduits.length > 1 || produits.length > 6 ? (
-        <FiltreCatalogue secteurs={secteursAvecProduits} total={produits.length} />
-      ) : null}
-      <ProduitGrid produits={produits} />
+    <!-- Barre de filtres collante -->
+    <div class="sticky top-16 z-30 border-b border-bordure bg-fond/95 backdrop-blur lg:top-20" data-barre>
+      <div class="container-page flex flex-col gap-1 py-3">
+        <div class="flex items-center gap-3">
+          <div class="relative min-w-0 flex-1 lg:max-w-[340px] lg:flex-none lg:basis-[340px]">
+            <label for="recherche" class="sr-only">Rechercher un produit</label>
+            <svg class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-attenue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+            <input
+              id="recherche"
+              type="search"
+              data-recherche
+              placeholder="Nom, viscosité, norme"
+              enterkeyhint="search"
+              autocomplete="off"
+              class="h-11 w-full rounded-lg border border-[#74869d] bg-fond pl-10 pr-3 text-base text-texte placeholder:text-attenue"
+            />
+          </div>
+
+          <!-- Ordinateur : listes déroulantes -->
+          <div class="hidden items-center gap-3 lg:flex">
+            <label class="sr-only" for="sel-usage">Usage</label>
+            <select id="sel-usage" data-sel-usage class="champ-select">
+              {USAGES.map((u) => <option value={u.id}>{u.id === 'tout' ? 'Tous les usages' : u.label}</option>)}
+            </select>
+            <label class="sr-only" for="sel-base">Type de base</label>
+            <select id="sel-base" data-sel-base class="champ-select">
+              {BASES.map((b) => <option value={b.id}>{b.id === 'toutes' ? 'Toutes les bases' : b.label}</option>)}
+            </select>
+            <button type="button" data-effacer data-effacer-barre hidden class="inline-flex h-11 items-center px-2 text-sm font-semibold text-vif underline underline-offset-2">Effacer</button>
+          </div>
+
+          <p class="hidden text-sm text-attenue lg:ml-auto lg:block" role="status" aria-live="polite">
+            <strong class="font-semibold tabular-nums text-texte" data-total>{produits.length}</strong>
+            <span data-mot-produits> produits</span>
+          </p>
+
+          <!-- Téléphone : bouton du tiroir -->
+          <button
+            type="button"
+            data-ouvrir-tiroir
+            aria-haspopup="dialog"
+            class="inline-flex h-11 shrink-0 items-center gap-2 rounded-lg border border-[#74869d] bg-fond px-3.5 text-sm font-semibold text-marine lg:hidden"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"></path></svg>
+            Filtres
+            <span data-badge-filtres hidden class="flex h-5 min-w-5 items-center justify-center rounded-full bg-marine px-1 text-xs tabular-nums text-white"></span>
+          </button>
+        </div>
+        <p class="text-[13px] text-attenue lg:hidden" role="status" aria-live="polite">
+          <strong class="font-semibold tabular-nums text-texte" data-total-mobile>{produits.length}</strong> produits
+        </p>
+      </div>
     </div>
+
+    <!-- Liste par gamme -->
+    <div id="liste" class="container-page flex flex-col gap-10 py-8 lg:gap-14 lg:py-12" data-liste>
+      {
+        gammes.map((g, gi) => (
+          <section data-gamme aria-labelledby={`gamme-${gi}`} class="flex flex-col gap-4 sm:gap-5">
+            <div class="flex items-baseline justify-between gap-4 border-b border-bordure pb-3" data-titre-gamme>
+              <h2 id={`gamme-${gi}`} class="text-[28px] leading-none text-marine sm:text-4xl">
+                {g.nom}
+              </h2>
+              <p class="shrink-0 text-sm tabular-nums text-attenue">{g.produits.length} produits</p>
+            </div>
+            <ul class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-5">
+              {g.produits.map((p) => (
+                <CarteProduit produit={p} prioritaire={compteur++ < 2} />
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+      <p data-aucun-produit hidden class="rounded-xl border border-dashed border-[#74869d] bg-fond p-10 text-center text-attenue">
+        Aucun produit ne correspond. Essayez un autre mot, ou
+        <button type="button" data-effacer class="inline-flex min-h-[44px] items-center font-semibold text-vif underline underline-offset-2">affichez toute la gamme</button>.
+      </p>
+    </div>
+
+    <!-- Aide -->
+    <section class="border-t border-bordure bg-fond">
+      <div class="container-page flex flex-wrap items-center justify-between gap-6 py-12 lg:py-14">
+        <div class="flex max-w-[640px] flex-[999_1_20rem] flex-col gap-2.5">
+          <h2 class="text-4xl text-marine lg:text-[44px]">Quelle huile pour votre véhicule ?</h2>
+          <p class="text-base leading-relaxed text-attenue">
+            Donnez-nous la marque et le modèle : nous vous indiquons l’huile et la quantité.
+          </p>
+        </div>
+        <a href="/contact" class="btn-primary w-full sm:w-auto">Demander un devis</a>
+      </div>
+    </section>
   </div>
+
+  <!-- Tiroir des filtres (téléphone) -->
+  <dialog id="tiroir" class="tiroir" aria-labelledby="tiroir-titre" data-tiroir>
+    <div class="flex h-full flex-col">
+      <div class="flex items-center justify-between border-b border-bordure px-5 py-3">
+        <h2 id="tiroir-titre" class="text-3xl text-marine">Filtres</h2>
+        <button type="button" data-fermer-tiroir aria-label="Fermer les filtres" class="flex h-11 w-11 items-center justify-center rounded-full text-marine hover:bg-surface-2">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto px-5 py-5">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-attenue">Usage</p>
+        <div class="grid grid-cols-2 gap-2.5" role="group" aria-label="Filtrer par usage">
+          {
+            USAGES.map((u) => (
+              <button type="button" data-usage-bouton={u.id} aria-pressed={u.id === 'tout' ? 'true' : 'false'} class="tuile flex min-h-[88px] flex-col items-start gap-1.5 rounded-xl border border-bordure bg-fond p-3 text-left text-marine">
+                <IconeUsage nom={u.icone} class="h-6 w-6" />
+                <span class="text-sm font-semibold leading-tight">{u.label}</span>
+                <span class="text-xs tabular-nums opacity-80">{compte(u.gammes)} produits</span>
+              </button>
+            ))
+          }
+        </div>
+        <p class="mb-3 mt-6 text-xs font-semibold uppercase tracking-[0.14em] text-attenue">Type de base</p>
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrer par type de base">
+          {
+            BASES.map((b) => (
+              <button type="button" data-base-bouton={b.id} aria-pressed={b.id === 'toutes' ? 'true' : 'false'} class="puce min-h-[44px] rounded-full border border-[#74869d] bg-fond px-4 text-sm font-medium text-texte">
+                {b.label}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+      <div class="flex gap-3 border-t border-bordure px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <button type="button" data-effacer class="h-12 rounded-lg border border-[#74869d] px-5 text-[15px] font-semibold text-marine">Effacer</button>
+        <button type="button" data-fermer-tiroir class="h-12 flex-1 rounded-lg bg-accent text-[15px] font-bold text-white">
+          Voir <span data-total-tiroir class="tabular-nums">{produits.length}</span> produits
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Aperçu rapide -->
+  <dialog id="apercu" class="apercu" aria-labelledby="apercu-titre" data-apercu-dialog>
+    <div class="relative flex h-full min-h-0 flex-col">
+      <button type="button" data-fermer-apercu aria-label="Fermer l’aperçu" class="absolute right-3 top-3 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-bordure bg-fond text-marine shadow-sm hover:bg-surface-2">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+      <div class="flex-1 overflow-y-auto overscroll-contain">
+        <div class="studio h-[260px] sm:h-[320px]" data-ap-photo-cadre>
+          <img data-ap-photo alt="" width="720" height="720" class="photo-bidon aspect-square h-full w-auto object-contain" />
+        </div>
+        <p data-ap-photo-note hidden class="bg-surface px-5 py-1.5 text-center text-xs text-attenue">Photo non contractuelle</p>
+        <div class="flex flex-col gap-5 p-5 sm:p-6">
+          <div class="flex flex-col gap-2">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-vif" data-ap-gamme></p>
+            <h2 id="apercu-titre" class="text-[44px] leading-[0.95] text-marine" data-ap-nom></h2>
+            <p class="text-[15px] leading-snug text-texte" data-ap-accroche></p>
+          </div>
+          <ul class="flex flex-col gap-1.5 text-sm leading-snug text-texte" data-ap-forts aria-label="Points forts"></ul>
+          <div data-ap-bloc-visc class="flex flex-col gap-2.5">
+            <p id="ap-visc-titre" class="text-xs font-semibold uppercase tracking-[0.12em] text-attenue">Viscosité</p>
+            <div role="group" aria-labelledby="ap-visc-titre" class="flex flex-wrap gap-2" data-ap-visc></div>
+          </div>
+          <dl data-ap-cles class="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-bordure bg-bordure"></dl>
+          <div data-ap-bloc-normes class="flex flex-col gap-2.5">
+            <h3 class="font-sans text-xs font-semibold uppercase leading-normal tracking-[0.12em] text-attenue">Normes et homologations</h3>
+            <ul class="flex flex-wrap gap-1.5" data-ap-normes></ul>
+          </div>
+          <p data-ap-resume class="rounded-lg border-l-4 border-vif bg-surface px-3.5 py-2.5 text-sm leading-snug text-texte"></p>
+          <div data-ap-bloc-cond class="flex flex-col gap-2.5">
+            <h3 class="font-sans text-xs font-semibold uppercase leading-normal tracking-[0.12em] text-attenue">Conditionnements</h3>
+            <ul class="flex flex-wrap gap-1.5" data-ap-cond></ul>
+            <p data-ap-cond-vide hidden class="text-sm text-attenue">Conditionnements : nous consulter</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2.5 border-t border-bordure bg-fond p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:flex-row sm:p-5">
+        <a href="/produits" data-ap-fiche class="btn-primary h-12 flex-1 justify-center whitespace-nowrap !normal-case !tracking-normal text-center text-[15px]">Voir la fiche complète</a>
+        <a href="/contact" data-ap-devis class="inline-flex h-12 flex-1 items-center justify-center rounded-lg border border-marine px-4 text-center text-[15px] font-semibold text-marine hover:bg-surface-2">Demander un devis</a>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="application/json" id="donnees-apercu" set:html={JSON.stringify(apercus).replace(/</g, '\\u003c')} />
 </PageLayout>
+
+<style is:global>
+  .champ-select {
+    height: 44px;
+    border-radius: 8px;
+    border: 1px solid #74869d;
+    background-color: var(--color-fond);
+    color: var(--color-texte);
+    padding: 0 12px;
+    font-size: 15px;
+  }
+  .tuile[aria-pressed='true'],
+  .puce[aria-pressed='true'] {
+    background: var(--color-marine);
+    border-color: var(--color-marine);
+    color: #fff;
+  }
+  .tuile:not([aria-pressed='true']):hover,
+  .puce:not([aria-pressed='true']):hover {
+    border-color: var(--color-marine);
+  }
+  dialog.tiroir {
+    padding: 0;
+    border: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    background: var(--color-fond);
+    color: var(--color-texte);
+  }
+  dialog.tiroir[open] {
+    display: block;
+  }
+  dialog.tiroir::backdrop {
+    background: rgba(0, 24, 50, 0.55);
+  }
+</style>
+
+<script>
+  type Cle = { nom: string; valeur: string; unite: string }
+  type Apercu = {
+    nom: string
+    gamme: string
+    base: string
+    photo: string | null
+    viscosites: string[]
+    defaut: number
+    variantes: Array<{ l: string; c: Cle[] }>
+    normes: string[]
+    constructeurs: string[]
+    cond: string[]
+    accroche: string
+    pointsForts: string[]
+    distinction: string
+    gradePhoto: string
+    nonContractuelle: boolean
+    codeBase: string
+  }
+
+  const racine = document.querySelector<HTMLElement>('[data-liste]')
+  if (racine) {
+    const cartes = [...racine.querySelectorAll<HTMLElement>('[data-produit]')]
+    const sections = [...racine.querySelectorAll<HTMLElement>('[data-gamme]')]
+    const tuiles = [...document.querySelectorAll<HTMLButtonElement>('[data-usage-bouton]')]
+    const puces = [...document.querySelectorAll<HTMLButtonElement>('[data-base-bouton]')]
+    const selUsage = document.querySelector<HTMLSelectElement>('[data-sel-usage]')!
+    const selBase = document.querySelector<HTMLSelectElement>('[data-sel-base]')!
+    const recherche = document.querySelector<HTMLInputElement>('[data-recherche]')!
+    const aucun = document.querySelector<HTMLElement>('[data-aucun-produit]')!
+    const sorties = [...document.querySelectorAll<HTMLElement>('[data-total], [data-total-mobile], [data-total-tiroir]')]
+    const motProduits = document.querySelector<HTMLElement>('[data-mot-produits]')!
+    const badge = document.querySelector<HTMLElement>('[data-badge-filtres]')!
+    const boutonsEffacer = [...document.querySelectorAll<HTMLElement>('[data-effacer]')]
+    const effacerBarre = document.querySelector<HTMLElement>('[data-effacer-barre]')!
+    const tiroir = document.querySelector<HTMLDialogElement>('[data-tiroir]')!
+
+    const normaliser = (t: string) => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+    const url = new URL(location.href)
+    let usage = url.searchParams.get('usage') ?? 'tout'
+    let base = url.searchParams.get('base') ?? 'toutes'
+    if (!tuiles.some((t) => t.dataset.usageBouton === usage)) usage = 'tout'
+    if (!puces.some((p) => p.dataset.baseBouton === base)) base = 'toutes'
+    recherche.value = url.searchParams.get('q') ?? ''
+
+    const appliquer = () => {
+      const mots = normaliser(recherche.value).split(/[^a-z0-9]+/).filter(Boolean)
+      let visibles = 0
+      for (const carte of cartes) {
+        const texte = ' ' + (carte.dataset.texte ?? '') + ' '
+        const ok =
+          (usage === 'tout' || carte.dataset.usage === usage) &&
+          (base === 'toutes' || carte.dataset.base === base) &&
+          mots.every((m) => texte.includes(m))
+        carte.hidden = !ok
+        if (ok) visibles++
+      }
+      const actif = usage !== 'tout' || base !== 'toutes' || mots.length > 0
+      // Titres de gamme seulement sans filtre ; une gamme vide disparaît.
+      for (const s of sections) {
+        s.hidden = !s.querySelector('[data-produit]:not([hidden])')
+        const titre = s.querySelector<HTMLElement>('[data-titre-gamme]')
+        if (titre) titre.hidden = actif
+      }
+      racine.classList.toggle('lg:gap-14', !actif)
+      racine.classList.toggle('lg:gap-6', actif)
+      racine.classList.toggle('gap-10', !actif)
+      racine.classList.toggle('gap-4', actif)
+      tuiles.forEach((t) => t.setAttribute('aria-pressed', String(t.dataset.usageBouton === usage)))
+      puces.forEach((p) => p.setAttribute('aria-pressed', String(p.dataset.baseBouton === base)))
+      selUsage.value = usage
+      selBase.value = base
+      sorties.forEach((o) => (o.textContent = String(visibles)))
+      motProduits.textContent = visibles > 1 ? ' produits' : ' produit'
+      const nbFiltres = (usage !== 'tout' ? 1 : 0) + (base !== 'toutes' ? 1 : 0)
+      badge.hidden = nbFiltres === 0
+      badge.textContent = String(nbFiltres)
+      effacerBarre.hidden = !actif
+      aucun.hidden = visibles > 0
+      const maj = (cle: string, valeur: string, defaut: string) =>
+        valeur && valeur !== defaut ? url.searchParams.set(cle, valeur) : url.searchParams.delete(cle)
+      maj('usage', usage, 'tout')
+      maj('base', base, 'toutes')
+      maj('q', recherche.value.trim(), '')
+      history.replaceState(null, '', url)
+    }
+
+    tuiles.forEach((t) => t.addEventListener('click', () => ((usage = t.dataset.usageBouton ?? 'tout'), appliquer())))
+    puces.forEach((p) => p.addEventListener('click', () => ((base = p.dataset.baseBouton ?? 'toutes'), appliquer())))
+    selUsage.addEventListener('change', () => ((usage = selUsage.value), appliquer()))
+    selBase.addEventListener('change', () => ((base = selBase.value), appliquer()))
+    recherche.addEventListener('input', appliquer)
+    boutonsEffacer.forEach((b) =>
+      b.addEventListener('click', () => {
+        usage = 'tout'
+        base = 'toutes'
+        recherche.value = ''
+        appliquer()
+      }),
+    )
+    appliquer()
+
+    /* ── Tiroir des filtres ── */
+    document.querySelector('[data-ouvrir-tiroir]')?.addEventListener('click', () => {
+      tiroir.showModal()
+      document.documentElement.classList.add('apercu-ouvert')
+    })
+    tiroir.querySelectorAll('[data-fermer-tiroir]').forEach((b) => b.addEventListener('click', () => tiroir.close()))
+    tiroir.addEventListener('close', () => document.documentElement.classList.remove('apercu-ouvert'))
+    matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
+      if (e.matches && tiroir.open) tiroir.close()
+    })
+
+    /* ── Aperçu rapide ── */
+    const donnees: Record<string, Apercu> = JSON.parse(document.getElementById('donnees-apercu')?.textContent ?? '{}')
+    const dlg = document.querySelector<HTMLDialogElement>('[data-apercu-dialog]')!
+    const $ = <T extends HTMLElement>(s: string) => dlg.querySelector<T>(s)!
+    const photo = $<HTMLImageElement>('[data-ap-photo]')
+    const cadre = $('[data-ap-photo-cadre]')
+    const blocVisc = $('[data-ap-bloc-visc]')
+    const zoneVisc = $('[data-ap-visc]')
+    const zoneCles = $('[data-ap-cles]')
+    const blocNormes = $('[data-ap-bloc-normes]')
+    const blocCond = $('[data-ap-bloc-cond]')
+    let declencheur: HTMLElement | null = null
+    let courant: Apercu | null = null
+    let slug = ''
+
+    const el = (tag: string, classe: string, texte?: string) => {
+      const n = document.createElement(tag)
+      n.className = classe
+      if (texte !== undefined) n.textContent = texte
+      return n
+    }
+
+    const afficherVariante = (i: number) => {
+      if (!courant) return
+      const v = courant.variantes[i]
+      ;[...zoneVisc.children].forEach((b, k) => b.setAttribute('aria-pressed', String(k === i)))
+      const cles = v?.c ?? []
+      zoneCles.hidden = cles.length === 0
+      zoneCles.replaceChildren(
+        ...cles.map((c, k) => {
+          const d = el('div', 'flex flex-col-reverse gap-1 bg-fond p-3.5' + (k === cles.length - 1 && cles.length % 2 === 1 ? ' col-span-2' : ''))
+          d.append(el('dt', 'text-[11px] uppercase tracking-[0.1em] text-attenue', c.nom))
+          const dd = el('dd', 'font-display text-[30px] leading-none tabular-nums text-marine', c.valeur)
+          if (c.unite) dd.append(el('span', 'ml-1 font-sans text-xs font-normal text-attenue', c.unite))
+          d.append(dd)
+          return d
+        }),
+      )
+      const choix = [courant.nom, v?.l].filter(Boolean).join(' ')
+      $<HTMLAnchorElement>('[data-ap-devis]').href = `/contact?produit=${encodeURIComponent(choix)}`
+    }
+
+    const ouvrir = (id: string, depuis: HTMLElement) => {
+      const d = donnees[id]
+      if (!d) return false
+      courant = d
+      slug = id
+      declencheur = depuis
+      $('[data-ap-gamme]').textContent = [d.gamme, d.base].filter(Boolean).join(' · ')
+      $('[data-ap-nom]').textContent = d.nom
+      photo.alt = `Bidon Petrovöll ${d.nom}`
+      photo.hidden = !d.photo
+      if (d.photo) photo.src = d.photo
+      else photo.removeAttribute('src')
+      cadre.classList.toggle('studio-vide', !d.photo)
+      $<HTMLAnchorElement>('[data-ap-fiche]').href = `/produits/${id}`
+      const libelles = d.variantes.map((v) => v.l)
+      blocVisc.hidden = libelles.length < 2 && d.viscosites.length === 0
+      if (libelles.length > 0) {
+        zoneVisc.replaceChildren(
+          ...libelles.map((l, i) => {
+            const b = el('button', 'pastille', l) as HTMLButtonElement
+            b.type = 'button'
+            b.addEventListener('click', () => afficherVariante(i))
+            return b
+          }),
+        )
+      } else {
+        zoneVisc.replaceChildren(...d.viscosites.map((v) => el('span', 'rounded-lg bg-surface-2 px-3 py-2 text-sm font-semibold tabular-nums text-marine', v)))
+      }
+      afficherVariante(d.variantes.length ? d.defaut : 0)
+      blocNormes.hidden = d.normes.length + d.constructeurs.length === 0
+      $('[data-ap-normes]').replaceChildren(
+        ...d.normes.map((n) => el('li', 'rounded-md bg-marine px-2.5 py-1.5 text-sm font-semibold text-white', n)),
+        ...d.constructeurs.map((n) => el('li', 'rounded-md bg-surface-2 px-2.5 py-1.5 text-sm text-marine', n)),
+      )
+      $('[data-ap-accroche]').textContent = d.accroche
+      $('[data-ap-forts]').replaceChildren(
+        ...d.pointsForts.map((f) => {
+          const li = el('li', 'flex gap-2')
+          li.append(el('span', 'mt-[7px] h-1.5 w-1.5 flex-none rounded-full bg-vif'), el('span', '', f))
+          return li
+        }),
+      )
+      const resume = $('[data-ap-resume]')
+      resume.hidden = !d.distinction
+      resume.replaceChildren(el('strong', 'font-semibold text-marine', 'En résumé : '), document.createTextNode(d.distinction))
+      $('[data-ap-photo-note]').hidden = !d.nonContractuelle
+      $('[data-ap-cond-vide]').hidden = d.cond.length > 0
+      $('[data-ap-cond]').replaceChildren(...d.cond.map((c) => el('li', 'rounded-md border border-[#74869d] px-3 py-1.5 text-sm font-semibold text-marine', c)))
+      dlg.showModal()
+      $('.overflow-y-auto').scrollTop = 0
+      document.documentElement.classList.add('apercu-ouvert')
+      history.replaceState(null, '', Object.assign(new URL(location.href), { hash: id }))
+      return true
+    }
+
+    racine.addEventListener('click', (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+      const lien = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[data-apercu]')
+      if (lien && ouvrir(lien.dataset.apercu!, lien)) e.preventDefault()
+    })
+    dlg.querySelector('[data-fermer-apercu]')?.addEventListener('click', () => dlg.close())
+    // Clic sur le fond (hors panneau)
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) dlg.close()
+    })
+    dlg.addEventListener('close', () => {
+      document.documentElement.classList.remove('apercu-ouvert')
+      if (location.hash === `#${slug}`) history.replaceState(null, '', url.pathname + url.search)
+      declencheur?.focus()
+    })
+    // Focus piégé dans le panneau
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return
+      const f = [...dlg.querySelectorAll<HTMLElement>('button, a[href]')].filter((n) => n.offsetParent !== null)
+      if (f.length === 0) return
+      const premier = f[0]
+      const dernier = f[f.length - 1]
+      if (e.shiftKey && document.activeElement === premier) {
+        e.preventDefault()
+        dernier.focus()
+      } else if (!e.shiftKey && document.activeElement === dernier) {
+        e.preventDefault()
+        premier.focus()
+      }
+    })
+    // Lien profond : /produits#slug rouvre l'aperçu
+    const profond = decodeURIComponent(location.hash.slice(1))
+    if (profond) {
+      const lien = racine.querySelector<HTMLAnchorElement>(`a[data-apercu="${CSS.escape(profond)}"]`)
+      if (lien) ouvrir(profond, lien)
+    }
+  }
+</script>

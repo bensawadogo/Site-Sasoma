@@ -1,0 +1,103 @@
+---
+/**
+ * Carte du catalogue : la photo domine (4:5, fond studio) avec le repère de
+ * BASE (pastille), puis gamme, nom, accroche (2 lignes), grade de la
+ * photo et viscosités, normes principales, véhicules (icônes en trait).
+ * Un seul lien (étiré sur toute la carte) ; sur /produits, le script ouvre
+ * l'aperçu rapide à la place de la navigation.
+ */
+import type { ProduitCatalogue } from '@/lib/catalogue'
+import { VEHICULES } from '@/lib/catalogue'
+
+import IconeUsage from './IconeUsage.astro'
+import PhotoStudio from './PhotoStudio.astro'
+
+interface Props {
+  produit: ProduitCatalogue
+  /** Au-dessus de la ligne de flottaison : chargée tout de suite. */
+  prioritaire?: boolean
+}
+const { produit: p, prioritaire = false } = Astro.props
+const grade = p.gradePhoto
+const compact = (t: string) => t.toUpperCase().replace(/[^A-Z0-9]/g, '')
+const autres = p.viscosites.filter((v) => !grade || compact(v) !== compact(grade))
+const visibles = autres.slice(0, grade ? 2 : 3)
+const reste = autres.length - visibles.length
+const normes = p.normesPrincipales.length > 0 ? p.normesPrincipales : p.normes.slice(0, 1)
+const vehicules = p.vehicules.map((v) => VEHICULES[v]).filter(Boolean)
+---
+
+<li data-produit data-usage={p.usage} data-base={p.base} data-texte={p.texteRecherche} class="min-w-0">
+  <article
+    class:list={['carte-produit relative flex h-full flex-col overflow-hidden rounded-xl border border-bordure bg-fond', `base-${p.base}`]}
+  >
+    <div class="relative">
+      <PhotoStudio
+        photo={p.photo}
+        alt={`Bidon Petrovöll ${p.nom}`}
+        widths={[240, 360, 480, 640]}
+        sizes="(min-width: 1024px) 280px, (min-width: 640px) 33vw, 46vw"
+        prioritaire={prioritaire}
+        class="aspect-[4/5] w-full"
+      />
+      {
+        p.libelleBase && (
+          <p class="pastille-base">
+            <span class="pastille-base-point" aria-hidden="true" />
+            {p.libelleBase.replace('Base ', '').replace(/^./, (c) => c.toUpperCase())}
+            <span class="sr-only"> : type de base de l'huile</span>
+          </p>
+        )
+      }
+    </div>
+    <div class="flex flex-1 flex-col gap-2 p-3 sm:gap-2.5 sm:p-4">
+      <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-vif">{p.gamme}</p>
+      <h3 class="font-display text-[22px] leading-[1.02] text-marine sm:text-[26px]">
+        <a
+          href={`/produits/${p.slug}`}
+          data-apercu={p.slug}
+          class="after:absolute after:inset-0 after:z-10 after:content-[''] focus-visible:after:rounded-xl"
+        >
+          {p.nom}<span class="sr-only"> : voir le produit</span>
+        </a>
+      </h3>
+      {p.accroche && <p class="line-clamp-2 text-[13px] leading-snug text-texte">{p.accroche}</p>}
+      {
+        (grade || visibles.length > 0) && (
+          <ul class="flex flex-wrap items-center gap-1.5" aria-label="Viscosités">
+            {grade && (
+              <li class="rounded-md bg-marine px-2 py-1 text-xs font-bold tabular-nums text-white">
+                <span class="font-medium opacity-80">Photo : </span>
+                {grade}
+              </li>
+            )}
+            {visibles.map((v) => (
+              <li class="rounded-md bg-surface-2 px-2 py-1 text-xs font-semibold tabular-nums text-marine">{v}</li>
+            ))}
+            {reste > 0 && <li class="px-1 py-1 text-xs text-attenue">+{reste}</li>}
+          </ul>
+        )
+      }
+      {
+        normes.length > 0 && (
+          <ul class="mt-auto flex flex-wrap gap-x-2 gap-y-0.5 pt-0.5 text-[12.5px] leading-snug text-attenue" aria-label="Normes principales">
+            {normes.map((n) => (
+              <li class="whitespace-nowrap">{n}</li>
+            ))}
+          </ul>
+        )
+      }
+      {
+        vehicules.length > 0 && (
+          <ul class="flex gap-2.5 pt-0.5 text-attenue" aria-label={`Véhicules : ${vehicules.map((v) => v.label).join(', ')}`}>
+            {vehicules.map((v) => (
+              <li title={v.label}>
+                <IconeUsage nom={v.icone} class="h-[18px] w-[18px]" />
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </article>
+</li>

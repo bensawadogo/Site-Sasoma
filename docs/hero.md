@@ -68,13 +68,13 @@ Deux heros séparés, un par format ; un seul est affiché (media query à 900 p
 | Séquence | 72 images 880×614 (2,2 Mo) | 120 images 1920×1080 (8,4 Mo) |
 | Étiquettes | pastilles sur les pièces, texte en bas | titre et texte à gauche du moteur, reliés par un trait |
 
-Communs : `noyau.ts` (textes, bidon, filet, étiquettes, séquence), `BidonHero.astro`, `HeroTextes.astro`, `HeroReperes.astro`, `lib/sequence-images.ts` et `lib/versement.ts` (testés). Points du moteur (goulot, pièces) et plans : `MOTEUR` et `PLANS_T3` dans `hero-video.config.ts`. Palier lite : deux images (moteur sec, moteur huilé) en fondu.
+Communs : `noyau.ts` (textes, bidon, filet, étiquettes, séquence), `BidonHero.astro`, `HeroTextes.astro`, `HeroReperes.astro`, `lib/sequence-images.ts` et `lib/versement.ts` (testés). Points du moteur (goulot, pièces) et plans : `MOTEUR` et `PLANS_T3` dans `hero-video.config.ts`. Paliers : lite (économie de données, 2G/3G, ≤ 2 Go) deux images en fondu ; partiel (débit < 1,5 Mb/s ou ≤ 3 Go) une image sur deux ; sequence : toutes (forçage `?tier=lite|partiel|sequence`). Images téléchargées en Blob et décodées hors du fil principal. Mesures : `ops/perf/` (Lighthouse avant/après, `outil/scroll.mjs`, `outil/captures.mjs`).
 
 **Refaire les vidéos** (journal : `ops/credits.md`, clé `DEAPI_API_KEY` dans `.env`, jamais commitée) :
 1. Image fixe du moteur en coupe : `python ops/scripts/deapi.py image ZImageTurbo_INT8 1344 768 GRAINE assets/ai/v3/prompt-coupe-2.txt K1.png 8`.
 2. Éditions alignées (même graine pour les trois) : `deapi.py editer Flux_2_Klein_4B_BF16 K1.png 3303 edit-K2b.txt K2.png 4 1344 768`, idem K3 et K4.
 3. Plans caméra fixe : `deapi.py video Ltx2_5_22B_Dist_INT8 1344 768 121 24 1101 K1.png K2.png clip-C1.txt C1.mp4`, puis K2 → K3 (C2) et K3 → K4 (C3).
-4. Composition (métal de K1, huile de la vidéo, fond noir) : `python ops/scripts/composer_huile.py K1.png 0.175 0.93 assets/ai/videos/moteur-v3.mp4 C1.mp4 C2.mp4 C3.mp4`. Sans vidéo pour un plan, `K3.png@0.27-0.66` fait couler l'huile de l'image clé.
+4. Animation (v4, remplace la composition des vidéos IA) : `python ops/scripts/animer_moteur.py assets/ai/v3/K1.png assets/ai/videos/moteur-v3.mp4` (≈ 25 min) : film d'huile (absorption, reflets, coulures), gouttes, nappe au fond du carter, pistons et bielles en bielle-manivelle. Planche de contrôle sans tout calculer : `animer_moteur.py K1.png --apercu 60,200,360 planche.png`. Ancienne composition : `ops/scripts/composer_huile.py`.
 5. `npm run hero:video`. Si le moteur change, repérer à nouveau `MOTEUR` (goulot, pièces, bord droit).
 
 **Mettre en ligne** : dans `src/pages/index.astro`, remplacer `HeroScroll` par `HeroVideo`.

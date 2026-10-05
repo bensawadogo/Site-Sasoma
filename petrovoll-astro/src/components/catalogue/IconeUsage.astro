@@ -1,0 +1,38 @@
+---
+/** Icônes des tuiles « Pour quel usage ? » (SVG en ligne, trait currentColor). */
+interface Props {
+  nom: string
+  class?: string
+}
+const { nom, class: classe = 'h-[30px] w-[30px]' } = Astro.props
+
+const TRACES: Record<string, string> = {
+  tout: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  voiture:
+    '<path d="M3 15l2-5.5A2 2 0 0 1 6.9 8h10.2a2 2 0 0 1 1.9 1.5L21 15"/><rect x="2" y="15" width="20" height="4" rx="1.5"/><circle cx="7" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/>',
+  camion:
+    '<rect x="1.5" y="6" width="13" height="10" rx="1"/><path d="M14.5 9.5h4l3 3.5v3h-7z"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/>',
+  moto: '<circle cx="5" cy="17" r="3.5"/><circle cx="19" cy="17" r="3.5"/><path d="M5 17l4-7h5l5 7"/><path d="M14 10l-1.5-4H16"/>',
+  boite:
+    '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+  usine: '<path d="M2 21V10l6 4V10l6 4V4h4l2 17z"/><path d="M2 21h20"/>',
+  marine: '<circle cx="12" cy="5" r="2"/><path d="M12 7v14"/><path d="M5 13a7 7 0 0 0 14 0"/><path d="M8 10h8"/>',
+  bus: '<rect x="3" y="3.5" width="18" height="14" rx="2"/><path d="M3 11h18M8 3.5v7.5"/><circle cx="7.5" cy="19.5" r="1.7"/><circle cx="16.5" cy="19.5" r="1.7"/>',
+  engin:
+    '<path d="M2 18h13l1-4H4z"/><path d="M6 14V9h5l2 5"/><path d="M15 12l4-7 3 2"/><path d="M19 5l-1 6h3"/>',
+  '4x4': '<path d="M2.5 15V10l3-3.5h9.5l3.5 4H21.5V15"/><path d="M8 6.5v3.5h10M2.5 15h19"/><circle cx="7" cy="16.5" r="2.3"/><circle cx="17" cy="16.5" r="2.3"/>',
+  goutte: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+}
+---
+
+<svg
+  class={classe}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  set:html={TRACES[nom] ?? TRACES.goutte}
+/>

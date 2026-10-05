@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'astro/config'
 
 import cloudflare from '@astrojs/cloudflare'
+import vercel from '@astrojs/vercel'
 import markdoc from '@astrojs/markdoc'
 import react from '@astrojs/react'
 import keystatic from '@keystatic/astro'
@@ -57,7 +58,8 @@ export default defineConfig({
   // imageService 'compile' : les photos du client sont redimensionnées et
   // converties en WebP par sharp AU BUILD (Cloudflare n'a pas sharp à
   // l'exécution). Toutes les pages publiques étant prérendues, c'est suffisant.
-  adapter: cloudflare({ imageService: 'compile' }),
+  // Aperçu sur Vercel (variable VERCEL posée par leur build) : même site, adaptateur Vercel.
+  adapter: process.env.VERCEL ? vercel() : cloudflare({ imageService: 'compile' }),
 
   /* ── Intégrations ────────────────────────────────────────────────────────
      react()    → islands React (filtre produits) uniquement

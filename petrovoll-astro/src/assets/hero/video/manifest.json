@@ -1,17 +1,18 @@
 {
   "desktop": {
-    "images": 120,
-    "parPlan": 40,
-    "largeur": 1920,
-    "hauteur": 1080,
+    "images": 96,
+    "parPlan": 32,
+    "largeur": 1344,
+    "hauteur": 768,
     "recadrage": {
       "x": 0,
       "y": 0,
       "l": 1,
       "h": 1
     },
-    "version": "ac67de4850",
-    "octets": 8294632
+    "decor": true,
+    "version": "06e7fc7a4d",
+    "octets": 6440576
   },
   "mobile": {
     "images": 72,
@@ -24,7 +25,8 @@
       "l": 0.8185,
       "h": 1
     },
-    "version": "234edd0b59",
-    "octets": 2194882
+    "decor": true,
+    "version": "d9ea4aa22a",
+    "octets": 3059038
   }
 }

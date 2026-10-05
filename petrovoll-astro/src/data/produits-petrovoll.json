@@ -1,0 +1,3047 @@
+[
+  {
+    "id": "stark-fully-synthetic",
+    "nom": "STÄRK Fully Synthetic",
+    "gamme": "Huiles moteur essence",
+    "usage": "Moteurs essence (et diesel de voiture) modernes ; huile haute performance, longs intervalles de vidange",
+    "base": "synthèse (PAO)",
+    "viscosite_sae": [
+      "5W-20",
+      "5W-30",
+      "0W-30",
+      "5W-40",
+      "0W-40"
+    ],
+    "grades_iso": null,
+    "normes": "API SN, ACEA A5/B5-04, MB 229.1, 229.3, Porsche Approved C20, VW 502.00, 505.00, BMW Long-life Oil, Peugeot-Citroën, Ferrari",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "5W20",
+        "couleur": "L 2.5",
+        "viscosite_40C_cSt": 38.02,
+        "viscosite_100C_cSt": 7.271,
+        "indice_viscosite": 158,
+        "densite_15C_g_cm3": 0.848,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 7.93,
+        "point_eclair_COC_C": 224,
+        "point_ecoulement_C": -42
+      },
+      {
+        "variante": "5W30",
+        "couleur": "L 2.5",
+        "viscosite_40C_cSt": 58.4,
+        "viscosite_100C_cSt": 10.5,
+        "indice_viscosite": 172,
+        "densite_15C_g_cm3": 0.851,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 7.93,
+        "point_eclair_COC_C": 222,
+        "point_ecoulement_C": -42
+      },
+      {
+        "variante": "0W30",
+        "couleur": "L 2.5",
+        "viscosite_40C_cSt": 59.4,
+        "viscosite_100C_cSt": 11.0,
+        "indice_viscosite": 180,
+        "densite_15C_g_cm3": 0.838,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.0,
+        "point_eclair_COC_C": 228,
+        "point_ecoulement_C": -45
+      },
+      {
+        "variante": "5W40",
+        "couleur": "L 2.5",
+        "viscosite_40C_cSt": 84.1,
+        "viscosite_100C_cSt": 14.0,
+        "indice_viscosite": 185,
+        "densite_15C_g_cm3": 0.851,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 7.93,
+        "point_eclair_COC_C": 226,
+        "point_ecoulement_C": -45
+      },
+      {
+        "variante": "0W40",
+        "couleur": "L 2.5",
+        "viscosite_40C_cSt": 76.6,
+        "viscosite_100C_cSt": 14.0,
+        "indice_viscosite": 190,
+        "densite_15C_g_cm3": 0.832,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.0,
+        "point_eclair_COC_C": 222,
+        "point_ecoulement_C": -45
+      }
+    ],
+    "notes": "Le site liste aussi, en gabarit générique, les grades « 5W-30, 5W-40, 10W-30, 10W-40, 20W-30 et 20W-40 » ; seuls les grades du tableau d'essais sont retenus ici. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/GasolineEngineOils/StarkFullySyntheticGasolineEngineOil",
+    "date_releve": "2026-10-03",
+    "photo": "stark-fully-synthetic.webp",
+    "accroche": "L'huile essence haut de gamme : base 100 % synthèse PAO pour moteurs récents et longs intervalles de vidange.",
+    "points_forts": [
+      "Base 100 % synthèse (PAO), grades 0W et 5W",
+      "Vidanges espacées, démarrage à froid facilité",
+      "Protège contre la corrosion, les boues noires et les dépôts de piston",
+      "Viscosité HTHS abaissée pour économiser le carburant"
+    ],
+    "normes_principales": [
+      "API SN",
+      "ACEA A5/B5-04"
+    ],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "STÄRK Fully = synthèse PAO, API SN, ACEA A5/B5, grades 0W/5W ; STÄRK Semi = semi-synthèse, API SM, usage courant ; VÖLEX et VÖNO = minérales.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "stark-semi-synthetic",
+    "nom": "STÄRK Semi Synthetic",
+    "gamme": "Huiles moteur essence",
+    "usage": "Moteurs essence et diesel de voiture ; huile multigrade basse viscosité",
+    "base": "semi-synthétique",
+    "viscosite_sae": [
+      "5W-30",
+      "10W-30",
+      "10W-40",
+      "15W-40",
+      "20W-50"
+    ],
+    "grades_iso": null,
+    "normes": "API SM, ACEA A3/B4-04, MB 229.1, Ford M2C-153E, BMW Long-life Oil-98, VW 505 00 / 500 00, moteurs japonais qualifiés",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "5W30",
+        "couleur": "L 2.5",
+        "viscosite_40C_cSt": 76.6,
+        "viscosite_100C_cSt": 11.56,
+        "indice_viscosite": 158,
+        "densite_15C_g_cm3": 0.862,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 7.5,
+        "point_eclair_COC_C": 224,
+        "point_ecoulement_C": -36
+      },
+      {
+        "variante": "10W30",
+        "couleur": "L 2.5",
+        "viscosite_40C_cSt": 74.3,
+        "viscosite_100C_cSt": 11.89,
+        "indice_viscosite": 150,
+        "densite_15C_g_cm3": 0.877,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 7.5,
+        "point_eclair_COC_C": 222,
+        "point_ecoulement_C": -33
+      },
+      {
+        "variante": "10W40",
+        "couleur": "L 2.5",
+        "viscosite_40C_cSt": 91.62,
+        "viscosite_100C_cSt": 14.2,
+        "indice_viscosite": 160,
+        "densite_15C_g_cm3": 0.878,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 7.5,
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -33
+      },
+      {
+        "variante": "15W40",
+        "couleur": "L 2.5",
+        "viscosite_40C_cSt": 98.9,
+        "viscosite_100C_cSt": 14.84,
+        "indice_viscosite": 157,
+        "densite_15C_g_cm3": 0.875,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 7.5,
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -30
+      },
+      {
+        "variante": "20W50",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 141.9,
+        "viscosite_100C_cSt": 18.62,
+        "indice_viscosite": 148,
+        "densite_15C_g_cm3": 0.88,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 7.5,
+        "point_eclair_COC_C": 236,
+        "point_ecoulement_C": -27
+      }
+    ],
+    "notes": "Le site liste aussi, en gabarit générique, les grades « 5W-30, 5W-40, 10W-30, 10W-40, 20W-30 et 20W-40 » ; seuls les grades du tableau d'essais sont retenus ici. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/GasolineEngineOils/StarkSemiSyntheticGasolineEngineOil",
+    "date_releve": "2026-10-03",
+    "photo": "stark-semi-synthetic.webp",
+    "accroche": "L'huile semi-synthétique polyvalente pour voitures essence et diesel, entre le minéral et le tout-synthèse.",
+    "points_forts": [
+      "Mélange de bases minérales et synthétiques",
+      "Film lubrifiant stable à chaud et sous forte charge",
+      "Faible consommation d'huile, protège des boues noires",
+      "Évite collage, vernissage et calaminage (cylindres, pistons, soupapes, turbo)"
+    ],
+    "normes_principales": [
+      "API SM",
+      "ACEA A3/B4-04"
+    ],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "STÄRK Semi = semi-synthèse, API SM, ACEA A3/B4, usage courant ; STÄRK Fully = synthèse PAO, API SN, moteurs récents ; VÖLEX/VÖNO = minérales.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "volex-multigrade-mineral",
+    "nom": "VÖLEX Multi Grade Mineral",
+    "gamme": "Huiles moteur essence",
+    "usage": "Moteurs essence et diesel, avec ou sans turbo ; voitures puissantes, utilitaires et camions légers",
+    "base": "minérale",
+    "viscosite_sae": [
+      "15W-40",
+      "20W-50"
+    ],
+    "grades_iso": null,
+    "normes": "API SL, ACEA A3/B3, MB 229.1, VW 501 01 / 505 00",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "15W40",
+        "couleur": "L 2.5",
+        "viscosite_40C_cSt": 105.3,
+        "viscosite_100C_cSt": 15.1,
+        "indice_viscosite": 150,
+        "densite_15C_g_cm3": 0.8781,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 7.5,
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -24
+      },
+      {
+        "variante": "20W50",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 160.1,
+        "viscosite_100C_cSt": 18.5,
+        "indice_viscosite": 130,
+        "densite_15C_g_cm3": 0.8863,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 7.5,
+        "point_eclair_COC_C": 240,
+        "point_ecoulement_C": -27
+      }
+    ],
+    "notes": "Le site liste aussi, en gabarit générique, les grades « 5W-30, 5W-40, 10W-30, 10W-40, 20W-30 et 20W-40 » ; seuls les grades du tableau d'essais sont retenus ici. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/GasolineEngineOils/VolexMultiGradeMineralGasolineEngineOil",
+    "date_releve": "2026-10-03",
+    "photo": "volex-multigrade-mineral.webp",
+    "accroche": "Minérale multigrade 15W-40 et 20W-50 pour voitures puissantes, utilitaires et camions légers, avec ou sans turbo.",
+    "points_forts": [
+      "Deux grades épais seulement : 15W-40 et 20W-50",
+      "Faible consommation d'huile, économie de carburant et filtrabilité améliorée",
+      "Bonne tenue viscosité-température et stabilité au cisaillement",
+      "Pour moteurs multisoupapes, avec ou sans catalyseur"
+    ],
+    "normes_principales": [
+      "API SL",
+      "ACEA A3/B3"
+    ],
+    "vehicules": [
+      "voiture",
+      "camion"
+    ],
+    "distinction": "VÖLEX = minérale multigrade 15W-40/20W-50, API SL, ACEA A3/B3 ; VÖNO = minérale plus ancienne (API SL/SJ/SF, CCMC G2/D1) avec monogrades ; STÄRK = semi ou synthèse.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "vono-mineral",
+    "nom": "VÖNO Mineral",
+    "gamme": "Huiles moteur essence",
+    "usage": "Moteurs essence et diesel de voiture, avec ou sans turbo",
+    "base": "minérale",
+    "viscosite_sae": [
+      "10W",
+      "SAE 30",
+      "SAE 40",
+      "SAE 50",
+      "15W-40",
+      "20W-50"
+    ],
+    "grades_iso": null,
+    "normes": "API SL, SJ, SF, CCMC G2/D1, Mil-L-46152C",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "10W",
+        "couleur": "L 2.5",
+        "viscosite_40C_cSt": 33.8,
+        "viscosite_100C_cSt": 5.545,
+        "indice_viscosite": 100,
+        "densite_15C_g_cm3": 0.886,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 6.5,
+        "point_eclair_COC_C": 218,
+        "point_ecoulement_C": -33
+      },
+      {
+        "variante": "30",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 95.2,
+        "viscosite_100C_cSt": 10.9,
+        "indice_viscosite": 98,
+        "densite_15C_g_cm3": 0.892,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 6.5,
+        "point_eclair_COC_C": 236,
+        "point_ecoulement_C": -18
+      },
+      {
+        "variante": "40",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 140.1,
+        "viscosite_100C_cSt": 14.1,
+        "indice_viscosite": 97,
+        "densite_15C_g_cm3": 0.897,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 6.5,
+        "point_eclair_COC_C": 240,
+        "point_ecoulement_C": -15
+      },
+      {
+        "variante": "50",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 226.5,
+        "viscosite_100C_cSt": 19.56,
+        "indice_viscosite": 98,
+        "densite_15C_g_cm3": 0.899,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 6.5,
+        "point_eclair_COC_C": 245,
+        "point_ecoulement_C": -9
+      },
+      {
+        "variante": "15W40",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 108.5,
+        "viscosite_100C_cSt": 14.56,
+        "indice_viscosite": 138,
+        "densite_15C_g_cm3": 0.878,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 6.5,
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -27
+      },
+      {
+        "variante": "20W50",
+        "couleur": "L 3.5",
+        "viscosite_40C_cSt": 165.1,
+        "viscosite_100C_cSt": 18.62,
+        "indice_viscosite": 126,
+        "densite_15C_g_cm3": 0.898,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 6.5,
+        "point_eclair_COC_C": 230,
+        "point_ecoulement_C": -24
+      }
+    ],
+    "notes": "Le site liste aussi, en gabarit générique, les grades « 5W-30, 5W-40, 10W-30, 10W-40, 20W-30 et 20W-40 » ; seuls les grades du tableau d'essais sont retenus ici. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/GasolineEngineOils/VonoMineralGasolineEngineOil",
+    "date_releve": "2026-10-03",
+    "photo": "vono-mineral.webp",
+    "accroche": "La minérale aux nombreux grades, seule de la gamme essence à proposer aussi des monogrades SAE 30, 40 et 50.",
+    "points_forts": [
+      "Grades 10W, SAE 30/40/50, 15W-40 et 20W-50",
+      "Film lubrifiant stable sous forte charge, bonne stabilité thermique",
+      "Assure le bon fonctionnement des poussoirs hydrauliques",
+      "Protège contre l'usure, la rouille et la corrosion ; moteur propre"
+    ],
+    "normes_principales": [
+      "API SL",
+      "CCMC G2/D1"
+    ],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "VÖNO = minérale, normes API SL/SJ/SF et CCMC G2/D1, 6 grades dont les monogrades ; VÖLEX = minérale ACEA A3/B3 en 15W-40/20W-50 seulement.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "viro-tec-fully-synthetic",
+    "nom": "VIRÖ-TEC Fully Synthetic",
+    "gamme": "Huiles moteur diesel",
+    "usage": "Moteurs diesel très sollicités à longs intervalles : poids lourds, bus, engins de chantier ; compatible moteurs diesel EGR",
+    "base": "synthèse (base HC synthétique)",
+    "viscosite_sae": [
+      "5W-20",
+      "5W-30",
+      "10W-30",
+      "5W-40",
+      "0W-40"
+    ],
+    "grades_iso": null,
+    "normes": "API CK-4*, CJ-4, CI-4, CH-4 ; ACEA E7-08, A3/B4 ; JASO DH-1 ; Volvo VDS-3 ; GM Allison C-4 ; MB 228.3 ; MAN 3275 ; CAT ECF-1a ; Volvo ; Renault ; Cummins CES 20077",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "5W20",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 49.32,
+        "viscosite_100C_cSt": 8.433,
+        "indice_viscosite": 147,
+        "densite_15C_g_cm3": 0.8521,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.0,
+        "point_eclair_COC_C": 224,
+        "point_ecoulement_C": -42
+      },
+      {
+        "variante": "5W30",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 66.8,
+        "viscosite_100C_cSt": 11.15,
+        "indice_viscosite": 160,
+        "densite_15C_g_cm3": 0.8562,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.0,
+        "point_eclair_COC_C": 232,
+        "point_ecoulement_C": -42
+      },
+      {
+        "variante": "10W30",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 75.56,
+        "viscosite_100C_cSt": 11.5,
+        "indice_viscosite": 145,
+        "densite_15C_g_cm3": 0.858,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.0,
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -42
+      },
+      {
+        "variante": "5W40",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 83.5,
+        "viscosite_100C_cSt": 14.4,
+        "indice_viscosite": 180,
+        "densite_15C_g_cm3": 0.851,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.0,
+        "point_eclair_COC_C": 228,
+        "point_ecoulement_C": -42
+      },
+      {
+        "variante": "0W40",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 78.6,
+        "viscosite_100C_cSt": 13.83,
+        "indice_viscosite": 182,
+        "densite_15C_g_cm3": 0.8351,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.0,
+        "point_eclair_COC_C": 224,
+        "point_ecoulement_C": -45
+      }
+    ],
+    "notes": "Indice de viscosité : balises HTML parasites dans la source (« 145/td> », « 180/td> ») ; lues comme 145 et 180. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/DieselEngineOils/VIRO-TECFullySyntheticDieselEngineOil",
+    "date_releve": "2026-10-03",
+    "photo": "viro-tec-fully-synthetic.webp",
+    "accroche": "L'huile diesel synthétique haut de gamme pour poids lourds, bus et engins à longs intervalles, compatible moteurs EGR.",
+    "points_forts": [
+      "Base HC synthétique, grades de 0W-40 à 10W-30",
+      "Intervalles de vidange les plus longs selon le constructeur",
+      "TBN stable : neutralise les acides sans s'épuiser vite",
+      "Contrôle suies, boues et dépôts de piston ; économie de carburant"
+    ],
+    "normes_principales": [
+      "API CK-4",
+      "ACEA E7-08"
+    ],
+    "vehicules": [
+      "camion",
+      "bus",
+      "engin"
+    ],
+    "distinction": "VIRÖ-TEC Fully = synthèse HC, API CK-4/CJ-4, ACEA E7 ; VIRÖ-TEC Semi = semi-synthèse, API CI-4 ; D-TEC = minérale, API CF, flottes anciennes.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "viro-tec-semi-synthetic",
+    "nom": "VIRÖ-TEC Semi Synthetic",
+    "gamme": "Huiles moteur diesel",
+    "usage": "Moteurs diesel BTP et transport routier à intervalles prolongés : poids lourds, bus, engins",
+    "base": "semi-synthétique",
+    "viscosite_sae": [
+      "10W-40",
+      "15W-40",
+      "20W-50"
+    ],
+    "grades_iso": null,
+    "normes": "API CI-4, CH-4, CG-4, CF-4, CF ; ACEA E3, E5/E7 ; Volvo VDS-3 ; GM Allison C4 ; MB 228.3 ; MAN 271",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "10W40",
+        "couleur": "L 3.5",
+        "viscosite_40C_cSt": 97.8,
+        "viscosite_100C_cSt": 14.69,
+        "indice_viscosite": 156,
+        "densite_15C_g_cm3": 0.8781,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.0,
+        "point_eclair_COC_C": 224,
+        "point_ecoulement_C": -33
+      },
+      {
+        "variante": "15W40",
+        "couleur": "L 3.5",
+        "viscosite_40C_cSt": 92.6,
+        "viscosite_100C_cSt": 13.83,
+        "indice_viscosite": 152,
+        "densite_15C_g_cm3": 0.875,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.0,
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -30
+      },
+      {
+        "variante": "20W50",
+        "couleur": "L 3.5",
+        "viscosite_40C_cSt": 155.1,
+        "viscosite_100C_cSt": 18.9,
+        "indice_viscosite": 135,
+        "densite_15C_g_cm3": 0.882,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.0,
+        "point_eclair_COC_C": 236,
+        "point_ecoulement_C": -27
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/DieselEngineOils/VIRO-TECSemiSyntheticDieselEngineOilAboutUs",
+    "date_releve": "2026-10-03",
+    "photo": "viro-tec-semi-synthetic.webp",
+    "accroche": "Diesel semi-synthétique multigrade pour BTP et transport routier à intervalles de vidange prolongés.",
+    "points_forts": [
+      "Grades 10W-40, 15W-40 et 20W-50",
+      "Protège de l'épaississement, des hautes températures, des boues et de la corrosion",
+      "Additifs conformes aux exigences anti-émissions américaines, européennes et japonaises",
+      "Bonne protection contre l'oxydation et longue durée de vie de l'huile"
+    ],
+    "normes_principales": [
+      "API CI-4",
+      "ACEA E5/E7"
+    ],
+    "vehicules": [
+      "camion",
+      "bus",
+      "engin"
+    ],
+    "distinction": "VIRÖ-TEC Semi = semi-synthèse, API CI-4, ACEA E3/E5/E7 ; VIRÖ-TEC Fully = synthèse HC, API CK-4 ; D-TEC = minérale, API CF.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "d-tec-mineral",
+    "nom": "D-TEC Mineral",
+    "gamme": "Huiles moteur diesel",
+    "usage": "Huile de carter pour flottes utilitaires anciennes, moteurs diesel et essence, performance modérée",
+    "base": "minérale",
+    "viscosite_sae": [
+      "SAE 30",
+      "SAE 40",
+      "SAE 50",
+      "15W-40",
+      "20W-50"
+    ],
+    "grades_iso": null,
+    "normes": "API CF, CE, CD/SF, CC/SC ; MIL-L-2104 B ; MIL-L-2105D ; CAT TO-2 ; Ford M2C159B",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "SAE30",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 97.7,
+        "viscosite_100C_cSt": 11.08,
+        "indice_viscosite": 98,
+        "densite_15C_g_cm3": 0.892,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 6.0,
+        "point_eclair_COC_C": 234,
+        "point_ecoulement_C": -21
+      },
+      {
+        "variante": "SAE40",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 139.8,
+        "viscosite_100C_cSt": 14.05,
+        "indice_viscosite": 97,
+        "densite_15C_g_cm3": 0.894,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 6.0,
+        "point_eclair_COC_C": 240,
+        "point_ecoulement_C": -18
+      },
+      {
+        "variante": "SAE50",
+        "couleur": "L 3.5",
+        "viscosite_40C_cSt": 210.2,
+        "viscosite_100C_cSt": 18.35,
+        "indice_viscosite": 96,
+        "densite_15C_g_cm3": 0.897,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 6.0,
+        "point_eclair_COC_C": 250,
+        "point_ecoulement_C": -15
+      },
+      {
+        "variante": "15W40",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 102.8,
+        "viscosite_100C_cSt": 14.0,
+        "indice_viscosite": 138,
+        "densite_15C_g_cm3": 0.882,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 6.0,
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -27
+      },
+      {
+        "variante": "20W50",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 158.2,
+        "viscosite_100C_cSt": 18.1,
+        "indice_viscosite": 127,
+        "densite_15C_g_cm3": 0.894,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 6.0,
+        "point_eclair_COC_C": 236,
+        "point_ecoulement_C": -24
+      }
+    ],
+    "notes": "Indice de viscosité : balises HTML parasites dans la source (« 96/td> », « 138/td> ») ; lues comme 96 et 138. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/DieselEngineOils/D-TECMineralDieselEngineOil",
+    "date_releve": "2026-10-03",
+    "photo": "d-tec-mineral.webp",
+    "accroche": "Huile diesel minérale à performance modérée pour flottes utilitaires anciennes, la seule diesel avec monogrades SAE 30/40/50.",
+    "points_forts": [
+      "Monogrades SAE 30, 40, 50 plus 15W-40 et 20W-50",
+      "Bonne rétention du TBN pendant toute la vidange",
+      "Faible consommation d'huile, protection contre l'oxydation",
+      "Contrôle suies, boues et dépôts ; transport routier longue distance"
+    ],
+    "normes_principales": [
+      "API CF",
+      "CAT TO-2"
+    ],
+    "vehicules": [
+      "camion"
+    ],
+    "distinction": "D-TEC = minérale, API CF/CE/CD, performance modérée, moteurs anciens ; VIRÖ-TEC Semi = API CI-4 ; VIRÖ-TEC Fully = synthèse API CK-4.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "cng-tec",
+    "nom": "CNG-TEC",
+    "gamme": "Huiles moteur diesel",
+    "usage": "Moteurs de camions et bus à allumage commandé au GNC/GNL, et diesel lourd conventionnel",
+    "base": null,
+    "viscosite_sae": [
+      "15W-40"
+    ],
+    "grades_iso": null,
+    "normes": "API CG-4, CF-4 ; MAN 3271-1, MAN 271 ; MB 226.9, MB 228.1 ; Renault RGD ; ACEA E2",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "15W-40",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 116.0,
+        "viscosite_100C_cSt": 15.3,
+        "indice_viscosite": 140,
+        "densite_15C_g_cm3": 0.875,
+        "cendres_sulfatees_pct": 0.95,
+        "TBN_mgKOH_g": 6.4,
+        "point_eclair_COC_C": 224,
+        "point_ecoulement_C": -27
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/DieselEngineOils/CNG-TECDieselEngineOil",
+    "date_releve": "2026-10-03",
+    "photo": "cng-tec.webp",
+    "accroche": "L'huile pour camions et bus roulant au gaz naturel (GNC/GNL), utilisable aussi en diesel lourd conventionnel.",
+    "points_forts": [
+      "Seul grade : 15W-40",
+      "Maîtrise des cendres (cendres sulfatées 0,95 %)",
+      "Contrôle de l'oxydation et de la nitration",
+      "Détergence : moins de carbone, vernis et boues ; protège de l'usure et du grippage"
+    ],
+    "normes_principales": [
+      "API CG-4",
+      "ACEA E2"
+    ],
+    "vehicules": [
+      "camion",
+      "bus"
+    ],
+    "distinction": "CNG-TEC = seule huile conçue pour moteurs à gaz naturel (allumage commandé GNC/GNL), 15W-40, API CG-4/CF-4, ACEA E2 ; les autres huiles diesel visent le gazole.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "motpro-4t",
+    "nom": "MÖTPRO 4T (moteur 4 temps)",
+    "gamme": "Huiles moto",
+    "usage": "Motos et scooters 4 temps (huile commune moteur/embrayage/boîte) ; JASO MA-2",
+    "base": null,
+    "viscosite_sae": [
+      "20W-40",
+      "20W-50"
+    ],
+    "grades_iso": null,
+    "normes": "JASO MA-2 (cité dans le texte)",
+    "conditionnements": [
+      "1 L",
+      "800 ml"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "20W40",
+        "couleur": "L 3.5",
+        "viscosite_40C_cSt": 120.6,
+        "viscosite_100C_cSt": 14.5,
+        "indice_viscosite": 122,
+        "densite_15C_g_cm3": 0.882,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 7.8,
+        "point_eclair_COC_C": 240,
+        "point_ecoulement_C": -24
+      },
+      {
+        "variante": "20W50",
+        "couleur": "L 3.5",
+        "viscosite_40C_cSt": 156.6,
+        "viscosite_100C_cSt": 18.0,
+        "indice_viscosite": 128,
+        "densite_15C_g_cm3": 0.883,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 7.8,
+        "point_eclair_COC_C": 234,
+        "point_ecoulement_C": -24
+      }
+    ],
+    "notes": "Le texte descriptif de la page (base PAO, moteurs de voiture) et ses normes automobiles (API SN, ACEA A5/B5-04, MB 229.1/229.3, Porsche C20, VW 502/505, BMW Long-life, Peugeot-Citroën, Ferrari) sont copiés de STÄRK Fully Synthetic : écartés ici (base non renseignée, norme limitée à JASO MA-2 citée pour l'embrayage). Le site liste aussi, en gabarit générique, les grades « 5W-30, 5W-40, 10W-30, 10W-40, 20W-30 et 20W-40 » ; seuls les grades du tableau d'essais sont retenus ici. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/MotorCycleOils/MOTPRO4-StrokeMotorcycleOil",
+    "date_releve": "2026-10-03",
+    "photo": "motpro-4t.webp",
+    "accroche": "L'huile 4 temps pour scooters et motos à circuit commun moteur/embrayage/boîte, conforme JASO MA-2.",
+    "points_forts": [
+      "Respecte le coefficient de friction JASO MA-2 : embrayage performant",
+      "Film stable en trajets courts ou à plein régime constant",
+      "Faible usure du moteur et de la boîte, passages de vitesse nets",
+      "Grades 20W-40 et 20W-50"
+    ],
+    "normes_principales": [
+      "JASO MA-2"
+    ],
+    "vehicules": [
+      "moto"
+    ],
+    "distinction": "MÖTPRO 4T = moteurs 4 temps, JASO MA-2, grades 20W-40/20W-50 ; MÖTPRO 2T = minérale pour 2 temps, API TC, JASO FB/FC/FD.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "motpro-2t",
+    "nom": "MÖTPRO 2T (moteur 2 temps)",
+    "gamme": "Huiles moto",
+    "usage": "Moteurs 2 temps refroidis par air ou eau (motos, scooters, hors-bord) ; graissage séparé ou en mélange",
+    "base": "minérale",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": "API TC, JASO FB, FC, FD, ISO-L-EGD",
+    "conditionnements": [
+      "1 L",
+      "800 ml"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": null,
+        "couleur": "Bleu",
+        "densite_15C_g_cm3": 0.8753,
+        "viscosite_40C_cSt": 48.9,
+        "viscosite_100C_cSt": 8.0,
+        "indice_viscosite": 134,
+        "point_eclair_COC_C": 110,
+        "point_ecoulement_C": -21
+      }
+    ],
+    "notes": "Le tableau source libelle 0.8753 « Kin. Viscosity @ 15°C » : interprété comme densité à 15 °C (valeur incompatible avec une viscosité). Le site liste aussi, en gabarit générique, les grades « 5W-30, 5W-40, 10W-30, 10W-40, 20W-30 et 20W-40 » ; seuls les grades du tableau d'essais sont retenus ici. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/MotorCycleOils/MOTPRO2-StrokeMotorcycleOil",
+    "date_releve": "2026-10-03",
+    "photo": "motpro-2t.webp",
+    "accroche": "L'huile 2 temps minérale à faibles cendres pour motos, scooters et tricycles, en mélange ou graissage séparé.",
+    "points_forts": [
+      "Convient au graissage séparé comme au mélange",
+      "Réduit fumées et dépôts sur segments et lumières d'échappement",
+      "Prolonge la vie des bougies et du moteur",
+      "Se mélange à l'essence avec ou sans plomb"
+    ],
+    "normes_principales": [
+      "API TC",
+      "JASO FD"
+    ],
+    "vehicules": [
+      "moto",
+      "bateau"
+    ],
+    "distinction": "MÖTPRO 2T = minérale pour moteurs 2 temps (API TC, JASO FB/FC/FD) ; MÖTPRO 4T = moteurs 4 temps, JASO MA-2.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "marineol-synthetic-cylinder",
+    "nom": "MARINEÖL Synthetic Marine Cylinder Oil",
+    "gamme": "Huiles marine",
+    "usage": "Moteurs marine in-bord et hors-bord ; protège contre dilution carburant et entrée d'eau",
+    "base": "synthèse (base HC synthétique)",
+    "viscosite_sae": [
+      "15W-40"
+    ],
+    "grades_iso": null,
+    "normes": "MAN Diesel & Turbo, Winterthur Gas & Diesel, Wärtsilä, DDC 93k214, JASO MA (T903:2011), NMMA FC-W",
+    "conditionnements": [
+      "5 L",
+      "20 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "TBN 15",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 93.0,
+        "viscosite_100C_cSt": 14.1,
+        "indice_viscosite": 156,
+        "densite_15C_g_cm3": 0.87,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 222,
+        "point_ecoulement_C": -36,
+        "TBN_mgKOH_g": 15
+      },
+      {
+        "variante": "TBN 20",
+        "couleur": "L 3.5",
+        "viscosite_40C_cSt": 97.89,
+        "viscosite_100C_cSt": 14.26,
+        "indice_viscosite": 150,
+        "densite_15C_g_cm3": 0.882,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 222,
+        "point_ecoulement_C": -33,
+        "TBN_mgKOH_g": 20
+      },
+      {
+        "variante": "TBN 40",
+        "couleur": "L 4.0",
+        "viscosite_40C_cSt": 104.3,
+        "viscosite_100C_cSt": 14.86,
+        "indice_viscosite": 148,
+        "densite_15C_g_cm3": 0.887,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -30,
+        "TBN_mgKOH_g": 40
+      },
+      {
+        "variante": "TBN 50",
+        "couleur": "L 5.0",
+        "viscosite_40C_cSt": 108.1,
+        "viscosite_100C_cSt": 15.16,
+        "indice_viscosite": 147,
+        "densite_15C_g_cm3": 0.89,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -30,
+        "TBN_mgKOH_g": 50
+      }
+    ],
+    "notes": "Le site titre la fiche « Cylinder Oil » mais la décrit comme huile 15W-40 pour moteurs in-bord et hors-bord. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/MarineOils/MARINEOLSyntheticMarineCylinderOil",
+    "date_releve": "2026-10-03",
+    "photo": "marineol-synthetic-cylinder.webp",
+    "accroche": "La marine synthétique (base HC) 15W-40, en 4 niveaux de TBN, contre dilution par carburant et entrée d'eau.",
+    "points_forts": [
+      "Quatre TBN au choix : 15, 20, 40 et 50",
+      "Évite les dépôts de sel, forte protection anticorrosion",
+      "Résiste à l'entrée de carburant et d'eau",
+      "Film résistant sous forte charge et haute température"
+    ],
+    "normes_principales": [
+      "MAN Diesel & Turbo",
+      "Wärtsilä"
+    ],
+    "vehicules": [
+      "bateau"
+    ],
+    "distinction": "MARINEÖL Synthetic = seule marine synthétique, 15W-40, TBN 15-50, moteurs in-bord et hors-bord ; Mineral et Trunk Piston = minérales en SAE 40/50.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "marineol-mineral",
+    "nom": "MARINEÖL Mineral Marine Oil",
+    "gamme": "Huiles marine",
+    "usage": "Lubrifiant de cylindre pour moteurs diesel marins lents à crosse (fuel résiduel, soufre jusqu'à 2,36 %)",
+    "base": "minérale",
+    "viscosite_sae": [
+      "SAE 40",
+      "SAE 50"
+    ],
+    "grades_iso": null,
+    "normes": "MAN Diesel & Turbo, Winterthur Gas & Diesel, Wärtsilä, Mitsubishi",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "SAE 40 / TBN 55",
+        "couleur": "L 4.0",
+        "viscosite_40C_cSt": 144.6,
+        "viscosite_100C_cSt": 14.56,
+        "indice_viscosite": 99,
+        "densite_15C_g_cm3": 0.916,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 240,
+        "point_ecoulement_C": -18,
+        "TBN_mgKOH_g": 55
+      },
+      {
+        "variante": "SAE 40 / TBN 70",
+        "couleur": "L 4.5",
+        "viscosite_40C_cSt": 144.8,
+        "viscosite_100C_cSt": 14.67,
+        "indice_viscosite": 100,
+        "densite_15C_g_cm3": 0.918,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 242,
+        "point_ecoulement_C": -18,
+        "TBN_mgKOH_g": 70
+      },
+      {
+        "variante": "SAE 40 / TBN 85",
+        "couleur": "L 5.0",
+        "viscosite_40C_cSt": 143.6,
+        "viscosite_100C_cSt": 14.81,
+        "indice_viscosite": 103,
+        "densite_15C_g_cm3": 0.919,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 246,
+        "point_ecoulement_C": -15,
+        "TBN_mgKOH_g": 85
+      },
+      {
+        "variante": "SAE 40 / TBN 100",
+        "couleur": "L 5.5",
+        "viscosite_40C_cSt": 143.1,
+        "viscosite_100C_cSt": 14.97,
+        "indice_viscosite": 105,
+        "densite_15C_g_cm3": 0.923,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 248,
+        "point_ecoulement_C": -15,
+        "TBN_mgKOH_g": 100
+      },
+      {
+        "variante": "SAE 50 / TBN 55",
+        "couleur": "L 4.5",
+        "viscosite_40C_cSt": 208.3,
+        "viscosite_100C_cSt": 18.65,
+        "indice_viscosite": 99,
+        "densite_15C_g_cm3": 0.915,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 242,
+        "point_ecoulement_C": -15,
+        "TBN_mgKOH_g": 55
+      },
+      {
+        "variante": "SAE 50 / TBN 70",
+        "couleur": "L 4.5",
+        "viscosite_40C_cSt": 201.3,
+        "viscosite_100C_cSt": 18.79,
+        "indice_viscosite": 104,
+        "densite_15C_g_cm3": 0.92,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 248,
+        "point_ecoulement_C": -15,
+        "TBN_mgKOH_g": 70
+      },
+      {
+        "variante": "SAE 50 / TBN 85",
+        "couleur": "L 5.0",
+        "viscosite_40C_cSt": 201.8,
+        "viscosite_100C_cSt": 18.98,
+        "indice_viscosite": 106,
+        "densite_15C_g_cm3": 0.922,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 244,
+        "point_ecoulement_C": -12,
+        "TBN_mgKOH_g": 85
+      },
+      {
+        "variante": "SAE 50 / TBN 100",
+        "couleur": "L 5.5",
+        "viscosite_40C_cSt": 202.3,
+        "viscosite_100C_cSt": 19.16,
+        "indice_viscosite": 107,
+        "densite_15C_g_cm3": 0.925,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 246,
+        "point_ecoulement_C": -9,
+        "TBN_mgKOH_g": 100
+      }
+    ],
+    "notes": "Les tableaux d'essais de MARINEÖL Mineral et Trunk Piston sont presque identiques (mêmes viscosités, densités) : seuls les TBN diffèrent (55-100 contre 15-55). Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/MarineOils/MARINEOLmineralMarineOil",
+    "date_releve": "2026-10-03",
+    "photo": "marineol-mineral.webp",
+    "accroche": "Lubrifiant de cylindre minéral à TBN élevé (55 à 100) pour moteurs marins lents à crosse brûlant du fuel résiduel.",
+    "points_forts": [
+      "TBN 55, 70, 85 ou 100 en SAE 40 et SAE 50",
+      "Fort TBN : neutralise les acides de combustion (soufre jusqu'à 2,36 %)",
+      "Détergence et protection antiusure",
+      "Convient aussi aux moteurs moyenne vitesse, paliers, tubes d'étambot et réducteurs"
+    ],
+    "normes_principales": [
+      "MAN Diesel & Turbo",
+      "Wärtsilä"
+    ],
+    "vehicules": [
+      "bateau"
+    ],
+    "distinction": "MARINEÖL Mineral = cylindre pour moteurs lents à crosse, TBN 55-100 ; Trunk Piston = moteurs à piston plongeur, TBN 15-55 ; Synthetic = synthèse 15W-40.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "marineol-trunk-piston",
+    "nom": "MARINEÖL Trunk Piston Marine Oil",
+    "gamme": "Huiles marine",
+    "usage": "Moteurs diesel à piston plongeur (trunk piston) ; recommandé pour WÄRTSILÄ 4T et 8L38 ; moteurs de bateaux",
+    "base": "minérale",
+    "viscosite_sae": [
+      "SAE 40",
+      "SAE 50"
+    ],
+    "grades_iso": null,
+    "normes": "Recommandé pour moteurs WARTSILA 4T, WARTSILA 8L38",
+    "conditionnements": [
+      "1 L",
+      "5 L",
+      "20 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "SAE 40 / TBN 15",
+        "couleur": "L 3.5",
+        "viscosite_40C_cSt": 144.6,
+        "viscosite_100C_cSt": 14.56,
+        "indice_viscosite": 99,
+        "densite_15C_g_cm3": 0.916,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 240,
+        "point_ecoulement_C": -18,
+        "TBN_mgKOH_g": 15
+      },
+      {
+        "variante": "SAE 40 / TBN 20",
+        "couleur": "L 3.5",
+        "viscosite_40C_cSt": 144.8,
+        "viscosite_100C_cSt": 14.67,
+        "indice_viscosite": 100,
+        "densite_15C_g_cm3": 0.918,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 242,
+        "point_ecoulement_C": -18,
+        "TBN_mgKOH_g": 20
+      },
+      {
+        "variante": "SAE 40 / TBN 40",
+        "couleur": "L 4.0",
+        "viscosite_40C_cSt": 143.6,
+        "viscosite_100C_cSt": 14.81,
+        "indice_viscosite": 103,
+        "densite_15C_g_cm3": 0.919,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 246,
+        "point_ecoulement_C": -15,
+        "TBN_mgKOH_g": 40
+      },
+      {
+        "variante": "SAE 40 / TBN 50",
+        "couleur": "L 4.5",
+        "viscosite_40C_cSt": 143.1,
+        "viscosite_100C_cSt": 14.97,
+        "indice_viscosite": 105,
+        "densite_15C_g_cm3": 0.923,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 248,
+        "point_ecoulement_C": -15,
+        "TBN_mgKOH_g": 50
+      },
+      {
+        "variante": "SAE 40 / TBN 55",
+        "couleur": "L 4.5",
+        "viscosite_40C_cSt": 150.5,
+        "viscosite_100C_cSt": 15.0,
+        "indice_viscosite": 99,
+        "densite_15C_g_cm3": 0.915,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 242,
+        "point_ecoulement_C": -15,
+        "TBN_mgKOH_g": 55
+      },
+      {
+        "variante": "SAE 50 / TBN 15",
+        "couleur": "L 4.5",
+        "viscosite_40C_cSt": 201.3,
+        "viscosite_100C_cSt": 18.79,
+        "indice_viscosite": 104,
+        "densite_15C_g_cm3": 0.92,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 248,
+        "point_ecoulement_C": -15,
+        "TBN_mgKOH_g": 15
+      },
+      {
+        "variante": "SAE 50 / TBN 20",
+        "couleur": "L 3.5",
+        "viscosite_40C_cSt": 201.8,
+        "viscosite_100C_cSt": 18.98,
+        "indice_viscosite": 106,
+        "densite_15C_g_cm3": 0.922,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 250,
+        "point_ecoulement_C": -12,
+        "TBN_mgKOH_g": 20
+      },
+      {
+        "variante": "SAE 50 / TBN 40",
+        "couleur": "L 4.0",
+        "viscosite_40C_cSt": 202.3,
+        "viscosite_100C_cSt": 19.16,
+        "indice_viscosite": 107,
+        "densite_15C_g_cm3": 0.925,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 240,
+        "point_ecoulement_C": -9,
+        "TBN_mgKOH_g": 40
+      },
+      {
+        "variante": "SAE 50 / TBN 50",
+        "couleur": "L 4.5",
+        "viscosite_40C_cSt": 202.3,
+        "viscosite_100C_cSt": 19.16,
+        "indice_viscosite": 107,
+        "densite_15C_g_cm3": 0.925,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 242,
+        "point_ecoulement_C": -9,
+        "TBN_mgKOH_g": 50
+      },
+      {
+        "variante": "SAE 50 / TBN 55",
+        "couleur": "L 4.5",
+        "viscosite_40C_cSt": 202.3,
+        "viscosite_100C_cSt": 19.16,
+        "indice_viscosite": 107,
+        "densite_15C_g_cm3": 0.925,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "point_eclair_COC_C": 244,
+        "point_ecoulement_C": -9,
+        "TBN_mgKOH_g": 55
+      }
+    ],
+    "notes": "Les tableaux d'essais de MARINEÖL Mineral et Trunk Piston sont presque identiques (mêmes viscosités, densités) : seuls les TBN diffèrent (15-55 contre 55-100). Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/MarineOils/MARINEOLTrunkPistonMarineOil",
+    "date_releve": "2026-10-03",
+    "photo": "marineol-trunk-piston.webp",
+    "accroche": "Huile minérale pour moteurs diesel marins à piston plongeur, TBN 15 à 55, recommandée pour Wärtsilä 4T et 8L38.",
+    "points_forts": [
+      "TBN 15, 20, 40, 50 ou 55 en SAE 40 et SAE 50",
+      "Résiste à l'entrée de carburant et d'eau",
+      "Contrôle suies, boues et dépôts de piston",
+      "Lubrification rapide, faible usure à froid"
+    ],
+    "normes_principales": [
+      "Wärtsilä 4T",
+      "Wärtsilä 8L38"
+    ],
+    "vehicules": [
+      "bateau"
+    ],
+    "distinction": "MARINEÖL Trunk Piston = minérale pour moteurs à piston plongeur, TBN 15-55 ; Mineral = huile de cylindre à TBN 55-100 ; Synthetic = HC 15W-40.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "marineol-2t-outboard",
+    "nom": "MARINEÖL 2T Outboard Oil (refroidi par eau)",
+    "gamme": "Huiles marine",
+    "usage": "Moteurs hors-bord 2 temps refroidis par eau ; graissage séparé ou en mélange",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": "API TC, NMMA TC-W 3",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": null,
+        "couleur": "Bleu",
+        "densite_15C_g_cm3": 0.87,
+        "viscosite_40C_cSt": 50.7,
+        "viscosite_100C_cSt": 7.1,
+        "indice_viscosite": 133,
+        "TBN_mgKOH_g": 4.2,
+        "point_eclair_COC_C": 142,
+        "point_ecoulement_C": -35
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/MarineOils/MARINEOL2-StrokeOutboardOil",
+    "date_releve": "2026-10-03",
+    "photo": "marineol-2t-outboard.webp",
+    "accroche": "L'huile 2 temps pour hors-bord refroidis par eau, conçue pour la norme NMMA TC-W 3.",
+    "points_forts": [
+      "Conçue pour NMMA TC-W 3 (2 temps refroidi par eau)",
+      "Combustion quasi sans résidu : bougies et segments propres",
+      "Protège contre la corrosion et l'usure",
+      "Graissage séparé ou en mélange ; convient aussi aux 2 temps refroidis par air"
+    ],
+    "normes_principales": [
+      "NMMA TC-W 3",
+      "API TC"
+    ],
+    "vehicules": [
+      "bateau"
+    ],
+    "distinction": "MARINEÖL 2T = seule marine 2 temps (NMMA TC-W 3, API TC) ; les autres MARINEÖL sont des huiles de moteurs diesel ou 4 temps.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "hydkon-hydraulic",
+    "nom": "HYDKÖN Hydraulic Oil",
+    "gamme": "Huiles industrielles",
+    "usage": "Circuits hydrauliques industriels ; antioxydante, antiusure, antirouille",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": [
+      "10",
+      "15",
+      "22",
+      "32",
+      "37",
+      "46",
+      "68",
+      "100",
+      "150",
+      "220"
+    ],
+    "normes": "DIN 51524-2:2006-09, HUSKY HS 207, VICKERS M-2950-S, Fives Cincinnati, HOCNF, PARKER (DENISON HF1, HF2, HF0)",
+    "conditionnements": [
+      "20 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "ISO VG 10",
+        "densite_15C_g_cm3": 0.853,
+        "viscosite_40C_cSt": 10,
+        "viscosite_100C_cSt": 2.68,
+        "indice_viscosite": 104,
+        "point_eclair_COC_C": 180,
+        "point_ecoulement_C": -30
+      },
+      {
+        "variante": "ISO VG 15",
+        "densite_15C_g_cm3": 0.859,
+        "viscosite_40C_cSt": 15,
+        "viscosite_100C_cSt": 3.45,
+        "indice_viscosite": 105,
+        "point_eclair_COC_C": 190,
+        "point_ecoulement_C": -30
+      },
+      {
+        "variante": "ISO VG 22",
+        "densite_15C_g_cm3": 0.867,
+        "viscosite_40C_cSt": 22,
+        "viscosite_100C_cSt": 4.31,
+        "indice_viscosite": 102,
+        "point_eclair_COC_C": 210,
+        "point_ecoulement_C": -27
+      },
+      {
+        "variante": "ISO VG 32",
+        "densite_15C_g_cm3": 0.87,
+        "viscosite_40C_cSt": 32,
+        "viscosite_100C_cSt": 5.48,
+        "indice_viscosite": 107,
+        "point_eclair_COC_C": 216,
+        "point_ecoulement_C": -18
+      },
+      {
+        "variante": "ISO VG 37",
+        "densite_15C_g_cm3": 0.874,
+        "viscosite_40C_cSt": 37,
+        "viscosite_100C_cSt": 5.98,
+        "indice_viscosite": 105,
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -18
+      },
+      {
+        "variante": "ISO VG 46",
+        "densite_15C_g_cm3": 0.878,
+        "viscosite_40C_cSt": 46,
+        "viscosite_100C_cSt": 6.85,
+        "indice_viscosite": 103,
+        "point_eclair_COC_C": 230,
+        "point_ecoulement_C": -15
+      },
+      {
+        "variante": "ISO VG 68",
+        "densite_15C_g_cm3": 0.881,
+        "viscosite_40C_cSt": 68,
+        "viscosite_100C_cSt": 8.73,
+        "indice_viscosite": 100,
+        "point_eclair_COC_C": 240,
+        "point_ecoulement_C": -15
+      },
+      {
+        "variante": "ISO VG 100",
+        "densite_15C_g_cm3": 0.888,
+        "viscosite_40C_cSt": 100,
+        "viscosite_100C_cSt": 11.41,
+        "indice_viscosite": 100,
+        "point_eclair_COC_C": 250,
+        "point_ecoulement_C": -12
+      },
+      {
+        "variante": "ISO VG 150",
+        "densite_15C_g_cm3": 0.889,
+        "viscosite_40C_cSt": 150,
+        "viscosite_100C_cSt": 14.92,
+        "indice_viscosite": 99,
+        "point_eclair_COC_C": 252,
+        "point_ecoulement_C": -9
+      },
+      {
+        "variante": "ISO VG 220",
+        "densite_15C_g_cm3": 0.895,
+        "viscosite_40C_cSt": 220,
+        "viscosite_100C_cSt": 19.3,
+        "indice_viscosite": 99,
+        "point_eclair_COC_C": 258,
+        "point_ecoulement_C": -9
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/IndustrialOils/HYDKONHydraulicOil",
+    "date_releve": "2026-10-03",
+    "photo": "hydkon-hydraulic.webp",
+    "accroche": "L'huile hydraulique industrielle antioxydante, antiusure et antirouille, en 10 grades ISO VG de 10 à 220.",
+    "points_forts": [
+      "10 grades ISO VG : 10, 15, 22, 32, 37, 46, 68, 100, 150, 220",
+      "Excellente démulsibilité, stabilité à l'oxydation et thermique",
+      "Forte capacité de charge, protection antiusure et antirouille",
+      "Bonne séparation de l'air, faible moussage, résistance hydrolytique"
+    ],
+    "normes_principales": [
+      "DIN 51524-2",
+      "Vickers M-2950-S"
+    ],
+    "vehicules": [
+      "industrie"
+    ],
+    "distinction": "HYDKÖN = circuits hydrauliques (DIN 51524-2, grades ISO VG 10-220) ; LUB-TEC GRÖB = réducteurs ; TRANS-TECH = transmissions d'engins.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "lub-tec-grob-gear",
+    "nom": "LUB-TEC GRÖB Industrial Gear Oils",
+    "gamme": "Huiles industrielles",
+    "usage": "Réducteurs industriels à charges élevées : engrenages fermés, ouverts (grades lourds), paliers, mines, cimenteries, machines-outils",
+    "base": "minérale (bases raffinées au solvant, additif EP soufre-phosphore)",
+    "viscosite_sae": null,
+    "grades_iso": [
+      "68",
+      "100",
+      "150",
+      "220",
+      "320",
+      "460",
+      "680",
+      "1000"
+    ],
+    "normes": "ANSI/AGMA 9005-D94 (EP), U.S. Steel 224, AGMA 250.04 (EP), AGMA 251.02 (EP)",
+    "conditionnements": [],
+    "proprietes_typiques": [
+      {
+        "variante": "ISO VG 68",
+        "densite_15C_g_cm3": 0.875,
+        "viscosite_40C_cSt": 68,
+        "viscosite_100C_cSt": 8.701,
+        "indice_viscosite": 99,
+        "point_eclair_COC_C": 228,
+        "point_ecoulement_C": -18
+      },
+      {
+        "variante": "ISO VG 100",
+        "densite_15C_g_cm3": 0.881,
+        "viscosite_40C_cSt": 100,
+        "viscosite_100C_cSt": 11.28,
+        "indice_viscosite": 99,
+        "point_eclair_COC_C": 236,
+        "point_ecoulement_C": -15
+      },
+      {
+        "variante": "ISO VG 150",
+        "densite_15C_g_cm3": 0.889,
+        "viscosite_40C_cSt": 150,
+        "viscosite_100C_cSt": 14.85,
+        "indice_viscosite": 98,
+        "point_eclair_COC_C": 246,
+        "point_ecoulement_C": -12
+      },
+      {
+        "variante": "ISO VG 220",
+        "densite_15C_g_cm3": 0.89,
+        "viscosite_40C_cSt": 220,
+        "viscosite_100C_cSt": 19.15,
+        "indice_viscosite": 98,
+        "point_eclair_COC_C": 250,
+        "point_ecoulement_C": -9
+      },
+      {
+        "variante": "ISO VG 320",
+        "densite_15C_g_cm3": 0.898,
+        "viscosite_40C_cSt": 320,
+        "viscosite_100C_cSt": 24.84,
+        "indice_viscosite": 100,
+        "point_eclair_COC_C": 260,
+        "point_ecoulement_C": -6
+      },
+      {
+        "variante": "ISO VG 460",
+        "densite_15C_g_cm3": 0.902,
+        "viscosite_40C_cSt": 460,
+        "viscosite_100C_cSt": 31.8,
+        "indice_viscosite": 100,
+        "point_eclair_COC_C": 264,
+        "point_ecoulement_C": -6
+      },
+      {
+        "variante": "ISO VG 680",
+        "densite_15C_g_cm3": 0.908,
+        "viscosite_40C_cSt": 680,
+        "viscosite_100C_cSt": 62.29,
+        "indice_viscosite": 160,
+        "point_eclair_COC_C": 270,
+        "point_ecoulement_C": -6
+      },
+      {
+        "variante": "ISO VG 1000",
+        "densite_15C_g_cm3": 0.912,
+        "viscosite_40C_cSt": 1000,
+        "viscosite_100C_cSt": 86.95,
+        "indice_viscosite": 170,
+        "point_eclair_COC_C": 280,
+        "point_ecoulement_C": -6
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/IndustrialOils/LUB-TECGROBIndustrialGearOils",
+    "date_releve": "2026-10-03",
+    "photo": "lub-tec-grob-gear.webp",
+    "accroche": "L'huile EP pour réducteurs industriels fortement chargés, de ISO VG 68 à 1000.",
+    "points_forts": [
+      "8 grades ISO VG de 68 à 1000",
+      "Haute capacité de charge, réduit friction et température des engrenages",
+      "Engrenages fermés (droits, coniques, hélicoïdaux, vis sans fin, hypoïdes) et ouverts (grades lourds)",
+      "Mines, cimenteries, machines-outils, équipement marin"
+    ],
+    "normes_principales": [
+      "AGMA 250.04 (EP)",
+      "U.S. Steel 224"
+    ],
+    "vehicules": [
+      "industrie"
+    ],
+    "distinction": "LUB-TEC GRÖB = engrenages industriels EP (AGMA, ISO VG 68-1000) ; HYDKÖN = hydraulique ; TRANS-TECH = transmissions d'engins hors route.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "aucun format prouvé (photo générique ou absente ; gabarit du site non confirmé)"
+  },
+  {
+    "id": "turbine-oil",
+    "nom": "TURBINE Oil",
+    "gamme": "Huiles industrielles",
+    "usage": "Turbines (huile inhibée sans zinc, bases à haut IV)",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": "ISO 6743-3:2003 DAB (Severe Duty), AGMA 250.04, David Brown Table M, ARAMCO 26 SAMSS-045",
+    "conditionnements": [],
+    "proprietes_typiques": null,
+    "notes": "Le site affiche sous cette fiche le gabarit générique « Grades : 5W-30 … 20W-40 », sans rapport avec ce produit : ignoré. Pas de tableau d'essais sur la page. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/IndustrialOils/TURBINEOil",
+    "date_releve": "2026-10-03",
+    "photo": "turbine-oil.webp",
+    "accroche": "Huile de turbine inhibée sans zinc, à bases haut indice de viscosité, résistante à la dégradation thermique.",
+    "points_forts": [
+      "Sans zinc, bases chimiquement stables à haut indice de viscosité",
+      "Inhibiteurs d'oxydation : tient dans la durée en présence d'air et de métaux catalyseurs",
+      "Bonne démulsibilité : l'eau se sépare bien dans le réservoir",
+      "Réduit coûts de maintenance, consommation et énergie"
+    ],
+    "normes_principales": [
+      "ISO 6743-3 DAB",
+      "David Brown Table M"
+    ],
+    "vehicules": [
+      "industrie"
+    ],
+    "distinction": "TURBINE Oil = turbines, inhibée sans zinc (ISO 6743-3 DAB) ; CIRCULATION Oil = circuits de graissage de paliers et engrenages ; page sans tableau d'essais.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "aucun format prouvé (photo générique ou absente ; gabarit du site non confirmé)"
+  },
+  {
+    "id": "scom-compressor",
+    "nom": "SCÖM Compressor Oil",
+    "gamme": "Huiles industrielles",
+    "usage": "Compresseurs d'air ; aussi câbles, glissières, chaînes",
+    "base": "minérale (additifs sans cendres antirouille/antioxydation)",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": "Siemens TLV 9013 04 (non-EP), ALSTOM HTGD 90 117 V0001 (non-EP), GEK 27070, 28143A, 32568F, 46506D, DIN 51515 parties I et II, BS 489:1999",
+    "conditionnements": [],
+    "proprietes_typiques": null,
+    "notes": "Le site affiche sous cette fiche le gabarit générique « Grades : 5W-30 … 20W-40 », sans rapport avec ce produit : ignoré. Pas de tableau d'essais sur la page. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/IndustrialOils/SCOMCompressorOil",
+    "date_releve": "2026-10-03",
+    "photo": "scom-compressor.webp",
+    "accroche": "L'huile minérale pour compresseurs d'air, à additifs sans cendres, longs intervalles de vidange.",
+    "points_forts": [
+      "Bases minérales et additifs sans cendres antirouille/antioxydation",
+      "Stabilité à haute température, vidanges espacées",
+      "Bonne séparation de l'eau, protection antirouille et anticorrosion",
+      "Peu de dépôts : prolonge la vie du filtre à air"
+    ],
+    "normes_principales": [
+      "DIN 51515 I et II",
+      "Siemens TLV 9013 04"
+    ],
+    "vehicules": [
+      "industrie"
+    ],
+    "distinction": "SCÖM = compresseurs d'air (DIN 51515, Siemens, GEK), minérale sans cendres ; REFRIGERATION Oil = compresseurs frigorifiques, naphténique.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "aucun format prouvé (photo générique ou absente ; gabarit du site non confirmé)"
+  },
+  {
+    "id": "schneidol-cutting",
+    "nom": "SCHNEIDÖL Cutting Oil",
+    "gamme": "Huiles industrielles",
+    "usage": "Huile de coupe soluble généraliste (dilution 4 à 8 % dans l'eau) : rectification, fraisage, tournage, perçage, métaux ferreux et non ferreux",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [],
+    "proprietes_typiques": null,
+    "notes": "Le site affiche sous cette fiche le gabarit générique « Grades : 5W-30 … 20W-40 », sans rapport avec ce produit : ignoré. Pas de tableau d'essais sur la page. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/IndustrialOils/SCHNEIDOLCuttingOil",
+    "date_releve": "2026-10-03",
+    "photo": "schneidol-cutting.webp",
+    "accroche": "Huile de coupe soluble généraliste, émulsion à 4-8 % dans l'eau, pour métaux ferreux et non ferreux.",
+    "points_forts": [
+      "Dilution de 4 à 8 % (commencer à 4 %)",
+      "Bactéricide intégré contre bactéries et champignons",
+      "Émulsion stable et durable, meilleure précision et finition",
+      "Rectification, fraisage, tournage, perçage ; prolonge la vie des outils"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "industrie"
+    ],
+    "distinction": "SCHNEIDÖL = seule huile d'usinage de la gamme (soluble dans l'eau, 4-8 %) ; les autres huiles industrielles se lubrifient pures.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "aucun format prouvé (photo générique ou absente ; gabarit du site non confirmé)"
+  },
+  {
+    "id": "transformer-oil",
+    "nom": "TRANSFORMER Oil",
+    "gamme": "Huiles industrielles",
+    "usage": "Transformateurs et appareillages électriques (isolant et caloporteur)",
+    "base": "naphténique (non inhibée)",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": "IEC 296 (1982), BS 148 (1984) classes I et II",
+    "conditionnements": [],
+    "proprietes_typiques": null,
+    "notes": "Le site affiche sous cette fiche le gabarit générique « Grades : 5W-30 … 20W-40 », sans rapport avec ce produit : ignoré. Pas de tableau d'essais sur la page. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/IndustrialOils/TRANSFORMEROil",
+    "date_releve": "2026-10-03",
+    "photo": "transformer-oil.webp",
+    "accroche": "L'huile isolante naphténique pour transformateurs et appareillages électriques, classes I et II BS 148 / IEC 296.",
+    "points_forts": [
+      "Rigidité diélectrique élevée",
+      "Point d'écoulement très bas",
+      "Exempte d'acides et de soufre corrosif",
+      "Supprime l'effet couronne et les arcs"
+    ],
+    "normes_principales": [
+      "IEC 296 (1982)",
+      "BS 148 (1984)"
+    ],
+    "vehicules": [
+      "industrie"
+    ],
+    "distinction": "TRANSFORMER Oil = isolant et caloporteur électrique, naphténique non inhibée (IEC 296, BS 148) ; HEAT TRANSFER Oil = fluide caloporteur thermique.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "aucun format prouvé (photo générique ou absente ; gabarit du site non confirmé)"
+  },
+  {
+    "id": "trans-tech",
+    "nom": "TRANS-TECH Industrial Transmission Oil",
+    "gamme": "Huiles industrielles",
+    "usage": "Transmissions, différentiels, embrayages, circuits hydrauliques ; engins hors route, forêt, mines, agriculture",
+    "base": null,
+    "viscosite_sae": [
+      "10W",
+      "SAE 30",
+      "SAE 40",
+      "SAE 50"
+    ],
+    "grades_iso": null,
+    "normes": "Caterpillar TO-4 et TO-4M, API CF-2, Allison C-4 (SAE 10W et 30), CAT TO-4 (SAE 50), MIL-L-2104E, ZF TE-ML 01 et 03, Eaton Fuller",
+    "conditionnements": [],
+    "proprietes_typiques": [
+      {
+        "variante": "10W",
+        "couleur": "L 2.5",
+        "viscosite_40C_cSt": 38.12,
+        "viscosite_100C_cSt": 6.125,
+        "indice_viscosite": 106,
+        "densite_15C_g_cm3": 0.8881,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.5,
+        "point_eclair_COC_C": 218,
+        "point_ecoulement_C": -33
+      },
+      {
+        "variante": "SAE 30",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 106.82,
+        "viscosite_100C_cSt": 11.86,
+        "indice_viscosite": 99,
+        "densite_15C_g_cm3": 0.8934,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.5,
+        "point_eclair_COC_C": 236,
+        "point_ecoulement_C": -24
+      },
+      {
+        "variante": "SAE 40",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 142.3,
+        "viscosite_100C_cSt": 14.38,
+        "indice_viscosite": 99,
+        "densite_15C_g_cm3": 0.8952,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.5,
+        "point_eclair_COC_C": 240,
+        "point_ecoulement_C": -21
+      },
+      {
+        "variante": "SAE 50",
+        "couleur": "L 3.0",
+        "viscosite_40C_cSt": 222.3,
+        "viscosite_100C_cSt": 19.32,
+        "indice_viscosite": 98,
+        "densite_15C_g_cm3": 0.9051,
+        "moussage_seq_I_II_III_ml": "0/0",
+        "TBN_mgKOH_g": 11.5,
+        "point_eclair_COC_C": 246,
+        "point_ecoulement_C": -18
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/IndustrialOils/TRANS-TECHIndustrialTransmissionOil",
+    "date_releve": "2026-10-03",
+    "photo": "trans-tech.webp",
+    "accroche": "L'huile de transmission pour engins hors route : différentiels, embrayages, boîtes powershift et hydraulique (CAT TO-4).",
+    "points_forts": [
+      "Grades 10W, SAE 30, 40 et 50",
+      "Contrôle du patinage, réduit l'usure des engrenages",
+      "Commandes finales, boîtes powershift, hydraulique haute pression",
+      "Chantier, forêt, mines, agriculture"
+    ],
+    "normes_principales": [
+      "Caterpillar TO-4",
+      "Allison C-4"
+    ],
+    "vehicules": [
+      "engin",
+      "industrie"
+    ],
+    "distinction": "TRANS-TECH = transmissions d'engins (CAT TO-4, Allison C-4) en grades SAE ; LUB-TEC GRÖB = réducteurs industriels en ISO VG.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "aucun format prouvé (photo générique ou absente ; gabarit du site non confirmé)"
+  },
+  {
+    "id": "refrigeration-oil",
+    "nom": "REFRIGERATION Oil",
+    "gamme": "Huiles industrielles",
+    "usage": "Compresseurs frigorifiques alternatifs et rotatifs (miscible avec tous les réfrigérants sauf SO2)",
+    "base": "naphténique",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [],
+    "proprietes_typiques": null,
+    "notes": "Le site affiche sous cette fiche le gabarit générique « Grades : 5W-30 … 20W-40 », sans rapport avec ce produit : ignoré. Pas de tableau d'essais sur la page. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/IndustrialOils/REFRIGERATIONOil",
+    "date_releve": "2026-10-03",
+    "photo": "refrigeration-oil.webp",
+    "accroche": "L'huile naphténique pour compresseurs frigorifiques alternatifs et rotatifs, miscible avec tous les réfrigérants sauf SO2.",
+    "points_forts": [
+      "Faible teneur en cire, bas point d'écoulement",
+      "Forte rigidité diélectrique",
+      "Excellente stabilité chimique et thermique",
+      "Miscibilité et relations P-V-T définies avec les réfrigérants HFC"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "industrie"
+    ],
+    "distinction": "REFRIGERATION Oil = compresseurs frigorifiques, naphténique ; SCÖM = compresseurs d'air ; page sans tableau d'essais ni norme.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "aucun format prouvé (photo générique ou absente ; gabarit du site non confirmé)"
+  },
+  {
+    "id": "heat-transfer-oil",
+    "nom": "HEAT TRANSFER Oil",
+    "gamme": "Huiles industrielles",
+    "usage": "Fluide caloporteur circuits ouverts et fermés ; température du fluide jusqu'à 260 °C, paroi chauffe 280 °C",
+    "base": "minérale (bases pétrolières hautement raffinées)",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [],
+    "proprietes_typiques": null,
+    "notes": "Le site affiche sous cette fiche le gabarit générique « Grades : 5W-30 … 20W-40 », sans rapport avec ce produit : ignoré. Pas de tableau d'essais sur la page. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/IndustrialOils/HEATTRANSFEROil",
+    "date_releve": "2026-10-03",
+    "photo": "heat-transfer-oil.webp",
+    "accroche": "Fluide caloporteur stable jusqu'à 260 °C (paroi chauffante 280 °C), pour circuits ouverts et fermés.",
+    "points_forts": [
+      "Température du fluide jusqu'à 260 °C, paroi chauffante jusqu'à 280 °C",
+      "Résiste au craquage thermique et à l'oxydation",
+      "Forte chaleur spécifique, bonne conductivité thermique",
+      "Peu de dépôts carbonés ; à ne pas mélanger avec d'autres huiles"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "industrie"
+    ],
+    "distinction": "HEAT TRANSFER Oil = fluide de transfert thermique jusqu'à 260 °C ; TRANSFORMER Oil = isolant électrique ; page sans tableau d'essais ni norme.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "aucun format prouvé (photo générique ou absente ; gabarit du site non confirmé)"
+  },
+  {
+    "id": "circulation-oil",
+    "nom": "CIRCULATION Oil",
+    "gamme": "Huiles industrielles",
+    "usage": "Paliers lisses et à roulements, engrenages, turbines à vapeur et hydrauliques, circuits de circulation",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [],
+    "proprietes_typiques": null,
+    "notes": "Le site affiche sous cette fiche le gabarit générique « Grades : 5W-30 … 20W-40 », sans rapport avec ce produit : ignoré. Pas de tableau d'essais sur la page. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/IndustrialOils/CIRCULATIONOil",
+    "date_releve": "2026-10-03",
+    "photo": "circulation-oil.webp",
+    "accroche": "Huile de circulation pour paliers lisses et à roulements, engrenages à arbres parallèles et turbines à vapeur ou hydrauliques.",
+    "points_forts": [
+      "Très forte stabilité thermique et à l'oxydation",
+      "Séparation rapide de l'eau, forte résistance à l'émulsion",
+      "Maîtrise des vernis et des boues",
+      "Antiusure, antirouille, anti-mousse et bonne désaération"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "industrie"
+    ],
+    "distinction": "CIRCULATION Oil = circuits de graissage continu (paliers, engrenages, turbines) ; TURBINE Oil = turbines, sans zinc ; page sans tableau d'essais ni norme.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "aucun format prouvé (photo générique ou absente ; gabarit du site non confirmé)"
+  },
+  {
+    "id": "dexo-atf-cvt",
+    "nom": "DEXÖ ATF CVT",
+    "gamme": "Fluides de transmission automatique (ATF)",
+    "usage": "Transmissions à variation continue (CVT) à courroie",
+    "base": "synthèse",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": "Audi/VW TL 52 180, BMW EZL799, Dodge/Jeep NS-2/CVTF+4/MOPAR CVT 4, Honda HMMF/HCF-2, Kia/Hyundai SP-CVT 1, MB CVT 28/236.20, Toyota/Lexus CVT TC/FE ; JATCO et Nissan FF/SF",
+    "conditionnements": [
+      "1 L",
+      "4 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": null,
+        "couleur": "L 6.5",
+        "densite_15C_g_cm3": 0.848,
+        "viscosite_40C_cSt": 32.8,
+        "viscosite_100C_cSt": 7.21,
+        "indice_viscosite": 193,
+        "point_eclair_COC_C": 210,
+        "point_ecoulement_C": -48,
+        "viscosite_brookfield_moins40C_cP": 10200
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-CVT",
+    "date_releve": "2026-10-03",
+    "photo": "dexo-atf-cvt.webp",
+    "accroche": "Le fluide entièrement synthétique pour transmissions à variation continue (CVT) à courroie, spécifications JATCO et Nissan.",
+    "points_forts": [
+      "Pour courroies push et push-pull",
+      "Coefficient de friction métal/métal stable",
+      "Excellente stabilité au vieillissement et à l'oxydation",
+      "Fluide à froid : 10 200 cP à -40 °C"
+    ],
+    "normes_principales": [
+      "JATCO / Nissan FF et SF",
+      "Audi/VW TL 52 180"
+    ],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "DEXÖ ATF CVT = transmissions à variation continue (synthèse, spécifications constructeurs CVT) ; DEXRON VI/III/II et Type A = boîtes automatiques à trains d'engrenages.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "dexo-atf-dexron-vi",
+    "nom": "DEXÖ ATF DEXRON VI",
+    "gamme": "Fluides de transmission automatique (ATF)",
+    "usage": "Boîtes automatiques modernes 6/8/9 rapports (SUV, berlines, véhicules de luxe)",
+    "base": "synthèse (HC + PAO)",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": "DEXRON VI, MERCON LV, JASO 1ALV, BMW ETL 7045 E/ETL 8072 B, MB 236.41",
+    "conditionnements": [
+      "1 L",
+      "4 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": null,
+        "couleur": "L 6.5",
+        "densite_15C_g_cm3": 0.8375,
+        "viscosite_40C_cSt": 23.23,
+        "viscosite_100C_cSt": 6.463,
+        "indice_viscosite": 194,
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -51,
+        "viscosite_brookfield_moins40C_cP": 9500
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-VI",
+    "date_releve": "2026-10-03",
+    "photo": "dexo-atf-dexron-vi.webp",
+    "accroche": "L'ATF synthétique basse viscosité pour boîtes modernes à 6, 8 ou 9 rapports : SUV, berlines, véhicules de luxe.",
+    "points_forts": [
+      "Base HC synthétique et PAO, viscosité réduite (23,2 cSt à 40 °C)",
+      "Passages de rapports plus constants, même en conditions extrêmes",
+      "Limite boues et vernis, bonne tenue à l'oxydation",
+      "Couvre les remplissages d'origine GM DEXRON VI (GM 2006 et plus récents)"
+    ],
+    "normes_principales": [
+      "DEXRON VI",
+      "MERCON LV"
+    ],
+    "vehicules": [
+      "voiture",
+      "4x4"
+    ],
+    "distinction": "ATF DEXRON VI = synthèse HC + PAO basse viscosité, boîtes 6/8/9 rapports ; DEXRON III = bases hydrotraitées polyvalentes ; DEXRON II et Type A = générations plus anciennes.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "dexo-atf-dexron-iii",
+    "nom": "DEXÖ ATF DEXRON III",
+    "gamme": "Fluides de transmission automatique (ATF)",
+    "usage": "Boîtes automatiques GM, Ford et autres ; direction assistée",
+    "base": "bases très hydrotraitées",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": "DEXRON III, MERCON V, MB 236.6, ZF TE-ML 17C, Allison C-4, Caterpillar TO-4",
+    "conditionnements": [
+      "1 L",
+      "4 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": null,
+        "couleur": "L 6.5",
+        "densite_15C_g_cm3": 0.859,
+        "viscosite_40C_cSt": 34.65,
+        "viscosite_100C_cSt": 7.45,
+        "indice_viscosite": 190,
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -45,
+        "viscosite_brookfield_moins40C_cP": 10500
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-III",
+    "date_releve": "2026-10-03",
+    "photo": "dexo-atf-dexron-iii.webp",
+    "accroche": "L'ATF polyvalent DEXRON III / MERCON V pour boîtes GM, Ford et autres, et directions assistées.",
+    "points_forts": [
+      "Bases très hydrotraitées, indice de viscosité élevé",
+      "Bons passages de vitesse à froid, friction élevée constante",
+      "Miscible et compatible avec les autres ATF et les joints",
+      "Protège contre corrosion, usure, boues et mousse"
+    ],
+    "normes_principales": [
+      "DEXRON III",
+      "MERCON V"
+    ],
+    "vehicules": [
+      "voiture",
+      "camion"
+    ],
+    "distinction": "ATF DEXRON III = polyvalent GM/Ford (DEXRON III, MERCON V, bases hydrotraitées) ; DEXRON VI = synthèse basse viscosité ; DEXRON II = norme plus ancienne.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "dexo-atf-dexron-ii",
+    "nom": "DEXÖ ATF DEXRON II",
+    "gamme": "Fluides de transmission automatique (ATF)",
+    "usage": "Boîtes automatiques où GM Dexron II est requis ; direction assistée voitures et utilitaires",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": "GM DEXRON II",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": null,
+        "couleur": "L 6.5",
+        "densite_15C_g_cm3": 0.8482,
+        "viscosite_40C_cSt": 35.83,
+        "viscosite_100C_cSt": 7.21,
+        "indice_viscosite": 170,
+        "point_eclair_COC_C": 210,
+        "point_ecoulement_C": -45,
+        "viscosite_brookfield_moins40C_cP": 35500
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-DEXRON-II",
+    "date_releve": "2026-10-03",
+    "photo": "dexo-atf-dexron-ii.webp",
+    "accroche": "L'ATF de génération DEXRON II pour boîtes automatiques où GM Dexron II est exigé, et directions assistées.",
+    "points_forts": [
+      "Indice de viscosité élevé, bas point d'écoulement",
+      "Antioxydant, antirouille, antiusure",
+      "Compatible avec les joints",
+      "Fluide sur une large plage de température"
+    ],
+    "normes_principales": [
+      "GM DEXRON II"
+    ],
+    "vehicules": [
+      "voiture",
+      "camion"
+    ],
+    "distinction": "ATF DEXRON II = norme GM la plus ancienne de la série, une seule norme ; DEXRON III/VI = générations plus récentes et plus performantes.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "dexo-atf-type-a",
+    "nom": "DEXÖ ATF Type A, Suffix A",
+    "gamme": "Fluides de transmission automatique (ATF)",
+    "usage": "Transmission automatique, direction assistée, hydraulique ; poids lourds, hors route, certaines boîtes manuelles",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": "GM Type A Suffix A, Mercedes-Benz 236.2, Allison C4",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": null,
+        "couleur": "L 6.5",
+        "densite_15C_g_cm3": 0.8582,
+        "viscosite_40C_cSt": 33.15,
+        "viscosite_100C_cSt": 6.501,
+        "indice_viscosite": 154,
+        "point_eclair_COC_C": 212,
+        "point_ecoulement_C": -45,
+        "viscosite_brookfield_moins40C_cP": 35000
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AutomaticTransmissionFluids/DEXO-ATF-TYPE_A-SUFFIX_A",
+    "date_releve": "2026-10-03",
+    "photo": "dexo-atf-type-a.webp",
+    "accroche": "L'ATF Type A Suffix A pour poids lourds, engins hors route, directions assistées et certaines boîtes manuelles de voiture.",
+    "points_forts": [
+      "Fonctionnement souple et sans problème",
+      "Très bonne résistance à la mousse",
+      "Protège des dépôts, bonne tenue à l'oxydation et à l'usure",
+      "Aussi huile de direction assistée et d'hydraulique"
+    ],
+    "normes_principales": [
+      "GM Type A Suffix A",
+      "Allison C4"
+    ],
+    "vehicules": [
+      "camion",
+      "engin",
+      "voiture"
+    ],
+    "distinction": "ATF Type A Suffix A = norme GM ancienne pour poids lourds et hors route (Allison C4, MB 236.2) ; les ATF DEXRON visent les boîtes automatiques de voitures.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "max-grob-synthetic",
+    "nom": "MAX-GRÖB Synthetic Gear Oil",
+    "gamme": "Huiles de boîte manuelle et pont",
+    "usage": "Boîtes manuelles et ponts automobiles, fonctionnement basse température",
+    "base": "synthèse",
+    "viscosite_sae": [
+      "75W-90",
+      "80W-140"
+    ],
+    "grades_iso": null,
+    "normes": "API GL-5, MIL-L-2105D, EATON Axle Division Bulletin 90-104 ; approuvée MT-1",
+    "conditionnements": [
+      "1 L",
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "75W90",
+        "densite_15C_g_cm3": 0.884,
+        "viscosite_40C_cSt": 102.6,
+        "viscosite_100C_cSt": 15.5,
+        "indice_viscosite": 160,
+        "point_eclair_COC_C": 210,
+        "point_ecoulement_C": -45,
+        "viscosite_brookfield": "97 000 cP à -40 °C"
+      },
+      {
+        "variante": "80W140",
+        "densite_15C_g_cm3": 0.902,
+        "viscosite_40C_cSt": 223.4,
+        "viscosite_100C_cSt": 29.12,
+        "indice_viscosite": 170,
+        "point_eclair_COC_C": 220,
+        "point_ecoulement_C": -30,
+        "viscosite_brookfield": "110 000 cP à -26 °C"
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AutomotiveManualGearOils/MAX-GROBSyntheticGearOil",
+    "date_releve": "2026-10-03",
+    "photo": "max-grob-synthetic.webp",
+    "accroche": "L'huile de boîte et de pont synthétique 75W-90 / 80W-140, API GL-5, approuvée MT-1, utilisable par grand froid.",
+    "points_forts": [
+      "Synthèse extrême pression, approuvée MT-1",
+      "Stabilité chimique et thermique sur une large plage, vidanges prolongées",
+      "Protège de la rouille due à l'eau et à l'humidité",
+      "Bonne tenue à basse température : 97 000 cP à -40 °C (75W-90)"
+    ],
+    "normes_principales": [
+      "API GL-5",
+      "MT-1"
+    ],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "MAX-GRÖB Synthetic = synthèse, 75W-90/80W-140, API GL-5, MT-1, basse température ; MAX-GRÖB Gear Oil = base non précisée, monogrades et 80W-90/85W-140.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "max-grob-gear",
+    "nom": "MAX-GRÖB Gear Oil",
+    "gamme": "Huiles de boîte manuelle et pont",
+    "usage": "Boîtes synchronisées et ponts ; additifs EP soufre-phosphore",
+    "base": null,
+    "viscosite_sae": [
+      "SAE 90",
+      "SAE 140",
+      "80W-90",
+      "85W-140"
+    ],
+    "grades_iso": null,
+    "normes": "API GL-5, AGMA 250.04, David Brown Table M, ARAMCO 26 SAMSS-045 ; également disponibles : SAE 80W90 et 85W140 en API GL-4, SAE 90 et 140 en API GL-1",
+    "conditionnements": [
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "SAE 90",
+        "densite_15C_g_cm3": 0.887,
+        "viscosite_40C_cSt": 200.2,
+        "viscosite_100C_cSt": 17.95,
+        "indice_viscosite": 98,
+        "point_eclair_COC_C": 224,
+        "point_ecoulement_C": -18,
+        "viscosite_brookfield": null
+      },
+      {
+        "variante": "SAE 140",
+        "densite_15C_g_cm3": 0.901,
+        "viscosite_40C_cSt": 436.3,
+        "viscosite_100C_cSt": 29.7,
+        "indice_viscosite": 97,
+        "point_eclair_COC_C": 240,
+        "point_ecoulement_C": -9,
+        "viscosite_brookfield": null
+      },
+      {
+        "variante": "80W90",
+        "densite_15C_g_cm3": 0.884,
+        "viscosite_40C_cSt": 143.1,
+        "viscosite_100C_cSt": 14.96,
+        "indice_viscosite": 105,
+        "point_eclair_COC_C": 216,
+        "point_ecoulement_C": -27,
+        "viscosite_brookfield": "95 000 cP à -26 °C"
+      },
+      {
+        "variante": "85W140",
+        "densite_15C_g_cm3": 0.902,
+        "viscosite_40C_cSt": 356.8,
+        "viscosite_100C_cSt": 27.36,
+        "indice_viscosite": 103,
+        "point_eclair_COC_C": 236,
+        "point_ecoulement_C": -21,
+        "viscosite_brookfield": "85 000 cP à -12 °C"
+      }
+    ],
+    "notes": "La base n'est pas indiquée par la source. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AutomotiveManualGearOils/MAX-GROBGearOil",
+    "date_releve": "2026-10-03",
+    "photo": "max-grob-gear.webp",
+    "accroche": "L'huile de boîte et pont EP soufre-phosphore, API GL-5, pour boîtes synchronisées, en monogrades et 80W-90 / 85W-140.",
+    "points_forts": [
+      "Additifs EP soufre-phosphore : protection sous fortes charges",
+      "Passages de vitesse doux et bruit réduit",
+      "Protège les transmissions à composants en bronze",
+      "Existe aussi en GL-4 (80W-90, 85W-140) et GL-1 (SAE 90, 140)"
+    ],
+    "normes_principales": [
+      "API GL-5",
+      "AGMA 250.04"
+    ],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "MAX-GRÖB Gear Oil = EP soufre-phosphore, GL-5, SAE 90/140 et 80W-90/85W-140 ; MAX-GRÖB Synthetic = synthèse 75W-90/80W-140, MT-1.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "dot-5-1",
+    "nom": "DOT 5.1 Brake Fluid",
+    "gamme": "Liquides de frein",
+    "usage": "Circuits hydrauliques de freinage et d'embrayage",
+    "base": "synthèse (glycols)",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": "FMVSS 116 DOT 5.1, SAE J1703/J1704, ISO 4925 classes 3/4/5.1, JIS K2233 classes 3/4/5",
+    "conditionnements": [
+      "250 ml",
+      "500 ml"
+    ],
+    "proprietes_typiques": null,
+    "notes": "Le gabarit générique « Grades : 5W-30 … 20W-40 » affiché par le site est sans objet pour un liquide de frein : ignoré. Pas de tableau d'essais. Photo du site partagée avec DOT 4 & 3 (flacons 250 et 500 ml). Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/BrakeFluids/DOT5_1BrakeFluid",
+    "date_releve": "2026-10-03",
+    "photo": "dot-5-1.webp",
+    "accroche": "Le liquide de frein DOT 5.1, entièrement synthétique à base de glycols, basse viscosité et points d'ébullition améliorés.",
+    "points_forts": [
+      "Entièrement synthétique, base glycols",
+      "Basse viscosité, points d'ébullition sec et humide améliorés",
+      "Protège freins et embrayage hydrauliques des dépôts et de la corrosion",
+      "Conforme ISO 4925 classe 5.1 et JIS K2233"
+    ],
+    "normes_principales": [
+      "FMVSS 116 DOT 5.1",
+      "ISO 4925 classe 5.1"
+    ],
+    "vehicules": [],
+    "distinction": "DOT 5.1 = entièrement synthétique à base de glycols, basse viscosité, ISO 4925 classe 5.1 ; DOT 4 & 3 = éthers PAG et polyglycols, FMVSS DOT 4.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "dot-4-3",
+    "nom": "DOT 4 & DOT 3 Brake Fluid",
+    "gamme": "Liquides de frein",
+    "usage": "Circuits hydrauliques de freinage et d'embrayage",
+    "base": "éthers PAG et polyglycols",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": "SAE J1704/J1703, ISO 4925, NFRI2-640, FMVSS DOT 4",
+    "conditionnements": [
+      "250 ml",
+      "500 ml"
+    ],
+    "proprietes_typiques": null,
+    "notes": "Le gabarit générique « Grades : 5W-30 … 20W-40 » affiché par le site est sans objet pour un liquide de frein : ignoré. Pas de tableau d'essais. Photo du site partagée avec DOT 5.1 (flacons 250 et 500 ml). Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/BrakeFluids/DOT4And3BrakeFluid",
+    "date_releve": "2026-10-03",
+    "photo": "dot-4-3.webp",
+    "accroche": "Le liquide de frein DOT 4 / DOT 3 à base d'éthers PAG et de polyglycols, à point d'ébullition élevé.",
+    "points_forts": [
+      "Point d'ébullition élevé : pas de vapeur dans le circuit",
+      "Pression de freinage ferme en toutes conditions",
+      "Excellente stabilité chimique",
+      "Protège les métaux et caoutchoucs des circuits de frein et hydrauliques"
+    ],
+    "normes_principales": [
+      "FMVSS DOT 4",
+      "SAE J1704/J1703"
+    ],
+    "vehicules": [],
+    "distinction": "DOT 4 & 3 = éthers PAG et polyglycols, FMVSS DOT 4 ; DOT 5.1 = entièrement synthétique à base de glycols, basse viscosité, classe ISO 5.1.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "kuhler",
+    "nom": "KÜHLER Coolant & Anti-Freeze",
+    "gamme": "Liquides de refroidissement",
+    "usage": "Radiateurs : liquide de refroidissement, antigel et anti-ébullition, prémélangé ; sans nitrite, amine, phosphate ni silicate",
+    "base": "monoéthylène glycol (disponible en vert, rouge, bleu)",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [
+      "5 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "30 %",
+        "couleur": "Vert fluo",
+        "aspect": "B&C",
+        "d20": 1.01,
+        "ph": 7.2,
+        "alcalinite_reserve": 3.2,
+        "protection_gel_C": -15,
+        "mono_ethylene_glycol_pct": 29.3
+      },
+      {
+        "variante": "33 %",
+        "couleur": "Vert fluo",
+        "aspect": "B&C",
+        "d20": 1.04,
+        "ph": 7.2,
+        "alcalinite_reserve": 3.4,
+        "protection_gel_C": -20,
+        "mono_ethylene_glycol_pct": 31.9
+      },
+      {
+        "variante": "40 %",
+        "couleur": "Vert fluo",
+        "aspect": "B&C",
+        "d20": 1.05,
+        "ph": 7.4,
+        "alcalinite_reserve": 3.4,
+        "protection_gel_C": -27,
+        "mono_ethylene_glycol_pct": 39.1
+      },
+      {
+        "variante": "50 %",
+        "couleur": "Vert fluo",
+        "aspect": "B&C",
+        "d20": 1.07,
+        "ph": 7.5,
+        "alcalinite_reserve": 3.6,
+        "protection_gel_C": -36,
+        "mono_ethylene_glycol_pct": 49.1
+      },
+      {
+        "variante": "100 %",
+        "couleur": "Vert fluo",
+        "aspect": "B&C",
+        "d20": 1.09,
+        "ph": 7.6,
+        "alcalinite_reserve": 4.2,
+        "protection_gel_C": -18,
+        "mono_ethylene_glycol_pct": 96
+      }
+    ],
+    "notes": "Libellé « Desity @ 20°C » dans la source (densité à 20 °C, champ d20). Valeur de protection gel à 100 % (-18 °C) telle que publiée. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/CoolantsAndAntiFreeze/Kuhler",
+    "date_releve": "2026-10-03",
+    "photo": "kuhler.webp",
+    "accroche": "L'antigel-liquide de refroidissement prémélangé au monoéthylène glycol, sans nitrite, amine, phosphate ni silicate.",
+    "points_forts": [
+      "Prémélangé de 30 à 100 % (-36 °C à 50 %)",
+      "Protège aluminium, cuivre, fer, bronze et fonte",
+      "Sans nitrite, amine, phosphate ni silicate",
+      "Contre dépôts et mousse : bonne dissipation de la chaleur ; vert, rouge ou bleu"
+    ],
+    "normes_principales": [],
+    "vehicules": [],
+    "distinction": "KÜHLER = seul liquide de refroidissement/antigel (monoéthylène glycol, 30 à 100 %) ; aucune norme publiée.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "glat-ep0-ep1-ep2",
+    "nom": "GLÄT EP0 / EP1 / EP2 (lithium extrême pression)",
+    "gamme": "Graisses",
+    "usage": "Paliers lisses et à roulements, usage automobile et industriel ; plage -30 à 120 °C",
+    "base": "savon de lithium",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [
+      "20 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "NLGI 0",
+        "viscosite_40C_cSt": 148,
+        "penetration_25C": "355-385",
+        "point_goutte_C": 190,
+        "usure_4_billes_mm": 0.5
+      },
+      {
+        "variante": "NLGI 1",
+        "viscosite_40C_cSt": 150,
+        "penetration_25C": "220-250",
+        "point_goutte_C": 190,
+        "usure_4_billes_mm": 0.5
+      },
+      {
+        "variante": "NLGI 2",
+        "viscosite_40C_cSt": 170,
+        "penetration_25C": "265-295",
+        "point_goutte_C": 190,
+        "usure_4_billes_mm": 0.5
+      }
+    ],
+    "notes": "Le grade EP 2 figure aussi dans la fiche GLÄT EP2 / EP3. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/Greases/GLAT-EP0-EP1-EP2ExtremePressureLithiumGrease",
+    "date_releve": "2026-10-03",
+    "photo": "glat-ep0-ep1-ep2.webp",
+    "accroche": "Graisse au lithium extrême pression, grades EP 0 / 1 / 2, pour paliers et roulements de -30 à 120 °C.",
+    "points_forts": [
+      "Savon de lithium, additifs EP sans plomb ni métaux indésirables",
+      "Résiste au délavage et à l'entrée d'eau",
+      "Plage de -30 à 120 °C, point de goutte 190 °C",
+      "Grades souples adaptés au graissage centralisé"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "voiture",
+      "industrie"
+    ],
+    "distinction": "GLÄT EP0/1/2 = lithium EP, -30 à 120 °C, point de goutte 190 °C ; GLÄT EP2/3 = lithium complexe, jusqu'à 160 °C ; GLÄT Multi-Purpose = calcium.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "glat-ep2-ep3",
+    "nom": "GLÄT EP2 / EP3 (lithium complexe)",
+    "gamme": "Graisses",
+    "usage": "Applications sévères, haute température, engins de chantier et mines, aciéries ; plage -15 à 160 °C",
+    "base": "savon de lithium complexe",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [
+      "500 g",
+      "1 kg"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "NLGI 2",
+        "couleur": "Bleu foncé",
+        "viscosite_40C_cSt": 210,
+        "penetration_25C": 280,
+        "point_goutte_C": 275,
+        "usure_4_billes_mm": 0.6,
+        "timken_ok_load_kg": 20,
+        "corrosion_lame_cuivre": "1B"
+      },
+      {
+        "variante": "NLGI 3",
+        "couleur": "Bleu foncé",
+        "viscosite_40C_cSt": 210,
+        "penetration_25C": 235,
+        "point_goutte_C": 280,
+        "usure_4_billes_mm": 0.6,
+        "timken_ok_load_kg": 19,
+        "corrosion_lame_cuivre": "1B"
+      }
+    ],
+    "notes": "La fiche GLÄT EP2 / EP3 et la fiche GLÄT EP0/EP1/EP2 citent toutes deux le grade EP 2 ; la photo ne montre que EP 2. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/Greases/GLAT-EP2-EP3LithiumComplexGrease",
+    "date_releve": "2026-10-03",
+    "photo": "glat-ep2-ep3.webp",
+    "accroche": "Graisse au lithium complexe pour applications sévères, de -15 à 160 °C, point de goutte 275-280 °C.",
+    "points_forts": [
+      "Point de goutte 275 °C (NLGI 2) et 280 °C (NLGI 3)",
+      "Résiste au délavage, aux chocs et aux vibrations",
+      "Intervalles de regraissage allongés",
+      "Charge Timken OK 19-20 kg ; engins de chantier, mines, aciéries"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "engin",
+      "industrie"
+    ],
+    "distinction": "GLÄT EP2/3 = lithium complexe, jusqu'à 160 °C, usages sévères ; GLÄT EP0/1/2 = lithium EP jusqu'à 120 °C ; GLÄT Multi-Purpose = calcium.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "glat-multi-purpose",
+    "nom": "GLÄT Multi-Purpose Grease (base calcium)",
+    "gamme": "Graisses",
+    "usage": "Graisse multi-usage : roulements de roues, essieux, paliers ; résiste à l'eau et aux hautes températures",
+    "base": "savon de calcium",
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [
+      "20 L"
+    ],
+    "proprietes_typiques": [
+      {
+        "variante": "NLGI 2",
+        "couleur": "Brun",
+        "epaississant": "Savon de calcium",
+        "viscosite_40C_cSt": 72,
+        "penetration_travaillee_60_coups_25C": 275,
+        "separation_huile_24h_pct": 2.3,
+        "point_goutte_C": 190
+      },
+      {
+        "variante": "NLGI 3",
+        "couleur": "Brun",
+        "epaississant": "Savon de calcium",
+        "viscosite_40C_cSt": 72,
+        "penetration_travaillee_60_coups_25C": 275,
+        "separation_huile_24h_pct": 2.0,
+        "point_goutte_C": 195
+      }
+    ],
+    "notes": "Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/Greases/GLATMultiPurposeGrease",
+    "date_releve": "2026-10-03",
+    "photo": "glat-multi-purpose.webp",
+    "accroche": "Graisse multi-usage au savon de calcium pour roulements de roues, essieux et paliers, résistante à l'eau.",
+    "points_forts": [
+      "Savon de calcium, couleur brune, NLGI 2 et 3",
+      "Protection antirouille et anticorrosion",
+      "Bonne tenue et adhérence à haute température",
+      "Résiste à l'entrée d'eau"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "GLÄT Multi-Purpose = base calcium, roulements de roues, multi-usage ; GLÄT EP0/1/2 = lithium EP ; GLÄT EP2/3 = lithium complexe haute température.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "fuel-injector-cleaner",
+    "nom": "Petrovöll Fuel Injector Cleaner",
+    "gamme": "Additifs et entretien",
+    "usage": "Nettoyant d'injecteurs, soupapes et conduits d'admission, moteurs essence",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [
+      "250 ml"
+    ],
+    "proprietes_typiques": null,
+    "notes": "Le gabarit générique « Grades : 5W-30 … 20W-40 » du site est sans objet ici : ignoré. Pas de tableau d'essais. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLFuelInjectorCleaner",
+    "date_releve": "2026-10-03",
+    "photo": "fuel-injector-cleaner.webp",
+    "accroche": "Nettoyant d'injecteurs pour moteurs essence : supprime le calaminage des injecteurs et soupapes d'admission.",
+    "points_forts": [
+      "Nettoie injecteurs, carburateurs, soupapes d'admission et chambres",
+      "Améliore le démarrage à froid et la stabilité du carburant",
+      "Réduit ralenti irrégulier, à-coups et encrassement des bougies",
+      "Protège le circuit de la rouille"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "Fuel Injector Cleaner = essence, injecteurs et soupapes ; Diesel Injector Cleaner = gazole ; Complete Fuel System Cleaner = circuit complet, injection directe incluse.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "diesel-injector-cleaner",
+    "nom": "Petrovöll Diesel Injector Cleaner",
+    "gamme": "Additifs et entretien",
+    "usage": "Nettoyant d'injecteurs et chambres de combustion diesel",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [
+      "250 ml"
+    ],
+    "proprietes_typiques": null,
+    "notes": "Le gabarit générique « Grades : 5W-30 … 20W-40 » du site est sans objet ici : ignoré. Pas de tableau d'essais. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLDieselInjectorCleaner",
+    "date_releve": "2026-10-03",
+    "photo": "diesel-injector-cleaner.webp",
+    "accroche": "Nettoyant d'injecteurs diesel : chambres de combustion propres, moins de cliquetis et de fumées noires.",
+    "points_forts": [
+      "Nettoie tout le circuit gazole, injecteurs et pompe lubrifiés",
+      "Améliore la combustion et le démarrage à froid",
+      "Réduit le cliquetis diesel et les fumées noires",
+      "Sans danger pour les systèmes de post-traitement"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "Diesel Injector Cleaner = pour moteurs diesel (post-traitement compatible) ; Fuel Injector Cleaner = essence ; Complete Fuel System Cleaner = circuit complet.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "complete-fuel-system-cleaner",
+    "nom": "Petrovöll Complete Fuel System Cleaner",
+    "gamme": "Additifs et entretien",
+    "usage": "Nettoyant complet du circuit carburant (injecteurs directs et indirects, soupapes, pistons, culasse)",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [
+      "250 ml"
+    ],
+    "proprietes_typiques": null,
+    "notes": "Le gabarit générique « Grades : 5W-30 … 20W-40 » du site est sans objet ici : ignoré. Pas de tableau d'essais. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCompleteFuelSystemCleaner",
+    "date_releve": "2026-10-03",
+    "photo": "complete-fuel-system-cleaner.webp",
+    "accroche": "Le nettoyant complet du circuit carburant : injecteurs directs et indirects, soupapes, pistons, culasse.",
+    "points_forts": [
+      "Nettoie injecteurs directs et indirects, soupapes, sommets de piston, culasse",
+      "Protège contre la corrosion due à l'éthanol et à l'eau",
+      "Réduit la consommation en éliminant les dépôts",
+      "Facilite l'écoulement par temps froid et réduit les émissions"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "Complete Fuel System Cleaner = circuit carburant entier, injection directe comprise ; Fuel/Diesel Injector Cleaner = injecteurs seuls, essence ou gazole.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "octane-booster",
+    "nom": "Petrovöll Octane Booster",
+    "gamme": "Additifs et entretien",
+    "usage": "Additif carburant augmentant l'indice d'octane, moteurs essence à injection",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [
+      "250 ml"
+    ],
+    "proprietes_typiques": null,
+    "notes": "Le gabarit générique « Grades : 5W-30 … 20W-40 » du site est sans objet ici : ignoré. Pas de tableau d'essais. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLOctaneBooster",
+    "date_releve": "2026-10-03",
+    "photo": "octane-booster.webp",
+    "accroche": "L'additif qui relève l'indice d'octane et protège les sièges de soupapes avec les carburants sans plomb.",
+    "points_forts": [
+      "Anti-cliquetis très efficace, relève l'indice d'octane",
+      "Protège les sièges de soupapes avec le carburant sans plomb",
+      "Optimisé pour véhicules à catalyseur ; compatible post-traitement",
+      "Ralenti plus régulier, accélération plus rapide"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "Octane Booster = relève l'indice d'octane (essence à injection) ; les nettoyants éliminent les dépôts sans modifier l'octane.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "oil-treatment",
+    "nom": "Petrovöll Engine Oil Treatment",
+    "gamme": "Additifs et entretien",
+    "usage": "Additif d'huile moteur antiusure (zinc/phosphore), élimine les boues",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [
+      "444 ml"
+    ],
+    "proprietes_typiques": null,
+    "notes": "Le gabarit générique « Grades : 5W-30 … 20W-40 » du site est sans objet ici : ignoré. Pas de tableau d'essais. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLOilTreatment",
+    "date_releve": "2026-10-03",
+    "photo": "oil-treatment.webp",
+    "accroche": "L'additif d'huile moteur au zinc et phosphore antiusure, qui élimine aussi les boues noires.",
+    "points_forts": [
+      "Apporte zinc et phosphore pour protéger arbre à cames et soupapes au rodage",
+      "Élimine les boues du carter, crépines et culbuteurs",
+      "Réduit friction métal contre métal et bruit au démarrage",
+      "Utilisable avec huiles conventionnelles et synthétiques"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "Engine Oil Treatment = s'ajoute à l'huile (antiusure zinc/phosphore, anti-boues) ; Engine Flush = rinçage avant vidange ; Oil Stop Leak = joints.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "oil-stop-leak",
+    "nom": "Petrovöll Oil Stop Leak",
+    "gamme": "Additifs et entretien",
+    "usage": "Additif réduisant la consommation d'huile (régénère les joints), essence et diesel",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [
+      "444 ml"
+    ],
+    "proprietes_typiques": null,
+    "notes": "Le gabarit générique « Grades : 5W-30 … 20W-40 » du site est sans objet ici : ignoré. Pas de tableau d'essais. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLOilStopLeak",
+    "date_releve": "2026-10-03",
+    "photo": "oil-stop-leak.webp",
+    "accroche": "L'additif qui régénère les joints durcis pour réduire la consommation d'huile, essence et diesel.",
+    "points_forts": [
+      "Rend leur souplesse aux joints en élastomère, plastique et caoutchouc",
+      "Réduit la consommation d'huile des moteurs essence et diesel",
+      "Convient aux moteurs turbo, catalyseurs et filtres à particules",
+      "Réduit le bruit moteur"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "Oil Stop Leak = redonne de la souplesse aux joints (consommation d'huile) ; Engine Oil Treatment = antiusure ; Engine Flush = nettoyage interne.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "photo officielle"
+  },
+  {
+    "id": "carburetor-choke-cleaner",
+    "nom": "Petrovöll Carburetor and Choke Cleaner",
+    "gamme": "Additifs et entretien",
+    "usage": "Nettoyant carburateur et starter non chloré (déconseillé sur véhicules à injection)",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [],
+    "proprietes_typiques": null,
+    "notes": "Le gabarit générique « Grades : 5W-30 … 20W-40 » du site est sans objet ici : ignoré. Pas de tableau d'essais. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLCarburetorAndChokeCleaner",
+    "date_releve": "2026-10-03",
+    "photo": "carburetor-choke-cleaner.webp",
+    "accroche": "Le nettoyant carburateur et starter non chloré, avec tube d'extension, déconseillé sur véhicules à injection.",
+    "points_forts": [
+      "Dissout gomme, vernis, carbone dur et boues",
+      "Améliore accélération et démarrages, ralenti plus régulier",
+      "Nettoie les pièces métalliques non peintes, sans danger pour métaux, plastiques et caoutchoucs",
+      "Tube d'extension fourni"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "Carburetor and Choke Cleaner = nettoyage externe/interne du carburateur (véhicules sans injection) ; les nettoyants d'injecteurs se versent dans le carburant.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "aucun format prouvé (photo générique ou absente ; gabarit du site non confirmé)"
+  },
+  {
+    "id": "engine-flush",
+    "nom": "Petrovöll Engine Flush",
+    "gamme": "Additifs et entretien",
+    "usage": "Rinçage moteur (boues, vernis), moteurs essence non turbo",
+    "base": null,
+    "viscosite_sae": null,
+    "grades_iso": null,
+    "normes": null,
+    "conditionnements": [],
+    "proprietes_typiques": null,
+    "notes": "Le gabarit générique « Grades : 5W-30 … 20W-40 » du site est sans objet ici : ignoré. Pas de tableau d'essais. Conditionnements : le site affiche partout le gabarit « 1 L, 4 L, 5 L, 20 L, 208 L » (non confirmé produit par produit, donc non retenu) ; la liste ci-dessus ne reprend que les formats visibles sur la photo officielle.",
+    "source": "https://petrovoll.com/AdditivesAndCarCare/PETROVOLLEngineFlush",
+    "date_releve": "2026-10-03",
+    "photo": "engine-flush.webp",
+    "accroche": "Le rinçage moteur en 5 minutes qui chasse boues et vernis, pour moteurs essence non turbo.",
+    "points_forts": [
+      "Nettoie le moteur en 5 minutes",
+      "Élimine gommes, vernis et boues internes",
+      "Libère soupapes, segments et poussoirs collés",
+      "Améliore le rendement et la tenue de l'huile"
+    ],
+    "normes_principales": [],
+    "vehicules": [
+      "voiture"
+    ],
+    "distinction": "Engine Flush = rinçage interne avant vidange, essence non turbo ; Engine Oil Treatment = additif permanent dans l'huile.",
+    "conditionnements_site_gabarit": [
+      "1 L",
+      "4 L",
+      "5 L",
+      "20 L",
+      "208 L (fût)"
+    ],
+    "conditionnements_source": "aucun format prouvé (photo générique ou absente ; gabarit du site non confirmé)"
+  }
+]

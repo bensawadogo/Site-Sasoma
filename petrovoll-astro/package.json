@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.0",
+    "@astrojs/vercel": "^8.2.11",
     "@gltf-transform/cli": "^4.5.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",

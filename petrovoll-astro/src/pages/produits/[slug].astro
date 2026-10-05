@@ -1,38 +1,51 @@
 ---
 /**
- * Fiche produit — une page prérendue par produit de l'admin.
- * JSON-LD Product (+ Offer en FCFA quand un prix est renseigné).
+ * Fiche produit — une page prérendue par produit de l'admin (adresse = nom du
+ * fichier Keystatic). Les caractéristiques viennent du fichier fabricant ; une
+ * valeur absente n'affiche pas de ligne. JSON-LD Product (+ Offer si prix).
  */
 import { getImage } from 'astro:assets'
 import { getEntry, render } from 'astro:content'
 
-import ProduitDetail from '@/components/produits/ProduitDetail.astro'
+import CarteProduit from '@/components/catalogue/CarteProduit.astro'
+import PhotoStudio from '@/components/catalogue/PhotoStudio.astro'
 import PageLayout from '@/layouts/PageLayout.astro'
-import { getProduits, urlSite, type Produit } from '@/lib/contenu'
-import { extraitTexte } from '@/lib/format'
+import { construireProduit, dateLongue } from '@/lib/catalogue'
+import { getParametres, getProduits, urlSite } from '@/lib/contenu'
+import { extraitTexte, formaterPrix } from '@/lib/format'
 
 export const prerender = true
 
 export async function getStaticPaths() {
   const produits = await getProduits()
-  return produits.map((produit) => ({ params: { slug: produit.id }, props: { produit } }))
+  return produits.map((produit) => ({ params: { slug: produit.id } }))
 }
 
-interface Props {
-  produit: Produit
+const { slug } = Astro.params
+const entrees = await getProduits()
+const secteurs = new Map<string, string>()
+for (const e of entrees) {
+  const id = e.data.secteur
+  if (id && !secteurs.has(id)) secteurs.set(id, (await getEntry('secteurs', id))?.data.nom ?? '')
 }
-const { produit } = Astro.props
-const { Content } = await render(produit)
-const { nom, photos, prix, disponible, marque, reference, secteur } = produit.data
+const tous = entrees
+  .map((e) => construireProduit(e, e.data.secteur ? secteurs.get(e.data.secteur) : undefined))
+  .sort((a, b) => a.ordre - b.ordre || a.nom.localeCompare(b.nom, 'fr'))
+const p = tous.find((x) => x.slug === slug)!
+const { marque, reference } = p.entree.data
 
-const nomSecteur = secteur ? (await getEntry('secteurs', secteur))?.data.nom : undefined
-const urlPage = new URL(`/produits/${produit.id}`, urlSite(Astro.site)).toString()
-const description = extraitTexte(produit.body) || `${nom} — prix et disponibilité.`
-// Aperçu de partage (WhatsApp, Facebook) : JPEG 1200 px, format lu partout,
-// plutôt que la photo d'origine du téléphone (plusieurs Mo).
-const partage = photos[0] ? await getImage({ src: photos[0], width: 1200, format: 'jpeg', quality: 80 }) : undefined
+// Produit sans fiche fabricant (ajouté dans l'admin) : on montre son texte libre.
+const Contenu = p.fabricant ? undefined : (await render(p.entree)).Content
+const description =
+  p.description || extraitTexte(p.entree.body) || `${p.nom} : caractéristiques, conditionnements et demande de devis.`
+
+const parametres = await getParametres()
+const urlPage = new URL(`/produits/${p.slug}`, urlSite(Astro.site)).toString()
+const lienWhatsApp = parametres.whatsapp(`Bonjour, je souhaite un devis pour : ${p.nom}\n${urlPage}`)
+const lienDevis = `/contact?produit=${encodeURIComponent(p.nom)}`
+
+const partage = p.photo ? await getImage({ src: p.photo, width: 1200, format: 'jpeg', quality: 80 }) : undefined
 const imagePartage = partage ? new URL(partage.src, urlSite(Astro.site)).toString() : undefined
-// Dimensions réelles (1200 px de large, hauteur selon la photo) pour og:image.
 const taillePartage = partage
   ? { l: Number(partage.attributes.width), h: Number(partage.attributes.height) }
   : undefined
@@ -40,49 +53,492 @@ const taillePartage = partage
 const schema: Array<Record<string, unknown>> = [
   {
     '@type': 'Product',
-    name: nom,
+    name: p.nom,
     description,
-    ...(marque ? { brand: { '@type': 'Brand', name: marque } } : {}),
+    brand: { '@type': 'Brand', name: marque ?? 'Petrovöll' },
     ...(reference ? { sku: reference } : {}),
-    ...(nomSecteur ? { category: nomSecteur } : {}),
+    category: p.gamme,
     ...(imagePartage ? { image: imagePartage } : {}),
-    ...(prix != null
+    ...(p.prix != null
       ? {
           offers: {
             '@type': 'Offer',
-            price: prix,
+            price: p.prix,
             priceCurrency: 'XOF',
-            availability: disponible ? 'https://schema.org/InStock' : 'https://schema.org/BackOrder',
+            availability: p.disponible ? 'https://schema.org/InStock' : 'https://schema.org/BackOrder',
             url: urlPage,
           },
         }
       : {}),
   },
 ]
+
+const variantes = p.variantes
+// Variante par défaut = celle que montre la photo (photo et chiffres concordent).
+const defaut = p.defaut
+const meme = tous.filter((x) => x.slug !== p.slug && x.fabricant && x.gamme === p.gamme).slice(0, 4)
+const releve = dateLongue(p.dateReleve)
+const aNormes = p.normes.length > 0 || p.constructeurs.length > 0
+const onglets = [
+  ...(variantes.length > 0 ? [{ id: 'caracteristiques', titre: 'Caractéristiques' }] : []),
+  ...(aNormes ? [{ id: 'normes', titre: 'Normes et homologations' }] : []),
+  ...(p.fabricant || p.conditionnements.length > 0 ? [{ id: 'conditionnements', titre: 'Conditionnements' }] : []),
+]
+const surtitre = [p.gamme, p.baseTexte && `Base ${p.baseTexte}`].filter(Boolean).join(' · ')
 ---
 
 <PageLayout
-  titre={nom}
+  titre={p.nom}
   description={description}
   ogType="product"
   ogImage={imagePartage}
   ogImageTaille={taillePartage}
-  canonicalChemin={`/produits/${produit.id}`}
+  canonicalChemin={`/produits/${p.slug}`}
   schema={schema}
 >
-  <div class="container-page py-8 lg:py-14">
-    <nav aria-label="Fil d'Ariane" class="mb-6 text-sm text-attenue">
-      <ol class="flex flex-wrap gap-2">
-        <li><a href="/" class="hover:text-vif">Accueil</a></li>
+  <div
+    class="bg-surface pb-24 lg:pb-0"
+    data-fiche
+    data-nom={p.nom}
+    data-url={urlPage}
+    data-devis-base={lienDevis}
+    data-wa={lienWhatsApp ?? ''}
+  >
+    <nav aria-label="Fil d'Ariane" class="container-page pt-4 text-sm text-attenue">
+      <ol class="flex flex-wrap items-center gap-x-2">
+        <li><a href="/produits" class="inline-flex min-h-[44px] items-center text-attenue underline-offset-2 hover:text-vif hover:underline">Catalogue</a></li>
         <li aria-hidden="true">/</li>
-        <li><a href="/produits" class="hover:text-vif">Produits</a></li>
-        <li aria-hidden="true">/</li>
-        <li aria-current="page" class="text-texte">{nom}</li>
+        <li aria-current="page" class="text-texte">{p.nom}</li>
       </ol>
     </nav>
 
-    <ProduitDetail produit={produit} nomSecteur={nomSecteur} urlPage={urlPage}>
-      <Content />
-    </ProduitDetail>
+    <div class="container-page grid grid-cols-1 gap-6 pb-12 pt-2 lg:grid-cols-[minmax(0,1fr)_440px] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-10 lg:pb-16">
+      <!-- Photo -->
+      <div class:list={['relative min-w-0 lg:col-start-1 lg:row-start-1', `base-${p.base}`]}>
+        <PhotoStudio
+          photo={p.photo}
+          alt={`Bidon Petrovöll ${p.nom}`}
+          widths={[480, 720, 960, 1200]}
+          sizes="(min-width: 1024px) 640px, 100vw"
+          prioritaire
+          class="aspect-[5/4] w-full rounded-2xl border border-bordure sm:aspect-[16/10] lg:aspect-square"
+          imgClass="h-[96%] w-auto"
+        />
+        {
+          p.libelleBase && (
+            <p class="pastille-base !left-3 !top-3">
+              <span class="pastille-base-point" aria-hidden="true" />
+              {p.libelleBase.replace('Base ', '').replace(/^./, (c) => c.toUpperCase())}
+              <span class="sr-only"> : type de base de l'huile</span>
+            </p>
+          )
+        }
+        {
+          p.gradePhoto && (
+            <p class="absolute right-3 top-3 z-[2] rounded-md bg-marine px-2.5 py-1 text-xs font-bold tabular-nums text-white">
+              <span class="font-medium opacity-80">Photo : </span>
+              {p.gradePhoto}
+            </p>
+          )
+        }
+        {p.photoNonContractuelle && <p class="mt-2 text-center text-xs text-attenue">Photo non contractuelle</p>}
+      </div>
+
+      <!-- Colonne d'achat collante -->
+      <aside class="flex min-w-0 flex-col gap-5 lg:sticky lg:top-28 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
+        <div class="flex flex-col gap-3">
+          <p class="text-xs font-semibold uppercase tracking-[0.16em] text-vif">{surtitre}</p>
+          <h1 class="text-[52px] leading-[0.95] text-marine sm:text-[60px]">{p.nom}</h1>
+          {p.accroche ? (
+            <p class="text-[17px] leading-snug text-texte">{p.accroche}</p>
+          ) : (
+            description && <p class="text-[15px] leading-relaxed text-attenue">{description}</p>
+          )}
+          {
+            p.pointsForts.length > 0 && (
+              <ul class="flex flex-col gap-1.5 text-[15px] leading-snug text-texte" aria-label="Points forts">
+                {p.pointsForts.map((f) => (
+                  <li class="flex gap-2">
+                    <span class="mt-[8px] h-1.5 w-1.5 flex-none rounded-full bg-vif" aria-hidden="true" />
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+          {
+            p.distinction && (
+              <p class="rounded-lg border-l-4 border-vif bg-surface px-3.5 py-2.5 text-sm leading-snug text-texte">
+                <strong class="font-semibold text-marine">En résumé : </strong>{p.distinction}
+              </p>
+            )
+          }
+        </div>
+
+        {
+          p.chiffresCles.length > 0 && (
+            <ul class="flex flex-wrap gap-1.5" aria-label="Normes clés">
+              {p.chiffresCles.map((c) => (
+                <li class="rounded-md bg-marine px-2.5 py-1.5 text-sm font-semibold text-white">
+                  {c.libelle.replace('Norme ', '')} {c.valeur}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+
+        {
+          variantes.length > 1 && (
+            <div class="flex flex-col gap-2.5" data-bloc-variantes hidden>
+              <p id="titre-variante" class="text-xs font-semibold uppercase tracking-[0.12em] text-attenue">
+                {p.viscosites.length > 0 && !p.viscosites[0].startsWith('ISO') ? 'Viscosité' : 'Choix'}
+              </p>
+              <div role="group" aria-labelledby="titre-variante" class="flex flex-wrap gap-2">
+                {variantes.map((v, i) => (
+                  <button type="button" class="pastille" data-variante-bouton={i} aria-pressed={i === defaut ? 'true' : 'false'}>
+                    {v.libelle}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )
+        }
+
+        {
+          variantes.some((v) => v.cles.length > 0) &&
+            variantes.map((v, i) => (
+              <dl
+                data-variante-cles={i}
+                hidden={variantes.length > 1 && i !== defaut}
+                class="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-bordure bg-bordure"
+              >
+                {v.cles.map((c, k) => (
+                  <div class:list={['flex flex-col-reverse gap-1 bg-fond p-3.5', k === v.cles.length - 1 && v.cles.length % 2 === 1 && 'col-span-2']}>
+                    <dt class="text-[11px] uppercase tracking-[0.1em] text-attenue">{c.nom}</dt>
+                    <dd class="font-display text-[30px] leading-none tabular-nums text-marine">
+                      {c.valeur}
+                      {c.unite && <span class="ml-1 font-sans text-xs font-normal text-attenue">{c.unite}</span>}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            ))
+        }
+
+        <div id="commande" class="flex flex-col gap-4 rounded-xl border border-bordure bg-fond p-5">
+          {
+            p.conditionnements.length === 0 ? (
+              <p class="text-[15px] font-semibold text-marine">Conditionnements : nous consulter</p>
+            ) : (
+              <>
+                <p id="titre-format" class="text-xs font-semibold uppercase tracking-[0.12em] text-attenue">Conditionnement</p>
+                <div role="group" aria-labelledby="titre-format" class="flex flex-wrap gap-2" data-bloc-formats hidden>
+                  {p.conditionnements.map((f, i) => (
+                    <button type="button" class="pastille" data-format-bouton={f} aria-pressed={i === 0 ? 'true' : 'false'}>
+                      {f.replace(/\s*\(.*\)/, '')}
+                    </button>
+                  ))}
+                </div>
+                <ul class="flex flex-wrap gap-2" data-liste-formats>
+                  {p.conditionnements.map((f) => (
+                    <li class="rounded-lg border border-[#74869d] px-3.5 py-2.5 text-[15px] font-semibold text-marine">{f}</li>
+                  ))}
+                </ul>
+              </>
+            )
+          }
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-center rounded-lg border border-[#74869d]" data-bloc-quantite hidden>
+              <button type="button" data-moins aria-label="Retirer un" class="h-12 w-12 text-[22px] text-marine">−</button>
+              <output aria-live="polite" data-quantite class="min-w-[40px] text-center font-semibold tabular-nums">1</output>
+              <button type="button" data-plus aria-label="Ajouter un" class="h-12 w-12 text-[22px] text-marine">+</button>
+            </div>
+            <a
+              href={lienDevis}
+              data-devis
+              class="flex h-12 min-w-0 flex-[1_1_180px] items-center justify-center rounded-lg bg-accent px-4 text-center text-[15px] font-bold !text-white transition-colors duration-150 hover:bg-accent-fort"
+            >
+              Demander un devis<span data-resume class="ml-1.5"></span>
+            </a>
+          </div>
+          {
+            lienWhatsApp && (
+              <a
+                href={lienWhatsApp}
+                data-wa-lien
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex h-12 items-center justify-center rounded-lg border border-succes px-4 text-[15px] font-semibold text-succes transition-colors duration-150 hover:bg-succes hover:!text-white"
+              >
+                Commander sur WhatsApp
+              </a>
+            )
+          }
+          {p.prix != null ? <p class="font-display text-3xl tracking-wide text-vif">{formaterPrix(p.prix)}</p> : null}
+          <p class="text-[13px] leading-snug text-attenue">
+            {p.prix != null ? 'Prix indicatif, à confirmer selon le conditionnement et la quantité.' : 'Prix sur devis, selon le conditionnement et la quantité.'}
+            {!p.disponible && ' Produit sur commande : délai à confirmer.'}
+          </p>
+        </div>
+      </aside>
+
+      <!-- Onglets -->
+      {
+        onglets.length > 0 && (
+          <div data-onglets class="min-w-0 lg:col-start-1 lg:row-start-2">
+            <div role="tablist" aria-label="Détails du produit" hidden class="mb-5 flex gap-1 overflow-x-auto border-b border-bordure">
+              {onglets.map((o) => (
+                <button
+                  type="button"
+                  role="tab"
+                  id={`onglet-${o.id}`}
+                  aria-controls={`panneau-${o.id}`}
+                  aria-selected="false"
+                  class="onglet min-h-[48px] shrink-0 whitespace-nowrap px-4 text-[15px] font-semibold"
+                >
+                  {o.titre}
+                </button>
+              ))}
+            </div>
+
+            <div class="flex flex-col gap-10">
+              {variantes.length > 0 && (
+                <section id="panneau-caracteristiques" role="tabpanel" aria-labelledby="onglet-caracteristiques" class="flex flex-col gap-3.5">
+                  <h2 class="titre-panneau text-[30px] text-marine sm:text-4xl">
+                    Caractéristiques<span data-titre-variante> · {variantes[defaut].libelle}</span>
+                  </h2>
+                  <div class="overflow-hidden rounded-xl border border-bordure bg-fond">
+                    <table class="w-full border-collapse text-sm tabular-nums sm:text-[15px]">
+                      {variantes.map((v, i) => (
+                        <tbody data-variante-corps={i} hidden={variantes.length > 1 && i !== defaut}>
+                          {v.lignes.map((l) => (
+                            <tr class="border-b border-surface-2 last:border-b-0 even:bg-surface/60">
+                              <th scope="row" class="px-4 py-3 text-left font-medium text-texte">{l.nom}</th>
+                              <td class="whitespace-nowrap px-4 py-3 text-right font-semibold text-marine">
+                                {l.valeur}
+                                {l.unite && <span class="ml-1 text-xs font-normal text-attenue">{l.unite}</span>}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      ))}
+                    </table>
+                  </div>
+                  <p class="text-xs text-attenue sm:text-[13px]">
+                    Valeurs typiques publiées par le fabricant (petrovoll.com), sans tolérance : elles ne constituent pas une spécification.
+                  </p>
+                </section>
+              )}
+
+              {aNormes && (
+                <section id="panneau-normes" role="tabpanel" aria-labelledby="onglet-normes" class="flex flex-col gap-3.5">
+                  <h2 class="titre-panneau text-[30px] text-marine sm:text-4xl">Normes et homologations</h2>
+                  <div class="flex flex-col gap-5 rounded-xl border border-bordure bg-fond p-5">
+                    {p.normes.length > 0 && (
+                      <div class="flex flex-col gap-2.5">
+                        <h3 class="font-sans text-xs font-semibold uppercase leading-normal tracking-[0.12em] text-attenue">Normes</h3>
+                        <ul class="flex flex-wrap gap-1.5">
+                          {p.normes.map((n) => (
+                            <li class="rounded-md bg-marine px-2.5 py-1.5 text-sm font-semibold text-white">{n}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {p.constructeurs.length > 0 && (
+                      <div class="flex flex-col gap-2.5">
+                        <h3 class="font-sans text-xs font-semibold uppercase leading-normal tracking-[0.12em] text-attenue">Constructeurs et homologations</h3>
+                        <ul class="flex flex-wrap gap-1.5">
+                          {p.constructeurs.map((n) => (
+                            <li class="rounded-md bg-surface-2 px-2.5 py-1.5 text-sm text-marine">{n}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </section>
+              )}
+
+              <section id="panneau-conditionnements" role="tabpanel" aria-labelledby="onglet-conditionnements" class="flex flex-col gap-3.5">
+                <h2 class="titre-panneau text-[30px] text-marine sm:text-4xl">Conditionnements</h2>
+                {p.conditionnements.length > 0 ? (
+                  <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {p.conditionnements.map((f) => (
+                      <li class="rounded-xl border border-bordure bg-fond p-4 font-display text-[28px] leading-none text-marine">{f}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p class="text-[15px] font-semibold text-marine">Conditionnements : nous consulter</p>
+                )}
+                <p class="text-sm text-attenue">Disponibilité et prix sur devis, selon le conditionnement et la quantité.</p>
+              </section>
+            </div>
+          </div>
+        )
+      }
+
+      {
+        Contenu && (
+          <div class="rich-text min-w-0 rounded-xl border border-bordure bg-fond p-5 sm:p-6 lg:col-start-1 lg:row-start-2">
+            <Contenu />
+          </div>
+        )
+      }
+    </div>
+
+    <!-- Même gamme -->
+    {
+      meme.length > 0 && (
+        <section class="border-t border-bordure bg-fond">
+          <div class="container-page flex flex-col gap-5 pb-16 pt-12">
+            <h2 class="text-[32px] text-marine sm:text-4xl">Dans la même gamme</h2>
+            <ul class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
+              {meme.map((m) => <CarteProduit produit={m} />)}
+            </ul>
+            {releve && <p class="text-[13px] text-attenue">Source : petrovoll.com, relevé du {releve}.</p>}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Barre fixe téléphone -->
+    <div
+      class="fixed inset-x-0 bottom-0 z-30 flex gap-2.5 border-t border-bordure bg-fond px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-8px_24px_rgba(0,36,74,0.08)] lg:hidden"
+    >
+      <a
+        href={lienDevis}
+        data-devis
+        class="flex h-12 min-w-0 flex-1 items-center justify-center rounded-lg bg-accent px-3 text-[15px] font-bold !text-white"
+      >
+        Demander un devis<span data-resume-court class="ml-1.5"></span>
+      </a>
+      {
+        lienWhatsApp && (
+          <a
+            href={lienWhatsApp}
+            data-wa-lien
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Commander sur WhatsApp"
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-succes text-white"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 21l1.65-4.9A8.5 8.5 0 1 1 8 19.4L3 21z" />
+              <path d="M9 10c.5 2 2.5 4 5 5l1.5-1.5-2-1-1 .7c-.8-.4-1.6-1.2-2-2l.7-1-1-2L9 10z" />
+            </svg>
+          </a>
+        )
+      }
+    </div>
   </div>
 </PageLayout>
+
+<style is:global>
+  .onglet {
+    color: var(--color-attenue);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    transition:
+      color 150ms,
+      border-color 150ms;
+  }
+  .onglet:hover {
+    color: var(--color-marine);
+  }
+  .onglet[aria-selected='true'] {
+    color: var(--color-marine);
+    border-bottom-color: var(--color-accent);
+  }
+  .onglets-actifs .titre-panneau {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  const fiche = document.querySelector<HTMLElement>('[data-fiche]')
+  if (fiche) {
+    const nom = fiche.dataset.nom ?? ''
+    const urlPage = fiche.dataset.url ?? ''
+    const baseWa = fiche.dataset.wa ?? ''
+
+    const boutonsVariante = [...fiche.querySelectorAll<HTMLButtonElement>('[data-variante-bouton]')]
+    const corps = [...fiche.querySelectorAll<HTMLElement>('[data-variante-corps], [data-variante-cles]')]
+    const boutonsFormat = [...fiche.querySelectorAll<HTMLButtonElement>('[data-format-bouton]')]
+    const quantiteSortie = fiche.querySelector<HTMLElement>('[data-quantite]')
+    const titreVariante = fiche.querySelector<HTMLElement>('[data-titre-variante]')
+
+    // Les choix n'apparaissent que si le JS fonctionne ; sans JS, la liste des formats reste lisible.
+    fiche.querySelectorAll<HTMLElement>('[data-bloc-variantes], [data-bloc-formats], [data-bloc-quantite]').forEach((b) => (b.hidden = false))
+    fiche.querySelectorAll<HTMLElement>('[data-liste-formats]').forEach((b) => (b.hidden = true))
+
+    let variante = Math.max(0, boutonsVariante.findIndex((b) => b.getAttribute('aria-pressed') === 'true'))
+    let format = boutonsFormat.findIndex((b) => b.getAttribute('aria-pressed') === 'true')
+    let quantite = 1
+
+    const maj = () => {
+      boutonsVariante.forEach((b, i) => b.setAttribute('aria-pressed', String(i === variante)))
+      corps.forEach(
+        (c) =>
+          (c.hidden = boutonsVariante.length > 1 && Number(c.dataset.varianteCorps ?? c.dataset.varianteCles) !== variante),
+      )
+      const bv = boutonsVariante[variante]
+      if (titreVariante && bv) titreVariante.textContent = ` · ${bv.textContent?.trim()}`
+      boutonsFormat.forEach((b, i) => b.setAttribute('aria-pressed', String(i === format)))
+      if (quantiteSortie) quantiteSortie.textContent = String(quantite)
+
+      const fmt = boutonsFormat[format]?.textContent?.trim() ?? ''
+      const vis = bv?.textContent?.trim() ?? ''
+      const resume = fmt ? `${quantite} × ${fmt}` : ''
+      const designation = [nom, vis].filter(Boolean).join(' ')
+      const ligne = [designation, resume && `— ${resume}`].filter(Boolean).join(' ')
+
+      fiche.querySelectorAll<HTMLElement>('[data-resume]').forEach((e) => (e.textContent = resume ? ` · ${resume}` : ''))
+      fiche.querySelectorAll<HTMLElement>('[data-resume-court]').forEach((e) => (e.textContent = fmt ? ` · ${fmt}` : ''))
+      fiche.querySelectorAll<HTMLAnchorElement>('[data-devis]').forEach((a) => (a.href = `/contact?produit=${encodeURIComponent(ligne)}`))
+      if (baseWa) {
+        const u = new URL(baseWa)
+        u.searchParams.set('text', `Bonjour, je souhaite un devis pour : ${ligne}\n${urlPage}`)
+        fiche.querySelectorAll<HTMLAnchorElement>('[data-wa-lien]').forEach((a) => (a.href = u.toString()))
+      }
+    }
+
+    boutonsVariante.forEach((b, i) => b.addEventListener('click', () => ((variante = i), maj())))
+    boutonsFormat.forEach((b, i) => b.addEventListener('click', () => ((format = i), maj())))
+    fiche.querySelector('[data-moins]')?.addEventListener('click', () => ((quantite = Math.max(1, quantite - 1)), maj()))
+    fiche.querySelector('[data-plus]')?.addEventListener('click', () => ((quantite = Math.min(999, quantite + 1)), maj()))
+    maj()
+
+    // Onglets (sans JS : les sections restent empilées et lisibles).
+    const liste = fiche.querySelector<HTMLElement>('[role="tablist"]')
+    if (liste) {
+      const onglets = [...liste.querySelectorAll<HTMLButtonElement>('[role="tab"]')]
+      const panneaux = onglets.map((o) => document.getElementById(o.getAttribute('aria-controls')!)!)
+      liste.hidden = false
+      fiche.querySelector('[data-onglets]')?.classList.add('onglets-actifs')
+      const choisir = (i: number, focus = false) => {
+        onglets.forEach((o, k) => {
+          o.setAttribute('aria-selected', String(k === i))
+          o.tabIndex = k === i ? 0 : -1
+          panneaux[k].hidden = k !== i
+        })
+        if (focus) onglets[i].focus()
+      }
+      onglets.forEach((o, i) => {
+        o.addEventListener('click', () => choisir(i))
+        o.addEventListener('keydown', (e) => {
+          const n = onglets.length
+          const cibles: Record<string, number> = { ArrowRight: (i + 1) % n, ArrowLeft: (i + n - 1) % n, Home: 0, End: n - 1 }
+          if (e.key in cibles) {
+            e.preventDefault()
+            choisir(cibles[e.key], true)
+          }
+        })
+      })
+      choisir(0)
+    }
+  }
+</script>

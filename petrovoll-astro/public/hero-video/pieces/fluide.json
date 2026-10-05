@@ -1,0 +1,37 @@
+{
+ "version": "ab9e807db6",
+ "fps": 24,
+ "versement": {
+  "pos": [
+   872,
+   100
+  ],
+  "taille": [
+   74,
+   136
+  ],
+  "colonnes": 12,
+  "images": 72,
+  "boucle": [
+   24,
+   71
+  ]
+ },
+ "carter": {
+  "pos": [
+   392,
+   554
+  ],
+  "taille": [
+   528,
+   92
+  ],
+  "colonnes": 7,
+  "calme": 0,
+  "boucle": [
+   1,
+   109
+  ],
+  "niveau": 604
+ }
+}

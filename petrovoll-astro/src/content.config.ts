@@ -44,12 +44,15 @@ const produits = defineCollection({
 
 const secteurs = defineCollection({
   loader: glob({ pattern: '*.mdoc', base: './src/content/secteurs' }),
-  schema: z.object({
-    nom: z.string().min(1),
-    icone: texte,
-    ordre: z.number().nullish().transform((v) => v ?? 10),
-    resume: texte,
-  }),
+  schema: ({ image }) =>
+    z.object({
+      nom: z.string().min(1),
+      icone: texte,
+      ordre: z.number().nullish().transform((v) => v ?? 10),
+      resume: texte,
+      /** Photo de couverture (carte de l'accueil + haut de la page du secteur). */
+      image: image().nullish(),
+    }),
 })
 
 /** Pages éditoriales simples (À propos, Mentions légales). */

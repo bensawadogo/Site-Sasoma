@@ -30,7 +30,11 @@ const lien = 'flex min-h-[44px] items-center text-sm text-attenue hover:text-tex
 <footer class="zone-sombre mt-20">
   <div class="container-page grid gap-10 py-12 lg:grid-cols-4 lg:py-16">
     <div>
-      <img src="/images/logo/sasoma-horizontal-blanc.webp" alt={p.nomSociete} width="385" height="80" loading="lazy" class="h-11 w-auto" />
+      <!-- Logo couleur sur plaque blanche : sur le bleu nuit, la version blanche
+           perdait le globe (parties bleues transparentes) et se lisait mal. -->
+      <span class="inline-flex rounded-md bg-white px-3 py-2">
+        <img src="/images/logo/sasoma-horizontal.webp" alt={p.nomSociete} width="385" height="80" loading="lazy" class="h-10 w-auto" />
+      </span>
       {p.slogan && <p class="mt-4 max-w-xs text-base leading-relaxed text-attenue">{p.slogan}</p>}
       {
         p.reseaux.length > 0 && (

@@ -54,7 +54,10 @@ const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
     width: 100%;
     height: 100%;
   }
-  /* L'huile monte dans la silhouette exacte du bidon (effet rayons X) : teinte ambre en
+  /* Pas de will-change sur .niveau, .lumiere, .menisque : promus, ces grands calques
+     (jusqu'à 400 % du bidon, soit plusieurs Mo de mémoire graphique chacun) pèsent sur
+     un téléphone de 2 Go ; ils restent peints dans le calque du bidon.
+     L'huile monte dans la silhouette exacte du bidon (effet rayons X) : teinte ambre en
      « multiply », comme de l'huile vue à travers le plastique ; l'étiquette reste lisible. */
   .huile,
   .reflets {
@@ -80,7 +83,6 @@ const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
     background: rgb(246 210 122 / 0.7);
     transform-origin: 50% 1px;
     transform: translate3d(0, 100vh, 0);
-    will-change: transform;
   }
   /* Lumière du studio, fixée au monde (contre-rotation) : haut éclairé, bas dans l'ombre. */
   .lumiere {
@@ -92,7 +94,6 @@ const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
     margin: -150% 0 0 -150%;
     background: linear-gradient(to bottom, rgb(255 250 235 / 0.1) 30%, transparent 48%, transparent 52%, rgb(0 0 0 / 0.18) 70%);
     transform-origin: 50% 50%;
-    will-change: transform;
   }
   /* Grand rectangle dont le bord haut est la surface de l'huile. Son origine est le
      pivot du bidon : le script le contre-tourne (surface horizontale) et le descend
@@ -107,7 +108,6 @@ const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
     background: linear-gradient(to bottom, rgb(200 144 26 / 0) 0, #c8901a 7px);
     transform-origin: 50% 0;
     transform: translate3d(0, 100vh, 0);
-    will-change: transform;
   }
   .ouverture {
     position: absolute;
