@@ -9,7 +9,7 @@ import ContactCTA from '@/components/home/ContactCTA.astro'
 import ProduitPhare from '@/components/home/ProduitPhare.astro'
 import SecteursGrid from '@/components/home/SecteursGrid.astro'
 import StatsSection from '@/components/home/StatsSection.astro'
-import HeroScroll from '@/components/hero/HeroScroll.astro'
+import HeroVideo from '@/components/hero/video/HeroVideo.astro'
 import PageLayout from '@/layouts/PageLayout.astro'
 import { getParametres, getProduitVedette } from '@/lib/contenu'
 
@@ -24,7 +24,7 @@ const DESCRIPTION =
 ---
 
 <PageLayout titre={TITRE} titreComplet description={DESCRIPTION}>
-  <HeroScroll />
+  <HeroVideo />
   {produitVedette && <ProduitPhare produit={produitVedette} />}
   <SecteursGrid />
   <StatsSection />
