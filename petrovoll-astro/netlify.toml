@@ -1,0 +1,8 @@
+# Aperçu du site sur Netlify (08/10) : pages prérendues servies en statique depuis dist/.
+# L'hébergement prévu reste Cloudflare Pages (wrangler.toml) ; ici l'admin Keystatic n'est pas active.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
