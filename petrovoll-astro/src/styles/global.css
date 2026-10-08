@@ -349,8 +349,19 @@
   position: relative;
   z-index: 1;
 }
+.studio > picture {
+  /* Cadre plein : la hauteur en % de l'image (fiche produit) se calcule enfin ; sans cela,
+     l'image prenait sa taille réelle et débordait, rognée (« produits trop zoomés », 08/10). */
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
 .studio > picture > img {
   display: block;
+  max-width: 100%;
+  max-height: 100%;
 }
 /* Ombre de contact sous le bidon */
 .studio::after {
@@ -573,6 +584,20 @@ html.apercu-ouvert {
 }
 /* 08/10 (Ben) : le bloc reste suspendu, IMMOBILE (plus de va-et-vient) ; l'écart avec son
    ombre sur la route suffit à le faire « flotter ». */
+/* L'affiche du moteur n'apparaît qu'une fois calée par le script (background-position posé
+   par noyau.ts) : avant, le cadrage CSS approché la montrait ailleurs, puis elle sautait. */
+[data-route] [data-sequence] {
+  transition: opacity 0.35s ease-out;
+}
+[data-route] [data-sequence]:not([style*='background-position']) {
+  opacity: 0;
+}
+[data-route] .ombre-moteur:not([style*='--ombre-x']) {
+  visibility: hidden;
+}
+html:not([data-appareil]) [data-route] [data-sequence] {
+  opacity: 1;
+}
 [data-route] .ombre-moteur {
   /* Placée par translate (et non left/top) : le calage fait par le script après le
      chargement ne compte pas comme décalage de mise en page (CLS 0,094 → 0). */

@@ -11,7 +11,8 @@ import { getEntry } from 'astro:content'
 import CarteProduit from '@/components/catalogue/CarteProduit.astro'
 import IconeUsage from '@/components/catalogue/IconeUsage.astro'
 import PageLayout from '@/layouts/PageLayout.astro'
-import { BASES, USAGES, construireProduit } from '@/lib/catalogue'
+import SommaireGammes from '@/components/catalogue/SommaireGammes.astro'
+import { BASES, USAGES, construireProduit, grouperParGamme } from '@/lib/catalogue'
 import { getProduits } from '@/lib/contenu'
 
 export const prerender = true
@@ -27,12 +28,7 @@ const produits = entrees
   .sort((a, b) => a.ordre - b.ordre || a.nom.localeCompare(b.nom, 'fr'))
 
 // Regroupement par gamme, dans l'ordre du fabricant.
-const gammes: Array<{ nom: string; produits: typeof produits }> = []
-for (const p of produits) {
-  let g = gammes.find((x) => x.nom === p.gamme)
-  if (!g) gammes.push((g = { nom: p.gamme, produits: [] }))
-  g.produits.push(p)
-}
+const gammes = grouperParGamme(produits)
 const compte = (liste: readonly string[] | null) =>
   liste ? produits.filter((p) => liste.includes(p.gamme)).length : produits.length
 
@@ -145,6 +141,7 @@ let compteur = 0
         <p class="text-[13px] text-attenue lg:hidden" role="status" aria-live="polite">
           <strong class="font-semibold tabular-nums text-texte" data-total-mobile>{produits.length}</strong> produits
         </p>
+        <SommaireGammes gammes={gammes.map((g) => ({ nom: g.nom, id: g.id, nombre: g.produits.length }))} />
       </div>
     </div>
 
@@ -152,7 +149,7 @@ let compteur = 0
     <div id="liste" class="container-page flex flex-col gap-10 py-8 lg:gap-14 lg:py-12" data-liste>
       {
         gammes.map((g, gi) => (
-          <section data-gamme aria-labelledby={`gamme-${gi}`} class="flex flex-col gap-4 sm:gap-5">
+          <section id={g.id} data-gamme data-cible-gamme aria-labelledby={`gamme-${gi}`} class="flex flex-col gap-4 sm:gap-5">
             <div class="flex items-baseline justify-between gap-4 border-b border-bordure pb-3" data-titre-gamme>
               <h2 id={`gamme-${gi}`} class="text-[28px] leading-none text-marine sm:text-4xl">
                 {g.nom}
@@ -375,6 +372,8 @@ let compteur = 0
       // Titres de gamme seulement sans filtre ; une gamme vide disparaît.
       for (const s of sections) {
         s.hidden = !s.querySelector('[data-produit]:not([hidden])')
+        const puce = document.querySelector<HTMLElement>(`[data-lien-gamme="${s.id}"]`)
+        if (puce) puce.hidden = s.hidden
         const titre = s.querySelector<HTMLElement>('[data-titre-gamme]')
         if (titre) titre.hidden = actif
       }

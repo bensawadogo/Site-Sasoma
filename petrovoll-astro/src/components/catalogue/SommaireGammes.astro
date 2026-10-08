@@ -1,0 +1,114 @@
+---
+/**
+ * Sommaire des gammes (Ben, 08/10 : « on se perd, pas de sous-produits ») : une rangée de
+ * puces qui défile à l'horizontale, une par gamme, avec son nombre de produits ; chacune
+ * mène à sa section (#g-…). La puce de la section lue est mise en avant par le script.
+ * Sur /produits, les filtres masquent les puces des gammes vides (data-lien-gamme).
+ */
+interface Props {
+  gammes: Array<{ nom: string; id: string; nombre: number }>
+  class?: string
+}
+const { gammes, class: classe } = Astro.props
+---
+
+<nav class:list={['sommaire-gammes', classe]} aria-label="Gammes de produits" data-sommaire-gammes>
+  <ul class="sommaire-piste">
+    {
+      gammes.map((g) => (
+        <li data-lien-gamme={g.id}>
+          <a href={`#${g.id}`} class="sommaire-puce">
+            {g.nom}
+            <span class="sommaire-nombre">{g.nombre}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style is:global>
+  .sommaire-piste {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    padding-block: 0.25rem;
+    mask-image: linear-gradient(90deg, #000 calc(100% - 2rem), transparent);
+  }
+  .sommaire-piste::-webkit-scrollbar {
+    display: none;
+  }
+  .sommaire-piste > li {
+    flex: none;
+    scroll-snap-align: start;
+  }
+  .sommaire-piste > li:last-child {
+    padding-right: 2rem;
+  }
+  .sommaire-puce {
+    display: inline-flex;
+    min-height: 40px;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid #c9d3e0;
+    border-radius: 999px;
+    background: #fff;
+    padding: 0 0.9rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #0b1b33;
+    white-space: nowrap;
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      border-color 0.2s;
+  }
+  .sommaire-puce:hover {
+    border-color: #0b1b33;
+  }
+  .sommaire-puce[aria-current='true'] {
+    border-color: #0b1b33;
+    background: #0b1b33;
+    color: #fff;
+  }
+  .sommaire-nombre {
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.7;
+  }
+  /* Les sections visées ne passent pas sous la barre collante. */
+  [data-cible-gamme] {
+    scroll-margin-top: 11rem;
+  }
+</style>
+
+<script>
+  // Met en avant la puce de la gamme lue et la garde visible dans la rangée.
+  for (const nav of document.querySelectorAll<HTMLElement>('[data-sommaire-gammes]')) {
+    const liens = new Map(
+      [...nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')].map((a) => [a.hash.slice(1), a] as const),
+    )
+    const cibles = [...liens.keys()].map((id) => document.getElementById(id)).filter((e): e is HTMLElement => !!e)
+    if (!('IntersectionObserver' in window) || cibles.length === 0) continue
+    let courant: HTMLAnchorElement | undefined
+    const observateur = new IntersectionObserver(
+      (entrees) => {
+        for (const e of entrees) {
+          if (!e.isIntersecting) continue
+          const lien = liens.get(e.target.id)
+          if (!lien || lien === courant) continue
+          courant?.removeAttribute('aria-current')
+          lien.setAttribute('aria-current', 'true')
+          courant = lien
+          const piste = lien.closest('ul')!
+          piste.scrollTo({ left: lien.parentElement!.offsetLeft - 16, behavior: 'smooth' })
+        }
+      },
+      { rootMargin: '-35% 0px -60% 0px' },
+    )
+    cibles.forEach((c) => observateur.observe(c))
+  }
+</script>

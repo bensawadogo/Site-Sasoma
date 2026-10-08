@@ -375,3 +375,27 @@ export const VEHICULES: Record<string, { label: string; icone: string }> = {
   bateau: { label: 'Bateau', icone: 'marine' },
   industrie: { label: 'Industrie', icone: 'usine' },
 }
+
+/** Ancre d'une gamme (« Huiles moteur essence » → g-huiles-moteur-essence). */
+export function idGamme(nom: string): string {
+  return (
+    'g-' +
+    nom
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+  )
+}
+
+/** Produits regroupés par gamme, dans l'ordre d'arrivée (ordre du fabricant). */
+export function grouperParGamme<T extends { gamme: string }>(produits: T[]) {
+  const gammes: Array<{ nom: string; id: string; produits: T[] }> = []
+  for (const p of produits) {
+    let g = gammes.find((x) => x.nom === p.gamme)
+    if (!g) gammes.push((g = { nom: p.gamme, id: idGamme(p.gamme), produits: [] }))
+    g.produits.push(p)
+  }
+  return gammes
+}

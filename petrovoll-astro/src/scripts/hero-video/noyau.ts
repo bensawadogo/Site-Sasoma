@@ -401,6 +401,10 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   /** Fond : l'image du scroll (ou deux en fondu), seulement quand elle change. */
   function peindreFond() {
     if (!fonds.length) return
+    // Les images de la séquence sont le moteur SANS ses pistons (dessinés par moteur-vivant) :
+    // tant que les pièces ne sont pas là, l'affiche (moteur complet) reste seule. Sinon, à
+    // l'arrivée sur le site, un moteur « vide » et sombre la recouvrait (Ben, 08/10).
+    if (!vivant.charge) return
     ctxMoteur.clearRect(0, 0, canvasMoteur.width, canvasMoteur.height)
     if (!decor) {
       ctxMoteur.fillStyle = '#000'

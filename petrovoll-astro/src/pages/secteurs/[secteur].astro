@@ -1,15 +1,18 @@
 ---
 /**
  * Page secteur — une page prérendue par secteur de l'admin :
- * présentation (texte riche) + produits du secteur.
+ * présentation (texte riche) + produits du secteur, rangés par gamme comme le catalogue
+ * (mêmes cartes ; sommaire des gammes collant pour s'y retrouver, Ben 08/10).
  */
 import { Image } from 'astro:assets'
 import { render } from 'astro:content'
 
-import ProduitGrid from '@/components/produits/ProduitGrid.astro'
+import CarteProduit from '@/components/catalogue/CarteProduit.astro'
+import SommaireGammes from '@/components/catalogue/SommaireGammes.astro'
 import IconeSecteur from '@/components/ui/IconeSecteur.astro'
 import PageLayout from '@/layouts/PageLayout.astro'
 import { getProduits, getSecteurs, type Secteur } from '@/lib/contenu'
+import { construireProduit, grouperParGamme } from '@/lib/catalogue'
 import { extraitTexte } from '@/lib/format'
 
 export const prerender = true
@@ -24,7 +27,12 @@ interface Props {
 }
 const { secteur } = Astro.props
 const { Content } = await render(secteur)
-const produits = (await getProduits()).filter((p) => p.data.secteur === secteur.id)
+const produits = (await getProduits())
+  .filter((p) => p.data.secteur === secteur.id)
+  .map((p) => construireProduit(p, secteur.data.nom))
+  .sort((a, b) => a.ordre - b.ordre || a.nom.localeCompare(b.nom, 'fr'))
+const gammes = grouperParGamme(produits)
+let compteur = 0
 const description =
   secteur.data.resume ?? (extraitTexte(secteur.body) || `${secteur.data.nom} au Burkina Faso et en Afrique de l’Ouest.`)
 ---
@@ -38,6 +46,7 @@ const description =
     <span class="section-line" aria-hidden="true" />
 
     {
+      // Proportions d'origine (plus de rognage 21:9 : les bidons du bord étaient coupés).
       // En bandeau large, une photo trop petite (ex. image tirée d'une vidéo de téléphone) serait floue.
       secteur.data.image && secteur.data.image.width >= 900 && (
         <Image
@@ -48,7 +57,7 @@ const description =
           format="webp"
           quality={75}
           loading="eager"
-          class="mt-6 aspect-[21/9] w-full rounded-md object-cover"
+          class="mt-6 h-auto w-full rounded-md"
         />
       )
     }
@@ -57,15 +66,39 @@ const description =
       <Content />
     </div>
 
-    {
-      produits.length > 0 && (
-        <>
-          <h2 class="mt-12 text-2xl lg:text-3xl">Nos produits</h2>
-          <div class="mt-6">
-            <ProduitGrid produits={produits} />
-          </div>
-        </>
-      )
-    }
   </div>
+  {
+    produits.length > 0 && (
+      <div class="border-t border-bordure bg-surface">
+        <div class="container-page flex flex-col gap-10 py-10 lg:gap-14 lg:py-14">
+          <div class="flex flex-col gap-4">
+            <div class="flex items-baseline justify-between gap-4">
+              <h2 class="text-3xl text-marine lg:text-4xl">Nos produits</h2>
+              <a href="/produits" class="shrink-0 text-sm font-semibold text-vif underline underline-offset-2">Tout le catalogue</a>
+            </div>
+            {gammes.length > 1 && (
+              <div class="sticky top-16 z-30 -mx-4 bg-surface/95 px-4 py-2 backdrop-blur lg:top-20">
+                <SommaireGammes gammes={gammes.map((g) => ({ nom: g.nom, id: g.id, nombre: g.produits.length }))} />
+              </div>
+            )}
+          </div>
+          {gammes.map((g) => (
+            <section id={g.id} data-cible-gamme class="flex flex-col gap-4 sm:gap-5" aria-labelledby={gammes.length > 1 ? `t-${g.id}` : undefined}>
+              {gammes.length > 1 && (
+                <div class="flex items-baseline justify-between gap-4 border-b border-bordure pb-3">
+                  <h3 id={`t-${g.id}`} class="text-[26px] leading-none text-marine sm:text-3xl">{g.nom}</h3>
+                  <p class="shrink-0 text-sm tabular-nums text-attenue">{g.produits.length} produits</p>
+                </div>
+              )}
+              <ul class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-5">
+                {g.produits.map((p) => (
+                  <CarteProduit produit={p} prioritaire={compteur++ < 2} />
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </div>
+    )
+  }
 </PageLayout>
