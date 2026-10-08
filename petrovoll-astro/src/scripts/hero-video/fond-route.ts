@@ -1,8 +1,8 @@
 /**
  * fond-route.ts — vidéo de fond du hero (route, nuages en boucle ; FOND_ROUTE dans hero-video.config.ts).
  *  - niveau « faible » : rien n'est téléchargé, l'affiche (image fixe) reste ;
- *  - ordinateur : 4K pour un appareil « fort » sur grand écran (≥ seuil4k px réels), sinon 1080p,
- *    720p pour un appareil « moyen » sur petit écran ; téléphone : version verticale 1080×1920 ;
+ *  - ordinateur : 1080p pour un appareil « fort » sur grand écran, sinon 720p ; téléphone :
+ *    version verticale 1080×1920 ; la vidéo n'est demandée qu'après le chargement de la page ;
  *  - lecture en pause hors de l'écran ou onglet caché (une vidéo invisible ne doit rien coûter).
  */
 import { FOND_ROUTE } from '@/hero-video.config'
@@ -17,17 +17,18 @@ export function demarrerFondRoute(video: HTMLVideoElement) {
   const pxReels = window.innerWidth * Math.min(window.devicePixelRatio || 1, 3)
   let nom = 'route-tel'
   if (video.dataset.format === 'desktop') {
-    if (niveau === 'fort' && pxReels >= FOND_ROUTE.seuil4k) nom = 'route-4k'
-    else if (niveau === 'moyen' && pxReels < 1600) nom = 'route-720'
-    else nom = 'route-1080'
+    // 08/10 : plus de 4K (12,8 Mo, trop lourd ressenti « lent ») : 1080p au plus.
+    nom = niveau === 'fort' && pxReels >= 1600 ? 'route-1080' : 'route-720'
   }
   const source = `${FOND_ROUTE.dossier}/${nom}.mp4?v=${FOND_ROUTE.version}`
 
   // Avec IntersectionObserver, on attend son premier verdict : le hero de l'autre format
   // (masqué en CSS) ne doit ni lire ni télécharger sa vidéo.
   let visible = !('IntersectionObserver' in window)
+  // La vidéo ne passe qu'après la page (images du moteur, bidon) : l'affiche la remplace d'ici là.
+  let pageChargee = document.readyState === 'complete'
   const maj = () => {
-    if (visible && !document.hidden) {
+    if (visible && !document.hidden && pageChargee) {
       if (!video.src) video.src = source
       video.play().catch(() => {})
     } else video.pause()
@@ -41,5 +42,15 @@ export function demarrerFondRoute(video: HTMLVideoElement) {
   document.addEventListener('visibilitychange', maj)
   // Fondu d'entrée quand la vidéo peut jouer : l'affiche (même image) ne « saute » pas.
   video.addEventListener('playing', () => video.classList.add('pret'), { once: true })
+  if (!pageChargee)
+    addEventListener(
+      'load',
+      () =>
+        setTimeout(() => {
+          pageChargee = true
+          maj()
+        }, 800),
+      { once: true },
+    )
   maj()
 }

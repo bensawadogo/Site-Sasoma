@@ -4,8 +4,8 @@
  * Navbar.astro — barre de navigation sticky (mobile-first)
  * ────────────────────────────────────────────────────────────────────────────
  *  Barre flottante en « verre liquide » (Ben, 07-08/10) : presque transparente (on voit les
- *  nuages du hero), bords qui réfractent ce qui passe dessous comme une lentille (filtre SVG
- *  de déplacement, carte calculée à la taille de la barre ; Chromium), reflets spéculaires.
+ *  nuages du hero), flou très léger et reflets spéculaires. (08/10 : la réfraction SVG des
+ *  bords a été retirée : recalculée à chaque image de la vidéo du hero, elle ralentissait.)
  *  Logo d'origine en couleur partout ; au-dessus d'une zone sombre (.zone-sombre : hero,
  *  produit phare…), le verre se charge un peu plus de blanc. Burger ≥ 44 px, liens en lg:.
  */
@@ -74,21 +74,7 @@ const cheminCourant = Astro.url.pathname
   <MobileMenu liens={LIENS} cheminCourant={cheminCourant} />
 </header>
 
-<!-- Filtre de réfraction du verre : la carte de déplacement est dessinée par le script. -->
-<svg class="filtres" width="0" height="0" aria-hidden="true" focusable="false">
-  <filter id="verre-liquide" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-    <feImage id="verre-carte" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="carte"></feImage>
-    <feDisplacementMap in="SourceGraphic" in2="carte" scale="44" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
-  </filter>
-</svg>
-
 <style>
-  .filtres {
-    position: absolute;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-  }
   /* ── Verre clair (au-dessus d'un fond clair) ─────────────────────────────── */
   .verre {
     position: relative;
@@ -107,15 +93,10 @@ const cheminCourant = Astro.url.pathname
   }
   @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
     .verre {
-      background: rgb(255 255 255 / 0.28);
-      -webkit-backdrop-filter: blur(5px) saturate(1.7) brightness(1.06);
-      backdrop-filter: blur(5px) saturate(1.7) brightness(1.06);
+      background: rgb(255 255 255 / 0.2);
+      -webkit-backdrop-filter: blur(2px) saturate(1.35) brightness(1.08);
+      backdrop-filter: blur(2px) saturate(1.35) brightness(1.08);
     }
-  }
-  /* Réfraction des bords (Chromium) : lentille ; flou très léger, les nuages restent nets. */
-  :global(html.verre-liquide) .verre {
-    background: rgb(255 255 255 / 0.16);
-    backdrop-filter: url(#verre-liquide) blur(1px) saturate(1.35) brightness(1.08);
   }
   /* Reflets spéculaires : lueur en haut à gauche, liseré qui fait le tour comme sur une goutte. */
   .verre::before,
@@ -158,9 +139,6 @@ const cheminCourant = Astro.url.pathname
   #navbar[data-sur='sombre'] .verre {
     background: rgb(255 255 255 / 0.5);
   }
-  :global(html.verre-liquide) #navbar[data-sur='sombre'] .verre {
-    background: rgb(255 255 255 / 0.36);
-  }
 
   /* Appareil faible : ni flou ni réfraction en direct (coûteux sur un petit processeur graphique). */
   :global([data-appareil='faible']) #navbar .verre {
@@ -172,12 +150,8 @@ const cheminCourant = Astro.url.pathname
 </style>
 
 <script>
-  import { lireNiveau } from '@/lib/capacite-appareil'
-
   const header = document.getElementById('navbar')!
   const verre = header.querySelector<HTMLElement>('.verre')!
-  const carte = document.getElementById('verre-carte')!
-  const niveau = lireNiveau()
 
   /** Verre fumé quand le centre de la barre passe au-dessus d'une zone sombre. */
   let attente = false
@@ -197,61 +171,4 @@ const cheminCourant = Astro.url.pathname
   addEventListener('resize', demander)
   majFond()
 
-  /**
-   * Carte de déplacement de la lentille : neutre (128) au centre ; près des bords, le fond est
-   * pris plus à l'intérieur (vecteur vers le centre, croissant en carré) : les bords grossissent
-   * et courbent ce qui passe dessous, comme l'épaisseur d'une goutte de verre.
-   */
-  function dessinerCarte() {
-    const l = Math.round(verre.offsetWidth)
-    const h = Math.round(verre.offsetHeight)
-    if (!l || !h) return
-    const rayon = parseFloat(getComputedStyle(verre).borderTopLeftRadius) || 16
-    const bord = Math.min(22, h * 0.42)
-    const c = document.createElement('canvas')
-    c.width = l
-    c.height = h
-    const ctx = c.getContext('2d')!
-    const img = ctx.createImageData(l, h)
-    for (let y = 0; y < h; y++) {
-      for (let x = 0; x < l; x++) {
-        const px = x + 0.5 - l / 2
-        const py = y + 0.5 - h / 2
-        // distance au bord du rectangle arrondi, et normale vers l'intérieur
-        const qx = Math.max(Math.abs(px) - (l / 2 - rayon), 0)
-        const qy = Math.max(Math.abs(py) - (h / 2 - rayon), 0)
-        const coin = qx > 0 && qy > 0
-        const d = coin ? rayon - Math.hypot(qx, qy) : Math.min(l / 2 - Math.abs(px), h / 2 - Math.abs(py))
-        const t = Math.max(0, 1 - d / bord) ** 2
-        let nx = 0
-        let ny = 0
-        if (t > 0) {
-          if (coin) {
-            const n = Math.hypot(qx, qy) || 1
-            nx = (-Math.sign(px) * qx) / n
-            ny = (-Math.sign(py) * qy) / n
-          } else if (l / 2 - Math.abs(px) < h / 2 - Math.abs(py)) nx = -Math.sign(px)
-          else ny = -Math.sign(py)
-        }
-        const i = (y * l + x) * 4
-        img.data[i] = 128 + nx * t * 127
-        img.data[i + 1] = 128 + ny * t * 127
-        img.data[i + 2] = 128
-        img.data[i + 3] = 255
-      }
-    }
-    ctx.putImageData(img, 0, 0)
-    carte.setAttribute('href', c.toDataURL())
-    carte.setAttribute('width', String(l))
-    carte.setAttribute('height', String(h))
-  }
-
-  // Réfraction : Chromium seulement (backdrop-filter: url() ignoré ailleurs → flou simple),
-  // et pas sur un appareil faible.
-  const marques = (navigator as Navigator & { userAgentData?: { brands: { brand: string }[] } }).userAgentData?.brands ?? []
-  if (marques.some((b) => /Chromium/.test(b.brand)) && niveau !== 'faible') {
-    dessinerCarte()
-    document.documentElement.classList.add('verre-liquide')
-    new ResizeObserver(() => dessinerCarte()).observe(verre)
-  }
 </script>

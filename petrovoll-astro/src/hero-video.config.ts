@@ -174,8 +174,6 @@ export const FOND_ROUTE = {
   actif: FOND_ROUTE_ACTIF,
   dossier: '/hero-fond',
   version: '2',
-  /** Largeur d'écran × densité (px réels) à partir de laquelle un appareil « fort » reçoit la 4K. */
-  seuil4k: 2600,
 }
 
 /** Largeur (px) à partir de laquelle on affiche le hero desktop. */
