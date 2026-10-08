@@ -66,11 +66,12 @@ export interface Repere {
 
 const TOUR = 2 * Math.PI
 /**
- * Régime de ralenti montré (tr/s). Un vrai ralenti (≈ 12 tr/s) se lirait mal à 60 images/s ;
- * à 7 tr/s, avec le flou de mouvement, on voit un moteur qui tourne vite, pas un ralenti filmé.
+ * Régime montré (tr/s). Un vrai ralenti (≈ 12 tr/s) se lirait mal à 60 images/s. 7 tr/s donnait
+ * un moteur qui « s'affole » (Ben, 06/10) : 2,5 tr/s laisse suivre chaque piston, comme un
+ * ralenti filmé au ralenti dans une publicité.
  */
-const RALENTI = 7
-const DEMARREUR = { duree: 0.8, vitesse: 2.4 }
+const RALENTI = 2.5
+const DEMARREUR = { duree: 0.8, vitesse: 1.2 }
 
 /** θ (sur deux tours) où chaque cylindre (ordre de K1) est au PMH d'allumage : 1-3-4-2. */
 const ALLUMAGE = [1.5, 4.5, 2.5, 3.5].map((k) => k * Math.PI)
@@ -109,7 +110,7 @@ interface Fluide {
   }
 }
 
-export function creerMoteurVivant(url: string, reduit: boolean, echantillonsMax = 6, avecHuile = true, avecFluide = false) {
+export function creerMoteurVivant(url: string, reduit: boolean, echantillonsMax = 6, avecHuile = true, avecFluide = false, inerte = false) {
   let pieces: Pieces | null = null
   let atlas: ImageBitmap | null = null
   let theta = 0
@@ -144,7 +145,10 @@ export function creerMoteurVivant(url: string, reduit: boolean, echantillonsMax 
   /** Masque des cavités du carter, adouci une fois pour toutes (taille d'écran courante). */
   let masqueCarter: HTMLCanvasElement | null = null
 
-  const pret = fetch(url.replace('atlas.webp', 'pieces.json'))
+  // Appareil faible : rien n'est téléchargé (≈ 1,7 Mo d'atlas évités), le moteur reste l'affiche fixe.
+  const pret = inerte
+    ? new Promise<void>(() => {})
+    : fetch(url.replace('atlas.webp', 'pieces.json'))
     .then((r) => r.json() as Promise<Pieces>)
     .then(async (p) => {
       const blob = await fetch(`${url}?v=${p.version}`).then((r) => r.blob())

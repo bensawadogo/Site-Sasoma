@@ -3,6 +3,7 @@
  * ContactCTA.astro — encadré « devis » (textes : admin → Page d'accueil).
  * Liens natifs uniquement (tel:, wa.me, /contact) : zéro JS, cibles ≥ 48 px.
  */
+import TitreAnime from '@/components/ui/TitreAnime.astro'
 import { getAccueil, getParametres } from '@/lib/contenu'
 
 const [accueil, parametres] = await Promise.all([getAccueil(), getParametres()])
@@ -13,13 +14,14 @@ const lienWhatsApp = parametres.whatsapp()
   <div class="reveal relative overflow-hidden rounded-lg border border-accent/30 bg-surface px-6 py-10 text-center sm:px-10 lg:py-14">
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0"
+      class="parallaxe pointer-events-none absolute inset-0"
       style="background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(230,103,17,0.14), transparent 70%);"
     >
     </div>
 
     <div class="relative">
-      <h2 id="contact-cta-titre" class="text-3xl sm:text-4xl lg:text-5xl">{accueil.appelTitre}</h2>
+      <p class="eyebrow-ed justify-center text-vif"><span class="eyebrow-num">05</span>Contact</p>
+      <TitreAnime id="contact-cta-titre" class="titre-geant mx-auto mt-4 max-w-5xl" texte={accueil.appelTitre} />
       {accueil.appelTexte && <p class="mx-auto mt-4 max-w-xl text-base text-attenue">{accueil.appelTexte}</p>}
 
       <div class="mx-auto mt-8 flex max-w-lg flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">

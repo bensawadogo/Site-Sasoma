@@ -1,12 +1,16 @@
 ---
 /**
  * Accueil — page prérendue. Ordre du DOM = ordre sur mobile :
- * hero au scroll → produit phare (bidon 3D) → secteurs → chiffres clés → devis.
+ * hero au scroll → produit phare (bidon STÄRK qui tourne au scroll, sinon carte produit) →
+ * constructeurs (bande défilante) → secteurs → chiffres clés → certifications → devis.
  * Le hero (garage Blender + moteur) se règle dans src/hero-video.config.ts (hors admin) ; les autres sections
  * lisent leur contenu dans l'admin et se masquent si elles sont vides.
  */
+import BandeCertifications from '@/components/home/BandeCertifications.astro'
+import BandeMarques from '@/components/home/BandeMarques.astro'
 import ContactCTA from '@/components/home/ContactCTA.astro'
 import ProduitPhare from '@/components/home/ProduitPhare.astro'
+import ProduitScroll from '@/components/home/ProduitScroll.astro'
 import SecteursGrid from '@/components/home/SecteursGrid.astro'
 import StatsSection from '@/components/home/StatsSection.astro'
 import HeroVideo from '@/components/hero/video/HeroVideo.astro'
@@ -17,6 +21,10 @@ export const prerender = true
 
 const [parametres, produitVedette] = await Promise.all([getParametres(), getProduitVedette()])
 
+// Le bidon Blender représente un STÄRK Petrovöll : mise en scène au scroll pour ce produit seulement.
+const bidonStark =
+  !!produitVedette && /petrov/i.test(produitVedette.data.marque ?? '') && /st[äa]rk/i.test(produitVedette.data.nom)
+
 const TITRE = `${parametres.nomSociete} — Lubrifiants, transport et distribution au Burkina Faso`
 const DESCRIPTION =
   parametres.slogan ??
@@ -25,8 +33,14 @@ const DESCRIPTION =
 
 <PageLayout titre={TITRE} titreComplet description={DESCRIPTION}>
   <HeroVideo />
-  {produitVedette && <ProduitPhare produit={produitVedette} />}
+  <div class="raccord raccord--hero-nuit" aria-hidden="true"></div>
+  {produitVedette && (bidonStark ? <ProduitScroll produit={produitVedette} /> : <ProduitPhare produit={produitVedette} />)}
+  <div class="raccord raccord--nuit-jour" aria-hidden="true"></div>
+  <BandeMarques />
   <SecteursGrid />
+  <div class="raccord raccord--clair-marine" aria-hidden="true"></div>
   <StatsSection />
+  <BandeCertifications />
+  <div class="raccord raccord--marine-clair" aria-hidden="true"></div>
   <ContactCTA />
 </PageLayout>

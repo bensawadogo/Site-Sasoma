@@ -26,6 +26,7 @@
  */
 import { APPARITIONS_REPERES, dansImage, MOTEUR, PLANS_T3, type ReglagesHeroVideo } from '@/hero-video.config'
 import { HERO } from '@/hero.config'
+import { lireNiveau } from '@/lib/capacite-appareil'
 import { borner, doux, local, mix, opaciteBloc } from '@/lib/hero-timeline'
 import { creerMoteurVivant, type Repere } from '@/scripts/hero-video/moteur-vivant'
 import { caler, couverture, type Couverture, indexImage, ordreChargement, plusProche, pointCouvert } from '@/lib/sequence-images'
@@ -130,6 +131,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   canvasPieces.setAttribute('aria-hidden', 'true')
   canvasPieces.style.position = 'absolute'
   canvasPieces.style.pointerEvents = 'none'
+  canvasPieces.classList.add('flotte') // flotte avec le moteur (fond route, global.css)
   canvasMoteur.after(canvasPieces)
   const ctxPieces = canvasPieces.getContext('2d')!
   const ctxFilet = canvasFilet.getContext('2d')!
@@ -138,16 +140,21 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   // ── Palier : séquence complète, ou deux images en fondu ────────────────────
   const nav = navigator as NavigatorEtendu
   const forcage = new URLSearchParams(location.search).get(HERO.parametreForcage)
+  // Niveau de l'appareil (<html data-appareil>, src/lib/capacite-appareil.ts) :
+  // faible → palier lite et moteur FIGÉ (affiche), moyen → palier partiel, fort → inchangé.
+  const niveauAppareil = lireNiveau()
+  const fige = !forcage && niveauAppareil === 'faible'
   const leger =
     forcage === 'lite' ||
     (!forcage &&
-      (!!nav.connection?.saveData ||
+      (niveauAppareil === 'faible' ||
+        !!nav.connection?.saveData ||
         /(^|-)(2g|3g)$/.test(nav.connection?.effectiveType ?? '') ||
         (R.nom === 'mobile' && (nav.deviceMemory ?? 4) <= 2)))
   const partiel =
     !leger &&
     forcage !== 'sequence' &&
-    (forcage === 'partiel' || (nav.connection?.downlink ?? 10) < 1.5 || (nav.deviceMemory ?? 8) <= 3)
+    (forcage === 'partiel' || niveauAppareil === 'moyen' || (nav.connection?.downlink ?? 10) < 1.5 || (nav.deviceMemory ?? 8) <= 3)
   racine.dataset.palier = leger ? 'lite' : partiel ? 'partiel' : 'sequence'
 
   // ── Séquence d'images ──────────────────────────────────────────────────────
@@ -266,6 +273,16 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     // (champ double de la vidéo source, centré sur elle).
     canvasMoteur.style.backgroundSize = `${couv.l}px ${couv.h}px`
     canvasMoteur.style.backgroundPosition = `${couv.x}px ${couv.y}px`
+    // Ombre du moteur sur la route (fond route) : sous le carter, de la largeur du moteur.
+    const ombre = racine.querySelector<HTMLElement>('[data-ombre-moteur]')
+    if (ombre) {
+      const g = aLEcran({ x: MOTEUR.bordGauche, y: MOTEUR.bas })
+      const d = aLEcran({ x: MOTEUR.bordDroit, y: MOTEUR.bas })
+      const l = Math.abs(d.x - g.x)
+      ombre.style.setProperty('--ombre-x', `${(g.x + d.x) / 2}px`)
+      ombre.style.setProperty('--ombre-y', `${g.y + 0.09 * l}px`) // un écart : le bloc flotte
+      ombre.style.setProperty('--ombre-l', `${l * 1.05}px`)
+    }
     if (decor) {
       const a = aLEcran({ x: -0.5, y: -0.5 })
       const b = aLEcran({ x: 1.5, y: 1.5 })
@@ -351,7 +368,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   let visible = true
 
   // ── Pièces mobiles : le moteur tourne en temps réel (moteur-vivant.ts) ──────
-  const vivant = creerMoteurVivant('/hero-video/pieces/atlas.webp', mouvementReduit, leger || partiel ? 3 : 6, !leger, !leger && !partiel)
+  const vivant = creerMoteurVivant('/hero-video/pieces/atlas.webp', mouvementReduit, leger || partiel ? 3 : 6, !leger, !leger && !partiel, fige)
   /** Le moteur démarre quand le bidon a fini de verser (fraction de t3). */
   const DEMARRAGE_T3 = 0.3
   /** Images de fond à l'écran (une, ou deux en fondu pour le palier lite). */
@@ -435,7 +452,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   let coutPieces = 0
   let saute = false
   function lancerBoucle() {
-    if (boucle || !visible || document.hidden) return
+    if (fige || boucle || !visible || document.hidden) return
     dernierTemps = performance.now()
     let bouge = true
     const tick = (maintenant: number) => {
@@ -777,7 +794,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
       rafEnAttente = false
       lireProgression()
       rendre(temps)
-      if (filetVisible && !leger && !mouvementReduit) demanderRendu() // le filet ondule, le reflet défile
+      if (filetVisible && !leger && !mouvementReduit && visible && !document.hidden) demanderRendu() // le filet ondule, le reflet défile
     })
   }
 
@@ -792,6 +809,10 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     demanderRendu()
   }).observe(racine)
   addEventListener('scroll', () => visible && demanderRendu(), { passive: true })
+  // Onglet caché : toutes les boucles s'arrêtent ; au retour, on relance le rendu.
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) demanderRendu()
+  })
   let minuterie = 0
   addEventListener('resize', () => {
     clearTimeout(minuterie)

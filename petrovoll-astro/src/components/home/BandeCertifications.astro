@@ -1,0 +1,147 @@
+---
+/**
+ * BandeCertifications.astro — certifications et homologations du fabricant, en bande défilante.
+ *
+ * Sources : page « Our Certificates » de Petrovöll GmbH (ISO 9001:2015, ISO 14001:2015,
+ * OHSAS 18001:2007) et certificats PDF du fabricant (assets/catalogues/petrovoll/certificats/ :
+ * Mercedes-Benz MB 228.3 / 229.3, Volkswagen, Porsche, Volvo VDS-3, JASO, Parker Denison).
+ * Badges dessinés ici, sans le logo de l'ISO : l'ISO interdit son logo aux entreprises
+ * certifiées. Défilement plus lent si les animations sont coupées dans le système ; bouton pause.
+ */
+import TitreAnime from '@/components/ui/TitreAnime.astro'
+interface Props {
+  /** Titre visible (h2) ; l'accueil et « À propos » peuvent le formuler différemment. */
+  titre?: string
+}
+const { titre = 'Qualité certifiée, du fabricant à votre moteur' } = Astro.props
+
+const BADGES = [
+  { code: 'ISO 9001', annee: '2015', texte: 'Management de la qualité' },
+  { code: 'ISO 14001', annee: '2015', texte: 'Management environnemental' },
+  { code: 'OHSAS 18001', annee: '2007', texte: 'Santé et sécurité au travail' },
+  { code: 'MB 229.3', annee: 'Homologation', texte: 'Mercedes-Benz' },
+  { code: 'MB 228.3', annee: 'Homologation', texte: 'Mercedes-Benz poids lourds' },
+  { code: 'VW 502.00', annee: 'Homologation', texte: 'Volkswagen' },
+  { code: 'C20', annee: 'Porsche Approved', texte: 'Porsche' },
+  { code: 'VDS-3', annee: 'Homologation', texte: 'Volvo' },
+  { code: 'JASO MA', annee: 'Homologation', texte: 'Moto 4 temps' },
+  { code: 'HF-0', annee: 'Parker Denison', texte: 'Huiles hydrauliques' },
+  { code: 'API SN', annee: 'Norme', texte: 'Moteurs essence' },
+  { code: 'ACEA A5/B5', annee: 'Norme', texte: 'Moteurs européens' },
+]
+---
+
+<section class="zone-sombre grain bande-certif bg-fond py-12 text-texte lg:py-16" aria-labelledby="certif-titre">
+  <div class="container-page">
+    <p class="eyebrow-ed text-vif"><span class="eyebrow-num">04</span>Certifications · Petrovöll GmbH, Allemagne</p>
+    <TitreAnime id="certif-titre" class="titre-geant titre-geant--moyen mt-4 max-w-5xl" texte={titre} />
+  </div>
+
+  <div class="defile mt-8">
+    <ul class="piste defile-continu" aria-label="Certifications et homologations du fabricant">
+      {
+        [0, 1].map((copie) =>
+          BADGES.map((b) => (
+            <li class="badge" aria-hidden={copie ? 'true' : undefined}>
+              <span class="sceau" aria-hidden="true">
+                <svg viewBox="0 0 64 64" width="44" height="44">
+                  <circle cx="32" cy="32" r="29" fill="none" stroke="currentColor" stroke-width="2" />
+                  <circle cx="32" cy="32" r="23" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3" />
+                  <path d="M21 33l7 7 15-16" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <span class="flex flex-col">
+                <span class="font-display text-2xl leading-none tracking-wide">{b.code}</span>
+                <span class="mt-1 text-[0.7rem] font-semibold uppercase tracking-widest text-vif">{b.annee}</span>
+                <span class="text-sm text-attenue">{b.texte}</span>
+              </span>
+            </li>
+          )),
+        )
+      }
+    </ul>
+  </div>
+
+  <button type="button" class="pause-defile" data-pause-defile aria-pressed="false">
+    <span class="icone-pause" aria-hidden="true">❚❚</span><span class="icone-lecture" aria-hidden="true">▶</span>
+    <span class="sr-only">Mettre en pause le défilement</span>
+  </button>
+</section>
+
+<style>
+  .defile {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .piste {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    padding: 0.25rem 0;
+    /* Sens inverse de la bande des constructeurs. */
+    animation: defiler 50s linear infinite reverse;
+  }
+  .defile:hover .piste {
+    animation-play-state: paused;
+  }
+  .badge {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.9rem;
+    min-width: 15.5rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid rgb(255 255 255 / 0.14);
+    border-radius: 1rem;
+    background: linear-gradient(135deg, rgb(255 255 255 / 0.09), rgb(255 255 255 / 0.02));
+  }
+  .sceau {
+    display: grid;
+    flex: none;
+    place-items: center;
+    color: var(--color-vif);
+  }
+  @keyframes defiler {
+    to {
+      transform: translateX(calc(-50% - 0.5rem));
+    }
+  }
+  /* Pause : survol, ou bouton (WCAG 2.2.2 : tout défilement automatique doit pouvoir s'arrêter). */
+  .pause-defile {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin: 1rem auto 0;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    opacity: 0.55;
+    transition: opacity 0.2s;
+  }
+  .pause-defile:hover,
+  .pause-defile:focus-visible {
+    opacity: 1;
+  }
+  .icone-lecture,
+  .en-pause .icone-pause {
+    display: none;
+  }
+  .en-pause .icone-lecture {
+    display: inline;
+  }
+  .en-pause .piste {
+    animation-play-state: paused;
+  }
+  /* Animations désactivées dans le système : le défilement continue, plus lentement
+     (demande de Ben, 06/10) ; le bouton permet toujours de l'arrêter. */
+  @media (prefers-reduced-motion: reduce) {
+    .piste {
+      animation-duration: 100s;
+    }
+  }
+</style>
+
+<script>
+  import '@/scripts/defile-bandes'
+</script>

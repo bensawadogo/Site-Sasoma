@@ -1,0 +1,477 @@
+---
+/**
+ * ProduitScroll.astro — le produit phare raconté au scroll (comme la canette de drinkcollider.com).
+ *
+ * Le bidon STÄRK, rendu en studio dans Blender (ops/blender/bidon_studio.py : 48 vues sur un tour
+ * complet, fond transparent, public/bidon-studio/), flotte dans un ciel de nuit et fait un tour
+ * complet avec le défilement ; trois cartes courtes apparaissent une à une.
+ * Réglages (lumière, longueur) : src/produit-scroll.config.ts.
+ *
+ * Sans JavaScript : une vue fixe du bidon et les cartes empilées (rien n'est caché). Animations
+ * coupées dans le système : le bidon tourne quand même (c'est le visiteur qui le fait tourner),
+ * sans inclinaison. Caractéristiques : fiche du fabricant
+ * (src/content/produits/petrovoll-stark-fully-synthetic.mdoc).
+ */
+import TitreAnime from '@/components/ui/TitreAnime.astro'
+import { getImage } from 'astro:assets'
+import nuitLarge from '@/assets/univers/nuit-large.webp'
+import nuitHaut from '@/assets/univers/nuit-haut.webp'
+import sequence from '@/assets/bidon/sequence.json'
+import type { Produit } from '@/lib/contenu'
+import { PRODUIT_SCROLL } from '@/produit-scroll.config'
+
+interface Props {
+  produit: Produit
+}
+const { produit } = Astro.props
+const { nom } = produit.data
+
+const [fondLarge, fondHaut] = await Promise.all([
+  getImage({ src: nuitLarge, width: 1920, format: 'webp', quality: 72 }),
+  getImage({ src: nuitHaut, width: 900, format: 'webp', quality: 72 }),
+])
+const vue = (taille: string, i: number) => `/bidon-studio/${taille}/${String(i).padStart(3, '0')}.webp?v=${sequence.version}`
+const style = [
+  `--fond-large:url(${fondLarge.src})`,
+  `--fond-haut:url(${fondHaut.src})`,
+  `--lum-bidon:${PRODUIT_SCROLL.luminositeBidon}`,
+  `--lum-fond:${PRODUIT_SCROLL.luminositeFond}`,
+  `--course:${PRODUIT_SCROLL.hauteurDefilement * 100}vh`,
+].join(';')
+---
+
+<section
+  class="produit-scroll zone-sombre grain"
+  aria-labelledby="ps-titre"
+  data-produit-scroll
+  data-images={sequence.images}
+  data-version={sequence.version}
+  {style}
+>
+  <div class="scene">
+    <div class="fond" aria-hidden="true"></div>
+
+    <div class="bidon" aria-hidden="true" style={`aspect-ratio:1/${sequence.ratio}`}>
+      <img
+        class="bidon-fixe"
+        src={vue('petit', 0)}
+        srcset={`${vue('petit', 0)} 400w, ${vue('grand', 0)} 640w`}
+        sizes="(min-width: 1024px) 36vh, 60vw"
+        width="400"
+        height={Math.round(400 * sequence.ratio)}
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+      <canvas class="bidon-canvas"></canvas>
+    </div>
+
+    <div class="cartes">
+      <article class="carte" data-etape="0">
+        <p class="surtitre"><span class="eyebrow-num">01</span>Produit phare · Petrovöll</p>
+        <TitreAnime id="ps-titre" class="titre" texte={nom} />
+        <p class="texte">Huile moteur 100 % synthèse, fabriquée en Allemagne.</p>
+      </article>
+
+      <article class="carte" data-etape="1">
+        <p class="surtitre">Normes des constructeurs</p>
+        <ul class="normes">
+          <li>Mercedes-Benz</li>
+          <li>BMW</li>
+          <li>Volkswagen</li>
+          <li>Porsche</li>
+        </ul>
+      </article>
+
+      <article class="carte" data-etape="2">
+        <dl class="chiffres">
+          <div><dt>Point d’écoulement</dt><dd>−42 °C</dd></div>
+          <div><dt>Point d’éclair</dt><dd>222 °C</dd></div>
+        </dl>
+        <div class="actions">
+          <a href={`/produits/${produit.id}`} class="btn-primary">Voir le produit</a>
+          <a href={`/contact?produit=${encodeURIComponent(nom)}`} class="btn-verre">Devis</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .produit-scroll {
+    position: relative;
+    background: #050b18;
+    color: #fff;
+  }
+  .scene {
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 1rem;
+  }
+  .fond {
+    position: absolute;
+    inset: 0;
+    background: var(--fond-haut) center / cover no-repeat;
+    filter: brightness(var(--lum-fond));
+  }
+  .fond::after {
+    /* Fondu avec le noir des sections voisines, en haut et en bas. */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, #050b18, transparent 18%, transparent 80%, #050b18);
+  }
+  @media (min-width: 768px) {
+    .fond {
+      background-image: var(--fond-large);
+    }
+  }
+  .bidon {
+    position: relative;
+    width: min(56vw, 300px);
+    margin: 0 auto 2rem;
+    filter: brightness(var(--lum-bidon)) drop-shadow(0 30px 45px rgb(0 0 0 / 0.55));
+  }
+  .bidon-fixe,
+  .bidon-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .bidon-canvas {
+    display: none;
+  }
+  .cartes {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    max-width: 30rem;
+    margin: 0 auto;
+  }
+  .carte {
+    padding: 1.4rem 1.5rem;
+    border: 1px solid rgb(255 255 255 / 0.12);
+    border-radius: 1.25rem;
+    background: rgb(6 16 34 / 0.5);
+    box-shadow: 0 20px 50px -20px rgb(0 0 0 / 0.6);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .surtitre {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fd8d1c;
+  }
+  :global(.titre) {
+    margin-top: 0.4rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 8vw, 5.5rem);
+    line-height: 0.92;
+  }
+  .texte {
+    margin-top: 0.7rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #c9d4e3;
+  }
+  .normes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+  }
+  .normes li {
+    padding: 0.5rem 0.95rem;
+    border: 1px solid rgb(255 255 255 / 0.22);
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .chiffres {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .chiffres div {
+    display: flex;
+    flex-direction: column;
+  }
+  .chiffres dt {
+    order: 2;
+    font-size: 0.8rem;
+    color: #c9d4e3;
+  }
+  .chiffres dd {
+    order: 1;
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 4.5vw, 3.4rem);
+    line-height: 1;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+  .btn-verre {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.7rem 1.4rem;
+    border: 1px solid rgb(255 255 255 / 0.6);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background-color 0.2s;
+  }
+  .btn-verre:hover {
+    background: rgb(255 255 255 / 0.12);
+  }
+
+  /* ── Mise en scène au scroll (ajoutée par le script) ─────────────────────── */
+  .produit-scroll.anime {
+    height: var(--course);
+  }
+  .anime .scene {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    padding: 0;
+  }
+  .anime .bidon {
+    position: absolute;
+    left: 50%;
+    top: 9%;
+    width: auto;
+    height: 46%;
+    margin: 0;
+    transform: translate(-50%, 0);
+    will-change: transform;
+  }
+  .anime .bidon-canvas {
+    display: block;
+  }
+  /* L'image fixe reste visible tant que la séquence n'a pas dessiné sa première vue. */
+  .anime.dessine .bidon-fixe {
+    visibility: hidden;
+  }
+  .anime .cartes {
+    position: absolute;
+    inset: auto 1rem 1.5rem;
+    display: block;
+    max-width: none;
+  }
+  .anime .carte {
+    position: absolute;
+    inset: auto 0 0;
+    opacity: 0;
+    transform: translateY(24px);
+    pointer-events: none;
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease;
+  }
+  .anime .carte.active {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .sobre .carte {
+    transition: opacity 0.3s;
+  }
+  @media (min-width: 1024px) {
+    .anime .bidon {
+      left: 32%;
+      top: 15%;
+      height: 72%;
+    }
+    .anime .cartes {
+      inset: 50% 7vw auto auto;
+      width: min(30rem, 36vw);
+    }
+    .anime .carte {
+      inset: auto 0 auto 0;
+      top: 0;
+      transform: translateY(calc(-50% + 24px));
+    }
+    .anime .carte.active {
+      transform: translateY(-50%);
+    }
+  }
+</style>
+
+<script>
+  import { lireNiveau } from '@/lib/capacite-appareil'
+
+  /**
+   * Scroll → vue du bidon (un tour complet sur la section), position, inclinaison, carte active.
+   * Images chargées seulement à l'approche de la section ; dessin au rythme de l'écran.
+   */
+  const LARGEUR_PETIT = 400
+
+  function lisse(a: number, b: number, x: number) {
+    const t = Math.min(1, Math.max(0, (x - a) / (b - a)))
+    return t * t * (3 - 2 * t)
+  }
+
+  // Avancement → [décalage x (%), décalage y (%), inclinaison (°), échelle] ; la rotation est à part.
+  const CLES: [number, number, number, number, number][] = [
+    [0.0, 0, 4, -5, 0.94],
+    [0.35, 0, 0, 0, 1],
+    [0.7, -4, -3, 6, 1.03],
+    [1.0, 0, 0, -2, 0.97],
+  ]
+  function pose(p: number) {
+    for (let i = 1; i < CLES.length; i++) {
+      if (p <= CLES[i][0]) {
+        const a = CLES[i - 1]
+        const b = CLES[i]
+        const t = lisse(a[0], b[0], p)
+        return a.slice(1).map((v, k) => v + (b[k + 1] - v) * t)
+      }
+    }
+    return CLES[CLES.length - 1].slice(1)
+  }
+
+  function initialiser(section: HTMLElement) {
+    // Niveau de l'appareil (src/lib/capacite-appareil.ts) :
+    //  faible → image fixe (disposition sans « .anime » : le bidon de face et les trois cartes
+    //           l'une sous l'autre) : aucune des 48 images n'est téléchargée, aucun scroll écouté ;
+    //  moyen  → une image sur deux, taille « petit » (≈ 0,6 Mo au lieu de 2,1 Mo) ;
+    //  fort   → séquence complète, comportement d'origine.
+    const niveau = lireNiveau()
+    if (niveau === 'faible') return
+    // Très vieux navigateur sans IntersectionObserver : disposition statique (rien n'est caché).
+    if (!('IntersectionObserver' in window)) return
+    const pas = niveau === 'moyen' ? 2 : 1
+    const sobre = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (sobre) section.classList.add('sobre')
+    const n = Number(section.dataset.images)
+    const version = section.dataset.version
+    const bidon = section.querySelector<HTMLElement>('.bidon')!
+    const canvas = section.querySelector<HTMLCanvasElement>('.bidon-canvas')!
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+    const cartes = [...section.querySelectorAll<HTMLElement>('.carte')]
+    const images: (HTMLImageElement | undefined)[] = []
+    let pret = false
+    let derniere = -1
+
+    section.classList.add('anime')
+
+    function charger() {
+      const hauteurEcran = bidon.getBoundingClientRect().height * Math.min(window.devicePixelRatio || 1, 2)
+      const taille = niveau === 'fort' && hauteurEcran > LARGEUR_PETIT * 1.4 ? 'grand' : 'petit'
+      for (let i = 0; i < n; i++) {
+        if (i % pas !== 0) {
+          images.push(undefined) // image sautée : la plus proche chargée la remplace
+          continue
+        }
+        const im = new Image()
+        im.decoding = 'async'
+        im.src = `/bidon-studio/${taille}/${String(i).padStart(3, '0')}.webp?v=${version}`
+        images.push(im)
+      }
+      images[0]!.decode().then(() => {
+        pret = true
+        derniere = -1
+        dessiner()
+      }, () => {})
+      images.forEach((im) =>
+        im?.decode().then(() => {
+          derniere = -1
+          auScroll()
+        }, () => {}),
+      )
+    }
+
+    function plusProche(i: number) {
+      for (let d = 0; d < n; d++) {
+        for (const k of [(i - d + n) % n, (i + d) % n]) if (images[k]?.complete && images[k].naturalWidth) return images[k]
+      }
+      return null
+    }
+
+    function dessiner() {
+      const r = section.getBoundingClientRect()
+      const course = r.height - window.innerHeight
+      const p = Math.min(1, Math.max(0, -r.top / course))
+      const [dx, dy, rot, ech] = pose(p)
+      bidon.style.transform = sobre
+        ? 'translate(-50%, 0)'
+        : `translate(calc(-50% + ${dx}%), ${dy}%) rotate(${rot}deg) scale(${ech})`
+
+      const etape = Math.min(cartes.length - 1, Math.floor(p * cartes.length * 0.999))
+      cartes.forEach((c, k) => c.classList.toggle('active', k === etape))
+
+      if (!pret) return
+      // Un tour complet sur toute la section ; la vue 0 (3/4 avant) revient à la fin.
+      const i = Math.round(p * n) % n
+      if (i === derniere) return
+      const im = plusProche(i)
+      if (!im) return
+      const b = canvas.getBoundingClientRect()
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      const l = Math.round(b.width * dpr)
+      const h = Math.round(b.height * dpr)
+      if (canvas.width !== l || canvas.height !== h) {
+        canvas.width = l
+        canvas.height = h
+      }
+      ctx!.clearRect(0, 0, l, h)
+      const k = Math.min(l / im.naturalWidth, h / im.naturalHeight)
+      const w = im.naturalWidth * k
+      const hh = im.naturalHeight * k
+      ctx!.drawImage(im, (l - w) / 2, (h - hh) / 2, w, hh)
+      derniere = images[i] === undefined || im === images[i] ? i : -1
+      section.classList.add('dessine')
+    }
+
+    let enCours = false
+    // Hors de l'écran (marge d'un écran), plus aucun dessin : le scroll ne coûte rien.
+    let enVue = true
+    function auScroll() {
+      if (enCours || !enVue) return
+      enCours = true
+      requestAnimationFrame(() => {
+        enCours = false
+        dessiner()
+      })
+    }
+
+    new IntersectionObserver(
+      (entrees, obs) => {
+        if (entrees.some((e) => e.isIntersecting)) {
+          obs.disconnect()
+          charger()
+        }
+      },
+      { rootMargin: '150% 0px' },
+    ).observe(section)
+
+    new IntersectionObserver(
+      ([e]) => {
+        enVue = e.isIntersecting
+        if (enVue) auScroll()
+      },
+      { rootMargin: '100% 0px' },
+    ).observe(section)
+
+    window.addEventListener('scroll', auScroll, { passive: true })
+    window.addEventListener('resize', () => {
+      derniere = -1
+      auScroll()
+    })
+    dessiner()
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-produit-scroll]').forEach(initialiser)
+</script>

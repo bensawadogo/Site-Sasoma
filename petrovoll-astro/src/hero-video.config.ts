@@ -23,6 +23,9 @@
 import manifeste from '@/assets/hero/video/manifest.json'
 import type { Point, Zone } from '@/hero.config'
 
+/** Fond route actif (voir FOND_ROUTE plus bas). */
+const FOND_ROUTE_ACTIF = true
+
 /** Points du moteur dans la vidéo source retournée (repérés sur K1, x → 1 − x). */
 export const MOTEUR = {
   /** Ouverture du goulot de remplissage, en haut à droite du moteur : arrivée du filet. */
@@ -140,7 +143,9 @@ export const HERO_DESKTOP: ReglagesHeroVideo = {
     // Image réduite, posée en bas et calée à gauche : le moteur occupe la gauche de
     // l'écran, l'orifice descend à un tiers de la hauteur, le bidon penché au-dessus
     // reste sous l'en-tête.
-    focale: { x: 0.5, y: 1 },
+    // Fond route (07/10) : image remontée (focale 0,62) pour que le bloc flotte au-dessus de
+    // son ombre sur la route ; avec le garage, elle était posée en bas (focale 1).
+    focale: { x: 0.5, y: FOND_ROUTE_ACTIF ? 0.62 : 1 },
     cale: { bord: 'gauche', x: 0.05 },
     zoom: 0.72,
     dprMax: 2,
@@ -157,6 +162,20 @@ export const HERO_DESKTOP: ReglagesHeroVideo = {
   bec: 'avant',
   etiquettes: 'droite',
   reperes: 'colonne',
+}
+
+/**
+ * Fond du hero (07/10, choix de Ben) : la route du désert (photo E) dont seuls les nuages
+ * bougent, en boucle (ops/scripts/video_nuages.py, rendu dans ops/captures/hero-video-E4k).
+ * Il remplace le garage : le moteur (masqué par masque.webp) est posé sur la route.
+ * Version : à changer si les fichiers de public/hero-fond/ sont remplacés.
+ */
+export const FOND_ROUTE = {
+  actif: FOND_ROUTE_ACTIF,
+  dossier: '/hero-fond',
+  version: '2',
+  /** Largeur d'écran × densité (px réels) à partir de laquelle un appareil « fort » reçoit la 4K. */
+  seuil4k: 2600,
 }
 
 /** Largeur (px) à partir de laquelle on affiche le hero desktop. */

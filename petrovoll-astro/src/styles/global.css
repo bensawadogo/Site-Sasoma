@@ -185,8 +185,11 @@
   }
 
   /* Accessibilité : respect de `prefers-reduced-motion` */
+  /* Exception : les bandes défilantes (.defile-continu) gardent un défilement lent, avec
+     bouton pause (BandeMarques, BandeCertifications ; demande de Ben, 06/10), et le bloc
+     moteur + bidon du hero flotte doucement au-dessus de la route (.flotte, Ben, 07/10). */
   @media (prefers-reduced-motion: reduce) {
-    *,
+    *:not(.defile-continu):not(.flotte):not(.fond-route),
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
@@ -510,4 +513,112 @@ html.apercu-ouvert {
   flex: none;
   border-radius: 50%;
   background: var(--base, #74869d);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   Adaptation à la puissance de l'appareil — <html data-appareil="faible|moyen|fort">
+   (posé dans le <head> par src/lib/capacite-appareil.ts ; fort = rendu historique, aucune règle).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Toutes puissances : une bande défilante hors écran (ou onglet caché) est mise en pause. */
+.defile.hors-ecran .defile-continu {
+  animation-play-state: paused !important;
+}
+
+/* Faible : plus d'animation continue. Les bandes deviennent un rail que l'on fait glisser
+   au doigt (une seule copie des éléments, sans fondu ni bouton pause devenu inutile). */
+[data-appareil='faible'] .defile {
+  overflow-x: auto !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  scrollbar-width: none;
+}
+[data-appareil='faible'] .defile::-webkit-scrollbar {
+  display: none;
+}
+[data-appareil='faible'] .defile-continu {
+  animation: none !important;
+  transform: none !important;
+}
+[data-appareil='faible'] .defile-continu > [aria-hidden='true'] {
+  display: none !important;
+}
+[data-appareil='faible'] .pause-defile {
+  display: none !important;
+}
+
+/* ── Hero sur la route : le bloc moteur + bidon flotte (Ben, 07/10) ──────────────────────
+   `translate` (et non `transform`) : le script tourne déjà le bidon avec transform, les deux
+   se cumulent. Même durée pour l'ombre posée sur la route, qui se resserre quand le bloc
+   monte. Niveau « faible » : immobile (aucune animation continue). */
+@keyframes flotter {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -1.1svh;
+  }
+}
+@keyframes ombre-flotter {
+  0%,
+  100% {
+    scale: 1;
+    opacity: 0.8;
+  }
+  50% {
+    scale: 0.86;
+    opacity: 0.55;
+  }
+}
+[data-route] .flotte {
+  animation: flotter 5.5s ease-in-out infinite;
+}
+[data-route] .ombre-moteur {
+  position: absolute;
+  left: var(--ombre-x, 30%);
+  top: var(--ombre-y, 92%);
+  width: var(--ombre-l, 40%);
+  height: calc(var(--ombre-l, 40vw) * 0.16);
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.9), rgb(0 0 0 / 0.45) 55%, transparent);
+  filter: blur(6px);
+  pointer-events: none;
+  animation: ombre-flotter 5.5s ease-in-out infinite;
+}
+[data-appareil='faible'] [data-route] .flotte,
+[data-appareil='faible'] [data-route] .ombre-moteur {
+  animation: none;
+}
+
+/* ── Scène unifiée (07/10) : le moteur, éclairé en studio, prend la lumière du jour de la
+   route (ombres relevées, contraste et saturation adoucis, pointe de chaleur), et la
+   caméra avance doucement vers l'horizon pendant le scroll du hero (animation liée au
+   défilement, sans JS ; navigateurs sans animation-timeline : fond fixe). ─────────────── */
+[data-route] [data-sequence],
+[data-route] [data-sequence] + canvas {
+  filter: brightness(1.12) contrast(0.9) saturate(0.9) sepia(0.05);
+}
+@keyframes avancer-route {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.12;
+  }
+}
+@supports (animation-timeline: view()) {
+  [data-route] {
+    view-timeline: --hero-route block;
+  }
+  [data-route] .fond-route {
+    transform-origin: 50% 42%; /* point de fuite de la route */
+    animation: avancer-route linear both;
+    animation-timeline: --hero-route;
+    animation-range: contain 0% contain 100%;
+  }
+}
+[data-appareil='faible'] [data-route] .fond-route {
+  animation: none;
 }

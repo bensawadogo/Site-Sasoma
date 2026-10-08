@@ -1,0 +1,64 @@
+---
+/**
+ * Page affichée par le service worker (public/sw.js) quand il n'y a pas de
+ * réseau et que la page demandée n'a jamais été visitée. Liste les pages
+ * déjà ouvertes, disponibles sans connexion.
+ */
+import PageLayout from '@/layouts/PageLayout.astro'
+
+export const prerender = true
+---
+
+<PageLayout titre="Vous êtes hors ligne" description="Pas de connexion pour le moment : les pages déjà visitées restent accessibles." noindex>
+  <div class="container-page py-16 lg:py-24">
+    <div class="mx-auto max-w-xl">
+      <p class="font-display text-5xl text-accent">Hors ligne</p>
+      <h1 class="mt-4 text-3xl sm:text-4xl">Pas de connexion pour le moment</h1>
+      <p class="mt-4 text-attenue">
+        Cette page n’a pas encore été ouverte sur cet appareil. Vérifiez votre réseau puis réessayez : les pages déjà
+        visitées restent disponibles ci-dessous.
+      </p>
+
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <button type="button" id="reessayer" class="btn-primary w-full sm:w-auto">Réessayer</button>
+        <a href="/" class="btn-outline w-full sm:w-auto">Accueil</a>
+      </div>
+
+      <section class="mt-10" id="pages-visitees" hidden>
+        <h2 class="text-xl">Pages disponibles sans connexion</h2>
+        <ul id="liste-pages" class="mt-4 divide-y divide-bordure border-y border-bordure"></ul>
+      </section>
+    </div>
+  </div>
+</PageLayout>
+
+<script>
+  // Lit les pages mises en cache par le service worker (aucun appel réseau).
+  document.getElementById('reessayer')?.addEventListener('click', () => location.reload())
+
+  async function afficherPagesVisitees() {
+    if (!('caches' in window)) return
+    const noms = (await caches.keys()).filter((n) => n.startsWith('sasoma-pages-'))
+    if (!noms.length) return
+    const cache = await caches.open(noms[noms.length - 1])
+    const index = await cache.match('/__index-pages')
+    const titres: Record<string, string> = index ? await index.json() : {}
+    const chemins = (await cache.keys())
+      .map((r) => new URL(r.url).pathname)
+      .filter((p) => p !== '/hors-ligne' && p !== '/__index-pages')
+    if (!chemins.length) return
+    const liste = document.getElementById('liste-pages')
+    if (!liste) return
+    for (const chemin of chemins) {
+      const li = document.createElement('li')
+      const a = document.createElement('a')
+      a.href = chemin
+      a.className = 'block py-3 hover:text-accent'
+      a.textContent = (titres[chemin] || (chemin === '/' ? 'Accueil' : chemin)).trim()
+      li.appendChild(a)
+      liste.appendChild(li)
+    }
+    document.getElementById('pages-visitees')?.removeAttribute('hidden')
+  }
+  afficherPagesVisitees().catch(() => {})
+</script>

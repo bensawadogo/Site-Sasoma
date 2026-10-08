@@ -6,8 +6,9 @@
  */
 import { Image } from 'astro:assets'
 
-import vignetteStark from '@/assets/hero/bidon/vignette.webp'
-import photoMotpro from '@/assets/hero/fin/motpro-4t.jpg'
+// Packshots studio du catalogue (détourés, recadrés au produit) : même rendu pour les deux.
+import photoMotpro from '@/assets/hero/fin/motpro-4t-studio.webp'
+import photoStark from '@/assets/hero/fin/stark-semi.webp'
 import { HERO } from '@/hero.config'
 import { APPARITIONS_REPERES } from '@/hero-video.config'
 import { getParametres } from '@/lib/contenu'
@@ -23,8 +24,8 @@ const avecSociete = (texte: string) => texte.replaceAll('{societe}', parametres.
 const lienWhatsApp = parametres.whatsapp(avecSociete(HERO.messageWhatsApp))
 const { textes } = HERO
 const VIGNETTES = [
-  { src: vignetteStark, fond: 'sombre' },
-  { src: photoMotpro, fond: 'clair' },
+  { src: photoStark, fond: 'studio' },
+  { src: photoMotpro, fond: 'studio' },
 ] as const
 
 const plage = (id: string) => HERO.temps.find((t) => t.id === id)!
@@ -69,7 +70,7 @@ const blocs = [
       HERO.produitsFin.map((p, i) => (
         <li class="produit">
           <span class:list={['visuel', `visuel--${VIGNETTES[i].fond}`]}>
-            <Image src={VIGNETTES[i].src} alt="" height={176} format="webp" quality={80} loading="lazy" />
+            <Image src={VIGNETTES[i].src} alt="" height={240} format="webp" quality={85} loading="lazy" />
           </span>
           <span class="libelle">{p.libelle}</span>
           <span class="nom">{p.nom}</span>
@@ -175,17 +176,25 @@ const blocs = [
   .visuel {
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 100%;
-    height: 5.5rem;
+    height: 6.5rem;
+    padding: 0.4rem 0;
     border-radius: 0.375rem;
   }
-  .visuel--clair {
-    background: #fff;
+  /* Petit studio photo : fond dégradé, lumière douce derrière le produit, ombre au sol. */
+  .visuel--studio {
+    background:
+      radial-gradient(60% 55% at 50% 42%, rgb(255 255 255 / 0.22), transparent 70%),
+      radial-gradient(45% 10% at 50% 92%, rgb(0 0 0 / 0.45), transparent 70%),
+      linear-gradient(180deg, #2b3547, #111826);
   }
   .visuel :global(img) {
     height: 100%;
     width: auto;
-    object-fit: contain;
+    max-width: 100%;
+    object-fit: contain; /* jamais rogné */
+    filter: drop-shadow(0 6px 8px rgb(0 0 0 / 0.45));
   }
   .libelle {
     margin-top: 0.5rem;

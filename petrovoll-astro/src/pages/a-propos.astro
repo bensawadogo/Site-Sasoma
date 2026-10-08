@@ -1,5 +1,6 @@
 ---
 /** À propos — texte édité dans l'admin (Pages → Page « À propos »). */
+import BandeCertifications from '@/components/home/BandeCertifications.astro'
 import ContactCTA from '@/components/home/ContactCTA.astro'
 import StatsSection from '@/components/home/StatsSection.astro'
 import PageEditoriale from '@/components/ui/PageEditoriale.astro'
@@ -9,5 +10,6 @@ export const prerender = true
 
 <PageEditoriale id="a-propos" titreParDefaut="Qui sommes-nous ?" surtitre="À propos">
   <StatsSection />
+  <BandeCertifications titre="Un fabricant allemand certifié" />
   <ContactCTA />
 </PageEditoriale>

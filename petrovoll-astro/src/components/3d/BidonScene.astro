@@ -133,6 +133,7 @@ const {
 </style>
 
 <script>
+  import { lireNiveau } from '@/lib/capacite-appareil'
   import type { Qualite } from '@/scripts/bidon-3d'
 
   type Niveau = 'image' | Qualite
@@ -159,6 +160,10 @@ const {
     const connexion = nav.connection
     // L'utilisateur a demandé à économiser ses données : on respecte.
     if (connexion?.saveData) return 'image'
+    // Appareil jugé faible (src/lib/capacite-appareil.ts) : pas de 3D (three.js + modèle ≈ 1 Mo),
+    // l'image reste ; le bouton « Voir en 3D » laisse le choix. Moyen : toujours la 3D allégée.
+    const niveauAppareil = lireNiveau()
+    if (niveauAppareil === 'faible') return 'image'
     if ((nav.deviceMemory ?? 4) <= 1) return 'image'
     if (!webglDisponible()) return 'image'
 
@@ -170,7 +175,7 @@ const {
     const tactile = window.matchMedia('(pointer: coarse)').matches
     const faible = (nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4
     const mobile = petitEcran || tactile
-    return mobile || faible ? 'lite' : 'full'
+    return mobile || faible || niveauAppareil === 'moyen' ? 'lite' : 'full'
   }
 
   document.querySelectorAll<HTMLElement>('[data-bidon]').forEach((hote) => {

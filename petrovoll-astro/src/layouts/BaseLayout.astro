@@ -16,10 +16,13 @@
  *      (le panel Keystatic, lui, n'utilise pas ce layout).
  */
 import '@/styles/global.css'
+import '@/styles/studio.css'
 
+import ServiceWorker from '@/components/layout/ServiceWorker.astro'
 import CanonicalUrl from '@/components/seo/CanonicalUrl.astro'
 import OpenGraph from '@/components/seo/OpenGraph.astro'
 import SchemaOrg from '@/components/seo/SchemaOrg.astro'
+import { SCRIPT_APPAREIL } from '@/lib/capacite-appareil'
 import { getParametres, urlSite } from '@/lib/contenu'
 
 interface Props {
@@ -178,6 +181,7 @@ const descriptionFinale =
     <!-- ── Icônes (générées depuis le logo : python scripts/build-logo.py) ── -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <ServiceWorker />
 
     <!-- ── Vérification des consoles ───────────────────────────────────────
          TODO [seo] : renseigner les codes de validation fournis par Google
@@ -203,6 +207,11 @@ const descriptionFinale =
     <script is:inline>
       document.documentElement.classList.add('js-reveal-ready')
     </script>
+
+    <!-- Niveau de puissance de l'appareil (faible | moyen | fort) → <html data-appareil>,
+         posé avant le premier rendu ; lu par le hero, le bidon au scroll et les bandes
+         (src/lib/capacite-appareil.ts). `?appareil=faible` force le niveau pour les tests. -->
+    <script is:inline set:html={SCRIPT_APPAREIL} />
 
     <!-- Révélation au scroll : script bundlé (defer auto), ~1 Ko, sans dépendance.
          Le marquage `js-reveal-ready` est déjà posé par le script inline ci-dessus ;

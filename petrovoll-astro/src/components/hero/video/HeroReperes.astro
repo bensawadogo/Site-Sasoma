@@ -17,7 +17,7 @@ interface Props {
 const { mode, cote } = Astro.props
 ---
 
-<div class:list={['reperes', `reperes--${mode}`, `reperes--${cote}`]} aria-hidden={mode === 'pastille' ? 'true' : undefined}>
+<div class:list={['reperes', 'flotte', `reperes--${mode}`, `reperes--${cote}`]} aria-hidden={mode === 'pastille' ? 'true' : undefined}>
   {
     HERO.textes.t3.map((t, i) => (
       <div class="repere" data-repere>

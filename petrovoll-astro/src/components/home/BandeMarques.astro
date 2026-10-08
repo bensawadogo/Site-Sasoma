@@ -1,0 +1,142 @@
+---
+/**
+ * BandeMarques.astro — bande défilante des logos constructeurs (couleur).
+ *
+ * Seuls les constructeurs cités dans les homologations et spécifications des huiles
+ * Petrovöll (fiches du fabricant, src/content/produits) y figurent. Logos officiels :
+ * Wikidata / Wikimedia Commons (docs/logos-marques.json, ops/scripts/logos_marques.py),
+ * rendus en WebP légers. Défilement plus lent si les animations sont coupées dans le système ; bouton pause.
+ */
+import TitreAnime from '@/components/ui/TitreAnime.astro'
+import { Image } from 'astro:assets'
+
+const fichiers = import.meta.glob<{ default: ImageMetadata }>('../../assets/marques/*.webp', { eager: true })
+// Ordre d'affichage : voitures d'abord, puis poids lourds et engins.
+const ORDRE: [string, string][] = [
+  ['mercedes-benz', 'Mercedes-Benz'], ['bmw', 'BMW'], ['volkswagen', 'Volkswagen'], ['porsche', 'Porsche'],
+  ['ferrari', 'Ferrari'], ['peugeot', 'Peugeot'], ['citroen', 'Citroën'], ['renault', 'Renault'],
+  ['toyota', 'Toyota'], ['nissan', 'Nissan'], ['honda', 'Honda'], ['hyundai', 'Hyundai'], ['ford', 'Ford'],
+  ['volvo', 'Volvo'], ['man', 'MAN'], ['caterpillar', 'Caterpillar'], ['cummins', 'Cummins'],
+]
+const logos = ORDRE.flatMap(([slug, nom]) => {
+  const f = fichiers[`../../assets/marques/${slug}.webp`]
+  if (!f) return []
+  const img = f.default
+  // Emblèmes (presque carrés) plus hauts que les logotypes allongés : même présence visuelle.
+  const ratio = img.width / img.height
+  const hauteur = ratio > 3 ? 26 : ratio > 1.6 ? 38 : 56
+  return [{ nom, img, hauteur }]
+})
+---
+
+<!-- Fond blanc fixe (même en thème sombre) : les logos officiels sont faits pour un fond clair. -->
+<section class="bande-marques border-y border-[#dce4ee] bg-white py-10 lg:py-14" aria-labelledby="marques-titre">
+  <div class="container-page">
+    <p class="eyebrow-ed justify-center text-[#b8520b]"><span class="eyebrow-num">02</span>Homologations constructeurs</p>
+    <TitreAnime
+      id="marques-titre"
+      class="titre-geant titre-geant--moyen mx-auto mt-4 max-w-5xl text-center !text-[#00244a]"
+      texte="Conformes aux exigences des grands constructeurs"
+      accent="exigences"
+    />
+  </div>
+
+  <div class="defile mt-8">
+    <div class="piste defile-continu" role="list" aria-label="Constructeurs cités dans les homologations Petrovöll">
+      {
+        [0, 1].map((copie) =>
+          logos.map((l) => (
+            <div class="logo" role={copie ? undefined : 'listitem'} aria-hidden={copie ? 'true' : undefined}>
+              <Image
+                src={l.img}
+                alt={copie ? '' : l.nom}
+                height={l.hauteur * 2}
+                style={`height:${l.hauteur}px;width:auto`}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          )),
+        )
+      }
+    </div>
+  </div>
+
+  <button type="button" class="pause-defile" data-pause-defile aria-pressed="false">
+    <span class="icone-pause" aria-hidden="true">❚❚</span><span class="icone-lecture" aria-hidden="true">▶</span>
+    <span class="sr-only">Mettre en pause le défilement</span>
+  </button>
+
+  <p class="container-page mt-6 text-center text-xs leading-relaxed text-[#56677d]">
+    Homologations et spécifications indiquées par le fabricant Petrovöll pour ses huiles (par exemple MB 229.3,
+    VW 502.00, BMW Longlife, Porsche C20, Volvo VDS-3, MAN M 3275). Les marques citées appartiennent à leurs
+    propriétaires.
+  </p>
+</section>
+
+<style>
+  .defile {
+    overflow: hidden;
+    /* Fondu sur les bords : les logos entrent et sortent en douceur. */
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .piste {
+    display: flex;
+    width: max-content;
+    animation: defiler 45s linear infinite;
+  }
+  .defile:hover .piste {
+    animation-play-state: paused;
+  }
+  .logo {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    height: 72px;
+    padding: 0 clamp(1.5rem, 3vw, 2.75rem);
+  }
+  @keyframes defiler {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  /* Pause : survol, ou bouton (WCAG 2.2.2 : tout défilement automatique doit pouvoir s'arrêter). */
+  .pause-defile {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin: 1rem auto 0;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    opacity: 0.55;
+    transition: opacity 0.2s;
+  }
+  .pause-defile:hover,
+  .pause-defile:focus-visible {
+    opacity: 1;
+  }
+  .icone-lecture,
+  .en-pause .icone-pause {
+    display: none;
+  }
+  .en-pause .icone-lecture {
+    display: inline;
+  }
+  .en-pause .piste {
+    animation-play-state: paused;
+  }
+  /* Animations désactivées dans le système : le défilement continue, plus lentement
+     (demande de Ben, 06/10) ; le bouton permet toujours de l'arrêter. */
+  @media (prefers-reduced-motion: reduce) {
+    .piste {
+      animation-duration: 90s;
+    }
+  }
+</style>
+
+<script>
+  import '@/scripts/defile-bandes'
+</script>

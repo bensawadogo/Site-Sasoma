@@ -1,0 +1,26 @@
+---
+/**
+ * ServiceWorker.astro — manifest PWA + enregistrement de /sw.js (site utilisable
+ * hors ligne). Le service worker n'est enregistré qu'en production (en dev il
+ * gênerait le rechargement à chaud), après le chargement de la page : aucun
+ * impact sur le premier écran.
+ */
+const actif = import.meta.env.PROD
+---
+
+<link rel="manifest" href="/manifest.webmanifest" />
+
+{
+  actif && (
+    <script
+      is:inline
+      set:html={`if ('serviceWorker' in navigator && window.isSecureContext) {
+  window.addEventListener('load', function () {
+    var go = function () { navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function () {}) }
+    if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 4000 })
+    else setTimeout(go, 2000)
+  })
+}`}
+    />
+  )
+}

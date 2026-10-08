@@ -8,13 +8,15 @@
 import BidonHero from '@/components/hero/video/BidonHero.astro'
 import HeroReperes from '@/components/hero/video/HeroReperes.astro'
 import HeroTextes from '@/components/hero/video/HeroTextes.astro'
-import { HERO_DESKTOP as R } from '@/hero-video.config'
+import FondRoute from '@/components/hero/video/FondRoute.astro'
+import { FOND_ROUTE, HERO_DESKTOP as R } from '@/hero-video.config'
 
 const pc = (v: number) => `${+(v * 100).toFixed(2)}%`
 const affiche = `${R.sequence.dossier}/affiche.webp?v=${R.sequence.version}`
 const variables = [
   `--hauteur:${R.hauteur}`,
   `--affiche:url(${affiche})`,
+  `--affiche-moteur:url(${R.sequence.dossier}/affiche-moteur.webp?v=${R.sequence.version})`,
   `--decor-penombre:url(${R.sequence.dossier}/decor-penombre.webp?v=${R.sequence.version})`,
   `--decor-allume:url(${R.sequence.dossier}/decor-allume.webp?v=${R.sequence.version})`,
   ...Object.entries(R.zones).flatMap(([nom, z]) => [
@@ -26,8 +28,10 @@ const variables = [
 ].join(';')
 ---
 
-<section class="hero-desktop zone-sombre relative -mt-16 lg:-mt-20" style={variables} data-hero-desktop aria-labelledby="hero-titre-desktop">
+<section class="hero-desktop zone-sombre relative -mt-16 lg:-mt-20" style={variables} data-hero-desktop data-route={FOND_ROUTE.actif ? "" : undefined} aria-labelledby="hero-titre-desktop">
   <div class="scene" data-scene>
+    {FOND_ROUTE.actif && <FondRoute format="desktop" />}
+    {FOND_ROUTE.actif && <div class="ombre-moteur" data-ombre-moteur aria-hidden="true" />}
     {
       R.sequence.decor && (
         <div class="decor" data-decor aria-hidden="true">
@@ -35,9 +39,9 @@ const variables = [
         </div>
       )
     }
-    <canvas class="sequence" data-sequence aria-hidden="true"></canvas>
+    <canvas class="sequence flotte" data-sequence aria-hidden="true"></canvas>
     <div class="couche voile" aria-hidden="true"></div>
-    <canvas class="couche" data-filet aria-hidden="true"></canvas>
+    <canvas class="couche flotte" data-filet aria-hidden="true"></canvas>
     <HeroReperes mode="colonne" cote={R.etiquettes} />
     <BidonHero />
     <HeroTextes idTitre="hero-titre-desktop" />
@@ -117,6 +121,18 @@ const variables = [
   /* Les étapes du moteur sont dans les étiquettes, à droite du moteur. */
   .hero-desktop :global([data-etape]) {
     display: none;
+  }
+  /* Fond route (FOND_ROUTE) : le garage est retiré, seul le moteur (affiche détourée par
+     masque.webp) est posé sur la vidéo de la route. */
+  [data-route] .decor {
+    background: none;
+    mask-image: none;
+  }
+  [data-route] .decor-allume {
+    display: none;
+  }
+  [data-route] .sequence {
+    background-image: var(--affiche-moteur);
   }
 </style>
 

@@ -1,0 +1,121 @@
+---
+/**
+ * TitreAnime.astro — titre de section à apparition mot par mot (masque + montée).
+ *
+ * - Découpe en mots côté SERVEUR : aucune différence de mise en page entre avant
+ *   et après l'animation (pas de CLS), texte indexable et lisible sans JS.
+ * - `aria-label` = texte complet ; les mots sont lus normalement par les lecteurs d'écran.
+ * - `accent` : mot mis en avant, composé en Inter italique fin à côté du Bebas Neue.
+ * - Animation déclenchée une seule fois par src/scripts/titres-animes.ts.
+ *   Désactivée si mouvement réduit ou appareil « faible » (titre affiché directement).
+ *
+ * Props : texte, balise (h1|h2|h3), class, id, accent (mot exact ou fragment du texte).
+ */
+interface Props {
+  texte: string
+  balise?: 'h1' | 'h2' | 'h3'
+  class?: string
+  id?: string
+  accent?: string
+}
+const { texte, balise = 'h2', class: classe = '', id, accent } = Astro.props
+const Balise = balise
+
+const norme = (s: string) => s.toLowerCase().replace(/[.,;:!?«»"]/g, '')
+const motsAccent = new Set((accent ?? '').split(/\s+/).filter(Boolean).map(norme))
+const mots = texte.split(/\s+/).filter(Boolean).map((mot, i) => ({
+  mot,
+  accent: motsAccent.has(norme(mot)),
+  i,
+}))
+---
+
+<Balise id={id} class:list={['titre-anime', classe]} aria-label={texte} data-titre-anime>
+  {
+    mots.map(({ mot, accent: estAccent, i }) => (
+      <Fragment>
+        <span class="ta-mot">
+          <span class:list={['ta-mot-i', estAccent && 'ta-accent']} style={`--i:${i}`}>
+            {mot}
+          </span>
+        </span>
+        {i < mots.length - 1 && ' '}
+      </Fragment>
+    ))
+  }
+</Balise>
+
+<script>
+  import '@/scripts/titres-animes'
+</script>
+
+<style is:global>
+  /* Sur-titre éditorial : numéro de section + capitales espacées */
+  .eyebrow-ed {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .eyebrow-num {
+    flex: none;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    font-weight: 300;
+    opacity: 0.75;
+  }
+  .eyebrow-num::after {
+    content: '';
+    display: inline-block;
+    width: 2rem;
+    height: 1px;
+    margin-left: 0.9rem;
+    vertical-align: middle;
+    background: currentColor;
+    opacity: 0.6;
+  }
+  /* Titres de section à l'échelle éditoriale */
+  .titre-geant {
+    font-size: clamp(3rem, 9vw, 9rem);
+    line-height: 0.9;
+    letter-spacing: 0.005em;
+  }
+  .titre-geant--moyen {
+    font-size: clamp(2.5rem, 6.5vw, 6.5rem);
+  }
+  .titre-anime .ta-mot {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    /* marge interne pour ne pas rogner les accents et les jambages */
+    padding: 0.12em 0.04em 0.16em;
+    margin: -0.12em -0.04em -0.16em;
+  }
+  .titre-anime .ta-mot-i {
+    display: inline-block;
+  }
+  /* Mot clé : Inter italique fin (oblique) à côté du Bebas Neue */
+  .titre-anime .ta-accent {
+    font-family: var(--font-sans);
+    font-style: italic;
+    font-weight: 200;
+    text-transform: none;
+    letter-spacing: -0.03em;
+    font-size: 0.82em;
+    line-height: 1;
+    padding-inline: 0.04em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html.js-reveal-ready:not([data-appareil='faible']) .titre-anime:not(.est-visible) .ta-mot-i {
+      transform: translateY(115%);
+    }
+    html.js-reveal-ready:not([data-appareil='faible']) .titre-anime.est-visible .ta-mot-i {
+      transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.1, 1);
+      transition-delay: calc(var(--i, 0) * 70ms);
+    }
+  }
+</style>

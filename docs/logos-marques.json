@@ -1,0 +1,102 @@
+{
+  "mercedes-benz": {
+    "nom": "Mercedes-Benz",
+    "wikidata": "Q36008",
+    "fichier": "Mercedes-Benz Logo 2010.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mercedes-Benz_Logo_2010.svg"
+  },
+  "bmw": {
+    "nom": "BMW",
+    "fichier": "BMW.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/BMW.svg"
+  },
+  "volkswagen": {
+    "nom": "Volkswagen",
+    "wikidata": "Q246",
+    "fichier": "Volkswagen logo 2019.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Volkswagen_logo_2019.svg"
+  },
+  "porsche": {
+    "nom": "Porsche",
+    "wikidata": "Q40993",
+    "fichier": "Porsche Schriftzug.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Porsche_Schriftzug.svg"
+  },
+  "ferrari": {
+    "nom": "Ferrari",
+    "wikidata": "Q27586",
+    "fichier": "Ferrari wordmark.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ferrari_wordmark.svg"
+  },
+  "peugeot": {
+    "nom": "Peugeot",
+    "wikidata": "Q6742",
+    "fichier": "Wordmark Peugeot 2021.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Wordmark_Peugeot_2021.svg"
+  },
+  "citroen": {
+    "nom": "Citroën",
+    "wikidata": "Q6746",
+    "fichier": "Citroen 2022.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Citroen_2022.svg"
+  },
+  "renault": {
+    "nom": "Renault",
+    "fichier": "Renault 2021 Text.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Renault_2021_Text.svg"
+  },
+  "volvo": {
+    "nom": "Volvo",
+    "wikidata": "Q215293",
+    "fichier": "Volvo-Iron-Mark-Black.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Volvo-Iron-Mark-Black.svg"
+  },
+  "ford": {
+    "nom": "Ford Motor Company",
+    "wikidata": "Q44294",
+    "fichier": "Ford logo flat.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ford_logo_flat.svg"
+  },
+  "toyota": {
+    "nom": "Toyota",
+    "wikidata": "Q53268",
+    "fichier": "Toyota.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Toyota.svg"
+  },
+  "honda": {
+    "nom": "Honda",
+    "wikidata": "Q9584",
+    "fichier": "Honda logo.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Honda_logo.svg"
+  },
+  "nissan": {
+    "nom": "Nissan",
+    "wikidata": "Q20165",
+    "fichier": "Nissan brand wordmark.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Nissan_brand_wordmark.svg"
+  },
+  "hyundai": {
+    "nom": "Hyundai Motor Company",
+    "wikidata": "Q55931",
+    "fichier": "Hyundai Motor Company logo.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Hyundai_Motor_Company_logo.svg"
+  },
+  "man": {
+    "nom": "MAN Truck & Bus",
+    "wikidata": "Q136339713",
+    "fichier": "MAN Truck & Bus - Logo.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/MAN_Truck_%26_Bus_-_Logo.svg"
+  },
+  "caterpillar": {
+    "nom": "Caterpillar Inc.",
+    "wikidata": "Q459965",
+    "fichier": "Caterpillar logo.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Caterpillar_logo.svg"
+  },
+  "cummins": {
+    "nom": "Cummins",
+    "wikidata": "Q173476",
+    "fichier": "Cummins logo.svg",
+    "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cummins_logo.svg"
+  }
+}

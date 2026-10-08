@@ -1,0 +1,10 @@
+{
+  "images": 48,
+  "tourComplet": true,
+  "largeurs": {
+    "grand": 640,
+    "petit": 400
+  },
+  "ratio": 1.55,
+  "version": "48e535c0eb"
+}
