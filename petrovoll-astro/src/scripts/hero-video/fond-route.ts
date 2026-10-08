@@ -2,7 +2,7 @@
  * fond-route.ts — vidéo de fond du hero (route, nuages en boucle ; FOND_ROUTE dans hero-video.config.ts).
  *  - niveau « faible » : rien n'est téléchargé, l'affiche (image fixe) reste ;
  *  - ordinateur : 1080p pour un appareil « fort » sur grand écran, sinon 720p ; téléphone :
- *    version verticale 1080×1920 ; la vidéo n'est demandée qu'après le chargement de la page ;
+ *    version verticale 720×1280 (550 Ko) ; rien en 2G/3G ni en économie de données ; la vidéo n'est demandée qu'après le chargement de la page ;
  *  - lecture en pause hors de l'écran ou onglet caché (une vidéo invisible ne doit rien coûter).
  */
 import { FOND_ROUTE } from '@/hero-video.config'
@@ -13,6 +13,9 @@ export function demarrerFondRoute(video: HTMLVideoElement) {
   video.dataset.branche = ''
   const niveau = lireNiveau()
   if (niveau === 'faible') return
+  // Connexion lente ou économie de données : l'affiche suffit, la vidéo n'est pas téléchargée.
+  const reseau = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
+  if (reseau?.saveData || /(^|-)(2g|3g)$/.test(reseau?.effectiveType ?? '')) return
 
   const pxReels = window.innerWidth * Math.min(window.devicePixelRatio || 1, 3)
   let nom = 'route-tel'

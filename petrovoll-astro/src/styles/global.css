@@ -574,12 +574,14 @@ html.apercu-ouvert {
 /* 08/10 (Ben) : le bloc reste suspendu, IMMOBILE (plus de va-et-vient) ; l'écart avec son
    ombre sur la route suffit à le faire « flotter ». */
 [data-route] .ombre-moteur {
+  /* Placée par translate (et non left/top) : le calage fait par le script après le
+     chargement ne compte pas comme décalage de mise en page (CLS 0,094 → 0). */
   position: absolute;
-  left: var(--ombre-x, 30%);
-  top: var(--ombre-y, 92%);
-  width: var(--ombre-l, 40%);
+  left: 0;
+  top: 0;
+  width: var(--ombre-l, 40vw);
   height: calc(var(--ombre-l, 40vw) * 0.16);
-  translate: -50% -50%;
+  translate: calc(var(--ombre-x, 30vw) - 50%) calc(var(--ombre-y, 92svh) - 50%);
   border-radius: 50%;
   background: radial-gradient(closest-side, rgb(0 0 0 / 0.9), rgb(0 0 0 / 0.45) 55%, transparent);
   filter: blur(6px);

@@ -173,7 +173,7 @@ export const HERO_DESKTOP: ReglagesHeroVideo = {
 export const FOND_ROUTE = {
   actif: FOND_ROUTE_ACTIF,
   dossier: '/hero-fond',
-  version: '2',
+  version: '3',
 }
 
 /** Largeur (px) à partir de laquelle on affiche le hero desktop. */

@@ -64,8 +64,8 @@ const mots = texte.split(/\s+/).filter(Boolean).map((mot, i) => ({
     flex: none;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
-    font-weight: 300;
-    opacity: 0.75;
+    /* Pleine couleur : à 75 %, le contraste passait sous 4,5:1 (PageSpeed 08/10). */
+    font-weight: 400;
   }
   .eyebrow-num::after {
     content: '';

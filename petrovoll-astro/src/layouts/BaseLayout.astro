@@ -24,6 +24,7 @@ import OpenGraph from '@/components/seo/OpenGraph.astro'
 import SchemaOrg from '@/components/seo/SchemaOrg.astro'
 import { SCRIPT_APPAREIL } from '@/lib/capacite-appareil'
 import { getParametres, urlSite } from '@/lib/contenu'
+import { FOND_ROUTE, HERO_DESKTOP, HERO_MOBILE, RUPTURE_DESKTOP } from '@/hero-video.config'
 
 interface Props {
   /** Titre de la page ; « — <nom de l'entreprise> » est ajouté automatiquement. */
@@ -83,6 +84,21 @@ if (import.meta.env.DEV) {
 
 /* ── URL absolue / canonical ────────────────────────────────────────────── */
 const site = urlSite(Astro.site)
+// Accueil : les deux images du premier écran (moteur, route) sont préchargées, chacune pour
+// son format ; sans cela, elles n'arrivent qu'après le CSS et le JS (LCP mobile, PageSpeed 08/10).
+const accueil = ['/', '/index', '/index.html'].includes(Astro.url.pathname)
+const prechargesHero = accueil
+  ? [
+      { href: `${HERO_MOBILE.sequence.dossier}/affiche-moteur.webp?v=${HERO_MOBILE.sequence.version}`, media: `(max-width: ${RUPTURE_DESKTOP - 1}px)` },
+      { href: `${HERO_DESKTOP.sequence.dossier}/affiche-moteur.webp?v=${HERO_DESKTOP.sequence.version}`, media: `(min-width: ${RUPTURE_DESKTOP}px)` },
+      ...(FOND_ROUTE.actif
+        ? [
+            { href: `${FOND_ROUTE.dossier}/route-affiche-tel.webp?v=${FOND_ROUTE.version}`, media: `(max-width: ${RUPTURE_DESKTOP - 1}px)` },
+            { href: `${FOND_ROUTE.dossier}/route-affiche.webp?v=${FOND_ROUTE.version}`, media: `(min-width: ${RUPTURE_DESKTOP}px)` },
+          ]
+        : []),
+    ]
+  : []
 const cheminCanonical = canonicalChemin ?? Astro.url.pathname
 const urlCanonical = new URL(cheminCanonical, site).toString()
 const baseSite = site.toString().replace(/\/+$/, '')
@@ -177,6 +193,7 @@ const descriptionFinale =
          `crossorigin` obligatoire, sinon le préchargement n'est pas réutilisé. -->
     <link rel="preload" href="/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/bebas-neue-400.woff2" as="font" type="font/woff2" crossorigin />
+    {prechargesHero.map((p) => <link rel="preload" as="image" href={p.href} media={p.media} fetchpriority="high" />)}
 
     <!-- ── Icônes (générées depuis le logo : python scripts/build-logo.py) ── -->
     <link rel="icon" href="/favicon.ico" sizes="any" />

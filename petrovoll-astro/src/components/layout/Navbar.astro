@@ -169,6 +169,7 @@ const cheminCourant = Astro.url.pathname
   }
   addEventListener('scroll', demander, { passive: true })
   addEventListener('resize', demander)
-  majFond()
+  // Au chargement : à l'image suivante, pas tout de suite (lecture de géométrie forcée).
+  demander()
 
 </script>

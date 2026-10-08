@@ -83,9 +83,9 @@ export default defineConfig({
 
   /* ── Build / HTML ────────────────────────────────────────────────────── */
   build: {
-    // Inline les petits CSS dans le HTML : un aller-retour réseau en moins
-    // sur mobile (objectif LCP < 2,5 s).
-    inlineStylesheets: 'auto',
+    // Tout le CSS dans le HTML (~17 Ko compressés) : plus aucune requête bloquante avant le
+    // premier rendu (PageSpeed 08/10 : 3 feuilles bloquaient ~1,2 s en 4G lente).
+    inlineStylesheets: 'always',
     // contact.html plutôt que contact/index.html : Cloudflare sert /contact
     // sans redirection, ce qui colle aux canoniques et au sitemap (sans « / »).
     format: 'file',
