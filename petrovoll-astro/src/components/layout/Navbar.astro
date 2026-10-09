@@ -22,7 +22,7 @@ const cheminCourant = Astro.url.pathname
 ---
 
 <header id="navbar" class="fixed inset-x-0 top-0 z-40 px-2 pt-2 lg:px-4 lg:pt-3" data-sur="clair">
-  <nav class="verre container-page flex h-14 items-center justify-between gap-3 rounded-2xl lg:h-16" aria-label="Navigation principale">
+  <nav class="verre relative z-10 container-page flex h-14 items-center justify-between gap-3 rounded-2xl lg:h-16" aria-label="Navigation principale">
     <a href="/" class="flex shrink-0 items-center" aria-label="SASOMA — retour à l'accueil">
       <img
         src="/images/logo/sasoma-horizontal.webp"
@@ -65,7 +65,9 @@ const cheminCourant = Astro.url.pathname
         aria-label="Ouvrir le menu"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round" />
+          <path class="trait-haut" d="M3 6h18" stroke-linecap="round" />
+          <path class="trait-milieu" d="M3 12h18" stroke-linecap="round" />
+          <path class="trait-bas" d="M3 18h18" stroke-linecap="round" />
         </svg>
       </button>
     </div>
@@ -127,6 +129,13 @@ const cheminCourant = Astro.url.pathname
   }
   .lien:hover {
     color: currentColor;
+  }
+  .burger path {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+      transform 0.25s,
+      opacity 0.2s;
   }
   .burger {
     border: 1px solid rgb(255 255 255 / 0.55);

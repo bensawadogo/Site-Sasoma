@@ -11,6 +11,7 @@
  *   - padding supérieur égal à la hauteur de la navbar (empêche le recouvrement)
  *   - aucune largeur fixe : tout repose sur `.container-page`
  */
+import BoutonRetour from '@/components/layout/BoutonRetour.astro'
 import Footer from '@/components/layout/Footer.astro'
 import Navbar from '@/components/layout/Navbar.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
@@ -50,6 +51,7 @@ const { titre, titreComplet, description, ogImage, ogImageTaille, ogType, canoni
       TODO [ui] : si la hauteur de navbar change, ajuster ici ET dans Navbar.astro.
     -->
     <main id="contenu" class="flex-1 pt-16 lg:pt-20">
+      <BoutonRetour />
       <slot />
     </main>
 

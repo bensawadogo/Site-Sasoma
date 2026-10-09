@@ -147,7 +147,7 @@ export const HERO_DESKTOP: ReglagesHeroVideo = {
     // son ombre sur la route ; avec le garage, elle était posée en bas (focale 1).
     focale: { x: 0.5, y: FOND_ROUTE_ACTIF ? 0.62 : 1 },
     cale: { bord: 'gauche', x: 0.05 },
-    zoom: 0.72,
+    zoom: 0.52, // 09/10 : 0,72 jugé trop gros sur ordinateur (Ben)
     dprMax: 2,
     parallele: 6,
   },
@@ -165,15 +165,16 @@ export const HERO_DESKTOP: ReglagesHeroVideo = {
 }
 
 /**
- * Fond du hero (07/10, choix de Ben) : la route du désert (photo E) dont seuls les nuages
- * bougent, en boucle (ops/scripts/video_nuages.py, rendu dans ops/captures/hero-video-E4k).
+ * Fond du hero (09/10, choix de Ben) : la route en lacet dans la savane (photo B), agrandie en 4K ;
+ * seuls ses nuages glissent, en boucle (ops/scripts/ciel_derive.py, rendu dans ops/captures/hero-video-B).
+ * Avant : route du désert E (video_nuages.py, ops/captures/hero-video-E4k).
  * Il remplace le garage : le moteur (masqué par masque.webp) est posé sur la route.
  * Version : à changer si les fichiers de public/hero-fond/ sont remplacés.
  */
 export const FOND_ROUTE = {
   actif: FOND_ROUTE_ACTIF,
   dossier: '/hero-fond',
-  version: '3',
+  version: '4',
 }
 
 /** Largeur (px) à partir de laquelle on affiche le hero desktop. */

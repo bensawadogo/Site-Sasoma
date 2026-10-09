@@ -1,8 +1,10 @@
 ---
 /**
- * Footer.astro — pied de page (zéro JS). Coordonnées, réseaux, secteurs et
- * identifiants légaux viennent de l'admin ; une ligne vide n'est pas affichée.
- * Cibles tactiles ≥ 44 px.
+ * Footer.astro — pied de page (zéro JS), version « studio » (Ben, 09/10 : « trop basique ») :
+ * bandeau d'appel au devis (sauf accueil et contact, qui en ont déjà un), colonnes
+ * Métiers / Entreprise / Contact, grand mot-symbole SASOMA en filigrane, barre légale avec
+ * « Haut de page ». Coordonnées, réseaux, secteurs et identifiants viennent de l'admin ;
+ * une ligne vide n'est pas affichée. Cibles tactiles ≥ 44 px.
  */
 import { getParametres, getSecteurs } from '@/lib/contenu'
 
@@ -24,29 +26,49 @@ const NOMS_RESEAUX: Record<string, string> = {
 }
 const identifiants = [p.rccm && `RCCM ${p.rccm}`, p.ifu && `IFU ${p.ifu}`].filter(Boolean).join(' · ')
 const annee = new Date().getFullYear()
-const lien = 'flex min-h-[44px] items-center text-sm text-attenue hover:text-texte'
+const chemin = Astro.url.pathname.replace(/\/(index)?(\.html)?$/, '') || '/'
+const avecAppel = chemin !== '/' && chemin !== '/contact'
 ---
 
-<footer class="zone-sombre mt-20">
-  <div class="container-page grid gap-10 py-12 lg:grid-cols-4 lg:py-16">
-    <div>
-      <!-- Logo couleur sur plaque blanche : sur le bleu nuit, la version blanche
-           perdait le globe (parties bleues transparentes) et se lisait mal. -->
-      <span class="inline-flex rounded-md bg-white px-3 py-2">
-        <img src="/images/logo/sasoma-horizontal.webp" alt={p.nomSociete} width="385" height="80" loading="lazy" class="h-10 w-auto" />
-      </span>
-      {p.slogan && <p class="mt-4 max-w-xs text-base leading-relaxed text-attenue">{p.slogan}</p>}
+<footer class="pied zone-sombre mt-20">
+  {
+    avecAppel && (
+      <div class="container-page">
+        <div class="pied-appel">
+          <div class="flex flex-col gap-3">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#f59e42]">Devis gratuit · réponse rapide</p>
+            <p class="font-display text-[44px] leading-[0.95] text-white sm:text-6xl">Parlons de votre prochaine commande.</p>
+          </div>
+          <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <a href="/contact" class="btn-primary w-full sm:w-auto">Demander un devis</a>
+            {lienWhatsApp && (
+              <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="pied-bouton">
+                WhatsApp
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  <div class="container-page grid gap-12 pb-10 pt-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-10 lg:pt-20">
+    <div class="flex flex-col gap-5">
+      <!-- Logo couleur sur plaque blanche : sur le bleu nuit, la version blanche perdait le globe. -->
+      <a href="/" class="inline-flex w-fit rounded-xl bg-white px-4 py-2.5 shadow-[0_10px_30px_-10px_rgb(0_0_0/0.5)]" aria-label={`${p.nomSociete} — accueil`}>
+        <img src="/images/logo/sasoma-horizontal.webp" alt={p.nomSociete} width="385" height="80" loading="lazy" class="h-9 w-auto" />
+      </a>
+      {p.slogan && <p class="max-w-sm text-[15px] leading-relaxed text-white/65">{p.slogan}</p>}
+      <p class="pied-label">
+        <span class="pied-point" aria-hidden="true"></span>
+        Distributeur Petrovöll GmbH · Allemagne
+      </p>
       {
         p.reseaux.length > 0 && (
-          <ul class="mt-6 flex flex-wrap gap-3">
+          <ul class="flex flex-wrap gap-2">
             {p.reseaux.map((r) => (
               <li>
-                <a
-                  href={r.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="flex min-h-[44px] items-center rounded border border-bordure px-3 text-xs uppercase tracking-wide text-attenue hover:text-vif"
-                >
+                <a href={r.url} target="_blank" rel="noopener noreferrer" class="pied-reseau">
                   {NOMS_RESEAUX[r.plateforme] ?? r.plateforme}
                 </a>
               </li>
@@ -59,10 +81,12 @@ const lien = 'flex min-h-[44px] items-center text-sm text-attenue hover:text-tex
     {
       secteurs.length > 0 && (
         <nav aria-labelledby="footer-secteurs">
-          <h2 id="footer-secteurs" class="font-display text-sm tracking-widest text-vif">SECTEURS</h2>
-          <ul class="mt-4 space-y-1">
+          <h2 id="footer-secteurs" class="pied-titre">Nos métiers</h2>
+          <ul class="mt-4">
             {secteurs.map((s) => (
-              <li><a href={`/secteurs/${s.id}`} class={lien}>{s.data.nom}</a></li>
+              <li>
+                <a href={`/secteurs/${s.id}`} class="pied-lien">{s.data.nom}</a>
+              </li>
             ))}
           </ul>
         </nav>
@@ -70,36 +94,173 @@ const lien = 'flex min-h-[44px] items-center text-sm text-attenue hover:text-tex
     }
 
     <nav aria-labelledby="footer-entreprise">
-      <h2 id="footer-entreprise" class="font-display text-sm tracking-widest text-vif">ENTREPRISE</h2>
-      <ul class="mt-4 space-y-1">
-        {LIENS_ENTREPRISE.map((l) => <li><a href={l.href} class={lien}>{l.libelle}</a></li>)}
+      <h2 id="footer-entreprise" class="pied-titre">Entreprise</h2>
+      <ul class="mt-4">
+        {
+          LIENS_ENTREPRISE.map((l) => (
+            <li>
+              <a href={l.href} class="pied-lien">{l.libelle}</a>
+            </li>
+          ))
+        }
       </ul>
     </nav>
 
     <div>
-      <h2 class="font-display text-sm tracking-widest text-vif">CONTACT</h2>
-      <ul class="mt-4 space-y-1 text-sm text-attenue">
-        {p.adresse && <li class="whitespace-pre-line py-2">{p.adresse}</li>}
-        {p.horaires && <li class="whitespace-pre-line py-2">{p.horaires}</li>}
-        {p.lienTelephone && <li><a href={p.lienTelephone} class={lien}>{p.telephone}</a></li>}
-        {p.email && <li><a href={`mailto:${p.email}`} class:list={[lien, 'break-all']}>{p.email}</a></li>}
+      <h2 class="pied-titre">Contact</h2>
+      <ul class="mt-4 text-sm text-white/65">
+        <li class="whitespace-pre-line py-2.5">{p.adresse || 'Ouagadougou, Burkina Faso'}</li>
+        {p.horaires && <li class="whitespace-pre-line py-2.5">{p.horaires}</li>}
+        {p.lienTelephone && <li><a href={p.lienTelephone} class="pied-lien">{p.telephone}</a></li>}
+        {p.email && <li><a href={`mailto:${p.email}`} class="pied-lien break-all">{p.email}</a></li>}
         {
           lienWhatsApp && (
             <li>
-              <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="flex min-h-[44px] items-center text-vif hover:text-vif-fort">
+              <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="pied-lien !text-[#f59e42]">
                 WhatsApp
               </a>
             </li>
           )
         }
+        <li><a href="/contact" class="pied-lien">Nous écrire →</a></li>
       </ul>
     </div>
   </div>
 
-  <div class="border-t border-bordure">
-    <div class="container-page flex flex-col gap-2 py-6 text-xs text-attenue sm:flex-row sm:items-center sm:justify-between">
-      <p>© {annee} {p.nomSociete} — Tous droits réservés.</p>
-      {identifiants && <p>{identifiants}</p>}
+  <!-- Mot-symbole géant, en filigrane : la signature de la page. -->
+  <p class="pied-marque" aria-hidden="true">SASOMA</p>
+
+  <div class="border-t border-white/10">
+    <div class="container-page flex flex-col gap-1 py-5 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
+      <p>© {annee} {p.nomSociete} — Tous droits réservés.{identifiants && <span> · {identifiants}</span>}</p>
+      <div class="flex items-center gap-6">
+        <a href="/mentions-legales" class="inline-flex min-h-[44px] items-center hover:text-white">Mentions légales</a>
+        <a href="#contenu" class="inline-flex min-h-[44px] items-center gap-2 hover:text-white">Haut de page <span aria-hidden="true">↑</span></a>
+      </div>
     </div>
   </div>
 </footer>
+
+<style>
+  .pied {
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    background:
+      radial-gradient(60% 50% at 85% 0%, rgb(233 113 26 / 0.16), transparent 70%),
+      radial-gradient(50% 60% at 0% 100%, rgb(37 99 235 / 0.16), transparent 70%),
+      linear-gradient(180deg, #0a1a33 0%, #050d1c 100%);
+  }
+  .pied-appel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  }
+  @media (min-width: 1024px) {
+    .pied-appel {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-top: 5rem;
+    }
+    .pied-appel > div:first-child {
+      max-width: 40rem;
+    }
+  }
+  .pied-bouton,
+  .pied-reseau {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(255 255 255 / 0.28);
+    border-radius: 0.5rem;
+    padding: 0 1.25rem;
+    font-weight: 600;
+    color: #fff;
+    transition:
+      background-color 0.2s,
+      border-color 0.2s;
+  }
+  .pied-reseau {
+    min-height: 44px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .pied-bouton:hover,
+  .pied-reseau:hover {
+    border-color: #fff;
+    background: rgb(255 255 255 / 0.08);
+  }
+  .pied-titre {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: rgb(255 255 255 / 0.5);
+  }
+  .pied-lien {
+    position: relative;
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    font-size: 15px;
+    color: rgb(255 255 255 / 0.85);
+    transition: color 0.2s;
+  }
+  .pied-lien::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .pied-lien:hover {
+    color: #fff;
+  }
+  .pied-lien:hover::after {
+    transform: scaleX(1);
+  }
+  .pied-label {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    gap: 0.6rem;
+    border: 1px solid rgb(255 255 255 / 0.14);
+    border-radius: 999px;
+    padding: 0.5rem 0.9rem;
+    font-size: 12px;
+    color: rgb(255 255 255 / 0.78);
+  }
+  .pied-point {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #f59e42;
+    box-shadow: 0 0 0 4px rgb(245 158 66 / 0.18);
+  }
+  .pied-marque {
+    margin: 0 0 -0.12em;
+    padding: 0 0.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 26vw, 24rem);
+    line-height: 0.8;
+    text-align: center;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    color: transparent;
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.02) 85%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    user-select: none;
+  }
+</style>

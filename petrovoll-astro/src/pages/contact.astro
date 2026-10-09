@@ -26,6 +26,11 @@ if (aucunCanal) {
   console.warn('[contact] aucun canal de contact : renseigner téléphone, WhatsApp ou e-mail dans l’admin (Coordonnées).')
 }
 
+// Carte (Ben, 09/10) : centrée sur l'adresse de l'admin ; tant qu'elle est vide, sur Ouagadougou.
+const lieu = parametres.adresse?.replace(/\s+/g, ' ').trim() || 'Ouagadougou, Burkina Faso'
+const carteSrc = `https://maps.google.com/maps?q=${encodeURIComponent(lieu)}&z=${parametres.adresse ? 15 : 12}&hl=fr&output=embed`
+const itineraire = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(lieu)}`
+
 const schema: Array<Record<string, unknown>> = [
   {
     '@type': 'ContactPage',
@@ -140,7 +145,66 @@ const schema: Array<Record<string, unknown>> = [
       )
     }
   </div>
+
+  <!-- Carte : chargée seulement à l'approche (iframe lazy), carte d'adresse posée dessus. -->
+  <section class="container-page pb-14 lg:pb-20" aria-labelledby="titre-carte">
+    <div class="carte-cadre">
+      <iframe
+        src={carteSrc}
+        title={`Carte : ${lieu}`}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        class="absolute inset-0 h-full w-full border-0"
+      ></iframe>
+      <div class="carte-fiche">
+        <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-vif">Nous trouver</p>
+        <h2 id="titre-carte" class="mt-1 text-3xl text-marine">{parametres.nomSociete}</h2>
+        <p class="mt-2 whitespace-pre-line text-sm leading-relaxed text-texte">{parametres.adresse || 'Ouagadougou, Burkina Faso'}</p>
+        {parametres.horaires && <p class="mt-2 whitespace-pre-line text-sm text-attenue">{parametres.horaires}</p>}
+        <a href={itineraire} target="_blank" rel="noopener noreferrer" class="btn-primary mt-4 w-full">Itinéraire</a>
+      </div>
+    </div>
+  </section>
 </PageLayout>
+
+<style>
+  .carte-cadre {
+    position: relative;
+    overflow: hidden;
+    min-height: 460px;
+    border: 1px solid #dce4ee;
+    border-radius: 1.25rem;
+    background: #e6edf4;
+    box-shadow: 0 30px 60px -30px rgb(11 27 51 / 0.35);
+  }
+  .carte-cadre iframe {
+    filter: saturate(0.85) contrast(1.02);
+  }
+  .carte-fiche {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    border: 1px solid rgb(255 255 255 / 0.7);
+    border-radius: 1rem;
+    background: rgb(255 255 255 / 0.9);
+    padding: 1.25rem;
+    box-shadow: 0 20px 40px -20px rgb(11 27 51 / 0.45);
+    backdrop-filter: blur(10px);
+  }
+  @media (min-width: 768px) {
+    .carte-cadre {
+      min-height: 520px;
+    }
+    .carte-fiche {
+      left: 1.5rem;
+      right: auto;
+      top: 1.5rem;
+      bottom: auto;
+      width: 340px;
+    }
+  }
+</style>
 
 <style>
   .champ {

@@ -1,7 +1,7 @@
 ---
 /**
  * ─────────────────────────────────────────────────────────────────────────────
- * MobileMenu.astro — panneau de navigation mobile (priorité N°1 du projet)
+ * MobileMenu.astro — menu de navigation mobile, plein écran
  * ────────────────────────────────────────────────────────────────────────────
  *  Contraintes mobiles respectées :
  *   • chaque lien ≥ 44 px de hauteur, séparateurs tactiles clairs
@@ -22,51 +22,160 @@ const { lienTelephone, whatsapp } = await getParametres()
 const lienWhatsApp = whatsapp()
 ---
 
-<!-- Pas d'aria-modal : le focus n'est pas piégé dans le panneau, c'est un
-     simple menu déroulant (l'annoncer comme modal tromperait les lecteurs d'écran). -->
-<div
-  id="menu-mobile"
-  class="max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-bordure bg-fond lg:hidden"
-  hidden
-  aria-label="Menu de navigation"
->
-  <ul class="container-page flex flex-col py-2">
-    {
-      liens.map((lien) => (
-        <li>
-          <a
-            href={lien.href}
-            data-lien-menu
-            class="flex min-h-[56px] items-center border-b border-bordure font-display text-2xl tracking-wide text-texte"
-            aria-current={cheminCourant.startsWith(lien.href) ? 'page' : undefined}
-          >
-            {lien.libelle}
-          </a>
-        </li>
-      ))
-    }
+<!-- Menu plein écran (Ben, 09/10) : fond nuit, grands liens numérotés qui entrent l'un après
+     l'autre, devis et contacts en bas. Pas d'aria-modal : le focus n'est pas piégé. -->
+<div id="menu-mobile" class="menu-plein lg:hidden" hidden aria-label="Menu de navigation">
+  <div class="menu-plein-corps container-page">
+    <ul class="flex flex-col">
+      {
+        liens.map((lien, i) => (
+          <li style={`--i:${i}`}>
+            <a
+              href={lien.href}
+              data-lien-menu
+              class="menu-lien"
+              aria-current={cheminCourant.startsWith(lien.href) ? 'page' : undefined}
+            >
+              <span class="menu-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              {lien.libelle}
+              <svg class="menu-fleche" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
 
-    <li class="flex flex-col gap-3 pt-4 pb-6">
+    <div class="menu-pied" style={`--i:${liens.length}`}>
       <a href="/contact" data-lien-menu class="btn-primary w-full">Demander un devis</a>
       {
         (lienWhatsApp || lienTelephone) && (
           <div class="grid grid-cols-2 gap-3">
             {lienWhatsApp && (
-              <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="btn-outline w-full">
+              <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="menu-secondaire">
                 WhatsApp
               </a>
             )}
             {lienTelephone && (
-              <a href={lienTelephone} class="btn-outline w-full">
+              <a href={lienTelephone} class="menu-secondaire">
                 Appeler
               </a>
             )}
           </div>
         )
       }
-    </li>
-  </ul>
+      <p class="text-xs uppercase tracking-[0.2em] text-white/50">Lubrifiants Petrovöll · Burkina Faso</p>
+    </div>
+  </div>
 </div>
+
+<style>
+  .menu-plein {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    color: #fff;
+    background:
+      radial-gradient(120% 70% at 100% 0%, rgb(233 113 26 / 0.22), transparent 60%),
+      radial-gradient(90% 60% at 0% 100%, rgb(37 99 235 / 0.18), transparent 60%),
+      #071327;
+  }
+  .menu-plein-corps {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2.5rem;
+    padding-top: 6.5rem;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+  .menu-lien {
+    display: flex;
+    min-height: 72px;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgb(255 255 255 / 0.12);
+    font-family: var(--font-display, 'Bebas Neue', sans-serif);
+    font-size: clamp(2.6rem, 11vw, 3.6rem);
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+  .menu-lien[aria-current='page'] {
+    color: #f59e42;
+  }
+  .menu-num {
+    width: 2rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+    color: rgb(255 255 255 / 0.45);
+  }
+  .menu-fleche {
+    margin-left: auto;
+    width: 1.6rem;
+    height: 1.6rem;
+    opacity: 0.5;
+    transition:
+      transform 0.25s,
+      opacity 0.25s;
+  }
+  .menu-lien:hover .menu-fleche,
+  .menu-lien:focus-visible .menu-fleche {
+    transform: translateX(4px);
+    opacity: 1;
+  }
+  .menu-pied {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .menu-secondaire {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(255 255 255 / 0.3);
+    border-radius: 0.5rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  /* Entrée : fond en fondu, liens qui montent l'un après l'autre. */
+  @media (prefers-reduced-motion: no-preference) {
+    .menu-plein:not([hidden]) {
+      animation: menu-fondu 0.3s ease-out;
+    }
+    .menu-plein:not([hidden]) li,
+    .menu-plein:not([hidden]) .menu-pied {
+      animation: menu-monter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      animation-delay: calc(0.06s * var(--i) + 0.08s);
+    }
+  }
+  @keyframes menu-fondu {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes menu-monter {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+  /* Barre du logo au-dessus du menu ouvert : verre bien blanc, croix à la place du burger. */
+  :global(#navbar[data-menu='ouvert'] .verre) {
+    background: rgb(255 255 255 / 0.92);
+  }
+  :global(#navbar[data-menu='ouvert'] .burger .trait-milieu) {
+    opacity: 0;
+  }
+  :global(#navbar[data-menu='ouvert'] .burger .trait-haut) {
+    transform: translateY(6px) rotate(45deg);
+  }
+  :global(#navbar[data-menu='ouvert'] .burger .trait-bas) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+</style>
 
 <script>
   const bouton = document.getElementById('menu-toggle')
@@ -75,6 +184,7 @@ const lienWhatsApp = whatsapp()
   if (bouton && panneau) {
     const ouvrir = () => {
       panneau.hidden = false
+      document.getElementById('navbar')?.setAttribute('data-menu', 'ouvert')
       bouton.setAttribute('aria-expanded', 'true')
       bouton.setAttribute('aria-label', 'Fermer le menu')
       // Empêche le défilement de l'arrière-plan pendant la navigation du menu.
@@ -85,6 +195,7 @@ const lienWhatsApp = whatsapp()
 
     const fermer = (rendreFocus = true) => {
       panneau.hidden = true
+      document.getElementById('navbar')?.removeAttribute('data-menu')
       bouton.setAttribute('aria-expanded', 'false')
       bouton.setAttribute('aria-label', 'Ouvrir le menu')
       document.documentElement.style.overflow = ''

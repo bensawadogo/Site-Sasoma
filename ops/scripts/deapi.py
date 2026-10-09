@@ -8,6 +8,7 @@ Chaque génération est à noter dans ops/credits.md (prix réel renvoyé par l'
   python ops/scripts/deapi.py prix  MODELE L H IMAGES FPS [PAS]
   python ops/scripts/deapi.py video MODELE L H IMAGES FPS GRAINE DEBUT FIN PROMPT_FICHIER SORTIE [PAS]
   python ops/scripts/deapi.py agrandir MODELE ENTREE SORTIE [ECHELLE]
+  python ops/scripts/deapi.py agrandir-image ENTREE SORTIE        # RealESRGAN_x4, entrée ≤ 2048 px
   python ops/scripts/deapi.py image MODELE L H GRAINE PROMPT_FICHIER SORTIE [PAS]
   python ops/scripts/deapi.py editer MODELE ENTREE GRAINE PROMPT_FICHIER SORTIE [PAS [L H]]
 """
@@ -126,6 +127,9 @@ def main(a):
             time.sleep(65)
         d = verifier(r)
         attendre(d['data']['request_id'], sortie)
+    elif a[0] == 'agrandir-image':
+        d = verifier(CLIENT.post(f'{API}/images/upscales', data={'model': 'RealESRGAN_x4'}, files={'image': open(a[1], 'rb')}))
+        attendre(d['data']['request_id'], a[2])
     elif a[0] == 'agrandir':
         champs = {'model': a[1]}
         if len(a) > 4:
