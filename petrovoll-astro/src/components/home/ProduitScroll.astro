@@ -14,8 +14,8 @@
  */
 import TitreAnime from '@/components/ui/TitreAnime.astro'
 import { getImage } from 'astro:assets'
-import nuitLarge from '@/assets/univers/nuit-large.webp'
-import nuitHaut from '@/assets/univers/nuit-haut.webp'
+import nuitLarge from '@/assets/univers/studio-large.webp' // 09/10 : studio bleu nuit (Seedream), à la place du ciel de nuit
+import nuitHaut from '@/assets/univers/studio-haut.webp'
 import sequence from '@/assets/bidon/sequence.json'
 import type { Produit } from '@/lib/contenu'
 import { PRODUIT_SCROLL } from '@/produit-scroll.config'
@@ -90,7 +90,7 @@ const style = [
         </dl>
         <div class="actions">
           <a href={`/produits/${produit.id}`} class="btn-primary">Voir le produit</a>
-          <a href={`/contact?produit=${encodeURIComponent(nom)}`} class="btn-verre">Devis</a>
+          <a href={`/contact?produit=${encodeURIComponent(nom)}#devis`} class="btn-verre">Devis</a>
         </div>
       </article>
     </div>
@@ -169,6 +169,8 @@ const style = [
   :global(.titre) {
     margin-top: 0.4rem;
     font-family: var(--font-display);
+    font-size-adjust: 0.4;
+    word-spacing: 0.14em;
     font-size: clamp(2.8rem, 8vw, 5.5rem);
     line-height: 0.92;
   }
@@ -208,6 +210,8 @@ const style = [
   .chiffres dd {
     order: 1;
     font-family: var(--font-display);
+    font-size-adjust: 0.4;
+    word-spacing: 0.14em;
     font-size: clamp(2.4rem, 4.5vw, 3.4rem);
     line-height: 1;
   }

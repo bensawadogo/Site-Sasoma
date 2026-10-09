@@ -1,0 +1,96 @@
+---
+/**
+ * Bouton WhatsApp flottant, en bas à droite de toutes les pages (Ben, 09/10).
+ * Ouvre WhatsApp avec un message prérempli dès que le numéro est saisi dans l'admin
+ * (Coordonnées → WhatsApp) ; d'ici là, il mène au formulaire de devis.
+ */
+import IconeReseau from '@/components/ui/IconeReseau.astro'
+import { getParametres } from '@/lib/contenu'
+
+const { whatsapp } = await getParametres()
+const lien = whatsapp()
+---
+
+<a
+  href={lien ?? '/contact#devis'}
+  target={lien ? '_blank' : undefined}
+  rel={lien ? 'noopener noreferrer' : undefined}
+  class="bouton-whatsapp"
+  aria-label="Nous écrire sur WhatsApp"
+>
+  <IconeReseau nom="whatsapp" class="h-7 w-7" />
+  <span class="bulle">WhatsApp</span>
+</a>
+
+<style>
+  .bouton-whatsapp {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 35;
+    display: inline-flex;
+    width: 56px;
+    height: 56px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #25d366;
+    color: #fff;
+    box-shadow:
+      0 12px 28px -8px rgb(37 211 102 / 0.6),
+      0 4px 10px rgb(0 0 0 / 0.18);
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .bouton-whatsapp:hover {
+    transform: scale(1.06);
+  }
+  /* Halo qui respire doucement, pour attirer l'œil sans gêner. */
+  .bouton-whatsapp::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: #25d366;
+    z-index: -1;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .bouton-whatsapp::before {
+      animation: respirer 2.8s ease-out infinite;
+    }
+  }
+  @keyframes respirer {
+    from {
+      opacity: 0.5;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.6);
+    }
+  }
+  .bulle {
+    position: absolute;
+    right: calc(100% + 0.6rem);
+    padding: 0.35rem 0.7rem;
+    border-radius: 0.5rem;
+    background: #0b1b33;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(6px);
+    pointer-events: none;
+    transition:
+      opacity 0.2s,
+      transform 0.2s;
+  }
+  .bouton-whatsapp:hover .bulle,
+  .bouton-whatsapp:focus-visible .bulle {
+    opacity: 1;
+    transform: none;
+  }
+  /* Menu mobile ouvert : il a déjà ses boutons. */
+  :global(html:has(#navbar[data-menu='ouvert'])) .bouton-whatsapp {
+    display: none;
+  }
+</style>

@@ -19,7 +19,7 @@ const { produit, nomSecteur, urlPage } = Astro.props
 const { nom, photos, prix, conditionnement, disponible, marque, reference, secteur } = produit.data
 const parametres = await getParametres()
 const lienWhatsApp = parametres.whatsapp(`Bonjour, je suis intéressé par : ${nom}\n${urlPage}`)
-const lienDevis = `/contact?produit=${encodeURIComponent(nom)}`
+const lienDevis = `/contact?produit=${encodeURIComponent(nom)}#devis`
 ---
 
 <article class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">

@@ -155,8 +155,10 @@ export const HERO_DESKTOP: ReglagesHeroVideo = {
     entete: { x: 0, y: 0, l: 1, h: 0.12 },
     moteur: { x: 0, y: 0, l: 1, h: 1 },
     bidon: { x: 0.74, y: 0.2, l: 0.2, h: 0.26 },
-    textes: { x: 0.66, y: 0.55, l: 0.3, h: 0.4 },
-    fin: { x: 0.5, y: 0.26, l: 0.46, h: 0.66 },
+    // 09/10 : textes sous le moteur, à gauche (ils s'empilaient à droite avec les étiquettes et
+    // l'écran de fin) ; l'écran de fin occupe la droite, le moteur s'efface avant lui.
+    textes: { x: 0.05, y: 0.7, l: 0.4, h: 0.26 },
+    fin: { x: 0.52, y: 0.24, l: 0.43, h: 0.68 },
   },
   chuteFilet: 0.32,
   bec: 'avant',

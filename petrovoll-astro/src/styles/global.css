@@ -37,9 +37,11 @@
   --color-succes: #15803d; /* « En stock » (5:1) */
 
   /* ── Typographies (auto-hébergées, cf. @font-face plus bas) ───────────── */
-  --font-display: 'Bebas Neue', 'Arial Narrow', Impact, sans-serif;
+  /* 09/10 (Ben : « typo premium ») : Clash Display (titres) + General Sans (texte), Fontshare,
+     licence ITF Free Font License (usage commercial autorisé). Bebas/Inter restent en secours. */
+  --font-display: 'Clash Display', 'Bebas Neue', 'Arial Narrow', sans-serif;
   --font-sans:
-    'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    'General Sans', 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   /* ── Ombres (style industriel : marquées, jamais diffuses) ─────────────── */
   --shadow-industrial: 0 10px 40px -12px rgb(0 0 0 / 0.6);
@@ -72,6 +74,41 @@
    Pas de `local()` : une version installée sur le poste (Bebas Neue v1, Inter
    statique) aurait des métriques ou des graisses différentes du fichier servi.
    ──────────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Clash Display';
+  src: url('/fonts/clash-display-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Clash Display';
+  src: url('/fonts/clash-display-600.woff2') format('woff2');
+  font-weight: 600 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'General Sans';
+  src: url('/fonts/general-sans-400.woff2') format('woff2');
+  font-weight: 300 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'General Sans';
+  src: url('/fonts/general-sans-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'General Sans';
+  src: url('/fonts/general-sans-600.woff2') format('woff2');
+  font-weight: 600 900;
+  font-style: normal;
+  font-display: swap;
+}
 @font-face {
   font-family: 'Bebas Neue';
   src: url('/fonts/bebas-neue-400.woff2') format('woff2');
@@ -140,15 +177,17 @@
     padding-bottom: env(safe-area-inset-bottom, 0); /* encoche iOS */
   }
 
-  /* Titres impactants : Bebas Neue, majuscules, interlettrage léger */
+  /* Titres : Clash Display, casse normale, interlettrage serré (rendu « studio »). Les tailles
+     du site ont été pensées pour Bebas Neue (étroite) : font-size-adjust ramène Clash, plus
+     large, à ~72 % de la taille demandée, partout d'un coup. */
   h1,
   h2,
   h3,
   h4 {
     font-family: var(--font-display);
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    line-height: 0.98;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.02;
     color: var(--color-texte);
     overflow-wrap: anywhere; /* pas de débordement sur petits écrans */
   }
@@ -647,4 +686,41 @@ html:not([data-appareil]) [data-route] [data-sequence] {
 }
 [data-appareil='faible'] [data-route] .fond-route {
   animation: none;
+}
+
+/* Police de titre partout où elle est employée : même réduction et casse normale. */
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-size-adjust: 0.4;
+  word-spacing: 0.14em; /* l'espace de Clash Display est étroite : les mots se collaient */
+  text-transform: none !important;
+}
+
+/* Champs de formulaire (contact) : cadre net, fond clair, focus orange. */
+.champ {
+  min-height: 48px;
+  width: 100%;
+  border: 1px solid #c9d3e0;
+  border-radius: 0.625rem;
+  background: #f7f9fc;
+  padding: 0 0.9rem;
+  font-size: 1rem;
+  color: #0b1b33;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background-color 0.2s;
+}
+.champ:focus {
+  outline: none;
+  border-color: #c2410c;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgb(194 65 12 / 0.15);
+}
+.font-display {
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }

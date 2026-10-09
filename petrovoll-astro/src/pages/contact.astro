@@ -1,12 +1,12 @@
 ---
 /**
- * Contact — coordonnées (admin → Coordonnées) + formulaire de devis.
+ * Contact — coordonnées (admin → Coordonnées) + formulaire de devis + carte.
  *
- * Le formulaire est envoyé par e-mail via Web3Forms (gratuit, sans serveur) :
- * la clé PUBLIC_WEB3FORMS_KEY est liée à l'adresse de réception choisie à sa
- * création sur web3forms.com. Cette clé est publique par conception (elle ne
- * permet que d'envoyer vers CETTE adresse). Sans clé, le formulaire est masqué
- * et seuls WhatsApp / téléphone / e-mail sont proposés.
+ * Le formulaire est TOUJOURS affiché (#devis : cible des boutons « Devis »), la carte à côté.
+ * Envoi par e-mail via Web3Forms (gratuit, sans serveur) : la clé PUBLIC_WEB3FORMS_KEY est
+ * liée à l'adresse de réception choisie à sa création sur web3forms.com. Cette clé est
+ * publique par conception (elle ne permet que d'envoyer vers CETTE adresse). Sans clé, la
+ * demande part par WhatsApp (message prérempli) ou, à défaut, par e-mail.
  *
  * Anti-spam : champ piège « botcheck » invisible (les robots le remplissent).
  */
@@ -19,9 +19,6 @@ const parametres = await getParametres()
 const cleWeb3Forms = import.meta.env.PUBLIC_WEB3FORMS_KEY
 const lienWhatsApp = parametres.whatsapp()
 const aucunCanal = !lienWhatsApp && !parametres.lienTelephone && !parametres.email && !cleWeb3Forms
-const canaux = [lienWhatsApp && 'par WhatsApp', parametres.lienTelephone && 'par téléphone', parametres.email && 'par e-mail']
-  .filter(Boolean)
-  .join(' ou ')
 if (aucunCanal) {
   console.warn('[contact] aucun canal de contact : renseigner téléphone, WhatsApp ou e-mail dans l’admin (Coordonnées).')
 }
@@ -52,133 +49,140 @@ const schema: Array<Record<string, unknown>> = [
   canonicalChemin="/contact"
   schema={schema}
 >
-  <div class="container-page grid grid-cols-1 gap-10 py-10 lg:grid-cols-2 lg:py-14">
-    <div>
-      <p class="text-xs font-semibold uppercase tracking-widest text-vif">Contact</p>
-      <h1 class="mt-2 text-3xl sm:text-4xl lg:text-5xl">Demander un devis</h1>
-      <span class="section-line" aria-hidden="true" />
-
-      <div class="mt-6 flex flex-col gap-3 sm:flex-row">
-        {
-          lienWhatsApp && (
-            <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="btn-primary w-full sm:w-auto">
-              Écrire sur WhatsApp
-            </a>
-          )
-        }
-        {
-          parametres.lienTelephone && (
-            <a href={parametres.lienTelephone} class="btn-outline w-full sm:w-auto">
-              Appeler {parametres.telephone}
-            </a>
-          )
-        }
-      </div>
-
-      <dl class="mt-8 space-y-4 text-base">
-        {parametres.email && (
-          <div>
-            <dt class="text-xs uppercase tracking-wide text-attenue">E-mail</dt>
-            <dd><a href={`mailto:${parametres.email}`} class="break-all text-vif underline underline-offset-4">{parametres.email}</a></dd>
+  <div class="container-page py-8 lg:py-12">
+    <header class="flex flex-col gap-3">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-vif">Contact · Devis gratuit</p>
+      <h1 class="text-4xl text-marine sm:text-5xl lg:text-6xl">Demander un devis</h1>
+      <p class="max-w-2xl text-base leading-relaxed text-attenue">
+        Dites-nous ce qu’il vous faut (produit, quantité, ville de livraison) : nous vous répondons rapidement.
+      </p>
+      {
+        (lienWhatsApp || parametres.lienTelephone) && (
+          <div class="mt-2 flex flex-col gap-3 sm:flex-row">
+            {lienWhatsApp && (
+              <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="btn-primary w-full sm:w-auto">
+                Écrire sur WhatsApp
+              </a>
+            )}
+            {parametres.lienTelephone && (
+              <a href={parametres.lienTelephone} class="btn-outline w-full sm:w-auto">
+                Appeler {parametres.telephone}
+              </a>
+            )}
           </div>
-        )}
-        {parametres.adresse && (
-          <div>
-            <dt class="text-xs uppercase tracking-wide text-attenue">Adresse</dt>
-            <dd class="whitespace-pre-line">{parametres.adresse}</dd>
-          </div>
-        )}
-        {parametres.horaires && (
-          <div>
-            <dt class="text-xs uppercase tracking-wide text-attenue">Horaires</dt>
-            <dd class="whitespace-pre-line">{parametres.horaires}</dd>
-          </div>
-        )}
-      </dl>
-    </div>
+        )
+      }
+    </header>
 
-    {
-      cleWeb3Forms ? (
-        <form
-          action="https://api.web3forms.com/submit"
-          method="POST"
-          class="grid grid-cols-1 gap-4 rounded-md border border-bordure bg-surface p-5 sm:p-6"
-          data-formulaire-contact
-        >
-          <input type="hidden" name="access_key" value={cleWeb3Forms} />
-          <input type="hidden" name="subject" value={`Nouvelle demande depuis le site ${parametres.nomSociete}`} />
-          <input type="hidden" name="from_name" value={`Site ${parametres.nomSociete}`} />
-          <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+    <!-- Formulaire (toujours affiché : le bouton « Devis » mène ici) et carte, côte à côte sur ordinateur. -->
+    <div class="mt-8 grid grid-cols-1 gap-6 lg:mt-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-8">
+      <form
+        id="devis"
+        action={cleWeb3Forms ? 'https://api.web3forms.com/submit' : '#devis'}
+        method="POST"
+        class="formulaire-devis"
+        data-formulaire-contact
+        data-web3forms={cleWeb3Forms ? '' : undefined}
+        data-whatsapp={lienWhatsApp ?? undefined}
+        data-email={parametres.email || undefined}
+      >
+        {cleWeb3Forms && <input type="hidden" name="access_key" value={cleWeb3Forms} />}
+        <input type="hidden" name="subject" value={`Nouvelle demande depuis le site ${parametres.nomSociete}`} />
+        <input type="hidden" name="from_name" value={`Site ${parametres.nomSociete}`} />
+        <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-          <label class="flex flex-col gap-1 text-sm">
-            Votre nom ou société *
+        <h2 class="text-3xl text-marine">Votre demande</h2>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <label class="flex flex-col gap-1 text-sm font-medium">
+            Nom ou société *
             <input required name="nom" autocomplete="name" maxlength="120" class="champ" />
           </label>
-          <label class="flex flex-col gap-1 text-sm">
+          <label class="flex flex-col gap-1 text-sm font-medium">
             Téléphone / WhatsApp *
             <input required type="tel" name="telephone" autocomplete="tel" inputmode="tel" maxlength="30" class="champ" placeholder="+226 …" />
           </label>
-          <label class="flex flex-col gap-1 text-sm">
-            E-mail (facultatif)
-            <input type="email" name="email" autocomplete="email" maxlength="120" class="champ" />
-          </label>
-          <label class="flex flex-col gap-1 text-sm">
-            Produit concerné (facultatif)
-            <input name="produit" maxlength="160" class="champ" data-champ-produit />
-          </label>
-          <label class="flex flex-col gap-1 text-sm">
-            Votre message *
-            <textarea required name="message" rows="5" maxlength="3000" class="champ py-3" placeholder="Besoin, quantités, ville de livraison…" />
-          </label>
+        </div>
+        <label class="flex flex-col gap-1 text-sm font-medium">
+          E-mail (facultatif)
+          <input type="email" name="email" autocomplete="email" maxlength="120" class="champ" />
+        </label>
+        <label class="flex flex-col gap-1 text-sm font-medium">
+          Besoin
+          <select name="besoin" class="champ">
+            <option>Lubrifiants Petrovöll</option>
+            <option>Transport & logistique</option>
+            <option>Distribution & import-export</option>
+            <option>Pneumatiques</option>
+            <option>Fournitures de bureau</option>
+            <option>Autre</option>
+          </select>
+        </label>
+        <label class="flex flex-col gap-1 text-sm font-medium">
+          Produit concerné (facultatif)
+          <input name="produit" maxlength="160" class="champ" data-champ-produit />
+        </label>
+        <label class="flex flex-col gap-1 text-sm font-medium">
+          Votre message *
+          <textarea required name="message" rows="4" maxlength="3000" class="champ py-3" placeholder="Quantités, ville de livraison…"></textarea>
+        </label>
+        <button type="submit" class="btn-primary w-full" data-bouton-envoi>Envoyer la demande</button>
+        <p class="text-sm" role="status" aria-live="polite" data-message-envoi hidden></p>
+      </form>
 
-          <button type="submit" class="btn-primary w-full" data-bouton-envoi data-whatsapp={lienWhatsApp ? '' : undefined}>Envoyer la demande</button>
-          <p class="text-sm" role="status" aria-live="polite" data-message-envoi hidden />
-        </form>
-      ) : aucunCanal ? (
-        <p class="rounded-md border border-dashed border-bordure p-6 text-base text-attenue">
-          {parametres.nomSociete} : nos coordonnées seront bientôt disponibles sur cette page.
-        </p>
-      ) : (
-        <p class="rounded-md border border-dashed border-bordure p-6 text-base text-attenue">
-          Contactez-nous directement {canaux} : nous vous répondons rapidement.
-        </p>
-      )
-    }
-  </div>
-
-  <!-- Carte : chargée seulement à l'approche (iframe lazy), carte d'adresse posée dessus. -->
-  <section class="container-page pb-14 lg:pb-20" aria-labelledby="titre-carte">
-    <div class="carte-cadre">
-      <iframe
-        src={carteSrc}
-        title={`Carte : ${lieu}`}
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        class="absolute inset-0 h-full w-full border-0"
-      ></iframe>
-      <div class="carte-fiche">
-        <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-vif">Nous trouver</p>
-        <h2 id="titre-carte" class="mt-1 text-3xl text-marine">{parametres.nomSociete}</h2>
-        <p class="mt-2 whitespace-pre-line text-sm leading-relaxed text-texte">{parametres.adresse || 'Ouagadougou, Burkina Faso'}</p>
-        {parametres.horaires && <p class="mt-2 whitespace-pre-line text-sm text-attenue">{parametres.horaires}</p>}
-        <a href={itineraire} target="_blank" rel="noopener noreferrer" class="btn-primary mt-4 w-full">Itinéraire</a>
-      </div>
+      <section class="carte-cadre" aria-labelledby="titre-carte">
+        <iframe
+          src={carteSrc}
+          title={`Carte : ${lieu}`}
+          loading="eager"
+          referrerpolicy="no-referrer-when-downgrade"
+          class="absolute inset-0 h-full w-full border-0"
+        ></iframe>
+        <div class="carte-fiche">
+          <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-vif">Nous trouver</p>
+          <h2 id="titre-carte" class="mt-1 text-3xl text-marine">{parametres.nomSociete}</h2>
+          <p class="mt-2 whitespace-pre-line text-sm leading-relaxed text-texte">{parametres.adresse || 'Ouagadougou, Burkina Faso'}</p>
+          {parametres.horaires && <p class="mt-2 whitespace-pre-line text-sm text-attenue">{parametres.horaires}</p>}
+          {
+            parametres.email && (
+              <p class="mt-2 text-sm">
+                <a href={`mailto:${parametres.email}`} class="text-vif underline underline-offset-4">
+                  {parametres.email}
+                </a>
+              </p>
+            )
+          }
+          <a href={itineraire} target="_blank" rel="noopener noreferrer" class="btn-primary mt-4 w-full">Itinéraire</a>
+        </div>
+      </section>
     </div>
-  </section>
+  </div>
 </PageLayout>
 
 <style>
+  .formulaire-devis {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    border: 1px solid #dce4ee;
+    border-radius: 1.25rem;
+    background: #fff;
+    padding: 1.5rem;
+    box-shadow: 0 30px 60px -35px rgb(11 27 51 / 0.35);
+    scroll-margin-top: 6rem;
+  }
+  @media (min-width: 640px) {
+    .formulaire-devis {
+      padding: 2rem;
+    }
+  }
   .carte-cadre {
     position: relative;
     overflow: hidden;
-    min-height: 460px;
+    min-height: 420px;
     border: 1px solid #dce4ee;
     border-radius: 1.25rem;
     background: #e6edf4;
-    box-shadow: 0 30px 60px -30px rgb(11 27 51 / 0.35);
-  }
-  .carte-cadre iframe {
-    filter: saturate(0.85) contrast(1.02);
+    box-shadow: 0 30px 60px -35px rgb(11 27 51 / 0.35);
   }
   .carte-fiche {
     position: absolute;
@@ -187,33 +191,19 @@ const schema: Array<Record<string, unknown>> = [
     bottom: 1rem;
     border: 1px solid rgb(255 255 255 / 0.7);
     border-radius: 1rem;
-    background: rgb(255 255 255 / 0.9);
+    background: rgb(255 255 255 / 0.92);
     padding: 1.25rem;
     box-shadow: 0 20px 40px -20px rgb(11 27 51 / 0.45);
     backdrop-filter: blur(10px);
   }
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     .carte-cadre {
-      min-height: 520px;
+      min-height: 100%;
     }
     .carte-fiche {
-      left: 1.5rem;
       right: auto;
-      top: 1.5rem;
-      bottom: auto;
-      width: 340px;
+      width: 320px;
     }
-  }
-</style>
-
-<style>
-  .champ {
-    min-height: 48px;
-    border-radius: 0.25rem;
-    border: 1px solid var(--color-bordure);
-    background: var(--color-fond);
-    padding: 0 0.75rem;
-    font-size: 1rem; /* ≥ 16 px : évite le zoom automatique d'iOS au focus */
   }
 </style>
 
@@ -228,15 +218,45 @@ const schema: Array<Record<string, unknown>> = [
 
     const bouton = formulaire.querySelector<HTMLButtonElement>('[data-bouton-envoi]')!
     const message = formulaire.querySelector<HTMLElement>('[data-message-envoi]')!
-
     const afficher = (texte: string, succes: boolean) => {
       message.hidden = false
       message.textContent = texte
       message.className = `text-sm ${succes ? 'text-succes' : 'text-vif'}`
     }
+    /** La demande en texte (WhatsApp ou e-mail, quand Web3Forms n'est pas configuré). */
+    const texteDemande = () => {
+      const d = new FormData(formulaire)
+      return [
+        'Bonjour, je souhaite un devis.',
+        `Nom : ${d.get('nom')}`,
+        `Téléphone : ${d.get('telephone')}`,
+        d.get('email') && `E-mail : ${d.get('email')}`,
+        `Besoin : ${d.get('besoin')}`,
+        d.get('produit') && `Produit : ${d.get('produit')}`,
+        `Message : ${d.get('message')}`,
+      ]
+        .filter(Boolean)
+        .join('\n')
+    }
 
     formulaire.addEventListener('submit', async (evenement) => {
       evenement.preventDefault()
+      // Sans Web3Forms : la demande part par WhatsApp (message prérempli), sinon par e-mail.
+      if (!formulaire.hasAttribute('data-web3forms')) {
+        const wa = formulaire.dataset.whatsapp
+        const email = formulaire.dataset.email
+        if (wa) {
+          const url = new URL(wa)
+          url.searchParams.set('text', texteDemande())
+          window.open(url.toString(), '_blank', 'noopener')
+          afficher('WhatsApp s’ouvre avec votre demande : il ne reste qu’à l’envoyer.', true)
+        } else if (email) {
+          location.href = `mailto:${email}?subject=${encodeURIComponent('Demande de devis')}&body=${encodeURIComponent(texteDemande())}`
+        } else {
+          afficher('Le formulaire sera relié très bientôt : merci de réessayer plus tard.', false)
+        }
+        return
+      }
       bouton.disabled = true
       bouton.textContent = 'Envoi en cours…'
       try {
@@ -251,8 +271,7 @@ const schema: Array<Record<string, unknown>> = [
         afficher('Merci ! Votre demande est bien envoyée, nous vous recontactons rapidement.', true)
       } catch (erreur) {
         console.warn('[contact] envoi échoué', erreur)
-        // Ne proposer WhatsApp que si un numéro est saisi dans l'admin.
-        const repli = bouton.hasAttribute('data-whatsapp') ? ', ou écrivez-nous directement sur WhatsApp' : ''
+        const repli = formulaire.dataset.whatsapp ? ', ou écrivez-nous directement sur WhatsApp' : ''
         afficher(`L’envoi n’a pas abouti (connexion instable ?). Réessayez${repli}.`, false)
       } finally {
         bouton.disabled = false

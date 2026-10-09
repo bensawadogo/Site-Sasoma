@@ -8,8 +8,8 @@
 export const PRODUIT_SCROLL = {
   /** Luminosité du bidon à l'écran (1 = rendu Blender tel quel ; 0,9 = 10 % plus sombre). */
   luminositeBidon: 1,
-  /** Luminosité du ciel de nuit derrière le bidon (1 = image d'origine). */
-  luminositeFond: 0.9,
+  /** Luminosité du studio derrière le bidon (1 = image d'origine). */
+  luminositeFond: 1,
   /** Longueur du défilement de la section, en hauteurs d'écran (le bidon fait un tour complet). */
   hauteurDefilement: 2.8,
 }

@@ -134,6 +134,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
   canvasPieces.classList.add('flotte') // flotte avec le moteur (fond route, global.css)
   canvasMoteur.after(canvasPieces)
   const ctxPieces = canvasPieces.getContext('2d')!
+  const ombreMoteur = racine.querySelector<HTMLElement>('[data-ombre-moteur]')
   const ctxFilet = canvasFilet.getContext('2d')!
   const mouvementReduit = matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -274,7 +275,7 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     canvasMoteur.style.backgroundSize = `${couv.l}px ${couv.h}px`
     canvasMoteur.style.backgroundPosition = `${couv.x}px ${couv.y}px`
     // Ombre du moteur sur la route (fond route) : sous le carter, de la largeur du moteur.
-    const ombre = racine.querySelector<HTMLElement>('[data-ombre-moteur]')
+    const ombre = ombreMoteur
     if (ombre) {
       const g = aLEcran({ x: MOTEUR.bordGauche, y: MOTEUR.bas })
       const d = aLEcran({ x: MOTEUR.bordDroit, y: MOTEUR.bas })
@@ -779,10 +780,12 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
     }
 
     dessinerMoteur(t3)
-    // Écran de fin : le moteur s'assombrit derrière les produits.
-    const sombre = String(1 - 0.7 * local(p, FIN.debut - 0.02, FIN.debut + 0.02))
+    // Écran de fin : le moteur (et son ombre) s'efface complètement, les produits restent seuls
+    // sur la route (09/10 : un moteur fantôme sous les textes faisait « tout au même endroit »).
+    const sombre = String(1 - local(p, FIN.debut - 0.04, FIN.debut + 0.01))
     style(canvasMoteur, 'opacity', sombre)
     style(canvasPieces, 'opacity', sombre)
+    if (ombreMoteur) style(ombreMoteur, 'opacity', String(0.7 * +sombre))
     if (decor && decorAllume) {
       style(decor, 'opacity', sombre)
       // Même lumière que la séquence (moteur_v5.py : lisser(t3, 0,05, 0,3)).

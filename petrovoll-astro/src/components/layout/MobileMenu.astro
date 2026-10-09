@@ -11,6 +11,7 @@
  *   • panneau masqué via l'attribut `hidden` → absent de l'ordre de tabulation
  *     et de l'arbre d'accessibilité quand il est fermé
  */
+import IconeReseau from '@/components/ui/IconeReseau.astro'
 import { getParametres } from '@/lib/contenu'
 
 interface Props {
@@ -18,11 +19,12 @@ interface Props {
   cheminCourant?: string
 }
 const { liens, cheminCourant = '' } = Astro.props
-const { lienTelephone, whatsapp } = await getParametres()
+const { lienTelephone, whatsapp, reseaux } = await getParametres()
 const lienWhatsApp = whatsapp()
+const lienFacebook = reseaux.find((r) => r.plateforme === 'facebook')?.url
 ---
 
-<!-- Menu plein écran (Ben, 09/10) : fond nuit, grands liens numérotés qui entrent l'un après
+<!-- Menu plein écran (Ben, 09/10) : fond blanc, grands liens numérotés qui entrent l'un après
      l'autre, devis et contacts en bas. Pas d'aria-modal : le focus n'est pas piégé. -->
 <div id="menu-mobile" class="menu-plein lg:hidden" hidden aria-label="Menu de navigation">
   <div class="menu-plein-corps container-page">
@@ -46,24 +48,35 @@ const lienWhatsApp = whatsapp()
     </ul>
 
     <div class="menu-pied" style={`--i:${liens.length}`}>
-      <a href="/contact" data-lien-menu class="btn-primary w-full">Demander un devis</a>
+      <a href="/contact#devis" data-lien-menu class="btn-primary w-full">Demander un devis</a>
+      <!-- WhatsApp toujours présent (formulaire de devis tant que le numéro n'est pas saisi) ;
+           Facebook dès que la page est renseignée dans l'admin (Réseaux sociaux). -->
+      <div class="grid grid-cols-2 gap-3">
+        <a
+          href={lienWhatsApp ?? '/contact#devis'}
+          target={lienWhatsApp ? '_blank' : undefined}
+          rel={lienWhatsApp ? 'noopener noreferrer' : undefined}
+          data-lien-menu
+          class:list={['menu-reseau menu-reseau--wa', !lienFacebook && 'col-span-2']}
+        >
+          <IconeReseau nom="whatsapp" class="h-5 w-5" /> WhatsApp
+        </a>
+        {
+          lienFacebook && (
+            <a href={lienFacebook} target="_blank" rel="noopener noreferrer" class="menu-reseau menu-reseau--fb">
+              <IconeReseau nom="facebook" class="h-5 w-5" /> Facebook
+            </a>
+          )
+        }
+      </div>
       {
-        (lienWhatsApp || lienTelephone) && (
-          <div class="grid grid-cols-2 gap-3">
-            {lienWhatsApp && (
-              <a href={lienWhatsApp} target="_blank" rel="noopener noreferrer" class="menu-secondaire">
-                WhatsApp
-              </a>
-            )}
-            {lienTelephone && (
-              <a href={lienTelephone} class="menu-secondaire">
-                Appeler
-              </a>
-            )}
-          </div>
+        lienTelephone && (
+          <a href={lienTelephone} class="menu-secondaire">
+            Appeler
+          </a>
         )
       }
-      <p class="text-xs uppercase tracking-[0.2em] text-white/50">Lubrifiants Petrovöll · Burkina Faso</p>
+      <p class="text-xs uppercase tracking-[0.2em] text-attenue">Lubrifiants Petrovöll · Burkina Faso</p>
     </div>
   </div>
 </div>
@@ -75,11 +88,10 @@ const lienWhatsApp = whatsapp()
     z-index: -1;
     overflow-y: auto;
     overscroll-behavior: contain;
-    color: #fff;
+    color: #0b1b33;
     background:
-      radial-gradient(120% 70% at 100% 0%, rgb(233 113 26 / 0.22), transparent 60%),
-      radial-gradient(90% 60% at 0% 100%, rgb(37 99 235 / 0.18), transparent 60%),
-      #071327;
+      radial-gradient(90% 50% at 100% 0%, rgb(233 113 26 / 0.07), transparent 60%),
+      #ffffff;
   }
   .menu-plein-corps {
     display: flex;
@@ -95,21 +107,24 @@ const lienWhatsApp = whatsapp()
     min-height: 72px;
     align-items: center;
     gap: 1rem;
-    border-bottom: 1px solid rgb(255 255 255 / 0.12);
-    font-family: var(--font-display, 'Bebas Neue', sans-serif);
+    border-bottom: 1px solid #e3e9f1;
+    font-family: var(--font-display);
+    font-size-adjust: 0.4;
+    word-spacing: 0.14em;
+    font-weight: 600;
     font-size: clamp(2.6rem, 11vw, 3.6rem);
     line-height: 1;
     letter-spacing: 0.01em;
   }
   .menu-lien[aria-current='page'] {
-    color: #f59e42;
+    color: #c2410c;
   }
   .menu-num {
     width: 2rem;
     font-family: inherit;
     font-size: 0.95rem;
     letter-spacing: 0.1em;
-    color: rgb(255 255 255 / 0.45);
+    color: #8a9ab0;
   }
   .menu-fleche {
     margin-left: auto;
@@ -135,10 +150,27 @@ const lienWhatsApp = whatsapp()
     min-height: 48px;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgb(255 255 255 / 0.3);
+    border: 1px solid #c9d3e0;
     border-radius: 0.5rem;
     font-weight: 600;
+    color: #0b1b33;
+  }
+  .menu-reseau {
+    display: inline-flex;
+    min-height: 52px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
     color: #fff;
+    box-shadow: 0 10px 22px -12px rgb(11 27 51 / 0.5);
+  }
+  .menu-reseau--wa {
+    background: #25d366;
+  }
+  .menu-reseau--fb {
+    background: #1877f2;
   }
   /* Entrée : fond en fondu, liens qui montent l'un après l'autre. */
   @media (prefers-reduced-motion: no-preference) {

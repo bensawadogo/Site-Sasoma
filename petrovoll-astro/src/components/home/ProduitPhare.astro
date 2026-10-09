@@ -64,7 +64,7 @@ const bidon3d = /petrov/i.test(marque ?? '') && /st[äa]rk/i.test(nom)
 
       <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <a href={`/produits/${produit.id}`} class="btn-primary w-full sm:w-auto">Voir le produit</a>
-        <a href={`/contact?produit=${encodeURIComponent(nom)}`} class="btn-outline w-full sm:w-auto">Demander un devis</a>
+        <a href={`/contact?produit=${encodeURIComponent(nom)}#devis`} class="btn-outline w-full sm:w-auto">Demander un devis</a>
       </div>
     </div>
   </div>

@@ -42,7 +42,7 @@ const description =
 const parametres = await getParametres()
 const urlPage = new URL(`/produits/${p.slug}`, urlSite(Astro.site)).toString()
 const lienWhatsApp = parametres.whatsapp(`Bonjour, je souhaite un devis pour : ${p.nom}\n${urlPage}`)
-const lienDevis = `/contact?produit=${encodeURIComponent(p.nom)}`
+const lienDevis = `/contact?produit=${encodeURIComponent(p.nom)}#devis`
 
 const partage = p.photo ? await getImage({ src: p.photo, width: 1200, format: 'jpeg', quality: 80 }) : undefined
 const imagePartage = partage ? new URL(partage.src, urlSite(Astro.site)).toString() : undefined
@@ -498,7 +498,7 @@ const surtitre = [p.gamme, p.baseTexte && `Base ${p.baseTexte}`].filter(Boolean)
 
       fiche.querySelectorAll<HTMLElement>('[data-resume]').forEach((e) => (e.textContent = resume ? ` · ${resume}` : ''))
       fiche.querySelectorAll<HTMLElement>('[data-resume-court]').forEach((e) => (e.textContent = fmt ? ` · ${fmt}` : ''))
-      fiche.querySelectorAll<HTMLAnchorElement>('[data-devis]').forEach((a) => (a.href = `/contact?produit=${encodeURIComponent(ligne)}`))
+      fiche.querySelectorAll<HTMLAnchorElement>('[data-devis]').forEach((a) => (a.href = `/contact?produit=${encodeURIComponent(ligne)}#devis`))
       if (baseWa) {
         const u = new URL(baseWa)
         u.searchParams.set('text', `Bonjour, je souhaite un devis pour : ${ligne}\n${urlPage}`)

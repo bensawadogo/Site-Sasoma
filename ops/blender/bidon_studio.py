@@ -60,15 +60,25 @@ coord = nt.nodes.new('ShaderNodeTexCoord'); coord.object = pivot
 sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(coord.outputs['Object'], sep.inputs[0])
 rampe = nt.nodes.new('ShaderNodeMapRange'); nt.links.new(sep.outputs['Y'], rampe.inputs['Value'])
 rampe.inputs['From Min'].default_value = dim.y * 0.04; rampe.inputs['From Max'].default_value = dim.y * 0.14
+# Le bouchon garde sa couleur (rouge) tout autour : sans cela il devenait gris au dos et le
+# bidon paraissait « bicolore » pendant le tour (Ben, 09/10). Bouchon = haut du bidon.
+haut_z = dim.z / 2
+bouchon = nt.nodes.new('ShaderNodeMapRange'); nt.links.new(sep.outputs['Z'], bouchon.inputs['Value'])
+bouchon.inputs['From Min'].default_value = haut_z - dim.z * 0.115
+bouchon.inputs['From Max'].default_value = haut_z - dim.z * 0.095
+garde = nt.nodes.new('ShaderNodeMath'); garde.operation = 'SUBTRACT'; garde.inputs[0].default_value = 1.0
+nt.links.new(bouchon.outputs['Result'], garde.inputs[1])
+facteur = nt.nodes.new('ShaderNodeMath'); facteur.operation = 'MULTIPLY'
+nt.links.new(rampe.outputs['Result'], facteur.inputs[0]); nt.links.new(garde.outputs[0], facteur.inputs[1])
 mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'
-nt.links.new(rampe.outputs['Result'], mix.inputs['Factor'])
+nt.links.new(facteur.outputs[0], mix.inputs['Factor'])
 nt.links.new(tex.outputs['Color'], mix.inputs[6])
 mix.inputs[7].default_value = (*[float(v) for v in gris], 1)
 nt.links.new(mix.outputs[2], nt.nodes['Principled BSDF'].inputs['Base Color'])
 # Le relief (normal map) porte aussi l'étiquette en miroir : il s'efface au dos.
 nm = next(n for n in nt.nodes if n.type == 'NORMAL_MAP')
 inv = nt.nodes.new('ShaderNodeMath'); inv.operation = 'SUBTRACT'; inv.inputs[0].default_value = 1.0
-nt.links.new(rampe.outputs['Result'], inv.inputs[1]); nt.links.new(inv.outputs[0], nm.inputs['Strength'])
+nt.links.new(facteur.outputs[0], inv.inputs[1]); nt.links.new(inv.outputs[0], nm.inputs['Strength'])
 print('gris plastique', gris)
 
 sc = bpy.context.scene

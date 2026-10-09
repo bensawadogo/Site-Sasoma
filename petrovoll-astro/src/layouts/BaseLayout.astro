@@ -191,8 +191,8 @@ const descriptionFinale =
     <!-- ── Polices auto-hébergées (public/fonts, cf. @font-face de global.css)
          Préchargement des 2 polices critiques = LCP texte plus rapide.
          `crossorigin` obligatoire, sinon le préchargement n'est pas réutilisé. -->
-    <link rel="preload" href="/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/bebas-neue-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/general-sans-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/clash-display-600.woff2" as="font" type="font/woff2" crossorigin />
     {prechargesHero.map((p) => <link rel="preload" as="image" href={p.href} media={p.media} fetchpriority="high" />)}
 
     <!-- ── Icônes (générées depuis le logo : python scripts/build-logo.py) ── -->
