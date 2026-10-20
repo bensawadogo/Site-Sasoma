@@ -167,16 +167,18 @@ export const HERO_DESKTOP: ReglagesHeroVideo = {
 }
 
 /**
- * Fond du hero (09/10, choix de Ben) : la route en lacet dans la savane (photo B), agrandie en 4K ;
- * seuls ses nuages glissent, en boucle (ops/scripts/ciel_derive.py, rendu dans ops/captures/hero-video-B).
- * Avant : route du désert E (video_nuages.py, ops/captures/hero-video-E4k).
+ * Fond du hero (20/10, choix de Ben) : la route africaine au coucher du soleil (photo F, acacia, camion),
+ * agrandie en 4K ; seuls ses nuages glissent, en boucle (masque ops/scripts/masque_ciel_couleur.py, puis
+ * ops/scripts/ciel_derive.py, centre téléphone 0,66 ; rendu dans ops/captures/hero-video-F). L'horizon, les
+ * montagnes et le soleil restent fixes.
+ * Avant : route en lacet dans la savane B (09/10, ops/captures/hero-video-B), route du désert E (hero-video-E4k).
  * Il remplace le garage : le moteur (masqué par masque.webp) est posé sur la route.
  * Version : à changer si les fichiers de public/hero-fond/ sont remplacés.
  */
 export const FOND_ROUTE = {
   actif: FOND_ROUTE_ACTIF,
   dossier: '/hero-fond',
-  version: '4',
+  version: '5',
 }
 
 /** Largeur (px) à partir de laquelle on affiche le hero desktop. */
