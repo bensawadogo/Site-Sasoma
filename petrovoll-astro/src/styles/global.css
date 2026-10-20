@@ -37,11 +37,10 @@
   --color-succes: #15803d; /* « En stock » (5:1) */
 
   /* ── Typographies (auto-hébergées, cf. @font-face plus bas) ───────────── */
-  /* 09/10 (Ben : « typo premium ») : Clash Display (titres) + General Sans (texte), Fontshare,
-     licence ITF Free Font License (usage commercial autorisé). Bebas/Inter restent en secours. */
-  --font-display: 'Clash Display', 'Bebas Neue', 'Arial Narrow', sans-serif;
-  --font-sans:
-    'General Sans', 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* 20/10 (Ben : « de vraies polices professionnelles ») : Plus Jakarta Sans (titres) + Inter (texte),
+     toutes deux SIL OFL 1.1 (usage commercial libre), fichiers variables latin de Fontsource 5.3.0. */
+  --font-display: 'Plus Jakarta Sans Variable', 'Inter Variable', 'Arial', sans-serif;
+  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   /* ── Ombres (style industriel : marquées, jamais diffuses) ─────────────── */
   --shadow-industrial: 0 10px 40px -12px rgb(0 0 0 / 0.6);
@@ -75,47 +74,11 @@
    statique) aurait des métriques ou des graisses différentes du fichier servi.
    ──────────────────────────────────────────────────────────────────────────── */
 @font-face {
-  font-family: 'Clash Display';
-  src: url('/fonts/clash-display-500.woff2') format('woff2');
-  font-weight: 500;
+  font-family: 'Plus Jakarta Sans Variable';
+  src: url('/fonts/plus-jakarta-sans-variable.woff2') format('woff2-variations');
+  font-weight: 200 800; /* police variable (axe wght) : 1 seul fichier pour tous les poids */
   font-style: normal;
   font-display: swap;
-}
-@font-face {
-  font-family: 'Clash Display';
-  src: url('/fonts/clash-display-600.woff2') format('woff2');
-  font-weight: 600 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'General Sans';
-  src: url('/fonts/general-sans-400.woff2') format('woff2');
-  font-weight: 300 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'General Sans';
-  src: url('/fonts/general-sans-500.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'General Sans';
-  src: url('/fonts/general-sans-600.woff2') format('woff2');
-  font-weight: 600 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Bebas Neue';
-  src: url('/fonts/bebas-neue-400.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  /* Plage exacte du sous-ensemble latin livré (identique à Fontsource) */
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
     U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
@@ -177,9 +140,9 @@
     padding-bottom: env(safe-area-inset-bottom, 0); /* encoche iOS */
   }
 
-  /* Titres : Clash Display, casse normale, interlettrage serré (rendu « studio »). Les tailles
-     du site ont été pensées pour Bebas Neue (étroite) : font-size-adjust ramène Clash, plus
-     large, à ~72 % de la taille demandée, partout d'un coup. */
+  /* Titres : Plus Jakarta Sans, casse normale, interlettrage serré. Les tailles du site ont été
+     pensées pour Bebas Neue (étroite) : font-size-adjust ramène la police, plus large, à ~75 % de
+     la taille demandée, partout d'un coup. */
   h1,
   h2,
   h3,
@@ -695,7 +658,7 @@ h3,
 h4,
 .font-display {
   font-size-adjust: 0.4;
-  word-spacing: 0.14em; /* l'espace de Clash Display est étroite : les mots se collaient */
+  word-spacing: 0.06em; /* interlettrage serré des titres : on aère un peu les mots */
   text-transform: none !important;
 }
 
