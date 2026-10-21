@@ -1,6 +1,6 @@
 """couvertures_secteurs.py — couvertures des métiers (cartes de l'accueil + pages secteurs), 21/10 : photos Pinterest choisies par Ben.
 
-  python ops/scripts/couvertures_secteurs.py
+  python ops/scripts/couvertures_secteurs.py [nom ...]   (sans nom : les cinq ; lubrifiants = gamme complète de Ben, à ne pas régénérer)
 Entrées dans ops/pinterest-secteurs/ : NOM.(jpg|png) et, si l'original est petit, NOM-x4.png (RealESRGAN deAPI, deapi.py agrandir-image).
 Sortie : petrovoll-astro/src/assets/secteurs/NOM-studio.jpg, 2048×1152 (16:9, recadrage centré sur FOCALE).
 """
@@ -28,7 +28,8 @@ def recadrer(im, fy=0.5):
     return im[:, x0:x0 + lc]
 
 
-for nom in ['lubrifiants', 'transport', 'distribution', 'pneumatiques', 'fournitures']:
+import sys
+for nom in (sys.argv[1:] or ['lubrifiants', 'transport', 'distribution', 'pneumatiques', 'fournitures']):
     f = next(Path(p) for p in glob.glob(str(SRC / f'{nom}.*')) if p.endswith(('.jpg', '.png')) and not p.endswith('-x4.png'))
     im = recadrer(cv2.imread(str(f)), FOCALE.get(nom, 0.5))
     lanczos = cv2.resize(im, (L, H), interpolation=cv2.INTER_LANCZOS4).astype(np.float32)
