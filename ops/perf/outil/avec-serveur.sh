@@ -3,7 +3,9 @@
 # puis l'arrête.   bash avec-serveur.sh node film.mjs http://localhost:5055/apercu-hero …
 cd "$(dirname "$0")"
 DIST=../../../petrovoll-astro/dist
-[ -d "$DIST/client" ] && DIST=$DIST/client   # après `vercel build`, le site est dans dist/client
+# Après `vercel build`, le site est dans dist/client (qui reste là après un `astro build` ordinaire) :
+# on sert la plus récente des deux versions.
+[ -f "$DIST/client/index.html" ] && [ "$DIST/client/index.html" -nt "$DIST/index.html" ] && DIST=$DIST/client
 npx -y serve@14 "$DIST" -l 5055 > /dev/null 2>&1 &
 PID=$!
 for i in $(seq 1 60); do

@@ -713,3 +713,10 @@ body *:not(.garder-maj) {
 .btn-verre {
   letter-spacing: 0.01em !important;
 }
+
+/* PageSpeed (22/10) : l'affiche du moteur n'est plus une image de fond du canvas, car un fond d'image compte pour le
+   LCP mobile et n'apparaissait qu'après le script (LCP 4,4 s). Le canvas dessine lui-même la première image (rendu
+   identique) ; seuls les appareils « faible », qui ne lancent pas la séquence, gardent l'affiche en fond. */
+html:not([data-appareil='faible']) [data-route] [data-sequence] {
+  background-image: none !important;
+}
