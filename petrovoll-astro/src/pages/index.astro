@@ -10,6 +10,7 @@ import BandeCertifications from '@/components/home/BandeCertifications.astro'
 import BandeMarques from '@/components/home/BandeMarques.astro'
 import ContactCTA from '@/components/home/ContactCTA.astro'
 import ProduitPhare from '@/components/home/ProduitPhare.astro'
+import PasDefilement from '@/components/home/PasDefilement.astro'
 import ProduitScroll from '@/components/home/ProduitScroll.astro'
 import ProduitsVitrine from '@/components/home/ProduitsVitrine.astro'
 import SecteursGrid from '@/components/home/SecteursGrid.astro'
@@ -38,6 +39,7 @@ const DESCRIPTION =
   {produitVedette && (bidonStark ? <ProduitScroll produit={produitVedette} /> : <ProduitPhare produit={produitVedette} />)}
   <div class="raccord raccord--nuit-jour" aria-hidden="true"></div>
   <ProduitsVitrine />
+  <PasDefilement />
   <BandeMarques />
   <SecteursGrid />
   <div class="raccord raccord--clair-marine" aria-hidden="true"></div>

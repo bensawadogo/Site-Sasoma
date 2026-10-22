@@ -1,0 +1,79 @@
+---
+/**
+ * PasDefilement.astro — un coup de pouce ne doit plus faire sauter l'animation (hero du moteur, bidon qui tourne).
+ *
+ * Dans ces deux zones, la page « accroche » à des étapes régulières (scroll-snap, `scroll-snap-stop: always`) :
+ * un geste, même un grand coup de pouce, avance d'UNE étape et pas plus. Hero : 3 gestes pour voir toute
+ * l'animation, bidon : 4 gestes ; un dernier geste sort de la zone. Seulement sur écran tactile (téléphone,
+ * tablette) : c'est là qu'un grand coup de pouce fait sauter l'animation ; à la souris, la molette avance déjà cran par cran. L'accroche n'est active que pendant que la zone
+ * est à l'écran (sinon elle piégerait le reste de la page), jamais avec « mouvement réduit », ni sur un appareil
+ * en mode léger (image fixe, rien à rater). Réglages : ETAPES ci-dessous.
+ */
+---
+
+<script>
+  import { lireNiveau } from '@/lib/capacite-appareil'
+
+  /** Zones concernées : sélecteur → nombre de gestes pour voir toute l'animation. */
+  const ETAPES: [string, number][] = [
+    ['[data-hero-mobile]', 3],
+    ['[data-hero-desktop]', 3],
+    ['[data-produit-scroll]', 4],
+  ]
+
+  const racine = document.documentElement
+  const actif = window.matchMedia('(pointer: coarse)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && lireNiveau() !== 'faible' && 'IntersectionObserver' in window
+
+  if (actif) {
+    const zones: { el: HTMLElement; n: number; points: HTMLElement[] }[] = []
+    for (const [selecteur, n] of ETAPES) {
+      document.querySelectorAll<HTMLElement>(selecteur).forEach((el) => {
+        if (getComputedStyle(el).display === 'none') return // hero de l'autre format
+        const points = Array.from({ length: n + 2 }, () => {
+          const p = document.createElement('span')
+          p.className = 'pas-defilement'
+          p.setAttribute('aria-hidden', 'true')
+          el.appendChild(p)
+          return p
+        })
+        zones.push({ el, n, points })
+      })
+    }
+
+    const placer = () => {
+      for (const { el, n, points } of zones) {
+        const course = Math.max(0, el.offsetHeight - window.innerHeight)
+        // étapes 0…n sur la course de l'animation, puis le bas de la zone (la section suivante)
+        points.forEach((p, k) => {
+          p.style.top = `${k <= n ? (course * k) / n : el.offsetHeight - 1}px`
+        })
+      }
+    }
+    placer()
+    addEventListener('resize', placer, { passive: true })
+    // la hauteur des zones change quand le script de l'animation démarre : on replace les étapes
+    if ('ResizeObserver' in window) zones.forEach(({ el }) => new ResizeObserver(placer).observe(el))
+
+    const visibles = new Set<Element>()
+    const observateur = new IntersectionObserver((entrees) => {
+      for (const e of entrees) (e.isIntersecting ? visibles.add(e.target) : visibles.delete(e.target))
+      racine.classList.toggle('pas-actif', visibles.size > 0)
+    })
+    zones.forEach(({ el }) => observateur.observe(el))
+  }
+</script>
+
+<style is:global>
+  .pas-defilement {
+    position: absolute;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  html.pas-actif {
+    scroll-snap-type: y mandatory;
+  }
+</style>

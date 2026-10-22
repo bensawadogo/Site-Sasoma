@@ -110,7 +110,7 @@ export interface ReglagesHeroVideo {
 
 export const HERO_MOBILE: ReglagesHeroVideo = {
   nom: 'mobile',
-  hauteur: '190svh', // 08/10 : 280svh jugé trop long (Ben),
+  hauteur: '240svh', // 22/10 : 3 gestes (PasDefilement) ; 280svh était jugé trop long le 08/10 (Ben), 190svh laissait des étapes trop courtes pour l'accroche,
   sequence: {
     dossier: '/hero-video/mobile',
     ...manifeste.mobile,
@@ -136,7 +136,7 @@ export const HERO_MOBILE: ReglagesHeroVideo = {
 
 export const HERO_DESKTOP: ReglagesHeroVideo = {
   nom: 'desktop',
-  hauteur: '220svh', // 08/10 : 340svh jugé trop long (Ben),
+  hauteur: '260svh', // 22/10 : 3 gestes (PasDefilement) ; 340svh était jugé trop long le 08/10 (Ben),
   sequence: {
     dossier: '/hero-video/desktop',
     ...manifeste.desktop,
