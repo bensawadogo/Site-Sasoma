@@ -54,9 +54,9 @@ const avecAppel = chemin !== '/' && chemin !== '/contact'
 
   <div class="container-page grid gap-12 pb-10 pt-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-10 lg:pt-20">
     <div class="flex flex-col gap-5">
-      <!-- Logo couleur sur plaque blanche : sur le bleu nuit, la version blanche perdait le globe. -->
-      <a href="/" class="inline-flex w-fit rounded-xl bg-white px-4 py-2.5 shadow-[0_10px_30px_-10px_rgb(0_0_0/0.5)]" aria-label={`${p.nomSociete} — accueil`}>
-        <img src="/images/logo/sasoma-horizontal.webp" alt={p.nomSociete} width="385" height="80" loading="lazy" class="h-9 w-auto" />
+      <!-- Logo aux couleurs de la charte (bleu marine, orange, globe), sans plaque : une lueur claire douce le détache du bleu nuit. -->
+      <a href="/" class="inline-flex w-fit" aria-label={`${p.nomSociete} — accueil`}>
+        <img src="/images/logo/sasoma-horizontal.webp" alt={p.nomSociete} width="385" height="80" loading="lazy" class="logo-pied h-10 w-auto" />
       </a>
       {p.slogan && <p class="max-w-sm text-[15px] leading-relaxed text-white/65">{p.slogan}</p>}
       <p class="pied-label">
@@ -196,12 +196,13 @@ const avecAppel = chemin !== '/' && chemin !== '/contact'
     border-color: #fff;
     background: rgb(255 255 255 / 0.08);
   }
+  .logo-pied {
+    filter: drop-shadow(0 0 8px rgb(255 255 255 / 0.95)) drop-shadow(0 0 22px rgb(255 255 255 / 0.75));
+  }
   .pied-titre {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.24em;
-    color: rgb(255 255 255 / 0.5);
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fd8d1c;
   }
   .pied-lien {
     position: relative;

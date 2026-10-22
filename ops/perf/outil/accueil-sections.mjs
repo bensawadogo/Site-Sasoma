@@ -8,7 +8,7 @@ await page.setViewport({ width: Number(l), height: Number(h), deviceScaleFactor:
 await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }])
 await page.goto(url, { waitUntil: 'networkidle0', timeout: 120000 })
 await page.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 500) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 100)) } })
-const prises = [['bidon1', '[data-produit-scroll]', 0.12], ['vitrine', '#produits-vitrine', 0], ['secteurs', '#secteurs', 0], ['certifs', '#certifications', 0]]
+const prises = [['bidon1', '[data-produit-scroll]', 0.12], ['vitrine', '#produits-vitrine', 0], ['secteurs', '#secteurs', 0], ['certifs', '.bande-certif', 0]]
 for (const [nom, sel, f] of prises) {
   const ok = await page.evaluate((sel, f) => {
     const s = document.querySelector(sel)

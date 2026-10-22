@@ -1,7 +1,7 @@
 ---
 /**
  * ProduitsVitrine.astro — « Nos produits » juste sous le produit phare, avant les secteurs (façon boutique) :
- * huit produits avec photo, nom, conditionnement, prix et bouton de devis. Choix : produits mis en avant
+ * six produits avec photo, nom, conditionnement, prix et bouton de devis. Choix : produits mis en avant
  * d'abord, puis ceux qui ont une photo, un seul par gamme de nom (premier mot) pour varier ; le catalogue
  * complet est un lien. Zéro JavaScript. Masquée s'il n'y a aucun produit.
  */
@@ -20,7 +20,7 @@ const choisis = ordre.filter((p) => {
   gammes.add(gamme)
   return true
 })
-const produits = [...choisis, ...ordre.filter((p) => !choisis.includes(p))].slice(0, 8)
+const produits = [...choisis, ...ordre.filter((p) => !choisis.includes(p))].slice(0, 6)
 ---
 
 {
@@ -36,7 +36,7 @@ const produits = [...choisis, ...ordre.filter((p) => !choisis.includes(p))].slic
         <a href="/produits" class="btn-outline shrink-0">Voir tout le catalogue</a>
       </div>
 
-      <ul class="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+      <ul class="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
         {produits.map((produit, i) => (
           <li class="reveal" style={`--i:${i % 4}`}>
             <article class="group flex h-full flex-col overflow-hidden rounded-md border border-bordure bg-surface transition-shadow hover:shadow-lg">
@@ -48,7 +48,7 @@ const produits = [...choisis, ...ordre.filter((p) => !choisis.includes(p))].slic
                     secteur={produit.data.secteur}
                     marque={produit.data.marque}
                     largeurs={[320, 480, 640]}
-                    sizes="(min-width: 1024px) 22vw, 46vw"
+                    sizes="(min-width: 1024px) 30vw, 46vw"
                     class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>

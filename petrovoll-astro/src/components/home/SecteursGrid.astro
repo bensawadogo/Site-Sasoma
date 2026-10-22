@@ -34,28 +34,20 @@ const secteurs = await getSecteurs()
               href={`/secteurs/${secteur.id}`}
               class="carte-studio group flex h-full min-h-[132px] flex-col gap-4 overflow-hidden rounded-md border border-bordure bg-surface p-5 transition-colors hover:border-accent/50"
             >
-              {secteur.data.image && (() => {
-                // Image qui n'est pas en 16:9 (ex. gamme complète) : affichée en entier, sans rognage ni parallaxe.
-                const ratio = secteur.data.image.width / secteur.data.image.height
-                const entiere = Math.abs(ratio - 16 / 9) > 0.1
-                return (
-                  <div
-                    class={`masque-image -mx-5 -mt-5 overflow-hidden bg-fond ${entiere ? '' : 'aspect-[16/9]'}`}
-                    style={entiere ? `aspect-ratio:${ratio}` : undefined}
-                  >
-                    <Image
-                      src={secteur.data.image}
-                      alt=""
-                      widths={[400, 640, 800]}
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      format="webp"
-                      quality={entiere ? 80 : 72}
-                      loading="lazy"
-                      class={entiere ? 'h-full w-full object-contain' : 'img-carte parallaxe -mt-[8%] h-[116%] w-full object-cover'}
-                    />
-                  </div>
-                )
-              })()}
+              {secteur.data.image && (
+                <div class="masque-image -mx-5 -mt-5 aspect-[3/2] overflow-hidden bg-fond">
+                  <Image
+                    src={secteur.data.image}
+                    alt=""
+                    widths={[400, 640, 800]}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    format="webp"
+                    quality={76}
+                    loading="lazy"
+                    class="img-carte h-full w-full object-cover"
+                  />
+                </div>
+              )}
               <span class="inline-flex h-11 w-11 items-center justify-center rounded bg-fond text-vif">
                 <IconeSecteur icone={secteur.data.icone} />
               </span>
