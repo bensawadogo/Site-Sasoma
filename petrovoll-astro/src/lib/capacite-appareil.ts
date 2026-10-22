@@ -10,8 +10,9 @@
  * mauvaise connexion et des téléphones d'entrée de gamme) : le niveau « faible » (affiche fixe, aucune
  * séquence d'images : ≈ 0,4 Mo au lieu de 2,6 à 5 Mo) est donné plus largement :
  *   faible : économiseur de données, réseau 2g/slow-2g/3g, débit estimé < 1,5 Mbit/s, latence ≥ 500 ms,
- *            RAM ≤ 2 Go, ≤ 2 cœurs, ou TÉLÉPHONE (écran tactile) avec RAM ≤ 4 Go.
- *   moyen  : RAM ≤ 4 Go hors téléphone (petit ordinateur), ou débit estimé < 4 Mbit/s.
+ *            RAM ≤ 2 Go ou ≤ 2 cœurs.
+ *   moyen  : RAM ≤ 4 Go (téléphone d'entrée de gamme, petit ordinateur) ou débit estimé < 4 Mbit/s :
+ *            les animations restent, en version allégée (une image sur trois, ≈ 1,4 Mo au lieu de 5).
  *   (Le nombre de cœurs ne classe « moyen » personne : un PC de bureau à 4 cœurs et 8 Go est fort,
  *   et les téléphones d'entrée de gamme annoncent souvent 8 cœurs lents ; seul ≤ 2 cœurs est faible.)
  *   fort   : tout le reste (ordinateur, téléphone récent à bonne connexion).
@@ -38,8 +39,6 @@ export interface SignauxAppareil {
   reseau?: string | null
   /** prefers-reduced-motion: reduce */
   mouvementReduit?: boolean | null
-  /** Écran tactile principal (pointer: coarse) : téléphone ou tablette. */
-  telephone?: boolean | null
   /** navigator.connection.downlink : débit estimé (Mbit/s). */
   debit?: number | null
   /** navigator.connection.rtt : latence estimée (ms). */
@@ -58,7 +57,6 @@ export function niveauAppareil(s: SignauxAppareil): NiveauAppareil {
   if (s.economiseur || reseauLent) return 'faible'
   if ((debit !== null && debit < 1.5) || (latence !== null && latence >= 500)) return 'faible'
   if ((memoire !== null && memoire <= 2) || (coeurs !== null && coeurs <= 2)) return 'faible'
-  if (s.telephone && memoireJuste) return 'faible'
 
   const moyen = memoireJuste || (debit !== null && debit < 4)
   if (!moyen) return 'fort'
@@ -81,12 +79,10 @@ interface NavigatorEtendu {
 export function lireSignaux(): SignauxAppareil {
   const nav = navigator as Navigator & NavigatorEtendu
   let reduit = false
-  let tactile = false
   try {
     reduit = matchMedia('(prefers-reduced-motion: reduce)').matches
-    tactile = matchMedia('(pointer: coarse)').matches
   } catch {
-    /* matchMedia absent : on suppose « pas de réduction », pas de téléphone */
+    /* matchMedia absent : on suppose « pas de réduction », pas de réduction */
   }
   return {
     memoire: nav.deviceMemory,
@@ -94,7 +90,6 @@ export function lireSignaux(): SignauxAppareil {
     economiseur: nav.connection?.saveData,
     reseau: nav.connection?.effectiveType,
     mouvementReduit: reduit,
-    telephone: tactile,
     debit: nav.connection?.downlink,
     latence: nav.connection?.rtt,
   }
@@ -116,14 +111,14 @@ export function lireNiveau(): NiveauAppareil {
  * ES5, sans dépendance, sans jamais lever d'erreur (en cas d'échec : aucun attribut = « fort »).
  */
 export const SCRIPT_APPAREIL = `(function(){try{
-var d=document.documentElement,n=navigator,c=n.connection||{},m=n.deviceMemory,k=n.hardwareConcurrency,t=c.effectiveType||'',r=false,tel=false,dl=c.downlink,rt=c.rtt;
+var d=document.documentElement,n=navigator,c=n.connection||{},m=n.deviceMemory,k=n.hardwareConcurrency,t=c.effectiveType||'',r=false,dl=c.downlink,rt=c.rtt;
 var f=/[?&]appareil=(faible|moyen|fort)(?:&|$)/.exec(location.search);
 if(f){d.setAttribute('data-appareil',f[1]);return}
-try{r=matchMedia('(prefers-reduced-motion: reduce)').matches;tel=matchMedia('(pointer: coarse)').matches}catch(e){}
+try{r=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
 m=typeof m==='number'&&m>0?m:null;k=typeof k==='number'&&k>0?k:null;
 dl=typeof dl==='number'&&dl>0?dl:null;rt=typeof rt==='number'&&rt>0?rt:null;
 var lent=t==='2g'||t==='slow-2g'||t==='3g',mj=m!==null&&m<=4,v;
-if(c.saveData||lent||(dl!==null&&dl<1.5)||(rt!==null&&rt>=500)||(m!==null&&m<=2)||(k!==null&&k<=2)||(tel&&mj))v='faible';
+if(c.saveData||lent||(dl!==null&&dl<1.5)||(rt!==null&&rt>=500)||(m!==null&&m<=2)||(k!==null&&k<=2))v='faible';
 else if(!(mj||(dl!==null&&dl<4)))v='fort';
 else v=r?'faible':'moyen';
 d.setAttribute('data-appareil',v)

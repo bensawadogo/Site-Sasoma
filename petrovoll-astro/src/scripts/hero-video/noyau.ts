@@ -832,8 +832,8 @@ export function lancerHeroVideo(racine: HTMLElement, R: ReglagesHeroVideo): void
 
   // Première image tout de suite (elle est l'affiche du hero), le reste après load.
   charger(0).then(() => {
-    // Palier partiel : une image sur deux (la dernière comprise).
-    const ordre = ordreChargement(total).filter((i) => i !== 0 && (!partiel || i % 2 === 0 || i === total - 1))
+    // Palier partiel : une image sur trois (la dernière comprise) ; les images manquantes sont remplacées par la plus proche.
+    const ordre = ordreChargement(total).filter((i) => i !== 0 && (!partiel || i % 3 === 0 || i === total - 1))
     const suite = () => (leger ? charger(total - 1) : chargerTout(ordre))
     if (document.readyState === 'complete') suite()
     else addEventListener('load', suite, { once: true })

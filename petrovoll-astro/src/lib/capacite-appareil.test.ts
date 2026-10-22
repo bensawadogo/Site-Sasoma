@@ -25,9 +25,8 @@ describe('niveauAppareil', () => {
     expect(niveauAppareil({ memoire: 8, coeurs: 2 })).toBe('faible')
   })
 
-  it('RAM 4 Go sur bon réseau : petit ordinateur → moyen, téléphone → faible ; PC à 4 cœurs et 8 Go → fort', () => {
+  it('RAM 4 Go sur bon réseau → moyen (animations allégées) ; PC à 4 cœurs et 8 Go → fort', () => {
     expect(niveauAppareil({ memoire: 4, coeurs: 8, reseau: '4g' })).toBe('moyen')
-    expect(niveauAppareil({ memoire: 4, coeurs: 8, reseau: '4g', telephone: true })).toBe('faible')
     expect(niveauAppareil({ memoire: 8, coeurs: 4 })).toBe('fort') // PC de bureau à 4 cœurs : garde ses animations
   })
 
@@ -40,7 +39,7 @@ describe('niveauAppareil', () => {
   })
 
   it('téléphone récent (8 Go) sur bonne connexion → fort', () => {
-    expect(niveauAppareil({ memoire: 8, coeurs: 8, reseau: '4g', telephone: true, debit: 10 })).toBe('fort')
+    expect(niveauAppareil({ memoire: 8, coeurs: 8, reseau: '4g', debit: 10 })).toBe('fort')
   })
 
   it('mouvement réduit : moyen → faible, mais seulement avec un signal de faiblesse', () => {
@@ -70,7 +69,7 @@ function executerScript(s: SignauxAppareil, recherche = ''): string | null {
     connection: { saveData: s.economiseur ?? undefined, effectiveType: s.reseau ?? undefined, downlink: s.debit ?? undefined, rtt: s.latence ?? undefined },
   }
   const doc = { documentElement: { setAttribute: (k: string, v: string) => (attrs[k] = v) } }
-  const matchMedia = (q: string) => ({ matches: /coarse/.test(q) ? !!s.telephone : !!s.mouvementReduit })
+  const matchMedia = () => ({ matches: !!s.mouvementReduit })
   new Function('document', 'navigator', 'location', 'matchMedia', SCRIPT_APPAREIL)(doc, nav, { search: recherche }, matchMedia)
   return attrs['data-appareil'] ?? null
 }
@@ -82,8 +81,8 @@ describe('SCRIPT_APPAREIL (script inline du <head>)', () => {
       for (const reseau of [undefined, 'slow-2g', '2g', '3g', '4g'])
         for (const economiseur of [false, true])
           for (const mouvementReduit of [false, true])
-            for (const [telephone, debit, latence] of [[false, undefined, undefined], [true, 10, 80], [false, 1.2, 100], [true, 3, 600]] as const)
-              cas.push({ memoire, coeurs, reseau, economiseur, mouvementReduit, telephone, debit, latence })
+            for (const [debit, latence] of [[undefined, undefined], [10, 80], [1.2, 100], [3, 600]] as const)
+              cas.push({ memoire, coeurs, reseau, economiseur, mouvementReduit, debit, latence })
 
   it('donne le même niveau que niveauAppareil() sur toutes les combinaisons', () => {
     for (const c of cas) expect(executerScript(c), JSON.stringify(c)).toBe(niveauAppareil(c))
