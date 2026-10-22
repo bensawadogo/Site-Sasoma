@@ -97,16 +97,14 @@ const mots = texte.split(/\s+/).filter(Boolean).map((mot, i) => ({
   .titre-anime .ta-mot-i {
     display: inline-block;
   }
-  /* Mot clé : Inter italique fin (oblique) à côté du Bebas Neue */
+  /* Mot clé : même police et même graisse que le titre, simplement en orange (plus de mélange italique fin / gras) */
   .titre-anime .ta-accent {
-    font-family: var(--font-sans);
-    font-style: italic;
-    font-weight: 200;
-    text-transform: none;
-    letter-spacing: -0.03em;
-    font-size: 0.82em;
-    line-height: 1;
-    padding-inline: 0.04em;
+    font-family: inherit;
+    font-style: normal;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    font-size: 1em;
+    color: var(--color-vif);
   }
 
   @media (prefers-reduced-motion: no-preference) {

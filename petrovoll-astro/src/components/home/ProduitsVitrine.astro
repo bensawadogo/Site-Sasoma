@@ -1,0 +1,73 @@
+---
+/**
+ * ProduitsVitrine.astro — « Nos produits » juste sous le produit phare, avant les secteurs (façon boutique) :
+ * huit produits avec photo, nom, conditionnement, prix et bouton de devis. Choix : produits mis en avant
+ * d'abord, puis ceux qui ont une photo, un seul par gamme de nom (premier mot) pour varier ; le catalogue
+ * complet est un lien. Zéro JavaScript. Masquée s'il n'y a aucun produit.
+ */
+import PhotoProduit from '@/components/produits/PhotoProduit.astro'
+import TitreAnime from '@/components/ui/TitreAnime.astro'
+import { getProduits } from '@/lib/contenu'
+import { formaterPrix } from '@/lib/format'
+
+const tous = await getProduits()
+const avecPhoto = tous.filter((p) => p.data.photos.length > 0)
+const ordre = [...avecPhoto.filter((p) => p.data.enAvant), ...avecPhoto.filter((p) => !p.data.enAvant)]
+const gammes = new Set<string>()
+const choisis = ordre.filter((p) => {
+  const gamme = p.data.nom.split(/\s+/)[0].toLowerCase()
+  if (gammes.has(gamme)) return false
+  gammes.add(gamme)
+  return true
+})
+const produits = [...choisis, ...ordre.filter((p) => !choisis.includes(p))].slice(0, 8)
+---
+
+{
+  produits.length > 0 && (
+    <section id="produits-vitrine" class="container-page scroll-mt-20 py-14 lg:py-20" aria-labelledby="vitrine-titre">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="eyebrow-ed text-vif">
+            <span class="eyebrow-num">02</span>Sélection
+          </p>
+          <TitreAnime id="vitrine-titre" class="mt-4 text-4xl lg:text-5xl" texte="Nos produits les plus demandés" accent="demandés" />
+        </div>
+        <a href="/produits" class="btn-outline shrink-0">Voir tout le catalogue</a>
+      </div>
+
+      <ul class="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+        {produits.map((produit, i) => (
+          <li class="reveal" style={`--i:${i % 4}`}>
+            <article class="group flex h-full flex-col overflow-hidden rounded-md border border-bordure bg-surface transition-shadow hover:shadow-lg">
+              <a href={`/produits/${produit.id}`} class="flex flex-1 flex-col">
+                <div class="aspect-square overflow-hidden bg-[#f1f3f6] p-4">
+                  <PhotoProduit
+                    photo={produit.data.photos[0]}
+                    alt={produit.data.nom}
+                    secteur={produit.data.secteur}
+                    marque={produit.data.marque}
+                    largeurs={[320, 480, 640]}
+                    sizes="(min-width: 1024px) 22vw, 46vw"
+                    class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <div class="flex flex-1 flex-col gap-1 p-4">
+                  <h3 class="text-base font-semibold leading-snug group-hover:text-vif">{produit.data.nom}</h3>
+                  {produit.data.conditionnement && <p class="text-sm text-attenue">{produit.data.conditionnement}</p>}
+                  <p class="mt-auto pt-2 font-display text-lg text-vif">{formaterPrix(produit.data.prix)}</p>
+                </div>
+              </a>
+              <a
+                href={`/contact?produit=${encodeURIComponent(produit.data.nom)}#devis`}
+                class="mx-4 mb-4 inline-flex min-h-11 items-center justify-center rounded border border-bordure text-sm font-semibold text-vif transition-colors hover:border-accent hover:bg-accent hover:text-white"
+              >
+                Demander un devis
+              </a>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

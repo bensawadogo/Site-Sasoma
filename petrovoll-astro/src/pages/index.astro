@@ -2,7 +2,7 @@
 /**
  * Accueil — page prérendue. Ordre du DOM = ordre sur mobile :
  * hero au scroll → produit phare (bidon STÄRK qui tourne au scroll, sinon carte produit) →
- * constructeurs (bande défilante) → secteurs → chiffres clés → certifications → devis.
+ * vitrine de huit produits (façon boutique) → constructeurs (bande défilante) → secteurs → chiffres clés → certifications → devis.
  * Le hero (garage Blender + moteur) se règle dans src/hero-video.config.ts (hors admin) ; les autres sections
  * lisent leur contenu dans l'admin et se masquent si elles sont vides.
  */
@@ -11,6 +11,7 @@ import BandeMarques from '@/components/home/BandeMarques.astro'
 import ContactCTA from '@/components/home/ContactCTA.astro'
 import ProduitPhare from '@/components/home/ProduitPhare.astro'
 import ProduitScroll from '@/components/home/ProduitScroll.astro'
+import ProduitsVitrine from '@/components/home/ProduitsVitrine.astro'
 import SecteursGrid from '@/components/home/SecteursGrid.astro'
 import StatsSection from '@/components/home/StatsSection.astro'
 import HeroVideo from '@/components/hero/video/HeroVideo.astro'
@@ -36,6 +37,7 @@ const DESCRIPTION =
   <div class="raccord raccord--hero-nuit" aria-hidden="true"></div>
   {produitVedette && (bidonStark ? <ProduitScroll produit={produitVedette} /> : <ProduitPhare produit={produitVedette} />)}
   <div class="raccord raccord--nuit-jour" aria-hidden="true"></div>
+  <ProduitsVitrine />
   <BandeMarques />
   <SecteursGrid />
   <div class="raccord raccord--clair-marine" aria-hidden="true"></div>

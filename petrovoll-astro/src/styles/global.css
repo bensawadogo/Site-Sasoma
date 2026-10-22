@@ -687,3 +687,29 @@ h4,
   font-weight: 600;
   letter-spacing: -0.01em;
 }
+
+/* Casse unique sur tout le site : phrase normale (majuscule initiale seulement), plus de mélange
+   MAJUSCULES / minuscules entre boutons, menus, surtitres et titres. */
+body *:not(.garder-maj) {
+  text-transform: none !important;
+}
+
+/* Sans majuscules, l'espacement large des petits libellés n'a plus de raison d'être. */
+[class*='tracking-['],
+.tracking-wide,
+.tracking-wider,
+.tracking-widest,
+.eyebrow-ed,
+.hero-produit-libelle,
+.hero-surtitre,
+.index,
+.libelle,
+.menu-num,
+.pied-reseau,
+.pied-titre,
+.surtitre,
+.btn-primary,
+.btn-outline,
+.btn-verre {
+  letter-spacing: 0.01em !important;
+}
