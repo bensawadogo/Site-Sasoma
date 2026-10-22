@@ -630,10 +630,10 @@ html:not([data-appareil]) [data-route] [data-sequence] {
 }
 @keyframes avancer-route {
   from {
-    scale: 1;
+    transform: scale(1);
   }
   to {
-    scale: 1.12;
+    transform: scale(1.12);
   }
 }
 @supports (animation-timeline: view()) {
@@ -642,9 +642,9 @@ html:not([data-appareil]) [data-route] [data-sequence] {
   }
   [data-route] .fond-route {
     transform-origin: 50% 42%; /* point de fuite de la route */
+    will-change: transform;
     animation: avancer-route linear both;
     animation-timeline: --hero-route;
-    animation-range: contain 0% contain 100%;
   }
 }
 [data-appareil='faible'] [data-route] .fond-route {

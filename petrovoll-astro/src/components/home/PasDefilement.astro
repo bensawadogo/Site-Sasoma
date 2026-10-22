@@ -49,10 +49,24 @@
         })
       }
     }
-    placer()
-    addEventListener('resize', placer, { passive: true })
-    // la hauteur des zones change quand le script de l'animation démarre : on replace les étapes
-    if ('ResizeObserver' in window) zones.forEach(({ el }) => new ResizeObserver(placer).observe(el))
+    // Mesures (offsetHeight) = mise en page forcée : une seule fois par image, et pas pendant le chargement.
+    let planifie = false
+    const replacer = () => {
+      if (planifie) return
+      planifie = true
+      requestAnimationFrame(() => {
+        planifie = false
+        placer()
+      })
+    }
+    const demarrer = () => {
+      placer()
+      addEventListener('resize', replacer, { passive: true })
+      // la hauteur des zones change quand le script de l'animation démarre : on replace les étapes
+      if ('ResizeObserver' in window) zones.forEach(({ el }) => new ResizeObserver(replacer).observe(el))
+    }
+    if (document.readyState === 'complete') setTimeout(demarrer, 0)
+    else addEventListener('load', () => setTimeout(demarrer, 0), { once: true })
 
     const visibles = new Set<Element>()
     const observateur = new IntersectionObserver((entrees) => {

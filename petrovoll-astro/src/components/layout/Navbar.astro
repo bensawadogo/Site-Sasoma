@@ -181,7 +181,10 @@ const cheminCourant = Astro.url.pathname
   }
   addEventListener('scroll', demander, { passive: true })
   addEventListener('resize', demander)
-  // Au chargement : à l'image suivante, pas tout de suite (lecture de géométrie forcée).
-  demander()
+  // Au chargement : une fois la page chargée et le navigateur au repos (lecture de géométrie qui force
+  // la mise en page : PageSpeed y voyait 119 ms pendant le chargement).
+  const premier = () => setTimeout(demander, 0)
+  if (document.readyState === 'complete') premier()
+  else addEventListener('load', premier, { once: true })
 
 </script>
