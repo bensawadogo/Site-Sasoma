@@ -25,14 +25,22 @@ describe('niveauAppareil', () => {
     expect(niveauAppareil({ memoire: 8, coeurs: 2 })).toBe('faible')
   })
 
-  it('RAM 4 Go sur bon réseau → moyen ; PC à 4 cœurs et 8 Go → fort', () => {
+  it('RAM 4 Go sur bon réseau : petit ordinateur → moyen, téléphone → faible ; PC à 4 cœurs et 8 Go → fort', () => {
     expect(niveauAppareil({ memoire: 4, coeurs: 8, reseau: '4g' })).toBe('moyen')
+    expect(niveauAppareil({ memoire: 4, coeurs: 8, reseau: '4g', telephone: true })).toBe('faible')
     expect(niveauAppareil({ memoire: 8, coeurs: 4 })).toBe('fort') // PC de bureau à 4 cœurs : garde ses animations
   })
 
-  it('réseau 3g : moyen sur un appareil confortable, faible sur un appareil juste', () => {
-    expect(niveauAppareil({ memoire: 8, coeurs: 8, reseau: '3g' })).toBe('moyen')
-    expect(niveauAppareil({ memoire: 4, coeurs: 8, reseau: '3g' })).toBe('faible')
+  it('réseau 3g, débit < 1,5 Mbit/s ou latence ≥ 500 ms → faible, même sur un appareil confortable', () => {
+    expect(niveauAppareil({ memoire: 8, coeurs: 8, reseau: '3g' })).toBe('faible')
+    expect(niveauAppareil({ memoire: 8, coeurs: 8, reseau: '4g', debit: 1.2 })).toBe('faible')
+    expect(niveauAppareil({ memoire: 8, coeurs: 8, reseau: '4g', latence: 600 })).toBe('faible')
+    expect(niveauAppareil({ memoire: 8, coeurs: 8, reseau: '4g', debit: 3 })).toBe('moyen')
+    expect(niveauAppareil({ memoire: 8, coeurs: 8, reseau: '4g', debit: 9, latence: 80 })).toBe('fort')
+  })
+
+  it('téléphone récent (8 Go) sur bonne connexion → fort', () => {
+    expect(niveauAppareil({ memoire: 8, coeurs: 8, reseau: '4g', telephone: true, debit: 10 })).toBe('fort')
   })
 
   it('mouvement réduit : moyen → faible, mais seulement avec un signal de faiblesse', () => {
@@ -59,10 +67,10 @@ function executerScript(s: SignauxAppareil, recherche = ''): string | null {
   const nav = {
     deviceMemory: s.memoire ?? undefined,
     hardwareConcurrency: s.coeurs ?? undefined,
-    connection: { saveData: s.economiseur ?? undefined, effectiveType: s.reseau ?? undefined },
+    connection: { saveData: s.economiseur ?? undefined, effectiveType: s.reseau ?? undefined, downlink: s.debit ?? undefined, rtt: s.latence ?? undefined },
   }
   const doc = { documentElement: { setAttribute: (k: string, v: string) => (attrs[k] = v) } }
-  const matchMedia = () => ({ matches: !!s.mouvementReduit })
+  const matchMedia = (q: string) => ({ matches: /coarse/.test(q) ? !!s.telephone : !!s.mouvementReduit })
   new Function('document', 'navigator', 'location', 'matchMedia', SCRIPT_APPAREIL)(doc, nav, { search: recherche }, matchMedia)
   return attrs['data-appareil'] ?? null
 }
@@ -73,7 +81,9 @@ describe('SCRIPT_APPAREIL (script inline du <head>)', () => {
     for (const coeurs of [undefined, 2, 4, 8])
       for (const reseau of [undefined, 'slow-2g', '2g', '3g', '4g'])
         for (const economiseur of [false, true])
-          for (const mouvementReduit of [false, true]) cas.push({ memoire, coeurs, reseau, economiseur, mouvementReduit })
+          for (const mouvementReduit of [false, true])
+            for (const [telephone, debit, latence] of [[false, undefined, undefined], [true, 10, 80], [false, 1.2, 100], [true, 3, 600]] as const)
+              cas.push({ memoire, coeurs, reseau, economiseur, mouvementReduit, telephone, debit, latence })
 
   it('donne le même niveau que niveauAppareil() sur toutes les combinaisons', () => {
     for (const c of cas) expect(executerScript(c), JSON.stringify(c)).toBe(niveauAppareil(c))
