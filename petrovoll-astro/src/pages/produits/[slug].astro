@@ -12,7 +12,7 @@ import PhotoStudio from '@/components/catalogue/PhotoStudio.astro'
 import PageLayout from '@/layouts/PageLayout.astro'
 import { construireProduit, dateLongue } from '@/lib/catalogue'
 import { getParametres, getProduits, urlSite } from '@/lib/contenu'
-import { extraitTexte, formaterPrix } from '@/lib/format'
+import { completerDescription, extraitTexte, filAriane, formaterPrix } from '@/lib/format'
 
 export const prerender = true
 
@@ -36,11 +36,18 @@ const { marque, reference } = p.entree.data
 
 // Produit sans fiche fabricant (ajouté dans l'admin) : on montre son texte libre.
 const Contenu = p.fabricant ? undefined : (await render(p.entree)).Content
-const description =
+const descriptionBase =
   p.description || extraitTexte(p.entree.body) || `${p.nom} : caractéristiques, conditionnements et demande de devis.`
+// Avec le nom du produit (deux fiches peuvent avoir le même texte fabricant) tant que ça tient en ~160 caractères.
+const descriptionAvecNom = completerDescription(descriptionBase, `${p.nom} chez SASOMA, Ouagadougou. Devis sur demande.`)
+const description =
+  descriptionAvecNom.length <= 160
+    ? descriptionAvecNom
+    : completerDescription(descriptionBase, 'Disponible chez SASOMA à Ouagadougou. Devis sur demande.')
 
 const parametres = await getParametres()
-const urlPage = new URL(`/produits/${p.slug}`, urlSite(Astro.site)).toString()
+const urlRacine = urlSite(Astro.site)
+const urlPage = new URL(`/produits/${p.slug}`, urlRacine).toString()
 const lienWhatsApp = parametres.whatsapp(`Bonjour, je souhaite un devis pour : ${p.nom}\n${urlPage}`)
 const lienDevis = `/contact?produit=${encodeURIComponent(p.nom)}#devis`
 
@@ -51,6 +58,11 @@ const taillePartage = partage
   : undefined
 
 const schema: Array<Record<string, unknown>> = [
+  filAriane([
+    { nom: 'Accueil', url: new URL('/', urlRacine).toString() },
+    { nom: 'Produits', url: new URL('/produits', urlRacine).toString() },
+    { nom: p.nom, url: urlPage },
+  ]),
   {
     '@type': 'Product',
     name: p.nom,

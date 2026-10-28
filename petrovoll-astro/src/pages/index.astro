@@ -27,7 +27,7 @@ const [parametres, produitVedette] = await Promise.all([getParametres(), getProd
 const bidonStark =
   !!produitVedette && /petrov/i.test(produitVedette.data.marque ?? '') && /st[äa]rk/i.test(produitVedette.data.nom)
 
-const TITRE = `${parametres.nomSociete} — Lubrifiants, transport et distribution au Burkina Faso`
+const TITRE = `${parametres.nomSociete} — Lubrifiants Petrovöll et transport au Burkina Faso`
 const DESCRIPTION =
   parametres.slogan ??
   'Lubrifiants Petrovöll, transport, import-export, pneumatiques et fournitures de bureau : un partenaire unique au Burkina Faso.'

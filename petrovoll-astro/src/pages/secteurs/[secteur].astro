@@ -11,9 +11,9 @@ import CarteProduit from '@/components/catalogue/CarteProduit.astro'
 import SommaireGammes from '@/components/catalogue/SommaireGammes.astro'
 import IconeSecteur from '@/components/ui/IconeSecteur.astro'
 import PageLayout from '@/layouts/PageLayout.astro'
-import { getProduits, getSecteurs, type Secteur } from '@/lib/contenu'
+import { getProduits, getSecteurs, urlSite, type Secteur } from '@/lib/contenu'
 import { construireProduit, grouperParGamme } from '@/lib/catalogue'
-import { extraitTexte } from '@/lib/format'
+import { completerDescription, extraitTexte, filAriane } from '@/lib/format'
 
 export const prerender = true
 
@@ -33,11 +33,25 @@ const produits = (await getProduits())
   .sort((a, b) => a.ordre - b.ordre || a.nom.localeCompare(b.nom, 'fr'))
 const gammes = grouperParGamme(produits)
 let compteur = 0
-const description =
-  secteur.data.resume ?? (extraitTexte(secteur.body) || `${secteur.data.nom} au Burkina Faso et en Afrique de l’Ouest.`)
+const description = completerDescription(
+  secteur.data.resume ?? (extraitTexte(secteur.body) || `${secteur.data.nom} au Burkina Faso et en Afrique de l’Ouest.`),
+  'SASOMA, Ouagadougou (Burkina Faso) : devis sur demande.',
+)
+const urlRacine = urlSite(Astro.site)
+const schema = [
+  filAriane([
+    { nom: 'Accueil', url: new URL('/', urlRacine).toString() },
+    { nom: secteur.data.nom, url: new URL(`/secteurs/${secteur.id}`, urlRacine).toString() },
+  ]),
+]
 ---
 
-<PageLayout titre={secteur.data.nom} description={description} canonicalChemin={`/secteurs/${secteur.id}`}>
+<PageLayout
+  titre={secteur.data.nom}
+  description={description}
+  canonicalChemin={`/secteurs/${secteur.id}`}
+  schema={schema}
+>
   <div class="container-page py-10 lg:py-14">
     <span class="inline-flex h-12 w-12 items-center justify-center rounded bg-surface text-vif">
       <IconeSecteur icone={secteur.data.icone} class="h-7 w-7" />

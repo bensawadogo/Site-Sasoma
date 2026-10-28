@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { extraitTexte, formaterPrix, jsonLdSur, lienTelephone, lienWhatsApp } from './format'
+import { completerDescription, extraitTexte, filAriane, formaterPrix, jsonLdSur, lienTelephone, lienWhatsApp } from './format'
 
 describe('formaterPrix', () => {
   it('formate en FCFA avec séparateur de milliers insécable', () => {
@@ -68,5 +68,25 @@ describe('jsonLdSur', () => {
     const sortie = jsonLdSur({ name: '</script><script>alert(1)</script>' })
     expect(sortie).not.toContain('</script>')
     expect(JSON.parse(sortie).name).toBe('</script><script>alert(1)</script>')
+  })
+})
+
+describe('completerDescription', () => {
+  it('ajoute le complément à une description trop courte', () => {
+    expect(completerDescription('Huile moteur', 'Devis sur demande.')).toBe('Huile moteur. Devis sur demande.')
+  })
+  it('laisse une description assez longue telle quelle', () => {
+    const longue = 'a'.repeat(95)
+    expect(completerDescription(longue, 'Devis sur demande.')).toBe(longue)
+  })
+})
+
+describe('filAriane', () => {
+  it('numérote les éléments à partir de 1', () => {
+    const fil = filAriane([
+      { nom: 'Accueil', url: 'https://x.test/' },
+      { nom: 'Produits', url: 'https://x.test/produits' },
+    ]) as { itemListElement: Array<{ position: number }> }
+    expect(fil.itemListElement.map((e) => e.position)).toEqual([1, 2])
   })
 })

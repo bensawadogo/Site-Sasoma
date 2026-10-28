@@ -58,6 +58,31 @@ export function extraitTexte(markdoc: string | null | undefined, longueur = 155)
   return `${(dernierEspace > 0 ? coupe.slice(0, dernierEspace) : coupe).replace(/[,;:.\s]+$/, '')}…`
 }
 
+/**
+ * Meta description trop courte (< `min` caractères) : lui ajoute une phrase
+ * de contexte pour approcher les ~120-155 caractères que Google affiche.
+ * Une description déjà assez longue est laissée telle quelle.
+ */
+export function completerDescription(texte: string, complement: string, min = 90): string {
+  const base = texte.trim()
+  if (base.length >= min) return base
+  const ponctue = /[.!?…]$/.test(base) ? base : `${base}.`
+  return `${ponctue} ${complement}`
+}
+
+/** JSON-LD BreadcrumbList (fil d'Ariane) : `elements` du plus haut au plus profond. */
+export function filAriane(elements: Array<{ nom: string; url: string }>): Record<string, unknown> {
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: elements.map((e, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: e.nom,
+      item: e.url,
+    })),
+  }
+}
+
 /** Sérialise du JSON-LD sans permettre de sortir de la balise <script>. */
 export function jsonLdSur(donnees: unknown): string {
   return JSON.stringify(donnees)
