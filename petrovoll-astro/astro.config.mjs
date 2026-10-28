@@ -41,8 +41,8 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   /* ── URL publique (canonical, sitemap, og:url, llms.txt) ─────────────────
-     TODO [seo] : remplacer par le domaine de production définitif. */
-  site: 'https://sasoma.example',
+     Domaine de production : le domaine nu redirige (308) vers www sur Vercel. */
+  site: 'https://www.sasomadistribution.com',
 
   /* ── Rendu ───────────────────────────────────────────────────────────────
      'server' + prerender=true par page = équivalent Astro 5 du « hybrid »
