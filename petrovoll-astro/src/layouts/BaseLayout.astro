@@ -111,23 +111,25 @@ const schemaOrganisation: Record<string, unknown> = {
   '@type': ['Organization', 'LocalBusiness'],
   '@id': `${baseSite}#organisation`,
   name: nomSociete,
+  // Variantes sous lesquelles on cherche l'entreprise (le domaine est sasomadistribution.com).
+  alternateName: [`${nomSociete} Distribution`, `${nomSociete} Burkina Faso`],
   url: baseSite,
   description,
   ...(slogan ? { slogan } : {}),
   ...(telephone ? { telephone } : {}),
   ...(email ? { email } : {}),
-  ...(adresse
-    ? {
-        address: {
-          '@type': 'PostalAddress',
-          streetAddress: adresse.replace(/\n/g, ', '),
-          // TODO [seo] : ajouter addressLocality / addressRegion / postalCode /
-          // addressCountry dès que l'adresse exacte est fournie par le client.
-        },
-      }
-    : {}),
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'BF',
+    ...(adresse ? { streetAddress: adresse.replace(/\n/g, ', ') } : {}),
+    // TODO [seo] : ajouter addressLocality / addressRegion / postalCode
+    // dès que l'adresse exacte est fournie par le client.
+  },
   // Zone desservie : donnée commerciale clé pour ce marché
-  areaServed: { '@type': 'Place', name: 'Afrique de l’Ouest' },
+  areaServed: [
+    { '@type': 'Country', name: 'Burkina Faso' },
+    { '@type': 'Place', name: 'Afrique de l’Ouest' },
+  ],
   knowsAbout: [
     'huile moteur',
     'lubrifiants',
