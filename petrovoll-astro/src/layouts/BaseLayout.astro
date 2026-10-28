@@ -18,6 +18,7 @@
 import '@/styles/global.css'
 import '@/styles/studio.css'
 
+import Analytics from '@vercel/analytics/astro'
 import ServiceWorker from '@/components/layout/ServiceWorker.astro'
 import CanonicalUrl from '@/components/seo/CanonicalUrl.astro'
 import OpenGraph from '@/components/seo/OpenGraph.astro'
@@ -234,6 +235,9 @@ const descriptionFinale =
          Le marquage `js-reveal-ready` est déjà posé par le script inline ci-dessus ;
          ce fichier ajoute l'IntersectionObserver + `.is-visible`. -->
     <script src="@/scripts/scroll-reveal.js"></script>
+
+    <!-- Mesure d'audience Vercel (sans cookie) -->
+    <Analytics />
   </head>
 
   <body class="min-h-dvh bg-fond text-texte">
