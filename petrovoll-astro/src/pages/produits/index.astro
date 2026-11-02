@@ -239,7 +239,7 @@ let compteur = 0
         <p data-ap-photo-note hidden class="bg-surface px-5 py-1.5 text-center text-xs text-attenue">Photo non contractuelle</p>
         <div class="flex flex-col gap-5 p-5 sm:p-6">
           <div class="flex flex-col gap-2">
-            <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-vif" data-ap-gamme></p>
+            <p class="text-xs font-semibold uppercase tracking-[0.14em] text-vif" data-ap-gamme></p>
             <h2 id="apercu-titre" class="text-[44px] leading-[0.95] text-marine" data-ap-nom></h2>
             <p class="text-[15px] leading-snug text-texte" data-ap-accroche></p>
           </div>
@@ -457,7 +457,7 @@ let compteur = 0
       zoneCles.replaceChildren(
         ...cles.map((c, k) => {
           const d = el('div', 'flex flex-col-reverse gap-1 bg-fond p-3.5' + (k === cles.length - 1 && cles.length % 2 === 1 ? ' col-span-2' : ''))
-          d.append(el('dt', 'text-[11px] uppercase tracking-[0.1em] text-attenue', c.nom))
+          d.append(el('dt', 'text-xs uppercase tracking-[0.1em] text-attenue', c.nom))
           const dd = el('dd', 'font-display text-[30px] leading-none tabular-nums text-marine', c.valeur)
           if (c.unite) dd.append(el('span', 'ml-1 font-sans text-xs font-normal text-attenue', c.unite))
           d.append(dd)

@@ -146,7 +146,8 @@
   h1,
   h2,
   h3,
-  h4 {
+  h4,
+  [role='heading'] {
     font-family: var(--font-display);
     font-weight: 600;
     letter-spacing: -0.015em;
@@ -515,7 +516,7 @@ html.apercu-ouvert {
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid #dce4ee;
   color: #00244a;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;
@@ -656,6 +657,7 @@ h1,
 h2,
 h3,
 h4,
+[role='heading'],
 .font-display {
   font-size-adjust: 0.4;
   word-spacing: 0.06em; /* interlettrage serré des titres : on aère un peu les mots */

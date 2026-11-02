@@ -14,10 +14,15 @@ import { APPARITIONS_REPERES } from '@/hero-video.config'
 import { getParametres } from '@/lib/contenu'
 
 interface Props {
-  /** id du h1 (un par hero : le hero masqué par la media query est hors de l'arbre d'accessibilité). */
+  /** id du titre (un par hero : le hero masqué par la media query est hors de l'arbre d'accessibilité). */
   idTitre: string
+  /**
+   * Un seul <h1> dans le HTML (les deux heros y sont, l'un masqué) : celui du hero mobile, la version
+   * que Google indexe. Le hero desktop garde un titre de niveau 1 pour les lecteurs d'écran (role=heading).
+   */
+  h1?: boolean
 }
-const { idTitre } = Astro.props
+const { idTitre, h1 = true } = Astro.props
 
 const parametres = await getParametres()
 const avecSociete = (texte: string) => texte.replaceAll('{societe}', parametres.nomSociete)
@@ -49,7 +54,13 @@ const blocs = [
 
 <div class="bloc textes" data-bloc data-actif data-debut="0" data-fin={plage('ouverture').fin}>
   <p class="surtitre">{textes.ouverture.surtitre}</p>
-  <h1 id={idTitre} class="titre">{textes.ouverture.titre}</h1>
+  {
+    h1 ? (
+      <h1 id={idTitre} class="titre">{textes.ouverture.titre}</h1>
+    ) : (
+      <p id={idTitre} class="titre" role="heading" aria-level="1">{textes.ouverture.titre}</p>
+    )
+  }
   <p class="indice" aria-hidden="true">{textes.ouverture.indice} <span>↓</span></p>
 </div>
 
@@ -208,7 +219,7 @@ const blocs = [
   }
   .libelle {
     padding: 0.6rem 0.75rem 0;
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;

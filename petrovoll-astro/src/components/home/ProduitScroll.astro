@@ -160,7 +160,7 @@ const style = [
     -webkit-backdrop-filter: blur(14px);
   }
   .surtitre {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -451,15 +451,20 @@ const style = [
       })
     }
 
-    new IntersectionObserver(
-      (entrees, obs) => {
-        if (entrees.some((e) => e.isIntersecting)) {
-          obs.disconnect()
-          charger()
-        }
-      },
-      { rootMargin: '150% 0px' },
-    ).observe(section)
+    // Les images du bidon (plusieurs centaines de Ko) attendent le premier geste du visiteur : celui
+    // qui reste en haut de page ne les télécharge pas (forfaits mobiles), et le chargement de la
+    // page n'a plus à les décoder.
+    apresPremierGeste(() =>
+      new IntersectionObserver(
+        (entrees, obs) => {
+          if (entrees.some((e) => e.isIntersecting)) {
+            obs.disconnect()
+            charger()
+          }
+        },
+        { rootMargin: '150% 0px' },
+      ).observe(section),
+    )
 
     new IntersectionObserver(
       ([e]) => {
@@ -475,6 +480,17 @@ const style = [
       auScroll()
     })
     dessiner()
+  }
+
+  /** Lance `f` au premier défilement, toucher, clic, molette ou touche (tout de suite si la page est déjà défilée). */
+  function apresPremierGeste(f: () => void) {
+    if (window.scrollY > 0) return f()
+    const evenements = ['scroll', 'wheel', 'touchstart', 'pointerdown', 'keydown']
+    const une = () => {
+      evenements.forEach((e) => window.removeEventListener(e, une))
+      f()
+    }
+    evenements.forEach((e) => window.addEventListener(e, une, { passive: true }))
   }
 
   document.querySelectorAll<HTMLElement>('[data-produit-scroll]').forEach(initialiser)

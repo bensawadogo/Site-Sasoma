@@ -226,7 +226,7 @@ const surtitre = [p.gamme, p.baseTexte && `Base ${p.baseTexte}`].filter(Boolean)
               >
                 {v.cles.map((c, k) => (
                   <div class:list={['flex flex-col-reverse gap-1 bg-fond p-3.5', k === v.cles.length - 1 && v.cles.length % 2 === 1 && 'col-span-2']}>
-                    <dt class="text-[11px] uppercase tracking-[0.1em] text-attenue">{c.nom}</dt>
+                    <dt class="text-xs uppercase tracking-[0.1em] text-attenue">{c.nom}</dt>
                     <dd class="font-display text-[30px] leading-none tabular-nums text-marine">
                       {c.valeur}
                       {c.unite && <span class="ml-1 font-sans text-xs font-normal text-attenue">{c.unite}</span>}

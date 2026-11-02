@@ -48,3 +48,15 @@ const DESCRIPTION =
   <div class="raccord raccord--marine-clair" aria-hidden="true"></div>
   <ContactCTA />
 </PageLayout>
+
+<style is:global>
+  /* Sections sous le produit phare et pied de page : le navigateur ne les met en page et ne les peint
+     qu'à l'approche de l'écran. Contrôle du 01/11 : pendant le chargement, chaque mise en page
+     complète coûtait 130 à 220 ms sur un téléphone moyen (blocage total ≈ 0,7 s). La taille
+     réservée est mémorisée (« auto ») une fois la section affichée. */
+  .raccord--nuit-jour ~ section,
+  .pied {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 800px;
+  }
+</style>

@@ -59,7 +59,7 @@ const BADGES = [
                   <stop offset="0.5" stop-color="#a87a22" />
                   <stop offset="1" stop-color="#f3d27a" />
                 </linearGradient>
-                <path id={`cercle-${i}`} d="M60 60 m-38 0 a38 38 0 1 1 76 0 a38 38 0 1 1 -76 0" />
+                <path id={`cercle-${i}`} d="M120 120 m-76 0 a76 76 0 1 1 152 0 a76 76 0 1 1 -152 0" />
               </defs>
               <polygon
                 points={Array.from({ length: 48 }, (_, k) => {
@@ -72,15 +72,17 @@ const BADGES = [
               <circle cx="60" cy="60" r="50" fill={`url(#or-${i})`} />
               <circle cx="60" cy="60" r="46" fill="none" stroke="#fff3c4" stroke-opacity="0.7" stroke-width="0.8" />
               <circle cx="60" cy="60" r="30" fill="none" stroke="#6b4a10" stroke-opacity="0.35" stroke-width="0.8" />
-              <text font-size="7.2" font-weight="700" letter-spacing="2.2" fill="#5a3d0c" fill-opacity="0.85">
+              <g transform="scale(0.5)">
+              <text font-size="14.4" font-weight="700" letter-spacing="4.4" fill="#5a3d0c" fill-opacity="0.85">
                 <textPath href={`#cercle-${i}`} startOffset="0">CERTIFIED · PETROVÖLL GMBH · GERMANY ·</textPath>
               </text>
-              <text x="60" y={c.sigle === 'ISO' ? 68 : 62} text-anchor="middle" font-size={c.sigle === 'ISO' ? 30 : 17} font-weight="800" fill="#4a3009" font-family="Plus Jakarta Sans Variable, Arial, sans-serif">{c.sigle}</text>
-              <text x="60" y={c.sigle === 'ISO' ? 82 : 77} text-anchor="middle" font-size="10.5" font-weight="800" fill="#4a3009" font-family="Plus Jakarta Sans Variable, Arial, sans-serif" letter-spacing="0.5">{c.num}:{c.annee}</text>
+              <text x="120" y={c.sigle === 'ISO' ? 136 : 124} text-anchor="middle" font-size={c.sigle === 'ISO' ? 60 : 34} font-weight="800" fill="#4a3009" font-family="Plus Jakarta Sans Variable, Arial, sans-serif">{c.sigle}</text>
+              <text x="120" y={c.sigle === 'ISO' ? 164 : 154} text-anchor="middle" font-size="21" font-weight="800" fill="#4a3009" font-family="Plus Jakarta Sans Variable, Arial, sans-serif" letter-spacing="1">{c.num}:{c.annee}</text>
+              </g>
             </svg>
           </span>
           <p class="mt-6 font-display text-[44px] leading-none tracking-wide text-white lg:text-5xl">{c.code}</p>
-          <p class="mt-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#e9c46a]">Version {c.annee}</p>
+          <p class="mt-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#e9c46a]">Version {c.annee}</p>
           <p class="mt-4 text-base font-semibold text-white">{c.texte}</p>
           <p class="mt-1.5 text-sm leading-relaxed text-white/60">{c.detail}</p>
         </li>
@@ -88,7 +90,7 @@ const BADGES = [
     }
   </ul>
 
-  <p class="container-page mt-12 text-[11px] font-semibold uppercase tracking-[0.24em] text-white/50">Homologations constructeurs et normes</p>
+  <p class="container-page mt-12 text-xs font-semibold uppercase tracking-[0.24em] text-white/50">Homologations constructeurs et normes</p>
   <div class="defile mt-4">
     <ul class="piste defile-continu" aria-label="Certifications et homologations du fabricant">
       {
@@ -104,7 +106,7 @@ const BADGES = [
               </span>
               <span class="flex flex-col">
                 <span class="font-display text-2xl leading-none tracking-wide">{b.code}</span>
-                <span class="mt-1 text-[0.7rem] font-semibold uppercase tracking-widest text-vif">{b.annee}</span>
+                <span class="mt-1 text-xs font-semibold uppercase tracking-widest text-vif">{b.annee}</span>
                 <span class="text-sm text-attenue">{b.texte}</span>
               </span>
             </li>

@@ -9,14 +9,15 @@ import { ICONES_SECTEUR } from './src/lib/icones'
  * depuis son téléphone : libellés en français, une aide sous chaque champ,
  * aucun code à saisir (ni couleur hexadécimale, ni nom d'icône technique).
  *
- * Chaque « Enregistrer » crée un commit sur GitHub ; Cloudflare Pages
+ * Chaque « Enregistrer » crée un commit sur GitHub ; Vercel, relié au dépôt,
  * reconstruit alors le site (1 à 2 minutes). Le schéma Astro qui relit ces
  * fichiers (src/content.config.ts) est volontairement TOLÉRANT : une saisie
  * incomplète ne doit jamais casser la mise en ligne.
  *
  * Stockage :
  *   - PUBLIC_KEYSTATIC_PROJECT défini → Keystatic Cloud (connexion par e-mail)
- *   - sinon                           → fichiers locaux (développement)
+ *   - sinon                           → fichiers locaux (développement) ; en ligne,
+ *     /keystatic est alors fermé (voir src/middleware.ts)
  */
 
 const projetCloud = import.meta.env.PUBLIC_KEYSTATIC_PROJECT as string | undefined
